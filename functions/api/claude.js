@@ -37,17 +37,19 @@ const GEMINI_MODEL_CHAIN = [
 ];
 
 // ── Resolve which provider + key to use ────────────────────────
-function resolveProvider(requestedProvider) {
-  const preferred = (requestedProvider || process.env.AI_PROVIDER || '').toLowerCase();
+// env = Cloudflare Pages env object (context.env) — replaces process.env
+function resolveProvider(requestedProvider, env) {
+  const e = env || {};
+  const preferred = (requestedProvider || e.AI_PROVIDER || '').toLowerCase();
   const candidates = preferred
     ? [preferred, ...['claude','gemini','groq'].filter(p => p !== preferred)]
     : ['claude','gemini','groq'];
 
   for (const p of candidates) {
     const key = {
-      claude: process.env.CLAUDE_API_KEY,
-      gemini: process.env.GEMINI_API_KEY,
-      groq:   process.env.GROQ_API_KEY,
+      claude: e.CLAUDE_API_KEY,
+      gemini: e.GEMINI_API_KEY,
+      groq:   e.GROQ_API_KEY,
     }[p];
     if (key) return { provider: p, key };
   }
@@ -247,12 +249,8 @@ function normalizeStream(provider, upstreamBody) {
 // ── Main handler ────────────────────────────────────────────────
 export async function onRequest(context) {
   const { request: req, env } = context;
-
-  // Inject env vars into process.env for compatibility with existing code
-  if (env.CLAUDE_API_KEY)  process.env.CLAUDE_API_KEY  = env.CLAUDE_API_KEY;
-  if (env.GEMINI_API_KEY)  process.env.GEMINI_API_KEY  = env.GEMINI_API_KEY;
-  if (env.GROQ_API_KEY)    process.env.GROQ_API_KEY    = env.GROQ_API_KEY;
-  if (env.AI_PROVIDER)     process.env.AI_PROVIDER     = env.AI_PROVIDER;
+  // env = Cloudflare Pages environment variables (set in Pages dashboard)
+  // process.env does NOT work reliably in Cloudflare Workers — use env directly
   const origin = req.headers.get('origin') || '';
   const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
   const corsHeaders = {
@@ -268,14 +266,14 @@ export async function onRequest(context) {
   const { apiKey: userKey, provider: requestedProvider, ...forwardBody } = body;
 
   // Resolve provider + key
-  let resolved = resolveProvider(requestedProvider);
+  let resolved = resolveProvider(requestedProvider, env);
 
   // Fallback: user-supplied key (local dev)
   if (!resolved && userKey) resolved = { provider: 'claude', key: userKey };
 
   if (!resolved) {
     return new Response(JSON.stringify({
-      error: 'No AI provider configured. Add CLAUDE_API_KEY, GEMINI_API_KEY, or GROQ_API_KEY to Vercel Environment Variables.'
+      error: 'No AI provider configured. Add GEMINI_API_KEY or GROQ_API_KEY in Cloudflare Pages → Settings → Environment Variables.'
     }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
@@ -450,7 +448,7 @@ export async function onRequest(context) {
     }
 
   } catch(err) {
-    return new Response(JSON.stringify({ error: `Proxy error: ${err.message}` }),
+    return new Response(JSON.stringify({ error: `Proxy error: ${err.message} — Check Cloudflare Pages logs (Workers & Pages → shuddhiqacloud → Observability)` }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 }
