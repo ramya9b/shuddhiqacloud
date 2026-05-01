@@ -411,8 +411,21 @@ export async function onRequest(context) {
       if (response.status === 429) {
         const retryAfter = response.headers.get('retry-after') || response.headers.get('x-ratelimit-reset-requests');
         const waitSecs   = retryAfter ? parseInt(retryAfter) : 60;
+        const isDailyLimit = !retryAfter && (
+          detail.includes('exceeded') || detail.includes('daily') ||
+          detail.includes('tokens per day') || detail.includes('quota')
+        );
+        if (isDailyLimit) {
+          return new Response(JSON.stringify({
+            error: provider + ' daily quota exhausted. The free-tier daily limit resets at midnight UTC. '
+              + 'To continue now: add a GEMINI_API_KEY (free, aistudio.google.com) in Cloudflare Pages → Settings → Environment Variables.',
+            waitSecs: 3600,
+            dailyLimit: true,
+            switchProvider: true
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
         return new Response(JSON.stringify({
-          error: provider + ' rate limited (resets in ~' + waitSecs + 's)',
+          error: provider + ' rate limited — resets in ~' + waitSecs + 's',
           waitSecs,
           switchProvider: true
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

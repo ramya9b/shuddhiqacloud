@@ -6405,15 +6405,26 @@ const ProviderManager = (function() {
     _state.failed.clear();
     _state.triedProviders.clear();
     _state.switchCount = 0;
-    Object.keys(_state.cooldown).forEach(k => delete _state.cooldown[k]);
-    console.log('[ProviderManager] Session state reset');
+    // BUG FIX: only clear EXPIRED cooldowns — preserve active ones.
+    // Old: cleared ALL cooldowns, allowing immediate retry of a rate-limited provider.
+    // New: if Groq is cooling down for 60s, clicking Generate again keeps that cooldown.
+    const now = Date.now();
+    Object.keys(_state.cooldown).forEach(p => {
+      if (_state.cooldown[p] <= now) delete _state.cooldown[p];
+    });
+    console.log('[ProviderManager] Session state reset. Active cooldowns preserved:',
+      Object.entries(_state.cooldown)
+        .filter(([,t]) => t > now)
+        .map(([p,t]) => p + ':' + Math.ceil((t-now)/1000) + 's')
+        .join(', ') || 'none'
+    );
   }
 
   function markFailed(provider) {
     _state.failed.add(provider);
     _state.triedProviders.add(provider);
     _state.switchCount++;
-    const cooldownMs = { groq:65000, gemini:62000, claude:120000 }[provider] || 65000;
+    const cooldownMs = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
     _state.cooldown[provider] = Date.now() + cooldownMs;
     console.log('[ProviderManager]', provider, 'failed. Switch', _state.switchCount + '/' + MAX_SWITCHES,
                 '| Cooldown:', Math.round(cooldownMs/1000) + 's');
@@ -7719,7 +7730,13 @@ async function _callProviderWithFallback(requestBody, signal) {
         // Mark cooldown in ProviderManager
         ProviderManager._state.failed.add(provider);
         ProviderManager._state.switchCount++;
-        const cooldownMs = { groq: 65000, gemini: 62000, claude: 120000 }[provider] || 65000;
+        // BUG FIX: use the API's actual waitSecs as the cooldown — not a hardcoded value.
+        // Old: hardcoded 35s/30s which expired before the API was ready → instant 429 loop.
+        // Now: groq/gemini usually return retry-after:60 for per-minute limits.
+        // Add 5s buffer so we don't hit the limit boundary exactly.
+        const apiWaitMs   = (waitS || 60) * 1000 + 5000;
+        const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
+        const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
 
         // Determine next provider for the toast message
@@ -7728,6 +7745,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const nextName  = nextProv ? ProviderManager.getConfig(nextProv).name : null;
 
         const isQuota       = errText.includes('quota') || errText.includes('RESOURCE_EXHAUSTED') || errText.includes('free-tier');
+        const isDailyLimit  = err.dailyLimit === true || errText.includes('daily quota exhausted');
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const provName      = ProviderManager.getConfig(provider).name;
@@ -7739,6 +7757,14 @@ async function _callProviderWithFallback(requestBody, signal) {
             toastMsg += ' Switching to ' + nextName + '…';
           } else {
             toastMsg = provName + ' token limit exceeded. Please shorten your requirement, or add a Gemini API key in Settings (free, 1M token limit).';
+          }
+        } else if (isDailyLimit) {
+          // Daily quota — cannot retry until midnight UTC, no countdown useful
+          if (nextName) {
+            toastMsg = provName + ' daily quota exhausted. Switching to ' + nextName + '…';
+          } else {
+            toastMsg = provName + ' daily quota exhausted (resets midnight UTC). '
+              + 'Add a free GEMINI_API_KEY at aistudio.google.com in Cloudflare Pages → Settings → Environment Variables to continue now.';
           }
         } else if (isUnavailable) {
           // Gemini model chain exhausted — specific actionable message
@@ -7816,9 +7842,13 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   console.warn('[Fallback] All providers failed. Tried:', tried, '| lastStatus:', lastStatus, '| Consecutive failures:', _consecutiveAllFailures);
 
-  // Special actionable message for token-limit errors
   const wasTooLarge = lastStatus === 413
     || (lastErr && (lastErr.message.includes('too large') || lastErr.message.includes('token limit')));
+
+  // Build a precise, non-misleading message
+  const triedNames = tried.map(p => ProviderManager.getConfig(p).name).join(', ');
+  const onlyOneTried = tried.length === 1;
+  const triedLabel  = onlyOneTried ? triedNames : 'All tried providers (' + triedNames + ')';
 
   let finalMsg = '';
   if (wasTooLarge) {
@@ -7827,13 +7857,50 @@ async function _callProviderWithFallback(requestBody, signal) {
       + '(2) Add a Gemini API key in Settings (free, handles large documents), '
       + 'or (3) Use a smaller section of your FRD.';
   } else if (wait > 5) {
-    finalMsg = 'All AI providers hit their rate limit. Try again in ~' + wait + ' seconds.';
+    // Show countdown + specific provider(s) + actionable fix
+    const onlyGemini = tried.length === 1 && tried[0] === 'gemini';
+    const onlyGroq   = tried.length === 1 && tried[0] === 'groq';
+    finalMsg = triedLabel + ' hit a rate limit — the API resets in ~' + wait + 's. '
+      + 'Click Generate again after waiting, or ';
+    if (onlyGemini) {
+      finalMsg += 'add a free GROQ_API_KEY (console.groq.com — 30 req/min) in Cloudflare Pages → Settings → Environment Variables for instant fallback.';
+    } else if (onlyGroq) {
+      finalMsg += 'add a free GEMINI_API_KEY (aistudio.google.com) in Settings for instant fallback.';
+    } else {
+      finalMsg += 'wait ' + wait + 's and try again.';
+    }
   } else {
-    finalMsg = 'All AI providers are temporarily unavailable (' + tried.join(', ') + ' tried).';
+    finalMsg = triedLabel + ' are temporarily unavailable. Click Generate to retry.';
   }
   if (billing && !wasTooLarge) {
-    finalMsg += ' Tip: Check API quota or billing settings — you may have hit free-tier daily limits.';
+    finalMsg += ' You may have hit the free-tier daily limit — check your API quota at the provider dashboard.';
   }
+  // ── Show error with live countdown timer ──────────────────────────────────
+  // Instead of just throwing, show the error in a banner with a live countdown.
+  // When timer reaches 0, auto-retry generation if user hasn't navigated away.
+  if (!wasTooLarge && wait > 5) {
+    const retryAt    = Date.now() + (wait * 1000);
+    const bannerId   = 'rl-countdown-banner';
+
+    // Show initial banner with retry button
+    showAdoBanner(
+      finalMsg + ' <button id="rl-retry-btn" onclick="generate()" style="margin-left:10px;padding:3px 12px;background:var(--indigo,#6366f1);color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600">↺ Retry Now</button>',
+      'warning', (wait + 5) * 1000
+    );
+
+    // Live countdown updater
+    const _countdownInterval = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
+      const btn = document.getElementById('rl-retry-btn');
+      if (btn) btn.textContent = remaining > 0 ? ('↺ Retry in ' + remaining + 's') : '↺ Retry Now';
+      if (remaining === 0) {
+        clearInterval(_countdownInterval);
+        // Auto-clear banner and let user retry manually — don't auto-fire generate()
+        // as they may have navigated to a different section
+      }
+    }, 1000);
+  }
+
   throw new Error(finalMsg);
 }
 
