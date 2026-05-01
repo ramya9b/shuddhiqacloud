@@ -7727,9 +7727,10 @@ async function _callProviderWithFallback(requestBody, signal) {
         const nextProv  = remaining.find(p => !ProviderManager._state.triedProviders.has(p) && !ProviderManager.isCoolingDown(p));
         const nextName  = nextProv ? ProviderManager.getConfig(nextProv).name : null;
 
-        const isQuota    = errText.includes('quota') || errText.includes('RESOURCE_EXHAUSTED') || errText.includes('free-tier');
-        const isOverload = status === 529 || errText.includes('overloaded');
-        const provName   = ProviderManager.getConfig(provider).name;
+        const isQuota       = errText.includes('quota') || errText.includes('RESOURCE_EXHAUSTED') || errText.includes('free-tier');
+        const isOverload    = status === 529 || errText.includes('overloaded');
+        const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
+        const provName      = ProviderManager.getConfig(provider).name;
 
         let toastMsg;
         if (isTooLarge) {
@@ -7738,6 +7739,15 @@ async function _callProviderWithFallback(requestBody, signal) {
             toastMsg += ' Switching to ' + nextName + '…';
           } else {
             toastMsg = provName + ' token limit exceeded. Please shorten your requirement, or add a Gemini API key in Settings (free, 1M token limit).';
+          }
+        } else if (isUnavailable) {
+          // Gemini model chain exhausted — specific actionable message
+          if (nextName) {
+            toastMsg = provName + ' model unavailable. Switching to ' + nextName + '…';
+          } else {
+            // REAL ROOT CAUSE: only one provider configured — nothing to switch to
+            toastMsg = provName + ' model is currently unavailable and no fallback provider is configured. '
+              + 'Add a GROQ_API_KEY (free at console.groq.com) in Cloudflare Pages → Settings → Environment Variables, then redeploy.';
           }
         } else if (isQuota) {
           toastMsg = provName + ' free-tier limit reached.';
@@ -7754,7 +7764,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         }
 
         console.log('[Fallback] Switching provider. Reason:', toastMsg);
-        showAdoBanner(toastMsg, 'warning', nextName ? 5000 : 8000);
+        showAdoBanner(toastMsg, 'warning', nextName ? 5000 : 15000);
 
         lastErr    = new Error(toastMsg);
         lastStatus = status;

@@ -27,20 +27,20 @@
 // Preview models still use v1beta API endpoint.
 const MODELS = {
   claude:      'claude-sonnet-4-6',
-  // Gemini stable models (April 2026)
-  // gemini-2.0-flash is DEPRECATED — shuts down June 1 2026
-  // gemini-3.1-pro-preview is expensive ($2/M) and overkill for test generation
-  // gemini-2.5-flash is the recommended stable model: $0.30/M, best quality/cost ratio
-  gemini:      'gemini-2.5-flash',              // PRIMARY: stable GA, $0.30/M input
-  geminiLite:  'gemini-2.5-flash-lite-preview', // FALLBACK: cheaper, $0.10/M input
-  geminiFlash: 'gemini-2.0-flash-lite',         // LAST RESORT: legacy, same endpoint format
+  // Gemini model chain (May 2026):
+  // PRIMARY:      gemini-2.5-flash (GA, best quality, thinkingBudget:0 required)
+  // FALLBACK 1:   gemini-2.0-flash (stable GA, no thinking, widely available)
+  // FALLBACK 2:   gemini-1.5-flash (oldest stable, guaranteed available for any key)
+  gemini:      'gemini-2.5-flash',    // PRIMARY
+  geminiLite:  'gemini-2.0-flash',    // FALLBACK 1: stable, no thinking issues
+  geminiFlash: 'gemini-1.5-flash',    // FALLBACK 2: oldest stable, always available
   groq:        'llama-3.3-70b-versatile',
 };
 
 const GEMINI_API_VERSION = {
-  'gemini-2.5-flash':              'v1beta',
-  'gemini-2.5-flash-lite-preview': 'v1beta',
-  'gemini-2.0-flash-lite':         'v1beta',
+  'gemini-2.5-flash': 'v1beta',
+  'gemini-2.0-flash': 'v1beta',
+  'gemini-1.5-flash': 'v1beta',
 };
 
 const GEMINI_MODEL_CHAIN = [
@@ -337,12 +337,27 @@ export default async function handler(req) {
 
         if (shouldTryChain) {
           for (const fallbackModel of GEMINI_MODEL_CHAIN.slice(1)) {
-            const apiVer = GEMINI_API_VERSION[fallbackModel] || 'v1';
+            const apiVer = GEMINI_API_VERSION[fallbackModel] || 'v1beta';
             const ep     = forwardBody.stream ? 'streamGenerateContent?alt=sse' : 'generateContent';
             const sep    = forwardBody.stream ? '&' : '?';
             const altUrl = `https://generativelanguage.googleapis.com/${apiVer}/models/${fallbackModel}:${ep}${sep}key=${key}`;
+
+            // FIX: rebuild body without thinkingConfig for non-2.5 models.
+            // The original upstream.body was built for gemini-2.5-flash and includes
+            // thinkingConfig:{thinkingBudget:0} which causes a 400 on older models.
+            let chainBody = upstream.body;
+            if (!fallbackModel.includes('2.5')) {
+              try {
+                const parsed = JSON.parse(upstream.body);
+                if (parsed.generationConfig?.thinkingConfig) {
+                  delete parsed.generationConfig.thinkingConfig;
+                }
+                chainBody = JSON.stringify(parsed);
+              } catch(e) { /* use original body if parse fails */ }
+            }
+
             console.log('[Gemini] Chain trying:', fallbackModel, '(' + apiVer + ')');
-            const altResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: upstream.body });
+            const altResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
             const altText = await altResp.text().catch(() => '');
             console.log('[Gemini] Chain result:', fallbackModel, '→ HTTP', altResp.status, altText.substring(0, 150));
             if (altResp.ok) {
@@ -368,7 +383,7 @@ export default async function handler(req) {
           // All models tried and failed → switch to next provider
           console.warn('[Gemini] All models exhausted. Switching to next provider.');
           return new Response(JSON.stringify({
-            error: 'Gemini model unavailable — switching to next provider',
+            error: 'Gemini: all available models are currently unavailable',
             detail: detail.substring(0, 200),
             switchProvider: true,
             provider: 'gemini',
