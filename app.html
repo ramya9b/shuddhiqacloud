@@ -7915,6 +7915,51 @@ async function generate() {
 
 CRITICAL LANGUAGE RULE: Generate ALL test case output in ${outputLang}.
 
+══════════════════════════════════════════════════
+⚠️  HARD CONSTRAINTS — READ BEFORE GENERATING ANYTHING
+These rules override everything else. Violations are not allowed.
+══════════════════════════════════════════════════
+
+CONSTRAINT 1 — MINIMUM 10 STEPS PER TEST CASE (ABSOLUTE MINIMUM):
+  Every single test case MUST have at minimum 10 numbered step rows.
+  If you reach step 9 and the test is "done" — ADD MORE verification steps:
+    • Verify the exact column value displayed
+    • Cross-check a related field
+    • Verify UI state after the action
+    • Confirm no side effects occurred
+    • Export and verify in Excel
+  ❌ NEVER output a test case with fewer than 10 steps. Ever.
+
+CONSTRAINT 2 — ZERO TOLERANCE FOR THESE FORBIDDEN STEPS:
+  ❌ "Report loads successfully" (as a standalone step or final step)
+  ❌ "Page loads successfully"
+  ❌ "Data is displayed"
+  ❌ "User can see data"
+  ❌ "Result is correct"
+  ❌ "Values match" (alone — must specify WHICH values match WHAT)
+  ❌ "Success" (alone)
+  ❌ Any expected result left blank or "Not specified"
+  If you are about to write any of the above — STOP and replace with a specific, measurable result.
+
+CONSTRAINT 3 — NO DUPLICATE SCENARIOS:
+  Before writing each new test case title, check: have I already written a test case
+  with the same or very similar action? If yes — write a DIFFERENT scenario instead.
+  ❌ NEVER write "Open the [Report Name]" as a standalone scenario more than once.
+  Each scenario must test something DISTINCT from all other scenarios.
+
+CONSTRAINT 4 — E2E SECTION IS MANDATORY:
+  The End-to-End section MUST contain at least 5 test cases covering the full workflow.
+  ❌ NEVER leave E2E empty or with 0 test cases.
+
+CONSTRAINT 5 — SELF-CHECK BEFORE OUTPUTTING EACH TEST CASE:
+  After writing each test case, check:
+  ✔ Does it have ≥ 10 steps? If no → add more steps now.
+  ✔ Is every expected result specific and non-generic? If no → rewrite now.
+  ✔ Is this scenario unique from all previous scenarios? If no → change it now.
+  ✔ Is this test case relevant to the actual requirement given? If no → replace now.
+  Only output the test case after passing all 4 checks.
+
+══════════════════════════════════════════════════
 ═══════════════════════════════════════
 STEP WRITING RULES — STRICTLY ENFORCED
 ═══════════════════════════════════════
@@ -7945,11 +7990,13 @@ RULE 6 — NEGATIVE TEST CASE ENFORCEMENT:
   FORBIDDEN in negative final steps: "Login successful", "Page loads", "Record created", "Success".
   REQUIRED: specific error message text, validation message, HTTP error code, field highlighted.
 
-RULE 7 — MINIMUM STEPS:
-  Simple UI validation: minimum 5 steps
-  API / integration test: minimum 6 steps
-  Security / access test: minimum 7 steps
-  Negative test case: minimum 5 steps (setup + trigger + verify failure)
+RULE 7 — MINIMUM STEPS (HARD MINIMUM = 10 FOR ALL TYPES):
+  Simple UI validation: minimum 10 steps
+  API / integration test: minimum 10 steps
+  Security / access test: minimum 10 steps
+  Negative test case: minimum 10 steps (setup + trigger + verify failure + additional verification)
+  If you cannot reach 10 steps naturally: add verification of related fields, UI state checks,
+  and cross-field consistency checks until you reach 10.
 
 ═══════════════════════════════════════
 OUTPUT FORMAT — 5-COLUMN FORMAT
@@ -7992,12 +8039,12 @@ Generate these sections:
 Table: Platform | Module | Priority | Total Test Cases | Created Date
 
 ## 2. End-to-End Test Cases
-Happy path + alternate flows + role-based access + error recovery. Minimum 10–15 test cases, each with minimum 5 step rows.
+Happy path + alternate flows + role-based access + error recovery. Minimum 10–15 test cases, each with minimum 10 step rows.
 Cover: main happy path, at least 2 alternate flows, role-based access (each role = 1 TC), session handling.
 Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. ONE step per row.
 
 ## 3. Field Validation Test Cases
-Form inputs: mandatory fields, email format, min/max length, special characters, SQL injection, XSS. Minimum 8–12 test cases.
+Form inputs: mandatory fields, email format, min/max length, special characters, SQL injection, XSS. Minimum 8–12 test cases, each with minimum 10 step rows.
 One TC per: each mandatory field, each format rule, boundary min/max, special chars, SQL injection, XSS attempt.
 Use the 5-column format. ONE step per row. Include specific field names and exact expected error messages.
 
@@ -8041,15 +8088,76 @@ Use 3-digit zero-padded TC IDs (TC001, TC002...). Use 5-column format throughout
 Apply OUTPUT VALIDATION GATE before finalising — no empty expected results, no positive results in negative trigger/verify steps.
 
 ═══════════════════════════════════════
-FINAL COUNT REQUIREMENT
+FINAL COUNT AND QUALITY REQUIREMENT
 ═══════════════════════════════════════
-Before finishing, count your test cases.
-MINIMUM TOTAL: 40 test cases across all sections.
-TARGET: 50+ test cases for complex requirements.
-If your count is below 40 — go back and add more test cases to whichever sections are short.
-Do NOT stop generating until you have reached the minimum.`
+Before outputting your final result, run this self-check:
+
+STEP 1 — Count your test cases.
+  MINIMUM TOTAL: 40 test cases across all sections.
+  TARGET: 50+ for complex requirements.
+  If count < 40 → go back and add more test cases now.
+
+STEP 2 — Count steps in EVERY test case.
+  MINIMUM: 10 steps per test case.
+  If ANY test case has fewer than 10 steps → expand it now before outputting.
+
+STEP 3 — Check every expected result.
+  If ANY expected result is blank, "Not specified", "Success", or generic → rewrite it now.
+
+STEP 4 — Check for duplicate scenarios.
+  If ANY two test cases have the same or very similar scenario → make one of them distinct.
+
+STEP 5 — Check E2E section.
+  If E2E has 0 test cases → generate at least 5 E2E test cases before finishing.
+
+Do NOT output until all 5 steps pass.`
     : `You are a senior QA Test Case Engineer specialising in Microsoft Dynamics 365 (F&O, CRM, Business Central), Salesforce (Sales, Service, CPQ), Workday, Oracle ERP Cloud, SAP (S/4HANA), Guidewire, ServiceNow, and Power BI report testing. You have 15+ years of enterprise platform QA experience and specialise in creating DETAILED, GRANULAR, production-ready test cases.
 
+══════════════════════════════════════════════════
+⚠️  HARD CONSTRAINTS — READ BEFORE GENERATING ANYTHING
+These rules override everything else. Violations are not allowed.
+══════════════════════════════════════════════════
+
+CONSTRAINT 1 — MINIMUM 10 STEPS PER TEST CASE (ABSOLUTE MINIMUM):
+  Every single test case MUST have at minimum 10 numbered step rows.
+  If you reach step 9 and the test is "done" — ADD MORE verification steps:
+    • Verify the exact column value displayed
+    • Cross-check a related field
+    • Verify UI state after the action
+    • Confirm no side effects occurred
+    • Export and verify in Excel
+  ❌ NEVER output a test case with fewer than 10 steps. Ever.
+
+CONSTRAINT 2 — ZERO TOLERANCE FOR THESE FORBIDDEN STEPS:
+  ❌ "Report loads successfully" (as a standalone step or final step)
+  ❌ "Page loads successfully"
+  ❌ "Data is displayed"
+  ❌ "User can see data"
+  ❌ "Result is correct"
+  ❌ "Values match" (alone — must specify WHICH values match WHAT)
+  ❌ "Success" (alone)
+  ❌ Any expected result left blank or "Not specified"
+  If you are about to write any of the above — STOP and replace with a specific, measurable result.
+
+CONSTRAINT 3 — NO DUPLICATE SCENARIOS:
+  Before writing each new test case title, check: have I already written a test case
+  with the same or very similar action? If yes — write a DIFFERENT scenario instead.
+  ❌ NEVER write "Open the [Report Name]" as a standalone scenario more than once.
+  Each scenario must test something DISTINCT from all other scenarios.
+
+CONSTRAINT 4 — E2E SECTION IS MANDATORY:
+  The End-to-End section MUST contain at least 5 test cases covering the full workflow.
+  ❌ NEVER leave E2E empty or with 0 test cases.
+
+CONSTRAINT 5 — SELF-CHECK BEFORE OUTPUTTING EACH TEST CASE:
+  After writing each test case, check:
+  ✔ Does it have ≥ 10 steps? If no → add more steps now.
+  ✔ Is every expected result specific and non-generic? If no → rewrite now.
+  ✔ Is this scenario unique from all previous scenarios? If no → change it now.
+  ✔ Is this test case relevant to the actual requirement given? If no → replace now.
+  Only output the test case after passing all 4 checks.
+
+══════════════════════════════════════════════════
 PLATFORM-SPECIFIC EXPERTISE:
 - D365 F&O: Use real field names (SalesLine.ItemId, PurchLine.PurchQty, InventOnhandItem.AvailPhysical). Reference D365 navigation paths (Sales and Marketing → Inquiries → Sales → Backorder lines). Reference tables: SalesLine, PurchTable, PurchLine, InventOnhandItem, EcoResProductTranslation, PriceDiscTable, InventTable.
 - Workday: Use real field names (Worker, Position, Compensation Grade, Business Process, Supervisory Organisation). Reference Workday navigation (Workday > Human Capital Management > Payroll > Pay Group).
@@ -8075,14 +8183,16 @@ RULE 2 — STEP ACTION starts with a verb from this exact list:
 RULE 3 — STEP EXPECTED must be SPECIFIC. Include actual column names, D365 field names,
   table names, exact values, and cross-contamination guards. NEVER vague.
 
-RULE 4 — MINIMUM STEPS:
-  Simple field validation: 6–7 steps
-  Cross-system D365 validation: 7–8 steps
-  Calculated field validation: 7–8 steps
-  Filter boundary validation: 6 steps
-  Security validation: 9 steps
-  Blank column validation: 7–8 steps
-  Data refresh validation: 6 steps
+RULE 4 — MINIMUM STEPS (HARD MINIMUM = 10 FOR ALL TYPES):
+  Simple field validation: minimum 10 steps
+  Cross-system D365 validation: minimum 10 steps
+  Calculated field validation: minimum 10 steps
+  Filter boundary validation: minimum 10 steps
+  Security validation: minimum 10 steps
+  Blank column validation: minimum 10 steps
+  Data refresh validation: minimum 10 steps
+  If you cannot reach 10 naturally — add field cross-checks, UI state verifications,
+  export/audit steps, and related field comparisons until you reach 10.
 
 RULE 5 — USE EXACT TEMPLATES BELOW for every step type.
   Do not invent new step patterns — use only the templates provided.
@@ -8098,14 +8208,16 @@ RULE 7 — BOUNDARY CASES: For filters use Change step pattern. For null use "bl
   Null PO: "Locate an item with no Confirmed Open PO." → "Days Until Next Open PO is blank/null — no error."
   Zero calc: "Locate an item with Retail Price = 0 or Total Units = 0." → "Total Price = $0.00."
 
-RULE 8 — MINIMUM STEPS PER TEST CASE:
-  Simple field validation: minimum 6 steps
-  Cross-system D365 validation: minimum 7 steps
-  Calculated field: minimum 7 steps
-  Filter boundary: minimum 6 steps
-  Security/access: minimum 9 steps
-  Blank column: minimum 7 steps
-  Negative: minimum 5 steps (setup + trigger + verify failure)
+RULE 8 — MINIMUM STEPS PER TEST CASE (HARD MINIMUM = 10 FOR ALL TYPES):
+  Simple field validation: minimum 10 steps
+  Cross-system D365 validation: minimum 10 steps
+  Calculated field: minimum 10 steps
+  Filter boundary: minimum 10 steps
+  Security/access: minimum 10 steps
+  Blank column: minimum 10 steps
+  Negative: minimum 10 steps (setup + multiple trigger/verify + UI state checks)
+  If you cannot reach 10 steps naturally: add verification of related fields, UI state checks,
+  negative boundary variations, and export/cross-check steps until you reach 10.
 
 RULE 9 — STRICT NEGATIVE SCENARIO ENFORCEMENT — MOST CRITICAL:
 Negative test cases have COMPLETELY DIFFERENT rules from positive test cases.
@@ -8234,9 +8346,16 @@ CHECK 3 — Vague Step Actions:
   Does any Step Action contain: "works fine", "loads correctly", "as expected", "correct result"?
   → If YES: Replace with specific, measurable action (e.g. "Verify error message text reads...")
 
-CHECK 4 — Step Count:
-  Does any test case have fewer than 5 step rows?
-  → If YES: Expand with additional verification steps (verify UI state, cross-check source data, etc.)
+CHECK 4 — Step Count (HARD MINIMUM = 10):
+  Does any test case have fewer than 10 step rows?
+  → If YES: You MUST expand it before outputting. Add:
+    • Additional field verification steps
+    • UI state check after each major action
+    • Cross-check with related field or system
+    • Negative boundary within the same flow
+    • Export and verify step
+    • Timestamp or audit trail check
+  → NEVER output a test case with fewer than 10 steps.
 
 IMPORTANT EXAMPLES of CORRECTLY written negative test cases:
 
@@ -8255,6 +8374,26 @@ EXAMPLE 2 — "TC005 – Verify Error Handling for Unauthorised Access":
   Step 3: Attempt to open the Back Order Report. | System DENIES access. Error displayed: "You do not have permission to view this report. Contact your system administrator."
   Step 4: Verify the report content is NOT displayed to the unauthorised user. | Report data is completely hidden. No test case data, filters, or results are visible.
   Step 5: Verify the URL cannot be directly accessed by pasting the report URL. | System redirects to access-denied page or displays authorisation error. Report data is not exposed.
+
+═══════════════════════════════════════
+CONDITIONAL SYSTEM RULE — READ FIRST
+═══════════════════════════════════════
+
+Before generating any test cases, identify what systems the requirement involves:
+
+IF the requirement mentions ONLY D365 / ERP:
+  → Generate D365 navigation steps ONLY. Do NOT add Power BI steps.
+
+IF the requirement mentions ONLY Power BI / a report:
+  → Generate Power BI steps ONLY. Do NOT force D365 steps unless cross-validation is explicitly required.
+
+IF the requirement mentions BOTH D365 AND Power BI:
+  → Include cross-system validation steps (D365 → Power BI comparison).
+
+IF the requirement is a web/mobile/API scenario:
+  → Do NOT add ERP or Power BI steps. Use web/API testing steps only.
+
+RULE: Never hardcode system assumptions. Test cases must match the systems actually described in the requirement.
 
 ═══════════════════════════════════════
 BEFORE GENERATING — ANALYSE THE REQUIREMENT
@@ -8432,7 +8571,7 @@ EXAMPLE 1 — Cross-system field validation (modelled on TC12):
 | Title                                                | Step Action                                                                      | Step Expected Result                                                                                              | Assigned To | State  |
 |------------------------------------------------------|----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|-------------|--------|
 | TC012 – Validate Inventory at Warehouse 9900         |                                                                                  |                                                                                                                   | QA Engineer | Design |
-|                                                      | Log in to Power BI service and open the Back Order Report.                       | Report loads successfully.                                                                                        |             |        |
+|                                                      | Log in to Power BI service and open the Back Order Report.                       | [SETUP STEP — POSITIVE OK] Report loads successfully. Table visual is visible.                                    |             |        |
 |                                                      | Set To Date = 2025-12-31.                                                        | Table updates with data rows.                                                                                     |             |        |
 |                                                      | Locate a test item with known on-hand stock at warehouse 9900.                   | Test item is visible in the report.                                                                               |             |        |
 |                                                      | Read the 'Avail DD' column value for this item.                                  | Avail DD shows a numeric quantity.                                                                                |             |        |
@@ -8502,7 +8641,7 @@ Cover: each data source column, each filter combination, each calculated field, 
 Use D365 Cross-Check Step Templates for cross-system verification.
 
 ## 3. Field Validation Test Cases
-Minimum 8–12 test cases. One TC per: each report column cross-checked to D365 source, each filter boundary, each calculated field formula.
+Minimum 8–12 test cases, each with minimum 10 step rows. One TC per: each report column cross-checked to D365 source, each filter boundary, each calculated field formula.
 Use the 5-column format. ONE step per row.
 Include specific D365 field names, table names, boundary values, and exact expected error messages.
 
@@ -8546,33 +8685,56 @@ Use 3-digit zero-padded TC IDs (TC001, TC002...). Use 5-column format throughout
 Apply the OUTPUT VALIDATION GATE before finalising — no empty expected results, no positive results in negative trigger/verify steps.
 
 ═══════════════════════════════════════
-FINAL COUNT REQUIREMENT
+FINAL COUNT AND QUALITY REQUIREMENT
 ═══════════════════════════════════════
-Before finishing, count your test cases.
-MINIMUM TOTAL: 40 test cases across all sections.
-TARGET: 50+ test cases for complex requirements.
-If your count is below 40 — go back and expand whichever sections are short.
-Do NOT stop generating until you have reached the minimum.`;
+Before outputting your final result, run this self-check:
+
+STEP 1 — Count your test cases.
+  MINIMUM TOTAL: 40 test cases across all sections.
+  TARGET: 50+ for complex requirements.
+  If count < 40 → go back and add more test cases now.
+
+STEP 2 — Count steps in EVERY test case.
+  MINIMUM: 10 steps per test case.
+  If ANY test case has fewer than 10 steps → expand it now before outputting.
+
+STEP 3 — Check every expected result.
+  If ANY expected result is blank, "Not specified", "Success", or generic → rewrite it now.
+
+STEP 4 — Check for duplicate scenarios.
+  If ANY two test cases have the same or very similar scenario → make one distinct.
+
+STEP 5 — Check E2E section.
+  If E2E has 0 test cases → generate at least 5 E2E test cases before finishing.
+
+Do NOT output until all 5 steps pass.`;
 
   // _verbosityBudget appended to every format that includes 0a/0b sections.
   // Prevents Gemini 2.5 Flash from generating 250k+ chars of analysis before any TC tables,
   // which caused the 30s timeout to fire mid-stream with 0 TCs parsed.
-  const _verbosityBudget = ' CRITICAL CONCISENESS: Sections 0a and 0b must be VERY brief — maximum 3 bullet points each, no prose, no paragraphs. Move directly to the Test Summary and TC tables as fast as possible. MINIMUM: Generate at least 15 test cases. TARGET: 20+ for complex requirements.';
+  const _verbosityBudget = ' CRITICAL CONCISENESS: Sections 0a and 0b must be VERY brief — maximum 3 bullet points each, no prose, no paragraphs. Move directly to the Test Summary and TC tables as fast as possible. MINIMUM: Generate at least 40 test cases with minimum 10 steps each. TARGET: 50+ for complex requirements.';
 
   const formatInstructions = {
-    full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 5 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
-    e2e:         "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Minimum 5 step rows per TC. Include D365 navigation paths and specific field names. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
+    full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
+    e2e:         "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
     field:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    integration: "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 4 (Integration Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 6 step rows per TC. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
+    integration: "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 4 (Integration Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
     negative:    "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 5 (Negative Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: (1) ONE step per row. (2) SETUP steps (login/open) may have positive expected. (3) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (4) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (5) REQUIRED: exact error message, validation text, access denied. Apply OUTPUT VALIDATION GATE. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    smoke:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Smoke/Sanity test cases. Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. ONE step per row. Aim for 8–15 critical-path smoke tests, each with minimum 4 step rows. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
+    smoke:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Smoke/Sanity test cases. Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. ONE step per row. Aim for 8–15 critical-path smoke tests, each with minimum 10 step rows. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
     testdata:    "Generate ONLY Section 6 (Test Data Requirements): Data Category | Field Name | D365/ERP Table Source | Sample Valid Value | Sample Invalid Value | Data Type | Constraints | Environment. Also include Section 1 (Test Summary).",
     metadata:    "Generate ONLY Section 7 (Test Case Metadata): TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact. Never skip a test case.",
     scenarios:   "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget,
     fields:      "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget
   };
 
-  const userPrompt = `Generate a QA test artifact for the following business process:
+  const userPrompt = `REMINDER BEFORE YOU START:
+✔ Every test case needs MINIMUM 10 steps — check each one before outputting.
+✔ No generic expected results ("Report loads successfully", "Not specified", "Success").
+✔ No duplicate scenarios — each test case must test something unique.
+✔ E2E section must have at least 5 test cases — never leave it empty.
+✔ Self-check each test case against these 4 rules before writing it to output.
+
+Generate a QA test artifact for the following business process:
 
 **Platform:** ${platform}
 **Module:** ${module || 'General'}
