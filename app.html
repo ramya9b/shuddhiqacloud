@@ -5118,6 +5118,73 @@ header::after { display: none !important; }
         </button>
       </div>
 
+      <!-- ── Use Your Own API Key section ── -->
+      <div style="border:1.5px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:16px;">
+        <div style="padding:11px 16px;background:var(--surface2);border-bottom:1px solid var(--border);
+                    display:flex;align-items:center;gap:8px;cursor:pointer"
+             onclick="document.getElementById('userKeyBody').style.display=document.getElementById('userKeyBody').style.display==='none'?'block':'none'">
+          <span style="font-size:14px">🔑</span>
+          <span style="font-size:13px;font-weight:700;color:var(--text)">Use Your Own API Key</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(99,102,241,.1);
+                       color:var(--indigo);font-weight:600;margin-left:4px">optional</span>
+          <span style="font-size:11px;color:var(--text3);margin-left:auto">Your key = your limits, no shared quota</span>
+        </div>
+        <div id="userKeyBody" style="display:none;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:12px;color:var(--text3);line-height:1.5;padding:8px 10px;
+               background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+            💡 Add your own key for any provider to use your personal quota instead of shared limits.
+            Keys are saved in your browser only — never sent to our servers except as the API call itself.
+          </div>
+          <!-- Claude key -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px;width:24px;text-align:center">🤖</span>
+            <span style="font-size:12px;font-weight:700;color:var(--text2);width:60px">Claude</span>
+            <input type="password" id="userClaudeKey" placeholder="sk-ant-api03-…"
+              autocomplete="off" spellcheck="false"
+              style="flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border2);
+                     background:var(--surface);color:var(--text);font-size:12px;font-family:'JetBrains Mono',monospace"
+              oninput="saveUserKey('claude',this.value)" />
+            <a href="https://console.anthropic.com" target="_blank" rel="noopener"
+              style="font-size:11px;color:var(--indigo);text-decoration:none;white-space:nowrap">Get key ↗</a>
+            <span id="userClaudeKeyBadge" style="font-size:10px;display:none;padding:2px 7px;
+              border-radius:10px;background:rgba(16,185,129,.12);color:#059669;font-weight:700">✓ Saved</span>
+          </div>
+          <!-- Gemini key -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px;width:24px;text-align:center">✦</span>
+            <span style="font-size:12px;font-weight:700;color:var(--text2);width:60px">Gemini</span>
+            <input type="password" id="userGeminiKey" placeholder="AIzaSy…"
+              autocomplete="off" spellcheck="false"
+              style="flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border2);
+                     background:var(--surface);color:var(--text);font-size:12px;font-family:'JetBrains Mono',monospace"
+              oninput="saveUserKey('gemini',this.value)" />
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+              style="font-size:11px;color:var(--indigo);text-decoration:none;white-space:nowrap">Get key ↗</a>
+            <span id="userGeminiKeyBadge" style="font-size:10px;display:none;padding:2px 7px;
+              border-radius:10px;background:rgba(16,185,129,.12);color:#059669;font-weight:700">✓ Saved</span>
+          </div>
+          <!-- Groq key -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px;width:24px;text-align:center">⚡</span>
+            <span style="font-size:12px;font-weight:700;color:var(--text2);width:60px">Groq</span>
+            <input type="password" id="userGroqKey" placeholder="gsk_…"
+              autocomplete="off" spellcheck="false"
+              style="flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--border2);
+                     background:var(--surface);color:var(--text);font-size:12px;font-family:'JetBrains Mono',monospace"
+              oninput="saveUserKey('groq',this.value)" />
+            <a href="https://console.groq.com/keys" target="_blank" rel="noopener"
+              style="font-size:11px;color:var(--indigo);text-decoration:none;white-space:nowrap">Get key ↗</a>
+            <span id="userGroqKeyBadge" style="font-size:10px;display:none;padding:2px 7px;
+              border-radius:10px;background:rgba(16,185,129,.12);color:#059669;font-weight:700">✓ Saved</span>
+          </div>
+          <button onclick="clearAllUserKeys()"
+            style="align-self:flex-start;padding:5px 14px;border-radius:7px;border:1px solid var(--border2);
+                   background:var(--surface2);color:var(--text3);font-size:11px;cursor:pointer;margin-top:2px">
+            Clear all saved keys
+          </button>
+        </div>
+      </div>
+
       <!-- Active provider card — keys from Vercel, no manual input needed -->
       <div id="activeProviderCard" style="border:1.5px solid var(--border2);border-radius:12px;
            overflow:hidden;margin-bottom:16px;transition:border-color .2s">
@@ -5991,6 +6058,12 @@ header::after { display: none !important; }
         <div class="meta-item">📁 <strong id="metaModule">-</strong></div>
         <div class="meta-item">🧪 <strong id="tcCount" style="color:var(--d365)">-</strong> TCs</div>
         <div class="meta-item">🌐 <strong id="metaLang">-</strong></div>
+        <div class="meta-item" id="metaProviderWrap" style="display:none">
+          🤖 <strong id="metaProvider" style="color:var(--indigo)">-</strong>
+          <span id="metaKeyBadge" style="display:none;font-size:10px;padding:1px 6px;
+            border-radius:8px;background:rgba(16,185,129,.12);color:#059669;
+            font-weight:700;margin-left:4px">Your key</span>
+        </div>
         <div class="token-badge" id="tokenBadge">✓ Complete</div>
       </div>
     </div>
@@ -8175,8 +8248,10 @@ async function _callProviderWithFallback(requestBody, signal) {
       // ── SUCCESS ─────────────────────────────────────────────────────────
       if (response.ok) {
         if (provider !== ProviderManager.getActive()) {
-          ProviderManager.setActive(provider, true);
-          console.log('[Fallback] Active provider updated to:', provider);
+          // P1 FIX: auto-switch is session-only — do NOT save to localStorage.
+          // The user's explicit provider choice must be preserved for next generation.
+          ProviderManager.setActive(provider, false);
+          console.log('[Fallback] Auto-switched to:', provider, '(temporary — user preference unchanged)');
         }
         _consecutiveAllFailures = 0; // reset on success
         return response;
@@ -8253,6 +8328,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isDailyLimit  = err.dailyLimit === true || errText.includes('daily quota exhausted');
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
+        const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
         const provName      = ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -8264,19 +8340,20 @@ async function _callProviderWithFallback(requestBody, signal) {
             toastMsg = provName + ' token limit exceeded. Please shorten your requirement, or add a Gemini API key in Settings (free, 1M token limit).';
           }
         } else if (isDailyLimit) {
-          // Daily quota — cannot retry until midnight UTC, no countdown useful
           if (nextName) {
             toastMsg = provName + ' daily quota exhausted. Switching to ' + nextName + '…';
           } else {
             toastMsg = provName + ' daily quota exhausted (resets midnight UTC). '
               + 'Add a free GEMINI_API_KEY at aistudio.google.com in Cloudflare Pages → Settings → Environment Variables to continue now.';
           }
+        } else if (isKeyIssue && provider === 'gemini') {
+          // Key-specific Gemini error — surface the proxy's actionable message directly
+          toastMsg = errText.substring(0, 200);
+          if (nextName) toastMsg += ' Switching to ' + nextName + '…';
         } else if (isUnavailable) {
-          // Gemini model chain exhausted — specific actionable message
           if (nextName) {
-            toastMsg = provName + ' model unavailable. Switching to ' + nextName + '…';
+            toastMsg = provName + ' unavailable. Switching to ' + nextName + '…';
           } else {
-            // REAL ROOT CAUSE: only one provider configured — nothing to switch to
             toastMsg = provName + ' model is currently unavailable and no fallback provider is configured. '
               + 'Add a GROQ_API_KEY (free at console.groq.com) in Cloudflare Pages → Settings → Environment Variables, then redeploy.';
           }
@@ -9449,8 +9526,15 @@ Make the output production-ready and specific to ${platform}. Use real field nam
     }
 
     // ── Build request body once (reused for every provider attempt) ─────────
+    // Read user-supplied keys from localStorage — these override shared deployment
+    // keys so users generate against their own quota with no shared limits.
+    const _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
+
     const requestBody = {
-      ...(apiKey ? { apiKey } : {}),
+      ...(apiKey       ? { apiKey }                          : {}),  // legacy Claude-only key
+      ...(_uk.claude   ? { apiKey: _uk.claude }              : {}),  // user Claude key
+      ...(_uk.gemini   ? { geminiApiKey: _uk.gemini }        : {}),  // user Gemini key
+      ...(_uk.groq     ? { groqApiKey:   _uk.groq   }        : {}),  // user Groq key
       model:    'claude-sonnet-4-6',   // proxy maps to correct model per provider
       max_tokens: _maxTokens,
       stream:   true,
@@ -10152,6 +10236,23 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('metaModule').textContent = module || 'General';
   document.getElementById('metaLang').textContent = `${detectedLanguage} &#8594; EN`;
   document.getElementById('tokenBadge').textContent = '✓ Complete';
+
+  // Show "Generated by [provider]" badge + "Your key" indicator
+  try {
+    const _activeP    = ProviderManager.getActive();
+    const _pConfig    = ProviderManager.getConfig(_activeP);
+    const _pName      = _pConfig.name || _activeP;
+    const _uk         = (typeof getUserKeys === 'function') ? getUserKeys() : {};
+    const _isUserKey  = !!_uk[_activeP];
+    const _pWrap      = document.getElementById('metaProviderWrap');
+    const _pEl        = document.getElementById('metaProvider');
+    const _pBadge     = document.getElementById('metaKeyBadge');
+    if (_pWrap && _pEl) {
+      _pEl.textContent    = _pName;
+      _pWrap.style.display = '';
+      if (_pBadge) _pBadge.style.display = _isUserKey ? 'inline' : 'none';
+    }
+  } catch(e) { /* non-critical — meta bar badge */ }
 
   document.getElementById('copyBtn').disabled = false;
   document.getElementById('copyXlsBtn').disabled = false;
@@ -11343,6 +11444,63 @@ document.getElementById('apiKey').addEventListener('input', function() {
     localStorage.removeItem('shuddhiqa-apikey');
   }
 });
+
+// ── User-supplied API key management ────────────────────────────────────────
+// Users can supply their own keys per provider. Keys are stored in localStorage
+// only — never logged or stored server-side. They override the shared deployment
+// keys so users have their own independent rate limits.
+
+const _USER_KEY_LS = { claude: 'shuddhi-user-claude-key', gemini: 'shuddhi-user-gemini-key', groq: 'shuddhi-user-groq-key' };
+
+function saveUserKey(provider, value) {
+  const key = _USER_KEY_LS[provider];
+  if (!key) return;
+  if (value && value.length > 8) {
+    localStorage.setItem(key, value);
+    const badge = document.getElementById('user' + provider.charAt(0).toUpperCase() + provider.slice(1) + 'KeyBadge');
+    if (badge) badge.style.display = 'inline';
+    showToast(provider.charAt(0).toUpperCase() + provider.slice(1) + ' key saved — your limits will be used', '🔑');
+  } else {
+    localStorage.removeItem(key);
+    const badge = document.getElementById('user' + provider.charAt(0).toUpperCase() + provider.slice(1) + 'KeyBadge');
+    if (badge) badge.style.display = 'none';
+  }
+}
+
+function clearAllUserKeys() {
+  Object.values(_USER_KEY_LS).forEach(k => localStorage.removeItem(k));
+  ['userClaudeKey','userGeminiKey','userGroqKey'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  ['userClaudeKeyBadge','userGeminiKeyBadge','userGroqKeyBadge'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  showToast('All personal API keys cleared', '🗑️');
+}
+
+function getUserKeys() {
+  return {
+    claude: localStorage.getItem(_USER_KEY_LS.claude) || '',
+    gemini: localStorage.getItem(_USER_KEY_LS.gemini) || '',
+    groq:   localStorage.getItem(_USER_KEY_LS.groq)   || '',
+  };
+}
+
+// Restore saved user keys into Settings inputs on load
+(function _restoreUserKeys() {
+  const map = { claude: 'userClaudeKey', gemini: 'userGeminiKey', groq: 'userGroqKey' };
+  Object.entries(_USER_KEY_LS).forEach(([provider, lsKey]) => {
+    const saved = localStorage.getItem(lsKey);
+    if (!saved) return;
+    const input = document.getElementById(map[provider]);
+    if (input) input.value = saved;
+    const badge = document.getElementById(map[provider] + 'Badge');
+    if (badge) { badge.style.display = 'inline'; }
+    // Auto-expand the section if any key is saved
+    const body = document.getElementById('userKeyBody');
+    if (body) body.style.display = 'block';
+  });
+})();
 
 // BUG-002 FIX: Cancellation flag for mid-push modal close
 let adoPushCancelled = false;

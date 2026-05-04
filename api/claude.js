@@ -50,19 +50,24 @@ const GEMINI_MODEL_CHAIN = [
 ];
 
 // ── Resolve which provider + key to use ────────────────────────
-function resolveProvider(requestedProvider) {
+// userKeys = { claude, gemini, groq } — keys supplied by the user from their browser.
+// User keys take priority over server env vars for their respective provider,
+// giving users unlimited generations against their own account limits.
+function resolveProvider(requestedProvider, userKeys) {
+  const uk = userKeys || {};
   const preferred = (requestedProvider || process.env.AI_PROVIDER || '').toLowerCase();
   const candidates = preferred
     ? [preferred, ...['claude','gemini','groq'].filter(p => p !== preferred)]
     : ['claude','gemini','groq'];
 
   for (const p of candidates) {
-    const key = {
+    // User-supplied key takes priority over the server env var for this provider
+    const key = uk[p] || {
       claude: process.env.CLAUDE_API_KEY,
       gemini: process.env.GEMINI_API_KEY,
       groq:   process.env.GROQ_API_KEY,
     }[p];
-    if (key) return { provider: p, key };
+    if (key) return { provider: p, key, userSupplied: !!uk[p] };
   }
   return null;
 }
@@ -376,13 +381,21 @@ export default async function handler(req) {
   let body;
   try { body = rawBody ? JSON.parse(rawBody) : {}; }
   catch(e) { body = {}; }
-  const { apiKey: userKey, provider: requestedProvider, ...forwardBody } = body;
+  const { apiKey: userClaudeKey, geminiApiKey: userGeminiKey, groqApiKey: userGroqKey,
+          provider: requestedProvider, ...forwardBody } = body;
 
-  // Resolve provider + key
-  let resolved = resolveProvider(requestedProvider);
+  // Build user-supplied key map — non-empty strings only
+  const _userKeys = {
+    ...(userClaudeKey ? { claude: userClaudeKey } : {}),
+    ...(userGeminiKey ? { gemini: userGeminiKey } : {}),
+    ...(userGroqKey   ? { groq:   userGroqKey   } : {}),
+  };
 
-  // Fallback: user-supplied key (local dev)
-  if (!resolved && userKey) resolved = { provider: 'claude', key: userKey };
+  // Resolve provider + key (user keys override server env vars per-provider)
+  let resolved = resolveProvider(requestedProvider, _userKeys);
+
+  // Legacy fallback: user-supplied Claude key from older clients (apiKey only)
+  if (!resolved && userClaudeKey) resolved = { provider: 'claude', key: userClaudeKey, userSupplied: true };
 
   if (!resolved) {
     return new Response(JSON.stringify({
@@ -418,14 +431,51 @@ export default async function handler(req) {
           '| URL:', upstream.url.replace(/key=[^&?]+/, 'key=REDACTED')
         );
 
-        // ── True rate limit or quota — do NOT try the model chain (waste quota).
-        //    Return switchProvider immediately so the frontend tries Groq/Claude.
+        // BUG FIX 1: API_NOT_ENABLED — detect BEFORE model chain.
+        // Previously this check was outside the Gemini block so a 403 wasted
+        // 2 chain attempts then returned vague "all models unavailable".
+        if (response.status === 403) {
+          const isApiNotEnabled = detail && (
+            detail.includes('API_NOT_ENABLED') ||
+            detail.includes('not been used') ||
+            detail.includes('disabled') ||
+            detail.includes('SERVICE_DISABLED')
+          );
+          if (isApiNotEnabled) {
+            return new Response(JSON.stringify({
+              error: 'Gemini API not enabled on this key\'s Google Cloud project. '
+                + 'Fix: go to console.cloud.google.com → APIs → Enable "Generative Language API". '
+                + 'OR get a fresh key from aistudio.google.com (API enabled by default).',
+              switchProvider: true,
+              provider: 'gemini',
+            }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          }
+          return new Response(JSON.stringify({
+            error: 'Gemini API key does not have permission (403). Check the key is valid and not restricted.',
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // BUG FIX 3: 401 — distinguish user-supplied vs server key for clarity.
+        if (response.status === 401) {
+          const isUserKey = !!(body.geminiApiKey);
+          return new Response(JSON.stringify({
+            error: isUserKey
+              ? 'Your Gemini API key is invalid. Remove it in Settings → Use Your Own Key and get a fresh key from aistudio.google.com.'
+              : 'Gemini API key invalid or expired — check GEMINI_API_KEY in Cloudflare Pages → Settings → Environment Variables.',
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // True rate limit or quota — do NOT try the model chain (waste quota).
         const isTrueRateLimit = response.status === 429
           || (response.status === 400 && (detail.includes('quota') || detail.includes('RESOURCE_EXHAUSTED') || detail.includes('rate')));
         if (isTrueRateLimit) {
           const retryAfter = response.headers.get('retry-after') || '60';
           const waitSecs   = parseInt(retryAfter) || 60;
-          console.warn('[Gemini] Rate limit / quota hit — switching to next provider immediately. Retry in ~' + waitSecs + 's');
+          console.warn('[Gemini] Rate limit / quota hit — switching to next provider. Retry in ~' + waitSecs + 's');
           return new Response(JSON.stringify({
             error: 'Gemini free-tier rate limit reached (resets in ~' + waitSecs + 's) — switching to next provider',
             waitSecs,
@@ -434,9 +484,8 @@ export default async function handler(req) {
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
-        // ── Model-not-found / API-disabled errors — try the model chain ──────
+        // Model-not-found / server errors — try the model chain
         const shouldTryChain = response.status === 404
-          || response.status === 403
           || (response.status === 400 && !detail.includes('quota'))
           || response.status === 500;
 
@@ -447,9 +496,7 @@ export default async function handler(req) {
             const sep    = forwardBody.stream ? '&' : '?';
             const altUrl = `https://generativelanguage.googleapis.com/${apiVer}/models/${fallbackModel}:${ep}${sep}key=${key}`;
 
-            // FIX: rebuild body without thinkingConfig for non-2.5 models.
-            // The original upstream.body was built for gemini-2.5-flash and includes
-            // thinkingConfig:{thinkingBudget:0} which causes a 400 on older models.
+            // Always strip thinkingConfig for non-2.5 models (causes 400 on 2.0/1.5)
             let chainBody = upstream.body;
             if (!fallbackModel.includes('2.5')) {
               try {
@@ -464,13 +511,12 @@ export default async function handler(req) {
             console.log('[Gemini] Chain trying:', fallbackModel, '(' + apiVer + ')');
             const altResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
             const altText = await altResp.text().catch(() => '');
-            console.log('[Gemini] Chain result:', fallbackModel, '→ HTTP', altResp.status, altText.substring(0, 150));
+            console.log('[Gemini] Chain result:', fallbackModel, '\u2192 HTTP', altResp.status, altText.substring(0, 150));
             if (altResp.ok) {
-              // Non-streaming: parse the text we already consumed
               if (forwardBody.stream !== true) {
                 let altJson = {};
                 try { altJson = JSON.parse(altText); } catch(e) {}
-                const text = getGeminiText(altJson); // FIX: use helper to skip thought parts (was parts[0].text)
+                const text = getGeminiText(altJson);
                 return new Response(JSON.stringify({
                   content: [{ type: 'text', text }],
                   stop_reason: 'end_turn',
@@ -478,24 +524,29 @@ export default async function handler(req) {
                   _provider: fallbackModel
                 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
               }
-              // Streaming: fresh request (we consumed the body with text())
-              const streamResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: upstream.body });
+              // BUG FIX 2: Streaming re-fetch MUST use chainBody (thinkingConfig stripped),
+              // NOT upstream.body — upstream.body causes 400 on gemini-2.0/1.5-flash.
+              const streamResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
               return new Response(normalizeStream(provider, streamResp.body), {
                 status: 200, headers: { ...corsHeaders, 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' },
               });
             }
           }
-          // All models tried and failed → switch to next provider
+          // BUG FIX 4: All models exhausted — actionable error message
           console.warn('[Gemini] All models exhausted. Switching to next provider.');
+          const _geminiKeyType = body.geminiApiKey ? 'your personal key' : 'the deployment key';
           return new Response(JSON.stringify({
-            error: 'Gemini: all available models are currently unavailable',
+            error: 'Gemini: all available models failed using ' + _geminiKeyType + '. '
+              + 'Causes: (1) GEMINI_API_KEY not set in Cloudflare Pages env vars. '
+              + '(2) Generative Language API not enabled — console.cloud.google.com → APIs → Enable it. '
+              + '(3) All free-tier quotas exhausted — get a fresh key from aistudio.google.com.',
             detail: detail.substring(0, 200),
             switchProvider: true,
             provider: 'gemini',
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
-        // 401 / other non-retryable — surface as switchable
+        // Other non-retryable Gemini error
         return new Response(JSON.stringify({
           error: `Gemini error ${response.status}: ${detail.substring(0, 150)}`,
           switchProvider: true,
