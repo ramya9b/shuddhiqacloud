@@ -262,13 +262,17 @@ export async function onRequest(context) {
   if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
   if (req.method !== 'POST')   return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: corsHeaders });
 
-  // F-04 FIX: enforce 5MB body size cap before parsing.
-  // Cloudflare allows up to 100MB by default — explicit check matters more here.
+  // F-04 FIX (raised 5MB→10MB after 413 misdiagnosis bug): enforce 10MB body size cap before parsing.
+  // Body size 10MB — protects against abuse while accommodating large enterprise FRDs
+  // (100+ page PDFs typically extract to 2-4MB of text).
+  // Cloudflare allows up to 100MB by default — this 10MB ceiling is a soft warning and a deliberate
+  // safety margin against runaway/malicious payloads.
+  // Was: 5_000_000 (too aggressive — rejected legitimate enterprise FRDs).
   const rawBody = await req.text().catch(() => '');
-  if (rawBody.length > 5_000_000) {
+  if (rawBody.length > 10_000_000) {
     return new Response(JSON.stringify({
       error: 'Request body too large',
-      detail: 'Body size ' + Math.round(rawBody.length / 1024) + 'KB exceeds 5MB limit'
+      detail: 'Body size ' + Math.round(rawBody.length / 1024) + 'KB exceeds 10MB limit'
     }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
   let body;

@@ -5021,6 +5021,11 @@ header::after { display: none !important; }
       <!-- Settings -->
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings">⚙️</button>
 
+      <!-- P2 — New Session: clears conversation history (distinct from + New Requirement) -->
+      <button id="newSessionBtn" class="hdr-icon-btn" onclick="newSession()" title="Clear conversation history (start fresh)" aria-label="New session" style="display:none;font-size:13px;padding:6px 10px">
+        ↻ New Session
+      </button>
+
       <!-- New Requirement CTA -->
       <button class="hdr-cta-btn" onclick="resetForm()">
         <span style="font-size:15px;font-weight:300">+</span> New Requirement
@@ -5191,6 +5196,22 @@ header::after { display: none !important; }
           <strong>Groq/Llama</strong> — Free: 30 req/min, 14,400 req/day. Fastest. Best for active sessions.
         </div>
       </details>
+
+      <!-- P2 — Conversation history controls -->
+      <div class="settings-section" style="margin-top:8px">
+        <div class="settings-section-title">Conversation History</div>
+        <div class="settings-section-desc">
+          Multi-turn refinement uses the last 10 exchanges as context. Stored locally in your browser only — never sent except as part of generation requests.
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap">
+          <span style="font-size:13px;color:var(--text2)">
+            Current: <strong id="convHistCount" style="color:var(--text1)">0</strong> turn(s)
+          </span>
+          <button onclick="clearConversationHistory();const c=document.getElementById('convHistCount');if(c)c.textContent=(typeof ConversationManager!=='undefined'?ConversationManager.pairCount():0);" type="button" style="padding:6px 14px;background:var(--surface2,#f3f4f6);border:1px solid var(--border1,#e5e7eb);color:var(--text1);border-radius:6px;cursor:pointer;font-size:13px;font-weight:500" aria-label="Clear conversation history">
+            Clear conversation
+          </button>
+        </div>
+      </div>
     </div>
 
 
@@ -6561,6 +6582,128 @@ window._updateProviderUI = _updateProviderUI;
 // ── Wire ProviderManager to window for global access ────────────────
 window.ProviderManager = ProviderManager;
 
+// ════════════════════════════════════════════════════════════════════════
+// P2 — ConversationManager
+// Multi-turn conversation history for iterative test case refinement.
+//
+// Storage: localStorage 'shuddhi-qa-conversation' key
+// Caps:
+//   • 10 user/assistant message pairs (20 messages total) MAX
+//   • 50KB total bytes MAX (whichever hits first)
+// Token budget: 100K tokens (~400K chars at ~4 chars/token) — drops oldest
+//   pairs until fit. Logs dropped count to console for diagnostics.
+//
+// Image safety: base64 image data URLs stripped before storage to prevent
+// localStorage quota blowout. The UI already discarded the binary; only
+// text history matters for AI continuation.
+// ════════════════════════════════════════════════════════════════════════
+const ConversationManager = (function() {
+  const STORAGE_KEY        = 'shuddhi-qa-conversation';
+  const MAX_PAIRS          = 10;          // 10 user/assistant pairs = 20 messages
+  const MAX_BYTES          = 50_000;      // 50KB localStorage cap
+  const TOKEN_BUDGET_CHARS = 400_000;     // ~100K tokens (Claude/Gemini context-friendly)
+  const IMG_DATA_REGEX     = /data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/g;
+
+  let _history = [];
+
+  function _stripImageData(content) {
+    if (typeof content !== 'string') return '';
+    if (content.indexOf('data:image/') === -1) return content;
+    return content.replace(IMG_DATA_REGEX, '[image stripped from history]');
+  }
+
+  function _serializedBytes(arr) {
+    try { return JSON.stringify(arr).length; } catch(e) { return Infinity; }
+  }
+
+  function _trimToCaps() {
+    // Cap at MAX_PAIRS * 2 messages
+    while (_history.length > MAX_PAIRS * 2) _history.shift();
+    // Cap at MAX_BYTES
+    while (_history.length > 0 && _serializedBytes(_history) > MAX_BYTES) {
+      _history.shift();
+    }
+  }
+
+  function _persist() {
+    _trimToCaps();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(_history));
+    } catch (quotaErr) {
+      // localStorage quota exceeded — drop oldest, retry until success or empty
+      console.warn('[ConversationManager] localStorage quota — dropping oldest messages');
+      while (_history.length > 0) {
+        _history.shift();
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(_history));
+          return;
+        } catch (e) { /* keep dropping */ }
+      }
+    }
+  }
+
+  function _restore() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          _history = parsed.filter(m =>
+            m && typeof m === 'object'
+            && (m.role === 'user' || m.role === 'assistant')
+            && typeof m.content === 'string'
+          );
+        }
+      }
+    } catch(e) {
+      console.warn('[ConversationManager] restore failed:', e.message);
+      _history = [];
+    }
+  }
+
+  function append(role, content) {
+    if (role !== 'user' && role !== 'assistant') {
+      console.warn('[ConversationManager] Invalid role:', role);
+      return;
+    }
+    if (typeof content !== 'string' || !content) return;
+    const safe = _stripImageData(content);
+    _history.push({ role, content: safe });
+    _persist();
+  }
+
+  function getRecent() {
+    // Apply token budget — drop oldest until under TOKEN_BUDGET_CHARS
+    let out = _history.slice(-MAX_PAIRS * 2);
+    let dropped = 0;
+    while (out.length > 0 && out.reduce((n, m) => n + m.content.length, 0) > TOKEN_BUDGET_CHARS) {
+      out.shift();
+      dropped++;
+    }
+    if (dropped > 0) {
+      console.log('[ConversationManager] Trimmed', dropped, 'old messages to fit token budget');
+    }
+    return out;
+  }
+
+  function clear() {
+    _history = [];
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) { /* C-07: silent — cleanup */ }
+    console.log('[ConversationManager] Cleared');
+  }
+
+  function size()       { return _history.length; }
+  function hasHistory() { return _history.length > 0; }
+  function pairCount()  { return Math.floor(_history.length / 2); }
+
+  // Auto-restore on load
+  _restore();
+
+  return { append, getRecent, clear, size, hasHistory, pairCount, persist: _persist, restore: _restore };
+})();
+
+window.ConversationManager = ConversationManager;
+
 // ── Backward-compat shims — redirect legacy calls to ProviderManager ─
 // These ensure ALL existing code that calls getActiveProvider() etc.
 // continues to work exactly as before.
@@ -6962,6 +7105,61 @@ function showToast(msg, emoji = '\u2705') {
     if (_bannerTimer) { clearTimeout(_bannerTimer); _bannerTimer = null; }
   };
 })();
+
+// ════════════════════════════════════════════════════════════════════════
+// P2 — Session-management helpers
+// newSession()      — clears conversation history (different from resetForm,
+//                     which clears UI state). User-facing button hidden when
+//                     history is empty.
+// _updateNewSessionBtnVisibility() — show/hide "↻ New Session" button.
+// clearConversationHistory() — invoked from the Settings panel link.
+// ════════════════════════════════════════════════════════════════════════
+function _updateNewSessionBtnVisibility() {
+  const btn = document.getElementById('newSessionBtn');
+  if (!btn) return;
+  const has = (typeof ConversationManager !== 'undefined') && ConversationManager.hasHistory();
+  btn.style.display = has ? 'inline-flex' : 'none';
+}
+window._updateNewSessionBtnVisibility = _updateNewSessionBtnVisibility;
+
+function newSession() {
+  if (typeof ConversationManager === 'undefined') return;
+  if (!ConversationManager.hasHistory()) {
+    if (typeof showToast === 'function') showToast('No conversation to clear', 'ℹ️');
+    return;
+  }
+  const ok = confirm(
+    'Start a new session?\n\n'
+    + 'This will clear your conversation history (' + ConversationManager.pairCount()
+    + ' previous turn' + (ConversationManager.pairCount() === 1 ? '' : 's') + ').\n'
+    + 'Your generated test cases will remain visible until you click "+ New Requirement".\n\n'
+    + 'Continue?'
+  );
+  if (!ok) return;
+  ConversationManager.clear();
+  _updateNewSessionBtnVisibility();
+  if (typeof showToast === 'function') showToast('Conversation history cleared — next generation starts fresh', '✓');
+}
+window.newSession = newSession;
+
+function clearConversationHistory() {
+  // Settings-panel entry point — same behaviour as newSession() but with
+  // a settings-context message.
+  if (typeof ConversationManager === 'undefined') return;
+  if (!ConversationManager.hasHistory()) {
+    if (typeof showToast === 'function') showToast('No conversation history to clear', 'ℹ️');
+    return;
+  }
+  const ok = confirm('Clear all conversation history? This cannot be undone.');
+  if (!ok) return;
+  ConversationManager.clear();
+  _updateNewSessionBtnVisibility();
+  if (typeof showToast === 'function') showToast('Conversation history cleared', '✓');
+  // Refresh the count label in settings panel if visible
+  const cnt = document.getElementById('convHistCount');
+  if (cnt) cnt.textContent = '0';
+}
+window.clearConversationHistory = clearConversationHistory;
 
 function resetForm() {
   // ── ProviderManager state cleanup — unblocks any stuck generation ──
@@ -7957,6 +8155,30 @@ async function _callProviderWithFallback(requestBody, signal) {
 
       console.error('[Fallback] Provider:', provider, '| Status:', status, '| Error:', errText.substring(0, 120));
 
+      // ── 413 EARLY EXIT (proxy body cap) ───────────────────────────────────
+      // 413 = OUR proxy OR the platform (Vercel ~4.5MB, Cloudflare 100MB) rejected
+      // the body size. Cycling providers is pointless — every provider call goes
+      // through the same proxy with the same body. Treat ANY 413 this way, even
+      // if the error body is empty/non-JSON (Vercel platform 413 returns HTML).
+      // Distinguishes from provider-side oversize errors (which return status 400
+      // with context_length_exceeded — those still flow into isTooLarge below).
+      if (status === 413) {
+        const detail = (err.detail || err.error || errText || 'request body exceeds size limit').toString();
+        console.error('[Fallback] Proxy body size limit hit (HTTP 413). NOT cycling providers — all providers use the same proxy. ' + detail);
+        showAdoBanner(
+          '<strong>Document too large for the proxy.</strong> '
+          + '(' + detail + ') '
+          + 'Try one of: (1) Shorten the requirement text, '
+          + '(2) Generate one section at a time instead of "All Sections", '
+          + '(3) Remove embedded images from the PDF before upload.',
+          'error',
+          0  // persistent — user must act
+        );
+        // Do NOT mark provider failed. Do NOT cycle. Throw a tagged error so
+        // the outer handler in generate() can suppress its misleading banner.
+        throw new Error('PROXY_BODY_TOO_LARGE: ' + detail);
+      }
+
       // ── Classify: retryable (rate limit / quota / too large) vs hard error ──
       const isTooLarge = status === 413
         || errText.includes('too large')
@@ -8125,6 +8347,11 @@ async function _callProviderWithFallback(requestBody, signal) {
 
 
 async function generate() {
+  // FIX 4 (413 misdiagnosis): flag for finally{} to NOT dismiss the actionable
+  // banner shown by the proxy-body-cap handler. Default false; set true when
+  // a PROXY_BODY_TOO_LARGE error has been displayed and must persist.
+  let _preserveBannerOnFinally = false;
+
   // Guard via ProviderManager — with stuck-flag detection
   if (ProviderManager.isGenerating()) {
     // Detect stuck flag: if generating for >2 minutes, force-reset
@@ -8202,6 +8429,19 @@ async function generate() {
 CRITICAL LANGUAGE RULE: Generate ALL test case output in ${outputLang}.
 
 ══════════════════════════════════════════════════
+🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
+══════════════════════════════════════════════════
+
+Before generating any test cases, check whether the requirement specifies:
+  (a) source system
+  (b) target system
+  (c) user role/persona
+  (d) data flow direction
+  (e) test environment
+
+If TWO OR MORE of these are missing or ambiguous, output ONLY a clarifying questions block with 1-3 specific questions and STOP. Do not generate test cases until the user provides the missing context. If only ONE is missing, proceed with a flagged assumption noted in Gap Analysis.
+
+══════════════════════════════════════════════════
 ⚠️  HARD CONSTRAINTS — READ BEFORE GENERATING ANYTHING
 These rules override everything else. Violations are not allowed.
 ══════════════════════════════════════════════════
@@ -8246,6 +8486,12 @@ CONSTRAINT 5 — SELF-CHECK BEFORE OUTPUTTING EACH TEST CASE:
   Only output the test case after passing all 4 checks.
 
 ══════════════════════════════════════════════════
+══════════════════════════════════════════════════
+🚫 ZERO HALLUCINATION TOLERANCE
+══════════════════════════════════════════════════
+
+If you do not have enough context to generate a test case accurately, ASK FOR CLARIFICATION instead of guessing. Never fabricate D365 menu paths, Salesforce field names, API endpoints, or table schemas. If a field name, table name, or navigation path is uncertain, write it as [needs confirmation: <best guess>] and flag it in the Gap Analysis section. Better to ask than to fabricate.
+
 ═══════════════════════════════════════
 STEP WRITING RULES — STRICTLY ENFORCED
 ═══════════════════════════════════════
@@ -8400,6 +8646,19 @@ Do NOT output until all 5 steps pass.`
     : `You are a senior QA Test Case Engineer specialising in Microsoft Dynamics 365 (F&O, CRM, Business Central), Salesforce (Sales, Service, CPQ), Workday, Oracle ERP Cloud, SAP (S/4HANA), Guidewire, ServiceNow, and Power BI report testing. You have 15+ years of enterprise platform QA experience and specialise in creating DETAILED, GRANULAR, production-ready test cases.
 
 ══════════════════════════════════════════════════
+🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
+══════════════════════════════════════════════════
+
+Before generating any test cases, check whether the requirement specifies:
+  (a) source system
+  (b) target system
+  (c) user role/persona
+  (d) data flow direction
+  (e) test environment
+
+If TWO OR MORE of these are missing or ambiguous, output ONLY a clarifying questions block with 1-3 specific questions and STOP. Do not generate test cases until the user provides the missing context. If only ONE is missing, proceed with a flagged assumption noted in Gap Analysis.
+
+══════════════════════════════════════════════════
 ⚠️  HARD CONSTRAINTS — READ BEFORE GENERATING ANYTHING
 These rules override everything else. Violations are not allowed.
 ══════════════════════════════════════════════════
@@ -8442,6 +8701,12 @@ CONSTRAINT 5 — SELF-CHECK BEFORE OUTPUTTING EACH TEST CASE:
   ✔ Is this scenario unique from all previous scenarios? If no → change it now.
   ✔ Is this test case relevant to the actual requirement given? If no → replace now.
   Only output the test case after passing all 4 checks.
+
+══════════════════════════════════════════════════
+🚫 ZERO HALLUCINATION TOLERANCE
+══════════════════════════════════════════════════
+
+If you do not have enough context to generate a test case accurately, ASK FOR CLARIFICATION instead of guessing. Never fabricate D365 menu paths, Salesforce field names, API endpoints, or table schemas. If a field name, table name, or navigation path is uncertain, write it as [needs confirmation: <best guess>] and flag it in the Gap Analysis section. Better to ask than to fabricate.
 
 ══════════════════════════════════════════════════
 PLATFORM-SPECIFIC EXPERTISE:
@@ -9063,6 +9328,41 @@ Make the output production-ready and specific to ${platform}. Use real field nam
     };
     const _maxTokens = _formatTokenBudget[outputFormat] || 16384;
 
+    // ════════════════════════════════════════════════════════════════════
+    // P2 — Conversation history detection + message-array assembly
+    // ════════════════════════════════════════════════════════════════════
+    // Detect fresh FRD: file upload OR text contains FRD/Requirement headings
+    // AND length > 5000. Per spec: a fresh FRD means a new context.
+    const _hasFRDHeading = extractedDocText
+      && /(^|\n)\s*#{1,3}\s*(FRD|Requirement|User Story|Functional Requirement)/i.test(extractedDocText);
+    const _isFreshFRD = !!(extractedDocText && extractedDocText.length > 5000)
+      && _hasFRDHeading;
+
+    // Decide whether to use history
+    let _useHistory = ConversationManager.hasHistory();
+    if (_useHistory && _isFreshFRD) {
+      const _continueIt = confirm(
+        'You have an active conversation (' + ConversationManager.pairCount() +
+        ' previous turn' + (ConversationManager.pairCount() === 1 ? '' : 's') + ').\n\n' +
+        'You uploaded a new requirement document. What would you like to do?\n\n' +
+        'OK    = Continue previous session (use history as context)\n' +
+        'Cancel = Start fresh (clear history, treat this as a new generation)'
+      );
+      if (!_continueIt) {
+        ConversationManager.clear();
+        _useHistory = false;
+      }
+    }
+
+    // Build messages array — with or without history
+    const _historyMessages = _useHistory ? ConversationManager.getRecent() : [];
+    const _messages = [..._historyMessages, { role: 'user', content: userPrompt }];
+
+    if (_historyMessages.length > 0) {
+      console.log('[Generate] Continuing session with',
+        _historyMessages.length, 'prior messages (', ConversationManager.pairCount(), 'pairs)');
+    }
+
     // ── Build request body once (reused for every provider attempt) ─────────
     const requestBody = {
       ...(apiKey ? { apiKey } : {}),
@@ -9070,8 +9370,45 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       max_tokens: _maxTokens,
       stream:   true,
       system:   systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+      messages: _messages,
     };
+
+    // ── 413 PRE-FLIGHT CHECK ────────────────────────────────────────────────
+    // Avoid wasting a round-trip when the request will be rejected by the proxy.
+    // Soft warn at 8MB (gives user a chance to abort or proceed). Hard reject at 10MB.
+    // Aligns with proxy cap raised from 5MB → 10MB (see api/claude.js comment).
+    const _bodyJson  = JSON.stringify(requestBody);
+    const _bodyBytes = new Blob([_bodyJson]).size;
+    const _bodyMB    = (_bodyBytes / 1024 / 1024).toFixed(2);
+    console.log('[Generate] Request body size:', _bodyMB + 'MB');
+
+    if (_bodyBytes > 10_000_000) {
+      // Hard reject — would 413 anyway, save the round-trip.
+      showAdoBanner(
+        'Requirement is ' + _bodyMB + 'MB — exceeds the 10MB limit. '
+        + 'Please shorten or split into multiple generations.',
+        'error', 0
+      );
+      _isGenerating = false;
+      try { ProviderManager.endGenerate(); } catch(e) { /* C-07: silent — defensive cleanup */ }
+      return;
+    }
+    if (_bodyBytes > 8_000_000) {
+      // Soft warn — close to limit, may fail.
+      const proceed = confirm(
+        'Your requirement is ' + _bodyMB + 'MB — close to the 10MB proxy limit.\n\n'
+        + 'Generation may fail. Suggestions:\n'
+        + '  • Generate one section at a time instead of "All Sections"\n'
+        + '  • Remove unused parts of the requirement document\n'
+        + '  • Split into multiple smaller generations\n\n'
+        + 'Continue anyway?'
+      );
+      if (!proceed) {
+        _isGenerating = false;
+        try { ProviderManager.endGenerate(); } catch(e) { /* C-07: silent — defensive cleanup */ }
+        return;
+      }
+    }
 
     // ── Route through fallback chain — handles 429 / quota / provider switch ─
     // _callProviderWithFallback:
@@ -9245,6 +9582,24 @@ Make the output production-ready and specific to ${platform}. Use real field nam
 
     // ── Build a specific, actionable error message ──────────────────────────
     const raw = err.message || '';
+
+    // FIX 4 (413 misdiagnosis fix): if the error is our tagged proxy body cap,
+    // the actionable banner has already been shown by _callProviderWithFallback.
+    // Skip the legacy "Document too large for available AI providers" message
+    // (which implies provider-level limits) and skip hideAdoBanner() (which
+    // would dismiss the actionable banner). Just reset state.
+    if (raw.startsWith('PROXY_BODY_TOO_LARGE:')) {
+      console.error('[Generate] Body size cap hit — banner already shown by fallback handler.');
+      _preserveBannerOnFinally = true;   // tell finally{} not to dismiss it
+      _isGenerating = false;
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('outputContent').className = 'output-content';
+      document.getElementById('statusDot').className = 'status-dot';
+      // Do NOT call hideAdoBanner here — the actionable banner must stay visible
+      // until the user dismisses it or starts a new generation.
+      return;
+    }
+
     let cleanMsg;
 
     if (raw.includes('too large') || raw.includes('token limit') || raw.includes('Document too large') || raw.includes('context_length')) {
@@ -9278,8 +9633,9 @@ Make the output production-ready and specific to ${platform}. Use real field nam
     btn.disabled = false;
     document.getElementById('stopBtn').style.display = 'none';
     ProviderManager.endGenerate();
-    // Dismiss any lingering "switching provider" banner on completion or error
-    if (typeof hideAdoBanner === 'function') hideAdoBanner();
+    // Dismiss any lingering "switching provider" banner on completion or error,
+    // UNLESS a PROXY_BODY_TOO_LARGE actionable banner is being preserved (FIX 4).
+    if (!_preserveBannerOnFinally && typeof hideAdoBanner === 'function') hideAdoBanner();
   }
 }
 
@@ -9668,6 +10024,29 @@ function finalizeOutput(elapsed, platform, module) {
 
   // Save to history
   saveToHistory(platform, module, rawMarkdown);
+
+  // P2 — append this turn to ConversationManager history.
+  // Store COMPACT user message (not the giant userPrompt with reminder block):
+  //   • If FRD upload: store parameters + FRD excerpt
+  //   • If refinement: store the user's typed text (flow)
+  // Assistant message = the generated rawMarkdown (truncated by ConversationManager
+  // caps if too large).
+  try {
+    const _userForHistory = extractedDocText
+      ? '[New generation request]\n'
+        + 'Platform: ' + platform + '\n'
+        + 'Module: ' + (module || 'General') + '\n'
+        + 'Priority: ' + priority + '\n'
+        + 'Format: ' + outputFormat + '\n\n'
+        + 'FRD excerpt:\n' + extractedDocText.substring(0, 3000)
+        + (extractedDocText.length > 3000 ? '\n[truncated for history]' : '')
+      : '[Refinement request]\n' + (flow || '');
+    ConversationManager.append('user', _userForHistory);
+    ConversationManager.append('assistant', rawMarkdown);
+    if (typeof _updateNewSessionBtnVisibility === 'function') _updateNewSessionBtnVisibility();
+  } catch(e) {
+    console.warn('[Generate] Could not persist conversation history:', e.message);
+  }
 
   if (typeof buildOutputStats   === 'function') buildOutputStats();
   if (typeof buildOutputToolbar === 'function') buildOutputToolbar();
@@ -11770,6 +12149,13 @@ function openSettings() {
   modal.style.display   = 'flex';
   overlay.style.display = 'block';
   setTimeout(() => modal.classList.add('open'), 10);
+  // P2 — refresh conversation history count display
+  try {
+    const cnt = document.getElementById('convHistCount');
+    if (cnt && typeof ConversationManager !== 'undefined') {
+      cnt.textContent = ConversationManager.pairCount();
+    }
+  } catch(e) { /* C-07: silent — display refresh is optional */ }
   // Load runtime status + Jira settings on open — safe call with fallback
   try {
     if (typeof populateAboutStatus === 'function') populateAboutStatus();
@@ -13499,6 +13885,8 @@ function checkAndTrimFlow(flow) {
   document.addEventListener('DOMContentLoaded', function () {
     var current = localStorage.getItem(THEME_KEY) || 'light';
     syncIcon(current);
+    // P2 — show "New Session" button if conversation history was restored from localStorage
+    if (typeof _updateNewSessionBtnVisibility === 'function') _updateNewSessionBtnVisibility();
   });
 
   // ── Keyboard shortcut: Ctrl / Cmd + Shift + T ─────────────────────────
