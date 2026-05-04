@@ -7617,143 +7617,187 @@ var _consecutiveAllFailures = 0;
 const CONSECUTIVE_FAIL_THRESHOLD = 3;
 
 // ════════════════════════════════════════════════════════════════════════════
-// REQUEST QUEUE MANAGER
-// Spec: Phases 1–6 — Centralized rate limit state, queue, background worker
+// REQUEST QUEUE MANAGER — Parallel Recovery Engine
 //
-// Instead of failing when all providers are rate-limited, requests are queued
-// and automatically processed when a provider becomes available.
-// Users see "High demand — generating shortly..." not an error.
+// Spec: Phases 1–14 (enhanced)
+//
+// Design:
+//   • Enqueue on rate-limit: never show an error or countdown
+//   • Per-provider staggered retries fire independently (NOT a global poll)
+//   • First provider to recover triggers generate() immediately
+//   • Banner shows activity messages — zero time references
+//   • All retries async, UI never blocked
 // ════════════════════════════════════════════════════════════════════════════
 const RequestQueueManager = (() => {
-  let _queue        = [];        // FIFO queue of pending generate requests
-  let _bgWorker     = null;      // setInterval handle for background processor
-  let _statusBanner = null;      // current queue status banner text
-  const POLL_MS     = 3000;      // check queue every 3s (spec: Phase 5)
+  let _queued         = null;   // single pending request (latest wins)
+  let _retryTimers    = {};     // { groq: timerId, gemini: timerId, ... }
+  let _bannerTimer    = null;   // cycling activity message interval
+  let _cancelled      = false;  // cancellation flag
+  let _fired          = false;  // true once a retry has triggered generate()
 
-  // ── Centralized rate limit state (spec: Phase 1) ─────────────────────────
-  // Single source of truth — synced from ProviderManager cooldowns
-  function _getBlockedUntil(provider) {
+  // Activity messages — never mention time (spec: Phase 3)
+  const _MSGS = [
+    'Optimizing across AI providers…',
+    'Preparing your test cases…',
+    'Connecting to available AI provider…',
+    'Analyzing requirement in background…',
+    'Almost ready — finalizing provider connection…',
+    'Working in background — no action needed…',
+  ];
+  let _msgIdx = 0;
+
+  // ── Provider availability ────────────────────────────────────────────────
+  function _blockedMs(provider) {
     const cd = ProviderManager._state.cooldown[provider];
-    return (cd && cd > Date.now()) ? cd : 0;
+    return (cd && cd > Date.now()) ? cd - Date.now() : 0;
   }
 
-  function _isProviderAvailable(provider) {
-    return ProviderManager.hasKey(provider) && !_getBlockedUntil(provider);
-  }
-
-  // ── Smart provider selection (spec: Phase 2) ──────────────────────────────
-  // Returns first available provider or null if all blocked
   function getFirstAvailable() {
-    return ProviderManager.PRIORITY.find(p => _isProviderAvailable(p)) || null;
+    return ProviderManager.PRIORITY.find(p =>
+      ProviderManager.hasKey(p) && !_blockedMs(p)
+    ) || null;
   }
 
   function getMinWaitMs() {
-    // How long until the first provider becomes available
     const times = ProviderManager.PRIORITY
       .filter(p => ProviderManager.hasKey(p))
-      .map(p => _getBlockedUntil(p))
+      .map(p => _blockedMs(p))
       .filter(t => t > 0);
-    return times.length ? Math.max(0, Math.min(...times) - Date.now()) : 0;
+    return times.length ? Math.min(...times) : 0;
   }
 
-  // ── Queue operations (spec: Phase 3) ─────────────────────────────────────
-  function enqueue(onReady) {
-    // onReady: callback fired when a provider is available
-    // Deduplicate: only one queued request allowed (user already waiting)
-    if (_queue.length > 0) {
-      console.log('[Queue] Request already queued — replacing with latest');
-      _queue = [];
+  // ── Staggered parallel retry scheduler (spec: Phase 2) ───────────────────
+  // Each configured provider gets its OWN timer set to fire exactly when
+  // its cooldown expires (+1s buffer). Whichever fires first wins.
+  function _scheduleParallelRetries() {
+    _clearRetryTimers();
+    _fired = false;
+
+    const configured = ProviderManager.PRIORITY.filter(p => ProviderManager.hasKey(p));
+    if (!configured.length) return;
+
+    configured.forEach(provider => {
+      const blockedFor = _blockedMs(provider);
+      // If already available: schedule in 500ms (near-instant)
+      // If cooling down: schedule for exact cooldown expiry + 1s buffer
+      const delayMs = blockedFor > 0 ? blockedFor + 1000 : 500;
+
+      console.log('[Queue] Scheduled retry:', provider, 'in', Math.round(delayMs/1000) + 's');
+
+      _retryTimers[provider] = setTimeout(() => {
+        if (_cancelled || _fired || !_queued) return;
+        if (ProviderManager.isGenerating()) return; // already running
+
+        // Check provider is actually available now
+        if (_blockedMs(provider) > 0) {
+          console.log('[Queue] Timer fired but', provider, 'still blocked — skipping');
+          return;
+        }
+
+        // First provider to fire wins — cancel all others
+        _fired = true;
+        _clearRetryTimers();
+        _stopBannerCycle();
+
+        const req = _queued;
+        _queued = null;
+        console.log('[Queue] Recovered via:', provider,
+          '| Waited:', Math.round((Date.now() - req.enqueuedAt)/1000) + 's');
+        _hideQueueBanner();
+        try { req.onReady(provider); } catch(e) { console.error('[Queue] Recovery error:', e); }
+      }, delayMs);
+    });
+  }
+
+  function _clearRetryTimers() {
+    Object.values(_retryTimers).forEach(id => clearTimeout(id));
+    _retryTimers = {};
+  }
+
+  // ── Banner — activity messages, zero countdown (spec: Phase 3) ───────────
+  function _showQueueBanner() {
+    // Initial banner
+    _updateBannerText();
+
+    if (_bannerTimer) return;
+    // Cycle through activity messages every 4s — feels alive, no time shown
+    _bannerTimer = setInterval(() => {
+      if (!_queued && !_bannerTimer) return;
+      _msgIdx = (_msgIdx + 1) % _MSGS.length;
+      _updateBannerText();
+    }, 4000);
+  }
+
+  function _updateBannerText() {
+    const msg   = _MSGS[_msgIdx % _MSGS.length];
+    const inner = '<span id="queue-status-banner" style="display:inline-flex;align-items:center;gap:8px">'
+      + '<span style="display:inline-block;width:10px;height:10px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite"></span>'
+      + msg + '</span>'
+      + ' <button onclick="RequestQueueManager.cancelQueue()" style="margin-left:10px;padding:2px 10px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:4px;cursor:pointer;font-size:11px">Cancel</button>';
+
+    const existing = document.getElementById('queue-status-banner');
+    if (existing) {
+      const span = existing.querySelector ? existing : document.getElementById('queue-status-banner');
+      // Replace text content preserving structure
+      if (span) span.childNodes[1] && (span.childNodes[1].textContent = msg);
+    } else {
+      // Inject spin animation once
+      if (!document.getElementById('queue-spin-style')) {
+        const s = document.createElement('style');
+        s.id = 'queue-spin-style';
+        s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+        document.head.appendChild(s);
+      }
+      showAdoBanner(inner, 'info', 300000); // 5 min max
     }
-    _queue.push({ onReady, enqueuedAt: Date.now() });
-    console.log('[Queue] Request enqueued. Queue length:', _queue.length);
-    _startWorker();
+  }
+
+  function _stopBannerCycle() {
+    if (_bannerTimer) { clearInterval(_bannerTimer); _bannerTimer = null; }
+  }
+
+  function _hideQueueBanner() {
+    _stopBannerCycle();
+    if (typeof hideAdoBanner === 'function') hideAdoBanner();
+  }
+
+  // ── Public API ────────────────────────────────────────────────────────────
+  function enqueue(onReady) {
+    // Always replace with latest request (spec: Phase 8)
+    if (_queued) console.log('[Queue] Replacing existing queued request with latest');
+    _queued    = { onReady, enqueuedAt: Date.now() };
+    _cancelled = false;
+    _fired     = false;
+    console.log('[Queue] Request enqueued. Scheduling parallel retries…');
+    console.log('[Queue] Queue size: 1');
+    _scheduleParallelRetries();
     _showQueueBanner();
   }
 
-  function dequeue() {
-    return _queue.shift() || null;
-  }
-
   function clear() {
-    _queue = [];
-    _stopWorker();
+    _cancelled = true;
+    _fired     = true;
+    _queued    = null;
+    _clearRetryTimers();
     _hideQueueBanner();
     console.log('[Queue] Cleared');
   }
 
-  function length() { return _queue.length; }
-
-  // ── Background worker (spec: Phase 5) ────────────────────────────────────
-  function _startWorker() {
-    if (_bgWorker) return; // already running
-    console.log('[Queue] Background worker started (polling every ' + POLL_MS + 'ms)');
-    _bgWorker = setInterval(_processQueue, POLL_MS);
-  }
-
-  function _stopWorker() {
-    if (_bgWorker) { clearInterval(_bgWorker); _bgWorker = null; }
-  }
-
-  function _processQueue() {
-    if (!_queue.length) { _stopWorker(); return; }
-    if (ProviderManager.isGenerating()) return; // already running
-
-    const available = getFirstAvailable();
-    if (!available) {
-      // Update banner with current wait time
-      const waitSecs = Math.ceil(getMinWaitMs() / 1000);
-      _showQueueBanner(waitSecs);
-      console.log('[Queue] No provider available yet. Next available in ~' + waitSecs + 's');
-      return;
-    }
-
-    const req = dequeue();
-    if (!req) return;
-
-    const waitedMs = Date.now() - req.enqueuedAt;
-    console.log('[Queue] Provider', available, 'now available. Processing queued request (waited', Math.round(waitedMs/1000) + 's)');
-    _stopWorker();
-    _hideQueueBanner();
-
-    // Fire the queued generation
-    try { req.onReady(available); } catch(e) { console.error('[Queue] Error firing queued request:', e); }
-  }
-
-  // ── UI — queue status banner (spec: Phase 6) ──────────────────────────────
-  function _showQueueBanner(waitSecsLeft) {
-    const msg = typeof waitSecsLeft === 'number' && waitSecsLeft > 0
-      ? '⏳ High demand detected — generating your test cases in ~' + waitSecsLeft + 's…'
-      : '⏳ High demand detected — generating your test cases shortly…';
-
-    // Update existing banner or create new one
-    const existing = document.getElementById('queue-status-banner');
-    if (existing) {
-      existing.textContent = msg;
-    } else {
-      showAdoBanner(
-        '<span id="queue-status-banner">' + msg + '</span>'
-        + ' <button onclick="RequestQueueManager.cancelQueue()" style="margin-left:10px;padding:2px 10px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:4px;cursor:pointer;font-size:11px">Cancel</button>',
-        'info',
-        180000   // 3 min max — worker clears it when done
-      );
-    }
-  }
-
-  function _hideQueueBanner() {
-    if (typeof hideAdoBanner === 'function') hideAdoBanner();
-  }
-
-  // Cancel queued request (user pressed Cancel in banner)
   function cancelQueue() {
     console.log('[Queue] Cancelled by user');
     clear();
     showToast('Generation cancelled', '✕');
   }
 
-  return { enqueue, dequeue, clear, length, getFirstAvailable, getMinWaitMs, cancelQueue, _processQueue };
+  function length() { return _queued ? 1 : 0; }
+
+  // Legacy compat (used in some error paths)
+  function dequeue() { const r = _queued; _queued = null; return r; }
+
+  return { enqueue, dequeue, clear, length, getFirstAvailable, getMinWaitMs, cancelQueue };
 })();
 
-window.RequestQueueManager = RequestQueueManager; // expose for banner cancel button
+window.RequestQueueManager = RequestQueueManager;
 
 
 
