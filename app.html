@@ -8190,29 +8190,31 @@ async function _callProviderWithFallback(requestBody, signal) {
 
       console.error('[Fallback] Provider:', provider, '| Status:', status, '| Error:', errText.substring(0, 120));
 
-      // ── 413 EARLY EXIT (proxy body cap) ───────────────────────────────────
-      // 413 = OUR proxy OR the platform (Vercel ~4.5MB, Cloudflare 100MB) rejected
-      // the body size. Cycling providers is pointless — every provider call goes
-      // through the same proxy with the same body. Treat ANY 413 this way, even
-      // if the error body is empty/non-JSON (Vercel platform 413 returns HTML).
-      // Distinguishes from provider-side oversize errors (which return status 400
-      // with context_length_exceeded — those still flow into isTooLarge below).
-      if (status === 413) {
-        const detail = (err.detail || err.error || errText || 'request body exceeds size limit').toString();
-        console.error('[Fallback] Proxy body size limit hit (HTTP 413). NOT cycling providers — all providers use the same proxy. ' + detail);
+      // ── 413 — two very different cases ─────────────────────────────────────────────────────────────
+      // Case A: err.switchProvider === true  → provider's own token limit
+      //         (Groq 12k TPM context window). Claude + Gemini handle much
+      //         larger payloads. Fall through to isTooLarge/isRateLimit so
+      //         the loop continues to the next configured provider.
+      // Case B: err.switchProvider falsy     → OUR proxy body cap (10MB) or
+      //         platform cap (Vercel ~4.5MB). Every provider goes through the
+      //         same proxy with the same body, so cycling is pointless.
+      if (status === 413 && !err.switchProvider) {
+        const detail = (err.detail || err.error || errText || 'request body exceeds proxy size limit').toString();
+        console.error('[Fallback] Proxy body cap hit (HTTP 413) — cycling pointless, all providers share this proxy. ' + detail);
         showAdoBanner(
           '<strong>Document too large for the proxy.</strong> '
           + '(' + detail + ') '
-          + 'Try one of: (1) Shorten the requirement text, '
+          + 'Try: (1) Shorten the requirement text, '
           + '(2) Generate one section at a time instead of "All Sections", '
           + '(3) Remove embedded images from the PDF before upload.',
           'error',
           0  // persistent — user must act
         );
-        // Do NOT mark provider failed. Do NOT cycle. Throw a tagged error so
-        // the outer handler in generate() can suppress its misleading banner.
-        throw new Error('PROXY_BODY_TOO_LARGE: ' + detail);
+        const _capErr = new Error('PROXY_BODY_TOO_LARGE: ' + detail);
+        _capErr.isProxyCap = true;
+        throw _capErr;
       }
+      // Case A (switchProvider 413) falls through — handled by isTooLarge below.
 
       // ── Classify: retryable (rate limit / quota / too large) vs hard error ──
       const isTooLarge = status === 413
@@ -8318,6 +8320,11 @@ async function _callProviderWithFallback(requestBody, signal) {
 
       // Re-throw genuine hard errors (not switchable conditions)
       const msg = e.message || '';
+      // FIX: proxy body cap errors are never switchable — tag check is authoritative.
+      // Without this, 'PROXY_BODY_TOO_LARGE: groq token limit exceeded' matched
+      // 'token limit' below and incorrectly continued the provider loop.
+      if (e.isProxyCap) throw e;
+
       const isSwitchable =
         msg.includes('rate limit')         ||
         msg.includes('Rate limit')         ||
@@ -8351,6 +8358,17 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   // ── Token-limit: cannot queue, must inform user ───────────────────────────
   if (wasTooLarge) {
+    // Give a targeted message when Groq is the only provider and its context
+    // window is the bottleneck — the actionable fix is to add Gemini or Claude.
+    const _onlyGroq = tried.length === 1 && tried[0] === 'groq';
+    if (_onlyGroq) {
+      throw new Error(
+        'Your document exceeds Groq\u2019s token limit (Groq free tier: ~12k tokens). '
+        + 'To handle large requirements, add a free GEMINI_API_KEY (aistudio.google.com) '
+        + 'in Cloudflare Pages \u2192 Settings \u2192 Environment Variables, then redeploy. '
+        + 'Gemini 2.5-flash supports 1M tokens \u2014 no size issues.'
+      );
+    }
     throw new Error('Document too large for available AI providers. '
       + 'Try: (1) Shorten your requirement text, '
       + '(2) Use a single-section format instead of All Sections, '
