@@ -262,7 +262,18 @@ export async function onRequest(context) {
   if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
   if (req.method !== 'POST')   return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: corsHeaders });
 
-  const body = await req.json().catch(() => ({}));
+  // F-04 FIX: enforce 5MB body size cap before parsing.
+  // Cloudflare allows up to 100MB by default — explicit check matters more here.
+  const rawBody = await req.text().catch(() => '');
+  if (rawBody.length > 5_000_000) {
+    return new Response(JSON.stringify({
+      error: 'Request body too large',
+      detail: 'Body size ' + Math.round(rawBody.length / 1024) + 'KB exceeds 5MB limit'
+    }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+  let body;
+  try { body = rawBody ? JSON.parse(rawBody) : {}; }
+  catch(e) { body = {}; }
   const { apiKey: userKey, provider: requestedProvider, ...forwardBody } = body;
 
   // Resolve provider + key

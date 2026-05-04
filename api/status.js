@@ -15,11 +15,12 @@
  *   { claudeKey, adoKey, adoOrg, adoProject }
  */
 
-export const config = { runtime: 'edge' };
+// Runs as Node.js function (default) — consistent with api/claude.js after edge migration.
+// vercel.json maxDuration applies. Was: export const config = { runtime: 'edge' };
 
 export default function handler(req) {
   const origin  = req.headers.get('origin') || '';
-  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin === '';
+  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
 
   // Resolve active AI provider
   const preferred = (process.env.AI_PROVIDER || '').toLowerCase();

@@ -6,10 +6,13 @@
  */
 export default async function handler(req, res) {
   const origin = req.headers.origin || '';
-  if (origin.includes('localhost') || origin.includes('vercel.app') || origin === '') {
+  if (origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '') {
     res.setHeader('Access-Control-Allow-Origin',  origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  } else {
+    // F-03 FIX: hard-reject disallowed origins to protect ADO API quota
+    return res.status(403).json({ error: 'Origin not allowed' });
   }
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });

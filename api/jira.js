@@ -12,11 +12,15 @@
 
 export default async function handler(req, res) {
   const origin  = req.headers.origin || '';
-  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin === '';
+  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
   if (allowed) {
     res.setHeader('Access-Control-Allow-Origin',  origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  } else {
+    // F-03 FIX: hard-reject disallowed origins. Previously the proxy continued
+    // processing — wasting Jira API quota — and only withheld CORS headers.
+    return res.status(403).json({ error: 'Origin not allowed' });
   }
 
   if (req.method === 'OPTIONS') return res.status(200).end();

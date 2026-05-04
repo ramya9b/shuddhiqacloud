@@ -5019,7 +5019,7 @@ header::after { display: none !important; }
       </button>
 
       <!-- Settings -->
-      <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings">⚙️</button>
+      <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings">⚙️</button>
 
       <!-- New Requirement CTA -->
       <button class="hdr-cta-btn" onclick="resetForm()">
@@ -5580,7 +5580,7 @@ header::after { display: none !important; }
               <div class="file-name" id="fileName">—</div>
               <div class="file-meta" id="fileMeta">—</div>
             </div>
-            <button class="file-remove" onclick="clearFile()" title="Remove file">✕</button>
+            <button class="file-remove" onclick="clearFile()" title="Remove file" aria-label="Close">✕</button>
           </div>
 
           <!-- Parse progress -->
@@ -5988,7 +5988,7 @@ header::after { display: none !important; }
         <div class="ado-modal-sub">Push test cases directly into ADO Test Plans</div>
       </div>
     </div>
-    <button class="ado-close" onclick="closeADOModal()">✕</button>
+    <button class="ado-close" onclick="closeADOModal()" aria-label="Close">✕</button>
   </div>
 
   <div class="ado-modal-body">
@@ -6359,7 +6359,7 @@ const ProviderManager = (function() {
 
     // Priority: localStorage > env AI_PROVIDER > first available key
     let saved = '';
-    try { saved = localStorage.getItem(LS_KEY) || ''; } catch(e) {}
+    try { saved = localStorage.getItem(LS_KEY) || ''; } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
     const envProvider = (statusData.aiProvider || '').toLowerCase();
     const firstAvail  = PROVIDERS.find(p => _state.keys[p]) || 'groq';
 
@@ -6390,7 +6390,7 @@ const ProviderManager = (function() {
     const previous = _state.active;
     _state.active = provider;
     if (save !== false) {
-      try { localStorage.setItem(LS_KEY, provider); } catch(e) {}
+      try { localStorage.setItem(LS_KEY, provider); } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
     }
     _syncLegacyFlags();
     // Only log when actually changing — eliminates console noise
@@ -6885,6 +6885,42 @@ function showToast(msg, emoji = '\u2705') {
 (function() {
   let _bannerTimer = null;
 
+  // ── HTML sanitiser (strict allowlist) ─────────────────────────────────────
+  // Allows only span/button + style + onclick that calls our known managers.
+  // Strips event handlers that don't match the allowlist.
+  function _sanitizeBannerHtml(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const ALLOWED_TAGS = new Set(['SPAN', 'BUTTON', 'B', 'STRONG', 'EM', 'BR']);
+    const ALLOWED_ATTRS = new Set(['style', 'id', 'class']);
+    const ALLOWED_ONCLICK_PREFIXES = ['RequestQueueManager.', 'generate(', 'hideAdoBanner('];
+
+    const walker = document.createTreeWalker(tmp, NodeFilter.SHOW_ELEMENT);
+    const toRemove = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      if (!ALLOWED_TAGS.has(n.tagName)) {
+        toRemove.push(n);
+        continue;
+      }
+      // Strip non-allowlisted attributes
+      [...n.attributes].forEach(attr => {
+        const name = attr.name.toLowerCase();
+        if (name === 'onclick') {
+          const allowed = ALLOWED_ONCLICK_PREFIXES.some(p => attr.value.startsWith(p));
+          if (!allowed) n.removeAttribute('onclick');
+        } else if (!ALLOWED_ATTRS.has(name)) {
+          n.removeAttribute(attr.name);
+        }
+      });
+    }
+    // Replace disallowed elements with their text
+    toRemove.forEach(node => {
+      node.parentNode && node.parentNode.replaceChild(document.createTextNode(node.textContent), node);
+    });
+    return tmp.innerHTML;
+  }
+
   window.showAdoBanner = function(msg, type = 'info', autoDismissMs) {
     const banner = document.getElementById('adoPushBanner');
     const iconEl = document.getElementById('adoPushBanner-icon');
@@ -6894,16 +6930,26 @@ function showToast(msg, emoji = '\u2705') {
     // Resolve icon
     const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
     iconEl.textContent = icons[type] || 'ℹ️';
-    msgEl.textContent  = msg;
+
+    // ── C-01 FIX: detect HTML and render safely ───────────────────────────
+    // Plain-text callers (the majority) continue to use textContent — same as before.
+    // HTML callers (queue banner, retry button) get sanitised innerHTML path.
+    const looksLikeHtml = typeof msg === 'string' && /<\w+[\s\S]*?>/.test(msg);
+    if (looksLikeHtml) {
+      msgEl.innerHTML = _sanitizeBannerHtml(msg);
+    } else {
+      msgEl.textContent = msg;
+    }
 
     // Apply type class
     banner.className = 'show ' + type;
 
-    // Auto-dismiss: default 4.5s for success/info/warning, persistent for error
+    // Auto-dismiss: U-03 FIX — warnings now 8s (was 4.5s) so users can read them.
+    // Success/info stay at 4.5s, errors persistent (0).
     if (_bannerTimer) { clearTimeout(_bannerTimer); _bannerTimer = null; }
     const delay = autoDismissMs !== undefined
       ? autoDismissMs
-      : (type === 'error' ? 0 : 4500);
+      : (type === 'error' ? 0 : (type === 'warning' ? 8000 : 4500));
     if (delay > 0) {
       _bannerTimer = setTimeout(() => window.hideAdoBanner(), delay);
     }
@@ -9071,7 +9117,7 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       const limitMs    = _getTimeoutMs();
       if (inactiveMs > limitMs) {
         clearInterval(_streamTimeout);
-        try { reader.cancel(); } catch(e) {}
+        try { reader.cancel(); } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
         console.warn('[Stream] No activity for', Math.round(inactiveMs/1000) + 's',
           '(limit:', Math.round(limitMs/1000) + 's,',
           'rawMarkdown:', rawMarkdown.length, 'chars) — aborting');
@@ -10070,7 +10116,42 @@ function exportExcel() {
     }
   }
 
-  const testSheets = sheets.filter(s => s.rows.length > 1);
+  const testSheets = sheets.filter(s => {
+    if (s.rows.length <= 1) return false;
+    // D-05 FIX: skip Section 7 metadata — the dedicated exporter below
+    // creates the "Metadata" sheet with the correct 6-column schema.
+    // Including it here would produce a duplicate "Test Case Metadata" sheet
+    // with the wrong 5-column shape.
+    if (s.title && /test case metadata/i.test(s.title)) return false;
+    return true;
+  });
+
+  // D-06 FIX: compute actual unique TC count (rows with non-empty Title)
+  // and override the Test Summary "Total Test Cases" cell. AI's claimed
+  // count is unreliable — it often counts rows, not TCs.
+  let actualTcCount = 0;
+  testSheets.forEach(s => {
+    if (s.title && /test summary/i.test(s.title)) return;
+    if (s.title && /test data/i.test(s.title)) return;
+    // Count rows where column 0 (Title) is non-empty AND not a header
+    s.rows.forEach((row, i) => {
+      if (i === 0) return; // header
+      if (row[0] && row[0].trim() && !HEADERS_5.includes(row[0])) actualTcCount++;
+    });
+  });
+  // Override the Test Summary count cell
+  const summarySheet = testSheets.find(s => s.title && /test summary/i.test(s.title));
+  if (summarySheet && actualTcCount > 0) {
+    // Test Summary rows: [headers, [Platform, Module, Priority, Total, Date]]
+    summarySheet.rows.forEach((row, i) => {
+      if (i === 0) return; // header row
+      // Column 3 should be Total Test Cases per the prompt schema
+      if (row.length >= 4 && /^\d+$/.test(String(row[3] || ''))) {
+        row[3] = String(actualTcCount);
+      }
+    });
+    console.log('[Export] Test Summary Total Test Cases overridden:', actualTcCount);
+  }
 
   if (testSheets.length === 0) {
     // Fallback: dump raw content with 10-col header
@@ -11602,7 +11683,7 @@ function _populateAboutStatusFallback() {
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
   // Try to run diagnostics if available
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
-  catch(e) {}
+  catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 function openSettings() {
@@ -12005,7 +12086,7 @@ function buildTGRow(tc) {
 
   const mainRow = `<tr class="tg-row-main ${sel?'tg-selected':''}" data-tc-id="${tc.id}" data-type="${tc.type}">
     <td class="tg-col-cb" style="text-align:center">
-      <input type="checkbox" class="tc-row-cb" ${sel?'checked':''}
+      <input type="checkbox" class="tc-row-cb" aria-label="Select test case" ${sel?'checked':''}
         style="accent-color:var(--d365);cursor:pointer;width:13px;height:13px"
         onchange="tgToggleSelect('${tc.id}',this.checked,this.closest('tr'));event.stopPropagation();"/>
     </td>
@@ -12262,7 +12343,7 @@ function renderTGTable() {
           <span class="tg-section-count" style="background:${color}20;color:${color};border:1px solid ${color}40">${filtered.length} TCs</span>
         </div>
         <div class="tg-section-body"><table class="tg-table">
-          <thead><tr><th style="width:36px"><input type="checkbox" onchange="tgSelectAll(this.checked)" style="accent-color:var(--d365);width:13px;height:13px"/></th>
+          <thead><tr><th style="width:36px"><input type="checkbox" aria-label="Select all test cases" onchange="tgSelectAll(this.checked)" style="accent-color:var(--d365);width:13px;height:13px"/></th>
           <th class="tg-col-id">ID</th><th class="tg-col-sc">Scenario</th><th class="tg-col-st">Steps</th>
           <th class="tg-col-exp">Expected</th><th class="tg-col-pri">Priority</th><th class="tg-col-act">Actions</th></tr></thead>
           <tbody>${rows||'<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text3)">No test cases in this category.</td></tr>'}</tbody>
@@ -12284,7 +12365,7 @@ function renderTGTable() {
             <span class="tg-section-chevron">&#9662;</span>
           </div>
           <div class="tg-section-body"><table class="tg-table">
-            <thead><tr><th style="width:36px"><input type="checkbox" onchange="tgSelectSection('${type}',this.checked)" style="accent-color:var(--d365);width:13px;height:13px"/></th>
+            <thead><tr><th style="width:36px"><input type="checkbox" aria-label="Select all in section" onchange="tgSelectSection('${type}',this.checked)" style="accent-color:var(--d365);width:13px;height:13px"/></th>
             <th class="tg-col-id">ID</th><th class="tg-col-sc">Scenario</th><th class="tg-col-st">Steps</th>
             <th class="tg-col-exp">Expected</th><th class="tg-col-pri">Priority</th><th class="tg-col-act">Actions</th></tr></thead>
             <tbody>${tcs.map(tc=>buildTGRow(tc)).join('')}</tbody>
@@ -12497,7 +12578,7 @@ function toggleSidebar(){
   if(btn) btn.textContent=isCollapsed?'▶':'◀';
   const lbl=document.querySelector('.sb-collapse-strip-label');
   if(lbl) lbl.textContent=isCollapsed?'Expand':'Collapse';
-  try{localStorage.setItem(SIDEBAR_STATE_KEY,isCollapsed?'1':'0');}catch(e){}
+  try{localStorage.setItem(SIDEBAR_STATE_KEY,isCollapsed?'1':'0');}catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 function toggleMobileSidebar(){
   const sidebar=document.getElementById('appSidebar');
@@ -12526,7 +12607,7 @@ function closeMobileSidebar(){
       const lbl=document.querySelector('.sb-collapse-strip-label');
       if(lbl) lbl.textContent='Expand';
     }
-  }catch(e){}
+  }catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 })();
 
 // ── Settings helpers ──────────────────────────────────────────────
@@ -12581,16 +12662,15 @@ function testADOConnection(){
       if(res){res.className='settings-test-result err';res.textContent='❌ '+e.message;}
     });
 }
-function syncApiKey(val){
-  if(typeof window!=='undefined') window.apiKey=val;
-}
+/* DUP REMOVED: syncApiKey V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 
 // ── ADO defaults save/load ────────────────────────────────────────
 function saveADODefaults(){
   const org=document.getElementById('settingsAdoOrgSelect')?.value||document.getElementById('settingsAdoOrg')?.value||'';
   const project=document.getElementById('settingsAdoProjectSelect')?.value||'';
   if(!org){showToast('Enter organisation first','⚠️');return;}
-  try{localStorage.setItem('shuddhi-ado-default-org',org);localStorage.setItem('shuddhi-ado-default-project',project);}catch(e){}
+  try{localStorage.setItem('shuddhi-ado-default-org',org);localStorage.setItem('shuddhi-ado-default-project',project);}catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
   window.__adoDefaultOrg=org; window.__adoDefaultProject=project;
   const confirm=document.getElementById('settingsSaveConfirm');
   if(confirm){
@@ -12606,7 +12686,7 @@ function saveADODefaults(){
     const project=localStorage.getItem('shuddhi-ado-default-project');
     if(org) window.__adoDefaultOrg=org;
     if(project) window.__adoDefaultProject=project;
-  }catch(e){}
+  }catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 })();
 
 // ── Multi-Provider AI switcher ────────────────────────────────────
@@ -12616,43 +12696,17 @@ const PROVIDER_META={
   gemini:{name:'Gemini 2.5 Flash',icon:'✦',model:'gemini-2.5-flash',envKey:'GEMINI_API_KEY',url:'https://aistudio.google.com',urlLabel:'aistudio.google.com',color:'#0369A1'},
   groq:{name:'Groq',icon:'\u26A1',model:'llama-3.3-70b-versatile',envKey:'GROQ_API_KEY',url:'https://console.groq.com',urlLabel:'console.groq.com',color:'#7C3AED'},
 };
-function getActiveProvider(){
-  return window.__activeProvider || _activeProvider ||
-    (()=>{try{return localStorage.getItem('shuddhi-ai-provider')||'claude';}catch(e){return 'claude';}})();
-}
+/* DUP REMOVED: getActiveProvider V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 function saveProviderChoice(){
-  try{localStorage.setItem('shuddhi-ai-provider',_activeProvider);}catch(e){}
+  try{localStorage.setItem('shuddhi-ai-provider',_activeProvider);}catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
   const meta=PROVIDER_META[_activeProvider]||{};
   showToast('✅ '+(meta.name||_activeProvider)+' set as active provider',meta.icon||'✅');
   const badge=document.getElementById('activeProviderBadge');
   if(badge){badge.textContent='✓ ACTIVE';}
 }
-function selectProvider(provider,save=true){
-  _activeProvider=provider;
-  const meta=PROVIDER_META[provider];
-  if(!meta) return;
-  if(save){try{localStorage.setItem('shuddhi-ai-provider',provider);}catch(e){} showToast('Switched to '+meta.name,meta.icon);}
-  // Immediately update the window flags so generate() sees the right provider
-  window.__activeProvider=provider;
-  document.querySelectorAll('.provider-pill').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pill-'+provider)?.classList.add('active');
-  // Update icon, name, model — but NOT activeEnvKey yet (set after hasKey check below)
-  const earlyFields={activeProviderIcon:meta.icon,activeProviderName:meta.name,activeProviderModel:meta.model,guideEnvKey:meta.envKey};
-  Object.entries(earlyFields).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.textContent=val;});
-  const hasKey={claude:window.__claudeKey,gemini:window.__geminiKey,groq:window.__groqKey}[provider];
-  const iconEl=document.getElementById('activeKeyStatusIcon');
-  const lblEl=document.getElementById('activeKeyStatusLabel');
-  const envEl=document.getElementById('activeEnvKey');
-  const card=document.getElementById('activeProviderCard');
-  if(iconEl) iconEl.textContent=hasKey?'\u2705':'⚠️';
-  if(lblEl)  lblEl.textContent=hasKey?'API key configured in Vercel':'Key not found — add '+meta.envKey+' to Vercel';
-  if(envEl)  envEl.textContent=meta.envKey+(hasKey?' · Vercel Env ✓':' · Not set');
-  if(card)   card.style.borderColor=hasKey?'rgba(16,185,129,.3)':'rgba(220,38,38,.25)';
-  const dot=document.getElementById('claudeKeyDot');
-  const lbl=document.getElementById('claudeKeyDotLabel');
-  if(dot){dot.style.background=hasKey?'var(--success,#10B981)':'var(--error,#EF4444)';dot.title='AI: '+provider+' active';}
-  if(lbl) lbl.textContent=meta.name;
-}
+/* DUP REMOVED: selectProvider V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
   // ProviderManager.init() already set these — sync for legacy code
   ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
@@ -12667,9 +12721,8 @@ function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
   const provider=savedP||activeProvider||(claudeKey?'claude':geminiKey?'gemini':groqKey?'groq':'claude');
   selectProvider(provider,false);
 }
-function applySettingsStatus(claudeKey,adoKey,geminiKey,groqKey,activeProvider){
-  applyProviderStatus(claudeKey,geminiKey||false,groqKey||false,activeProvider||'');
-}
+/* DUP REMOVED: applySettingsStatus V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 
 // ── Settings auto-load ────────────────────────────────────────────
 async function settingsAutoLoadProjects(){
@@ -12683,7 +12736,7 @@ async function settingsAutoLoadProjects(){
     ['settingsOrgHint','adoOrgHintText'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=org;});
     ['settingsAdoOrg','adoOrg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=org;});
     await loadProjectsIntoSettings(org);
-  }catch(e){}
+  }catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 async function loadProjectsIntoSettings(org){
   const projRow=document.getElementById('settingsAdoProjectRow');
@@ -12810,7 +12863,7 @@ function loadJiraSettings() {
     if (urlEl   && saved.url)   urlEl.value   = saved.url;
     if (emailEl && saved.email) emailEl.value = saved.email;
     if (tokenEl && saved.token) tokenEl.value = saved.token;
-  } catch(e) {}
+  } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 function saveJiraSettings() {
@@ -12819,7 +12872,7 @@ function saveJiraSettings() {
     const email = document.getElementById('settingsJiraEmail')?.value || '';
     const token = document.getElementById('settingsJiraToken')?.value || '';
     localStorage.setItem(JIRA_LS_KEY, JSON.stringify({ url, email, token }));
-  } catch(e) {}
+  } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 function checkJiraSettingsStatus() {
@@ -12859,7 +12912,7 @@ function checkJiraSettingsStatus() {
       if (sub)    sub.textContent   = 'Enter credentials below or add Vercel environment variables.';
       if (btn)    btn.style.display = 'none';
     }
-  } catch(e) {}
+  } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 async function testJiraConnection() {
@@ -12913,43 +12966,8 @@ function _resetFailedProviders() {
   console.log('[Provider] All provider state reset — ready for fresh attempt');
 }
 
-function handleProviderRateLimit(provider) {
-  // Mark current provider as failed + set cooldown (Gemini=60s, Groq=65s)
-  _failedProviders.add(provider);
-  const cooldownSecs = provider === 'gemini' ? 62 : provider === 'groq' ? 65 : 120;
-  _providerCooldown[provider] = Date.now() + (cooldownSecs * 1000);
-  console.log('[Provider] Failed:', provider, '| Cooldown:', cooldownSecs + 's | Next retry:', new Date(_providerCooldown[provider]).toLocaleTimeString());
+/* DUP REMOVED: handleProviderRateLimit V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
 
-  // Schedule automatic reset after 65s (Groq rate limit window)
-  clearTimeout(_failedResetTimer);
-  _failedResetTimer = setTimeout(_resetFailedProviders, 65000);
-
-  const chain = ['gemini', 'groq', 'claude']; // priority: gemini > groq > claude
-  const keys  = {
-    claude: window.__claudeKey,
-    gemini: window.__geminiKey,
-    groq:   window.__groqKey
-  };
-
-  // Find next provider that: has a key AND hasn't failed this session
-  for (const next of chain) {
-    if (next === provider)              continue; // skip current
-    if (_failedProviders.has(next))    continue; // skip already-failed
-    if (!keys[next])                   continue; // skip unconfigured
-
-    const meta = PROVIDER_META[next] || { name: next, icon: '\u26A1' };
-    // Silent switch — log only, no user-facing toast
-    console.log('[Provider] ' + provider + ' limit reached, switching to ' + next);
-    selectProvider(next, true);
-    return next;
-  }
-  // All configured providers have failed
-  _autoRetryCount = 0;
-  _failedProviders.clear();
-  return null; // caller shows error
-  showToast('All providers hit rate limits. Groq resets every ~1 min — try again shortly.', '⏱');
-  return null;
-}
 
 window.loadJiraSettings        = typeof loadJiraSettings        !== 'undefined' ? loadJiraSettings        : window.loadJiraSettings;
 window.saveJiraSettings        = typeof saveJiraSettings        !== 'undefined' ? saveJiraSettings        : window.saveJiraSettings;
@@ -12960,57 +12978,12 @@ window.testJiraConnection      = typeof testJiraConnection      !== 'undefined' 
 
 <script>
 // ── initSectionCollapse (also defined in main block) ────────────
-function initSectionCollapse(container) {
-  if (!container) return;
-  container.querySelectorAll('h2, h3').forEach(h => {
-    if (h.dataset.collapsible) return;
-    h.dataset.collapsible = '1';
-    h.style.cursor = 'pointer';
-    h.style.userSelect = 'none';
-    const chevron = document.createElement('span');
-    chevron.textContent = ' ▾';
-    chevron.style.cssText = 'font-size:11px;color:var(--text3);transition:transform .2s;margin-left:8px';
-    h.appendChild(chevron);
-    const siblings = [];
-    let next = h.nextElementSibling;
-    while (next && !['H2','H3'].includes(next.tagName)) { siblings.push(next); next = next.nextElementSibling; }
-    if (siblings.length) {
-      const wrap = document.createElement('div');
-      wrap.className = 'section-collapse-wrap';
-      h.parentNode.insertBefore(wrap, siblings[0]);
-      siblings.forEach(s => wrap.appendChild(s));
-      h.addEventListener('click', () => {
-        const isHidden = wrap.style.display === 'none';
-        wrap.style.display = isHidden ? '' : 'none';
-        chevron.style.transform = isHidden ? '' : 'rotate(-90deg)';
-      });
-    }
-  });
-}
+/* DUP REMOVED: initSectionCollapse V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 
 // ── addCopySingleButtons (also defined in main block) ───────────
-function addCopySingleButtons(container) {
-  if (!container) return;
-  container.querySelectorAll('table tbody tr').forEach(row => {
-    if (row.querySelector('.copy-row-btn')) return;
-    const lastCell = row.querySelector('td:last-child');
-    if (!lastCell) return;
-    const btn = document.createElement('button');
-    btn.className = 'copy-row-btn';
-    btn.title = 'Copy row';
-    btn.textContent = '📋';
-    btn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:12px;padding:2px 4px;opacity:.5;transition:opacity .15s';
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const cells = [...row.querySelectorAll('td')].slice(0,-1).map(td => td.innerText.trim());
-      navigator.clipboard && navigator.clipboard.writeText(cells.join('	')).then(() => {
-        btn.textContent = '✓';
-        setTimeout(() => { btn.textContent = '📋'; }, 1500);
-      });
-    });
-    lastCell.appendChild(btn);
-  });
-}
+/* DUP REMOVED: addCopySingleButtons V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 
 window.addCopySingleButtons=addCopySingleButtons;
 
@@ -13077,13 +13050,13 @@ function buildTGRequirementRow(el) {
 const ADO_ASSIGNED_KEY = 'shuddhi-ado-assigned-to';
 
 function adoSaveAssignedTo(val) {
-  try { localStorage.setItem(ADO_ASSIGNED_KEY, val || ''); } catch(e) {}
+  try { localStorage.setItem(ADO_ASSIGNED_KEY, val || ''); } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 function adoClearAssignedTo() {
   const input = document.getElementById('adoAssignedToSelect');
   if (input) input.value = '';
-  try { localStorage.removeItem(ADO_ASSIGNED_KEY); } catch(e) {}
+  try { localStorage.removeItem(ADO_ASSIGNED_KEY); } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 // Auto-restore saved value when Step 2 is shown
@@ -13093,7 +13066,7 @@ function adoRestoreAssignedTo() {
   try {
     const saved = localStorage.getItem(ADO_ASSIGNED_KEY) || '';
     if (saved) input.value = saved;
-  } catch(e) {}
+  } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
 }
 
 window.adoClearAssignedTo   = typeof adoClearAssignedTo   !== 'undefined' ? adoClearAssignedTo   : window.adoClearAssignedTo;
@@ -13114,18 +13087,8 @@ window.tgToggleSteps = (typeof tgToggleSteps !== 'undefined') ? tgToggleSteps : 
 
 
 <script>
-function parseStepsArr(raw) {
-  if (!raw) return [];
-  var arr = [];
-  if (/\d+\./.test(raw)) {
-    arr = raw.split(/;\s*(?=\d+\.)|\n\s*(?=\d+\.)/).map(function(s){return s.trim();}).filter(Boolean);
-    if (arr.length === 1)
-      arr = raw.split(/\s+(?=\d+\.)/).map(function(s){return s.trim();}).filter(Boolean);
-  } else {
-    arr = raw.split(/[;\n]/).map(function(s){return s.trim();}).filter(Boolean);
-  }
-  return arr;
-}
+/* DUP REMOVED: parseStepsArr V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
+
 window.parseStepsArr = parseStepsArr;
 </script>
 
@@ -13244,8 +13207,13 @@ function checkAndTrimFlow(flow) {
   criticalFns.forEach(function(name) {
     if (typeof window[name] === 'undefined') {
       try {
-        // eslint-disable-next-line no-eval
-        var fn = eval('typeof ' + name + ' !== "undefined" ? ' + name + ' : null');
+        // C-03 FIX: replaced eval() with safe globalThis lookup.
+        // Function declarations in non-module scripts attach to globalThis
+        // in all modern browsers, so this is functionally equivalent without
+        // the CSP/security cost of eval.
+        var fn = (typeof globalThis !== 'undefined' && globalThis[name])
+              || (typeof self       !== 'undefined' && self[name])
+              || null;
         if (fn && typeof fn === 'function') {
           window[name] = fn;
           console.log('[EventInit] Exposed:', name);

@@ -260,7 +260,7 @@ function normalizeStream(provider, upstreamBody) {
 // ── Main handler ────────────────────────────────────────────────
 export default async function handler(req) {
   const origin = req.headers.get('origin') || '';
-  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin === '';
+  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
   const corsHeaders = {
     'Access-Control-Allow-Origin':  allowed ? origin || '*' : '',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -270,7 +270,19 @@ export default async function handler(req) {
   if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
   if (req.method !== 'POST')   return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: corsHeaders });
 
-  const body = await req.json().catch(() => ({}));
+  // F-04 FIX: enforce 5MB body size cap before parsing.
+  // Protects against malicious oversized requests draining AI provider quota.
+  // Normal generation requests are <500KB even with large FRDs.
+  const rawBody = await req.text().catch(() => '');
+  if (rawBody.length > 5_000_000) {
+    return new Response(JSON.stringify({
+      error: 'Request body too large',
+      detail: 'Body size ' + Math.round(rawBody.length / 1024) + 'KB exceeds 5MB limit'
+    }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+  let body;
+  try { body = rawBody ? JSON.parse(rawBody) : {}; }
+  catch(e) { body = {}; }
   const { apiKey: userKey, provider: requestedProvider, ...forwardBody } = body;
 
   // Resolve provider + key
