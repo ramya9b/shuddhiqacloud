@@ -5591,7 +5591,7 @@ header::after { display: none !important; }
             <input type="file" id="reqFile" accept=".pdf,.doc,.docx,.txt,.json,.yaml,.yml,.png,.jpg,.jpeg" onchange="handleFileSelect(event)" />
             <div class="upload-icon">📎</div>
             <div class="upload-label"><span>Click to upload</span> or drag & drop</div>
-            <div class="upload-hint">PDF · DOCX · TXT — Max 10MB</div>
+            <div class="upload-hint">PDF · DOCX · TXT · PNG · JPG — Max 10MB · or <strong>Ctrl+V</strong> to paste screenshot</div>
           </div>
 
           <!-- File loaded card -->
@@ -6607,6 +6607,17 @@ const ConversationManager = (function() {
   let _history = [];
 
   function _stripImageData(content) {
+    // P3: handle multi-modal array content — serialize to plain string,
+    // replacing image blocks with a safe placeholder. This ensures vision
+    // turns never round-trip base64 through localStorage history.
+    if (Array.isArray(content)) {
+      return content.map(block => {
+        if (block.type === 'image') {
+          return '[vision image: ' + (block.source?.media_type || 'image') + ' — stripped from history]';
+        }
+        return block.text || '';
+      }).join('\n');
+    }
     if (typeof content !== 'string') return '';
     if (content.indexOf('data:image/') === -1) return content;
     return content.replace(IMG_DATA_REGEX, '[image stripped from history]');
@@ -7675,7 +7686,7 @@ async function processImageFile(file) {
   card.className = 'file-loaded visible';
   document.getElementById('fileIcon').textContent = '🖼️';
 
-  extractedDocText = '[IMAGE_UPLOADED] Screenshot or UI mockup provided for UI flow-based test generation.';
+  extractedDocText = '[VISION_IMAGE] Screenshot or UI mockup attached as vision input — see image block in message.';
   setParseProgress('', false);
   showToast('Screenshot loaded — describe the flow or click Generate', '🖼️');
   if (!document.getElementById('platform').value) selectPlatform('Web App');
@@ -7741,6 +7752,9 @@ function clearFile() {
   detectedPlatform = '';
   detectedLanguage = 'English';
   detectedLangCode = 'en';
+  // P3: clear vision globals so stale image data doesn't carry into next run
+  window.__uploadedImageBase64 = null;
+  window.__uploadedImageType   = null;
   document.getElementById('reqFile').value = '';
   document.getElementById('uploadZone').style.display = '';
   document.getElementById('fileLoaded').className = 'file-loaded';
@@ -7810,6 +7824,27 @@ function handleDrop(event) {
   const file = event.dataTransfer.files[0];
   if (file) processFile(file);
 }
+
+// ── P3: Clipboard paste → vision image ──────────────────────────
+// Ctrl+V anywhere on the page attaches a pasted image to the upload slot.
+// Non-image clipboard items are ignored so normal text paste still works.
+(function _registerPasteListener() {
+  document.addEventListener('paste', function(e) {
+    const items = Array.from(e.clipboardData?.items || []);
+    const imageItem = items.find(item => item.kind === 'file' && item.type.startsWith('image/'));
+    if (!imageItem) return; // not an image paste — let default behaviour run
+    const file = imageItem.getAsFile();
+    if (!file) return;
+    // Only intercept if the focused element is NOT a text input/textarea
+    // (so pasting text into flowDesc still works normally)
+    const active = document.activeElement;
+    const isTextTarget = active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT');
+    if (isTextTarget) return;
+    e.preventDefault();
+    processFile(file);
+    showToast('Screenshot pasted — click Generate to analyse', '🖼️');
+  });
+})();
 
 // ─── Generate ────────────────────────────────────────────────
 // FIX TC-NEW-001: AbortController for mid-stream cancellation
@@ -9294,12 +9329,14 @@ Generate a QA test artifact for the following business process:
 **Integrations/Systems:** ${integrations || 'Not specified'}
 **Document Language:** ${detectedLanguage} &#8212; IMPORTANT: Generate ALL test cases in English only, even though the source document may be in ${detectedLanguage}.
 
-${extractedDocText
-  ? `**Source:** Requirement Document (auto-parsed, language: ${detectedLanguage})
+${window.__uploadedImageBase64
+  ? `**Source:** Screenshot / UI mockup (vision image attached — analyse the UI depicted to identify all test scenarios)\n${flow ? '**Additional context:** ' + flow : ''}`
+  : extractedDocText
+    ? `**Source:** Requirement Document (auto-parsed, language: ${detectedLanguage})
 
 **Full Requirement Document Content:**
 ${extractedDocText.substring(0, 6000)}${extractedDocText.length > 6000 ? '\n\n[Document truncated — first 6,000 characters shown. For full coverage upload a shorter section.]' : ''}`
-  : `**Business Flow:**\n${flow}`
+    : `**Business Flow:**\n${flow}`
 }
 
 ${formatInstructions[outputFormat]}
@@ -9355,8 +9392,22 @@ Make the output production-ready and specific to ${platform}. Use real field nam
     }
 
     // Build messages array — with or without history
+    // P3: if a vision image is attached, the current-turn content is a multi-modal
+    // array [{type:'image',...}, {type:'text',...}]. History entries are always
+    // plain strings because ConversationManager._stripImageData() serialises them.
     const _historyMessages = _useHistory ? ConversationManager.getRecent() : [];
-    const _messages = [..._historyMessages, { role: 'user', content: userPrompt }];
+    const _hasVisionImage = !!(window.__uploadedImageBase64 && window.__uploadedImageType);
+    const _currentUserContent = _hasVisionImage
+      ? [
+          { type: 'image', source: { type: 'base64', media_type: window.__uploadedImageType, data: window.__uploadedImageBase64 } },
+          { type: 'text', text: userPrompt }
+        ]
+      : userPrompt;
+    const _messages = [..._historyMessages, { role: 'user', content: _currentUserContent }];
+
+    if (_hasVisionImage) {
+      console.log('[Generate] Vision image attached (' + window.__uploadedImageType + ') — sending as multi-modal content block');
+    }
 
     if (_historyMessages.length > 0) {
       console.log('[Generate] Continuing session with',
@@ -10032,7 +10083,12 @@ function finalizeOutput(elapsed, platform, module) {
   // Assistant message = the generated rawMarkdown (truncated by ConversationManager
   // caps if too large).
   try {
-    const _userForHistory = extractedDocText
+    // P3: if vision image was present, note it in history summary (base64 never stored —
+    // _stripImageData() in ConversationManager already handles array stripping).
+    const _visionNote = (window.__uploadedImageBase64)
+      ? '\nVision image: ' + (window.__uploadedImageType || 'image') + ' (stripped from history)'
+      : '';
+    const _userForHistory = extractedDocText && !window.__uploadedImageBase64
       ? '[New generation request]\n'
         + 'Platform: ' + platform + '\n'
         + 'Module: ' + (module || 'General') + '\n'
@@ -10040,7 +10096,11 @@ function finalizeOutput(elapsed, platform, module) {
         + 'Format: ' + outputFormat + '\n\n'
         + 'FRD excerpt:\n' + extractedDocText.substring(0, 3000)
         + (extractedDocText.length > 3000 ? '\n[truncated for history]' : '')
-      : '[Refinement request]\n' + (flow || '');
+      : '[' + (window.__uploadedImageBase64 ? 'Vision generation' : 'Refinement') + ' request]\n'
+        + 'Platform: ' + platform + '\n'
+        + 'Module: ' + (module || 'General') + '\n'
+        + 'Format: ' + outputFormat + _visionNote + '\n'
+        + (flow ? 'Context: ' + flow.substring(0, 500) : '');
     ConversationManager.append('user', _userForHistory);
     ConversationManager.append('assistant', rawMarkdown);
     if (typeof _updateNewSessionBtnVisibility === 'function') _updateNewSessionBtnVisibility();

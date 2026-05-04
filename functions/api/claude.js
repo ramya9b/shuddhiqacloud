@@ -56,6 +56,32 @@ function resolveProvider(requestedProvider, env) {
   return null;
 }
 
+// ── P3 Vision helpers ───────────────────────────────────────────
+function _toGeminiParts(content) {
+  if (typeof content === 'string') return [{ text: content }];
+  if (Array.isArray(content)) {
+    return content.map(block => {
+      if (block.type === 'image' && block.source?.type === 'base64') {
+        return { inlineData: { mimeType: block.source.media_type, data: block.source.data } };
+      }
+      return { text: block.text || '' };
+    });
+  }
+  return [{ text: String(content || '') }];
+}
+
+function _toGroqText(content) {
+  if (typeof content === 'string') return content;
+  if (Array.isArray(content)) {
+    const textParts = content.filter(b => b.type === 'text').map(b => b.text || '');
+    if (content.some(b => b.type === 'image')) {
+      textParts.push('[Note: A vision image was attached but Groq/Llama does not support image input. Switch to Claude or Gemini for screenshot-based test generation.]');
+    }
+    return textParts.join('\n');
+  }
+  return String(content || '');
+}
+
 // ── Build upstream request per provider ────────────────────────
 function buildUpstreamRequest(provider, key, body) {
   const { system, messages, max_tokens = 8192, stream = false } = body;
@@ -79,9 +105,10 @@ function buildUpstreamRequest(provider, key, body) {
 
   if (provider === 'gemini') {
     // Use systemInstruction field (not a user turn) to avoid consecutive-user-turn 400
+    // P3: _toGeminiParts handles both plain-string and multi-modal array content
     const contents = [];
     (messages || []).forEach(m => {
-      contents.push({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] });
+      contents.push({ role: m.role === 'assistant' ? 'model' : 'user', parts: _toGeminiParts(m.content) });
     });
 
     // ── TDZ FIX: declare geminiModel FIRST — it must be available inside geminiBody below.
@@ -119,7 +146,8 @@ function buildUpstreamRequest(provider, key, body) {
   if (provider === 'groq') {
     const groqMessages = [];
     if (system) groqMessages.push({ role: 'system', content: system });
-    (messages || []).forEach(m => groqMessages.push({ role: m.role, content: m.content }));
+    // P3: _toGroqText strips image blocks (llama-3.3-70b-versatile is text-only)
+    (messages || []).forEach(m => groqMessages.push({ role: m.role, content: _toGroqText(m.content) }));
     return {
       url: 'https://api.groq.com/openai/v1/chat/completions',
       headers: {
