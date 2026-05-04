@@ -10091,13 +10091,24 @@ function exportExcel() {
   const HEADERS_5 = ['Title','Step Action','Step Expected Result','Assigned To','State'];
   const isHeaderRow = (cells) => cells.some(c => HEADERS_5.includes(c));
 
+  // BUG FIX: column-position-preserving split (was filter(c=>c!=='') which
+  // shifted continuation rows' columns and produced the broken xlsx output
+  // we audited earlier — Step Action column held expected results, etc.)
+  const splitRow5 = (line) => {
+    const parts = line.split('|').map(c => cleanCell(c));
+    if (parts.length && parts[0] === '') parts.shift();
+    if (parts.length && parts[parts.length - 1] === '') parts.pop();
+    while (parts.length < 5) parts.push('');
+    return parts.slice(0, 5);
+  };
+
   for (const line of lines) {
     if (line.startsWith('## ')) {
       currentTitle = line.replace(/^##\s+/, '').trim();
       currentSheet = null;
     }
     if (line.startsWith('|') && !line.match(/^\|[-|\s]+\|$/)) {
-      const cells = line.split('|').map(c => cleanCell(c)).filter(c => c !== '');
+      const cells = splitRow5(line);
       if (!currentSheet) {
         currentSheet = { title: currentTitle, rows: [], is10col: false };
         sheets.push(currentSheet);
@@ -10105,9 +10116,9 @@ function exportExcel() {
       if (isHeaderRow(cells)) {
         currentSheet.rows.push(HEADERS_5);
       } else {
-        const row = [...cells];
-        while (row.length < 5) row.push('');
-        currentSheet.rows.push(row.slice(0, 5));
+        // Skip completely empty rows
+        if (cells.every(c => !c)) continue;
+        currentSheet.rows.push(cells);
       }
     } else if (line.match(/^\|[-|\s]+\|$/)) {
       continue;
@@ -10214,14 +10225,24 @@ function exportExcel() {
   // Parse Section 7 metadata table from markdown
   const metaLines = rawMarkdown.split('\n');
   let inMetaTable = false;
+  // BUG FIX: column-position-preserving split — same root cause as TC parser.
+  const splitRow6 = (line) => {
+    const parts = line.split('|').map(c => cleanCell(c));
+    if (parts.length && parts[0] === '') parts.shift();
+    if (parts.length && parts[parts.length - 1] === '') parts.pop();
+    while (parts.length < 6) parts.push('');
+    return parts.slice(0, 6);
+  };
   metaLines.forEach(line => {
     if (line.includes('Test Case Metadata') || (line.includes('TC ID') && line.includes('Preconditions'))) {
       inMetaTable = true; return;
     }
     if (inMetaTable && line.startsWith('|') && !line.match(/^\|[-\s|]+\|$/)) {
-      const cells = line.split('|').map(c => cleanCell(c)).filter(c => c !== '');
+      const cells = splitRow6(line);
       if (cells[0] === 'TC ID') return; // header row
-      if (cells.length >= 2) metaRows.push(cells);
+      // Skip empty rows; require at least TC ID column populated
+      if (!cells[0] && cells.every(c => !c)) return;
+      if (cells[0] || cells[1]) metaRows.push(cells);
     } else if (inMetaTable && line.startsWith('## ') && !line.includes('Test Case Metadata')) {
       inMetaTable = false;
     }
@@ -10716,15 +10737,20 @@ RULES:
       const lines = md.split('\n');
       const FIVE_HEADERS = ['Title','Step Action','Step Expected Result','Assigned To','State'];
       const sheetRows = [FIVE_HEADERS];
+      // BUG FIX: column-position-preserving split (same fix as parseTestCasesFromMarkdown)
+      const _splitRow5 = (line) => {
+        const parts = line.split('|').map(c => cleanCell(c));
+        if (parts.length && parts[0] === '') parts.shift();
+        if (parts.length && parts[parts.length - 1] === '') parts.pop();
+        while (parts.length < 5) parts.push('');
+        return parts.slice(0, 5);
+      };
       lines.forEach(line => {
         if (line.startsWith('|') && !line.match(/^\|[-\s|]+\|$/)) {
-          const cells = line.split('|').map(c => cleanCell(c)).filter(c => c !== '');
+          const cells = _splitRow5(line);
           if (cells.some(c => FIVE_HEADERS.includes(c))) return;
-          if (cells.length >= 2) {
-            const row = [...cells];
-            while (row.length < 5) row.push('');
-            sheetRows.push(row.slice(0, 5));
-          }
+          if (cells.every(c => !c)) return;
+          sheetRows.push(cells);
         }
       });
 
@@ -11315,13 +11341,34 @@ async function pushToADOFull() {
       const tcLines = rawMarkdown.split('\n');
       let inTable = false;
       const perSectionTCs = {};
+      // BUG FIX: column-position-preserving split (same root cause as parseTestCasesFromMarkdown)
+      const _splitR5 = (line) => {
+        const parts = line.split('|').map(c => cleanCell(c));
+        if (parts.length && parts[0] === '') parts.shift();
+        if (parts.length && parts[parts.length - 1] === '') parts.pop();
+        while (parts.length < 5) parts.push('');
+        return parts.slice(0, 5);
+      };
+      // Track the previous TC for continuation-row appending
+      let _lastTC = null;
+      let _lastSec = null;
       tcLines.forEach(line => {
-        if (line.startsWith('## ')) { sec = line.replace(/^##\s+/,'').trim(); inTable = false; }
+        if (line.startsWith('## ')) { sec = line.replace(/^##\s+/,'').trim(); inTable = false; _lastTC = null; }
         if (line.startsWith('|') && !line.match(/^\|[-\s|]+\|$/)) {
-          const cells = line.split('|').map(c => cleanCell(c)).filter(c=>c!=='');
-          if (cells.length < 2) return;
+          const cells = _splitR5(line);
+          if (cells.every(c => !c)) return;
           if (['Title','Step Action'].includes(cells[0])) { inTable=true; return; }
           if (!inTable) return;
+
+          // Continuation row: empty title → append step to previous TC
+          if (!cells[0] && _lastTC && (cells[1] || cells[2])) {
+            _lastTC.steps.push({
+              action:   cells[1] || ('Step ' + (_lastTC.steps.length + 1)),
+              expected: cells[2] || ''
+            });
+            return;
+          }
+
           const title = cells[0] || 'Untitled';
           const _splitST = raw => {
             if (!raw) return [];
@@ -11343,8 +11390,11 @@ async function pushToADOFull() {
           if (!steps.length) steps.push({ action: cells[1]||'', expected: cells[2]||'' });
           const suiteLbl = getSectionSuiteName(sec);
           if (!perSectionTCs[suiteLbl]) perSectionTCs[suiteLbl] = [];
-          perSectionTCs[suiteLbl].push({ title, steps, assignedTo: cells[3]||'QA Engineer', state: 'Active', priority: priority==='High'?2:priority==='Medium'?3:4 });
-        } else if (!line.startsWith('|')) { inTable = false; }
+          const _newTC = { title, steps, assignedTo: cells[3]||'QA Engineer', state: 'Active', priority: priority==='High'?2:priority==='Medium'?3:4 };
+          perSectionTCs[suiteLbl].push(_newTC);
+          _lastTC  = _newTC;   // remember for continuation-row appending
+          _lastSec = suiteLbl;
+        } else if (!line.startsWith('|')) { inTable = false; _lastTC = null; }
       });
       sectionGroups = perSectionTCs;
     } else {
@@ -11431,64 +11481,82 @@ function parseTestCasesFromMarkdown() {
   const testCases = [];
   let inTable = false;
 
+  // ═══════════════════════════════════════════════════════════════
+  // BUG FIX (Phase 2 root cause): Previous parser used
+  //   line.split('|').map(cleanCell).filter(c => c !== '')
+  // The filter() removed empty cells, which destroyed column positions
+  // on continuation rows. AI generates multi-step TCs as:
+  //   | TC003 - Title | Step 1 | Expected 1 | QA | Active |
+  //   |               | Step 2 | Expected 2 | QA | Active |  ← empty title
+  //   |               | Step 3 | Expected 3 | QA | Active |
+  // After filter(): row 2 became ['Step 2','Expected 2','QA','Active']
+  // → "Step 2" was treated as Title, creating phantom new TCs.
+  // FIX: preserve column positions; treat empty-title rows as continuations
+  // and append their steps to the previous test case.
+  // ═══════════════════════════════════════════════════════════════
+  function splitRow(line) {
+    // Split on '|' and drop the leading/trailing empties produced by '|'
+    // bracketing the row. Keep INTERNAL empty cells.
+    const parts = line.split('|').map(c => cleanCell(c));
+    if (parts.length && parts[0] === '') parts.shift();
+    if (parts.length && parts[parts.length - 1] === '') parts.pop();
+    // Pad to 5 columns so we can index reliably
+    while (parts.length < 5) parts.push('');
+    return parts.slice(0, 5);
+  }
+
   for (const line of lines) {
     if (line.startsWith('|') && !line.match(/^\|[-\s|]+\|$/)) {
-      const cells = line.split('|').map(c => cleanCell(c)).filter(c => c !== '');
-      if (cells.length < 2) continue;
+      const cells = splitRow(line);
 
-      // Skip header rows
-      if (['Title','Step Action','Step Expected Result','Assigned To','State']
-          .includes(cells[0])) { inTable = true; continue; }
-
+      // Skip header rows (any cell matches a known column header)
+      const HDRS = ['Title','Step Action','Step Expected Result','Assigned To','State'];
+      if (cells.some(c => HDRS.includes(c))) { inTable = true; continue; }
       if (!inTable) continue;
+      // Defensive: skip completely empty rows
+      if (cells.every(c => !c)) continue;
 
-      const title          = cells[0] || 'Untitled Test Case';
+      const titleCell      = cells[0];
       const stepActionRaw  = cells[1] || '';
       const stepExpRaw     = cells[2] || '';
       const assignedTo     = cells[3] || 'QA Engineer';
       const state          = cells[4] || 'Active';
 
-      // ── Split actions: supports both newline and semicolon-separated formats ──
-      // AI generates "1. Do X; 2. Do Y; 3. Do Z" (semicolons) or multi-line
+      // ─── Continuation row detection ─────────────────────────────────
+      // If Title is empty AND we have a previous TC AND this row has step
+      // content, append as a step of the previous TC.
+      if (!titleCell && testCases.length > 0 && (stepActionRaw || stepExpRaw)) {
+        const prev = testCases[testCases.length - 1];
+        prev.steps.push({
+          action:   stepActionRaw || ('Step ' + (prev.steps.length + 1)),
+          expected: stepExpRaw    || ''
+        });
+        continue;
+      }
+
+      // Otherwise this is a NEW test case.
+      const title = titleCell || 'Untitled Test Case';
+
+      // Single-row TC may still pack multiple steps into one cell
+      // (semicolon or newline-separated). Support both formats.
       const splitStepText = (raw) => {
         if (!raw) return [];
-        // Try newline split first (multi-line cells)
         const byNewline = raw.split('\n').map(s => s.trim()).filter(Boolean);
         if (byNewline.length > 1) return byNewline;
-        // Fallback: split by "; " (semicolon = AI format for numbered steps)
-        // Only split on "; " between numbered steps: "1. X; 2. Y; 3. Z"
         const bySemicolon = raw.split(/;\s*(?=\d+\.\s)/).map(s => s.trim()).filter(Boolean);
         if (bySemicolon.length > 1) return bySemicolon;
-        // Single step — return as-is
         return byNewline.length ? byNewline : [raw.trim()];
       };
 
       const actions   = splitStepText(stepActionRaw);
       const expecteds = splitStepText(stepExpRaw);
 
-      // ── Map each action to its corresponding expected result ──
-      // Rules:
-      //   1. If counts match exactly → 1:1 mapping
-      //   2. If only 1 expected result → it describes the overall outcome;
-      //      assign it ONLY to the LAST action step (climax step), empty for others
-      //   3. If more expecteds than actions → zip what we can, ignore extras
-      //   4. Never duplicate: each step gets its own unique expected result
       const steps = actions.map((action, i) => {
         let expected = '';
-        if (expecteds.length === actions.length) {
-          // Perfect 1:1 match
-          expected = expecteds[i] || '';
-        } else if (expecteds.length === 1) {
-          // Single summary result → assign to last step only, blank for intermediaries
-          expected = (i === actions.length - 1) ? (expecteds[0] || '') : '';
-        } else if (expecteds.length > 1) {
-          // Partial match → assign what we have, blank for extras
-          expected = expecteds[i] || '';
-        }
-        return {
-          action:   action   || 'Step ' + (i + 1),
-          expected: expected
-        };
+        if (expecteds.length === actions.length)      expected = expecteds[i] || '';
+        else if (expecteds.length === 1)              expected = (i === actions.length - 1) ? (expecteds[0] || '') : '';
+        else if (expecteds.length > 1)                expected = expecteds[i] || '';
+        return { action: action || ('Step ' + (i + 1)), expected };
       });
 
       if (steps.length === 0) steps.push({
@@ -11496,11 +11564,21 @@ function parseTestCasesFromMarkdown() {
         expected: stepExpRaw     || ''
       });
 
-      testCases.push({ title, steps, assignedTo, state, priority: priority === 'High' ? 2 : priority === 'Medium' ? 3 : 4 });
+      testCases.push({
+        title, steps, assignedTo, state,
+        priority: priority === 'High' ? 2 : priority === 'Medium' ? 3 : 4
+      });
 
     } else if (!line.startsWith('|')) {
       inTable = false;
     }
+  }
+
+  // Defensive logging for parsing diagnostics
+  if (typeof console !== 'undefined' && console.log) {
+    console.log('[parseTestCasesFromMarkdown] Parsed',
+      testCases.length, 'test cases · Total steps:',
+      testCases.reduce((n, tc) => n + (tc.steps ? tc.steps.length : 0), 0));
   }
   return testCases;
 }
@@ -12463,8 +12541,18 @@ function renderTestGenView() {
     }
     if (!trimmed.startsWith('|')) { if(inTCTable) inTCTable=false; continue; }
     if (trimmed.match(/^\|[\s\-:|]+\|$/)) continue;
-    const cells=trimmed.split('|').map(c=>cleanCell(c)).filter(c=>c!=='');
-    if (cells.length<2) continue;
+
+    // BUG FIX: column-position-preserving split. Previous filter(c=>c!=='')
+    // shifted columns on continuation rows and created phantom TCs in the UI grid.
+    const _splitR5 = (line) => {
+      const parts = line.split('|').map(c => cleanCell(c));
+      if (parts.length && parts[0] === '') parts.shift();
+      if (parts.length && parts[parts.length - 1] === '') parts.pop();
+      while (parts.length < 5) parts.push('');
+      return parts.slice(0, 5);
+    };
+    const cells = _splitR5(trimmed);
+    if (cells.every(c => !c)) continue;
 
     // ── Detect header row — 5-column format (Title | Step Action | Step Expected Result | Assigned To | State)
     // Also supports 10-col if old saved sessions exist
@@ -12476,6 +12564,19 @@ function renderTestGenView() {
 
     // ── 5-column: cells[0]=Title, cells[1]=Step Action, cells[2]=Step Expected Result
     const rawTitle = cells[0] || '';
+
+    // ── Continuation row: empty title → append step to most recent TC ────
+    // This is what was causing the screenshot bug — phantom TCs (TC020-TC027)
+    // were created from continuation rows of TC003.
+    if (!rawTitle && tgAllTCs.length > 0 && (cells[1] || cells[2])) {
+      const prev = tgAllTCs[tgAllTCs.length - 1];
+      // Append to stepsRaw (which is what UI uses to render via parseStepsArr)
+      const sep = prev.stepsRaw ? '\n' : '';
+      prev.stepsRaw  = (prev.stepsRaw  || '') + sep + (cells[1] || '');
+      prev.expected  = (prev.expected  || '') + sep + (cells[2] || '');
+      continue;
+    }
+
     if (!rawTitle || rawTitle.length < 2) continue;
     const idPart  = rawTitle.match(/^(TC[-\s]?\d+(?:\.\d+)?)/i);
     const tcId    = idPart ? idPart[1].replace(/[\s]/g,'') : ('TC'+String(tgAllTCs.length+1).padStart(3,'0'));
