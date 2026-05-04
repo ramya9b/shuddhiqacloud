@@ -98,6 +98,44 @@ function _toGroqText(content) {
   return String(content || '');
 }
 
+// ── Option B — Output normaliser ────────────────────────────────
+// Groq (llama-3.3-70b) and Gemini sometimes drift from the 5-column
+// schema despite explicit prompt instructions. This normaliser fixes
+// the most common drift patterns on non-streaming responses.
+// Safe: returns text unchanged if it already looks correct.
+function _normaliseProviderOutput(text) {
+  if (!text) return text;
+
+  // Already correct if canonical header is present — fast exit
+  if (/\|\s*Title\s*\|\s*Step Action\s*\|\s*Step Expected Result\s*\|\s*Assigned To\s*\|\s*State\s*\|/i.test(text)) {
+    // Still apply TC numbering fix (TC1 → TC001) even on otherwise-correct output
+    return text.replace(/\bTC(\d{1,2})(?=\s|[–\-–]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
+  }
+
+  // Fix 1: TC number padding
+  text = text.replace(/\bTC(\d{1,2})(?=\s|[–\-]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
+
+  // Fix 2: Normalise wrong column header names → canonical 5-column
+  text = text.replace(
+    /\|\s*(?:Test Case(?:\s+(?:Title|ID))?|TC Title|TC ID)\s*\|\s*(?:Test )?Steps?\s*\|\s*Expected(?:\s+(?:Outcomes?|Results?))?\s*\|\s*(?:Owner|Tester|Assigned(?:\s+To)?)\s*\|\s*(?:Status|Phase|State)\s*\|/gi,
+    '| Title | Step Action | Step Expected Result | Assigned To | State |'
+  );
+
+  // Fix 3: 3-column shorthand (Title|Steps|Expected) → 5-column
+  text = text.replace(
+    /\|\s*(?:Title|Test Case)\s*\|\s*(?:Step )?Actions?\s*\|\s*(?:Step )?Expected(?:\s+Results?)?\s*\|(?!\s*Assigned)/gi,
+    '| Title | Step Action | Step Expected Result | Assigned To | State |'
+  );
+
+  // Fix 4: Separator rows with wrong cell count → 5-cell separator
+  text = text.replace(
+    /^\|(\s*[-:]+\s*\|){2,4}\s*$/gm,
+    '| --- | --- | --- | --- | --- |'
+  );
+
+  return text;
+}
+
 // ── Build upstream request per provider ────────────────────────
 function buildUpstreamRequest(provider, key, body) {
   const { system, messages, max_tokens = 8192, stream = false } = body;
@@ -160,8 +198,25 @@ function buildUpstreamRequest(provider, key, body) {
   }
 
   if (provider === 'groq') {
+    // ── Option B: prepend a compact, imperative format schema ─────────────
+    // llama-3.3-70b drifts on complex table format despite system prompt instructions.
+    // Prepending a SHORT, direct schema block (imperative language, concrete example)
+    // at the very start of the system message significantly improves adherence.
+    const _GROQ_FORMAT_PREPEND =
+`CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
+Use this 5-column Markdown table for EVERY test case:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+|---|---|---|---|---|
+| TC001 – Your Test Title | | | QA Engineer | Design |
+| | Navigate to the page. | Page loads. Correct columns visible. | | |
+| | Enter value in the required field. | Field accepts input. No error shown. | | |
+RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
+RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 TC011 — NEVER TC1 TC2 TC10.
+RULE 4: Minimum 10 step rows per test case.
+`;
     const groqMessages = [];
-    if (system) groqMessages.push({ role: 'system', content: system });
+    groqMessages.push({ role: 'system', content: _GROQ_FORMAT_PREPEND + (system || '') });
     // P3: _toGroqText strips image blocks (llama-3.3-70b-versatile is text-only)
     (messages || []).forEach(m => groqMessages.push({ role: m.role, content: _toGroqText(m.content) }));
     return {
@@ -211,11 +266,13 @@ async function normalizeResponse(provider, response) {
 
   if (provider === 'gemini') {
     const text = getGeminiText(data); // REGRESSION FIX: use helper to skip thought parts
-    return { content: [{ type: 'text', text }], stop_reason: 'end_turn', model: MODELS.gemini };
+    // Option B: apply normaliser to fix common Gemini column-header drift
+    return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'end_turn', model: MODELS.gemini };
   }
   if (provider === 'groq') {
     const text = data.choices?.[0]?.message?.content || '';
-    return { content: [{ type: 'text', text }], stop_reason: 'stop', model: MODELS.groq };
+    // Option B: apply normaliser to fix common Groq table-structure drift
+    return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS.groq };
   }
   return data; // Claude already in correct format
 }

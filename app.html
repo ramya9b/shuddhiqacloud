@@ -5112,7 +5112,7 @@ header::after { display: none !important; }
           <span class="pill-icon">⚡</span>
           <div>
             <div class="pill-name">Groq</div>
-            <div class="pill-sub">Llama 3.3 70B · Free · Fast</div>
+            <div class="pill-sub">Llama 3.3 70B · Free · Fallback</div>
           </div>
           <span class="pill-status" id="pill-status-groq">—</span>
         </button>
@@ -5193,7 +5193,7 @@ header::after { display: none !important; }
         <div style="padding:10px 16px 14px;font-size:12.5px;color:var(--text2);line-height:1.6">
           <strong>Claude</strong> (Anthropic) — Best quality for complex QA reasoning. Paid.<br>
           <strong>Gemini 2.5 Flash</strong> (Google) — Free: 15 req/min, 1,500 req/day. Best quality output.<br>
-          <strong>Groq/Llama</strong> — Free: 30 req/min, 14,400 req/day. Fastest. Best for active sessions.
+          <strong>Groq/Llama</strong> — Free: 30 req/min, 14,400 req/day. Fastest. <strong>Fallback only</strong> — used when Claude and Gemini are unavailable. Table format fidelity is lower than Claude/Gemini; output is auto-normalised where possible.
         </div>
       </details>
 
@@ -8477,7 +8477,15 @@ async function generate() {
 
   const outputLang = document.getElementById('outputLanguage')?.value || 'English';
   const systemPrompt = isWebOrMobile
-    ? `You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
+    ? `▶ OUTPUT FORMAT CONTRACT — READ FIRST, FOLLOW EXACTLY:
+Every test case MUST be a 5-column Markdown pipe table with this EXACT header:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+Title row  → fill Title + Assigned To + State only. Step Action and Step Expected Result MUST be blank.
+Step rows  → fill Step Action + Step Expected Result only. Title, Assigned To, State MUST be blank.
+TC numbers → always 3-digit zero-padded: TC001 TC002 TC010 — NEVER TC1 TC2 TC10.
+Minimum 10 step rows per test case. Do not deviate from this schema for any reason.
+
+You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
 
 CRITICAL LANGUAGE RULE: Generate ALL test case output in ${outputLang}.
 
@@ -8696,7 +8704,15 @@ STEP 5 — Check E2E section.
   If E2E has 0 test cases → generate at least 5 E2E test cases before finishing.
 
 Do NOT output until all 5 steps pass.`
-    : `You are a senior QA Test Case Engineer specialising in Microsoft Dynamics 365 (F&O, CRM, Business Central), Salesforce (Sales, Service, CPQ), Workday, Oracle ERP Cloud, SAP (S/4HANA), Guidewire, ServiceNow, and Power BI report testing. You have 15+ years of enterprise platform QA experience and specialise in creating DETAILED, GRANULAR, production-ready test cases.
+    : `▶ OUTPUT FORMAT CONTRACT — READ FIRST, FOLLOW EXACTLY:
+Every test case MUST be a 5-column Markdown pipe table with this EXACT header:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+Title row  → fill Title + Assigned To + State only. Step Action and Step Expected Result MUST be blank.
+Step rows  → fill Step Action + Step Expected Result only. Title, Assigned To, State MUST be blank.
+TC numbers → always 3-digit zero-padded: TC001 TC002 TC010 — NEVER TC1 TC2 TC10.
+Minimum 10 step rows per test case. Do not deviate from this schema for any reason.
+
+You are a senior QA Test Case Engineer specialising in Microsoft Dynamics 365 (F&O, CRM, Business Central), Salesforce (Sales, Service, CPQ), Workday, Oracle ERP Cloud, SAP (S/4HANA), Guidewire, ServiceNow, and Power BI report testing. You have 15+ years of enterprise platform QA experience and specialise in creating DETAILED, GRANULAR, production-ready test cases.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -10055,11 +10071,66 @@ window.initPagination     = initPagination;
 
 
 
+// ── Option B: client-side output normaliser ─────────────────────────────────
+// Fixes common Groq/Gemini format drift after streaming completes.
+// Complements the proxy-level normaliser in api/claude.js.
+// Safe: fast-exits for Claude output (canonical header already present).
+function _normaliseOutput(text, provider) {
+  if (!text || provider === 'claude') return text;
+
+  // Fast exit: canonical 5-column header already present → only apply TC numbering fix
+  if (/\|\s*Title\s*\|\s*Step Action\s*\|\s*Step Expected Result\s*\|\s*Assigned To\s*\|\s*State\s*\|/i.test(text)) {
+    return text.replace(/\bTC(\d{1,2})(?=\s|[–\-]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
+  }
+
+  // Fix 1: TC number padding (TC1 → TC001, TC12 → TC012)
+  text = text.replace(/\bTC(\d{1,2})(?=\s|[–\-]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
+
+  // Fix 2: Wrong column header names → canonical 5-column header
+  text = text.replace(
+    /\|\s*(?:Test Case(?:\s+(?:Title|ID))?|TC Title|TC ID)\s*\|\s*(?:Test )?Steps?\s*\|\s*Expected(?:\s+(?:Outcomes?|Results?))?\s*\|\s*(?:Owner|Tester|Assigned(?:\s+To)?)\s*\|\s*(?:Status|Phase|State)\s*\|/gi,
+    '| Title | Step Action | Step Expected Result | Assigned To | State |'
+  );
+
+  // Fix 3: 3-column shorthand → 5-column
+  text = text.replace(
+    /\|\s*(?:Title|Test Case)\s*\|\s*(?:Step )?Actions?\s*\|\s*(?:Step )?Expected(?:\s+Results?)?\s*\|(?!\s*Assigned)/gi,
+    '| Title | Step Action | Step Expected Result | Assigned To | State |'
+  );
+
+  // Fix 4: Separator rows with wrong cell count → 5-cell separator
+  text = text.replace(
+    /^\|(\s*[-:]+\s*\|){2,4}\s*$/gm,
+    '| --- | --- | --- | --- | --- |'
+  );
+
+  // Fix 5: Step rows with only 3 cells (missing Assigned To + State) → pad to 5
+  // Matches: | blank | action text | expected text | (only 3 pipes total)
+  text = text.replace(
+    /^(\|\s*\|\s*)([^|]{4,})\|([^|]{4,})\|\s*$/gm,
+    (m, blank, action, expected) => `${blank}${action}|${expected}|  |  |`
+  );
+
+  const wasNormalised = !/\|\s*Title\s*\|\s*Step Action\s*\|/i.test(arguments[0]);
+  if (wasNormalised) {
+    console.log('[Normaliser] Applied format corrections for provider:', provider);
+  }
+
+  return text;
+}
+
 function finalizeOutput(elapsed, platform, module) {
   // Show filter bar
   const fb = document.getElementById('filterBar');
   if (fb) { fb.style.display = 'flex'; }
   const el = document.getElementById('outputContent');
+
+  // ── Option B: client-side format normaliser ─────────────────────────────
+  // Runs after the full stream is received (streaming or non-streaming).
+  // Fixes common Groq/Gemini table drift that survived the proxy normaliser.
+  // Safe for Claude output — fast-exits if the canonical header is already present.
+  rawMarkdown = _normaliseOutput(rawMarkdown, ProviderManager.getActive());
+
   el.innerHTML = marked.parse(rawMarkdown);
   el.className  = 'output-content visible';
   applyMetadataStyling(el); // ensure panel is shown
