@@ -6436,9 +6436,13 @@ const ProviderManager = (function() {
   }
 
   function getMinCooldownSecs() {
-    const now = Date.now();
-    const waits = Object.values(_state.cooldown).map(t => Math.max(0, Math.ceil((t - now)/1000)));
-    return waits.length ? Math.min(...waits) : 0;
+    // Returns MAX cooldown — user must wait until ALL providers are available.
+    // Was: Math.min() — wrong, would show 62s but provider at 65s still blocked.
+    const now   = Date.now();
+    const waits = Object.values(_state.cooldown)
+      .filter(t => t > now)
+      .map(t => Math.ceil((t - now) / 1000));
+    return waits.length ? Math.max(...waits) : 0;
   }
 
   // ── Fallback resolver ────────────────────────────────────────────
@@ -7646,15 +7650,50 @@ async function _callProviderWithFallback(requestBody, signal) {
   if (!toTry.length) {
     const wait = ProviderManager.getMinCooldownSecs();
     _consecutiveAllFailures++;
-    const hint = _consecutiveAllFailures >= CONSECUTIVE_FAIL_THRESHOLD
-      ? ' Check your API quota or billing settings for ' +
-        Object.keys(ProviderManager._state.cooldown).join(', ') + '.'
-      : '';
-    throw new Error(
-      wait > 5
-        ? 'All AI providers are on cooldown. Try again in ~' + wait + ' seconds.' + hint
-        : 'No AI providers available.' + hint
-    );
+
+    // Build specific message listing which providers are cooling down
+    const coolingDown = Object.entries(ProviderManager._state.cooldown)
+      .filter(([,t]) => t > Date.now())
+      .map(([p,t]) => ProviderManager.getConfig(p).name + ' (~' + Math.ceil((t-Date.now())/1000) + 's)')
+      .join(', ');
+
+    const isDailyHit = _consecutiveAllFailures >= CONSECUTIVE_FAIL_THRESHOLD;
+    let msg = wait > 5
+      ? 'Rate limited: ' + (coolingDown || 'all providers') + '. '
+        + 'Retrying automatically in ' + wait + 's…'
+      : 'No AI providers available right now.';
+
+    if (isDailyHit) {
+      msg += ' You may have hit the daily free-tier limit.';
+      if (!ProviderManager._state.keys.gemini) {
+        msg += ' Add a free GEMINI_API_KEY (aistudio.google.com) for a second provider.';
+      } else if (!ProviderManager._state.keys.groq) {
+        msg += ' Add a free GROQ_API_KEY (console.groq.com) for a second provider.';
+      }
+    }
+
+    // Auto-retry when cooldown expires — no manual click needed
+    if (wait > 0 && wait < 180) {
+      showAdoBanner(msg, 'warning', (wait + 3) * 1000);
+      console.log('[Fallback] All providers cooling down. Auto-retry in', wait, 'seconds');
+
+      // Countdown display
+      const retryAt = Date.now() + wait * 1000;
+      const _autoRetryTimer = setInterval(() => {
+        const rem = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
+        if (rem === 0) {
+          clearInterval(_autoRetryTimer);
+          // Only auto-retry if user hasn't navigated away or started a new generation
+          if (!ProviderManager.isGenerating()) {
+            console.log('[Fallback] Cooldown expired — auto-retrying generation');
+            generate();
+          }
+        }
+      }, 1000);
+    } else {
+      showAdoBanner(msg, 'warning', 15000);
+    }
+    throw new Error(msg);
   }
 
   console.log('[Fallback] Provider order:', toTry.join(' → '), '| Max attempts:', toTry.length);
