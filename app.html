@@ -7616,9 +7616,146 @@ function _delay(ms) { return new Promise(res => setTimeout(res, ms)); }
 var _consecutiveAllFailures = 0;
 const CONSECUTIVE_FAIL_THRESHOLD = 3;
 
-// Internal provider fallback loop — tries each provider silently
-// Returns { reader, decoder } for streaming or throws if all fail
-// ══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
+// REQUEST QUEUE MANAGER
+// Spec: Phases 1–6 — Centralized rate limit state, queue, background worker
+//
+// Instead of failing when all providers are rate-limited, requests are queued
+// and automatically processed when a provider becomes available.
+// Users see "High demand — generating shortly..." not an error.
+// ════════════════════════════════════════════════════════════════════════════
+const RequestQueueManager = (() => {
+  let _queue        = [];        // FIFO queue of pending generate requests
+  let _bgWorker     = null;      // setInterval handle for background processor
+  let _statusBanner = null;      // current queue status banner text
+  const POLL_MS     = 3000;      // check queue every 3s (spec: Phase 5)
+
+  // ── Centralized rate limit state (spec: Phase 1) ─────────────────────────
+  // Single source of truth — synced from ProviderManager cooldowns
+  function _getBlockedUntil(provider) {
+    const cd = ProviderManager._state.cooldown[provider];
+    return (cd && cd > Date.now()) ? cd : 0;
+  }
+
+  function _isProviderAvailable(provider) {
+    return ProviderManager.hasKey(provider) && !_getBlockedUntil(provider);
+  }
+
+  // ── Smart provider selection (spec: Phase 2) ──────────────────────────────
+  // Returns first available provider or null if all blocked
+  function getFirstAvailable() {
+    return ProviderManager.PRIORITY.find(p => _isProviderAvailable(p)) || null;
+  }
+
+  function getMinWaitMs() {
+    // How long until the first provider becomes available
+    const times = ProviderManager.PRIORITY
+      .filter(p => ProviderManager.hasKey(p))
+      .map(p => _getBlockedUntil(p))
+      .filter(t => t > 0);
+    return times.length ? Math.max(0, Math.min(...times) - Date.now()) : 0;
+  }
+
+  // ── Queue operations (spec: Phase 3) ─────────────────────────────────────
+  function enqueue(onReady) {
+    // onReady: callback fired when a provider is available
+    // Deduplicate: only one queued request allowed (user already waiting)
+    if (_queue.length > 0) {
+      console.log('[Queue] Request already queued — replacing with latest');
+      _queue = [];
+    }
+    _queue.push({ onReady, enqueuedAt: Date.now() });
+    console.log('[Queue] Request enqueued. Queue length:', _queue.length);
+    _startWorker();
+    _showQueueBanner();
+  }
+
+  function dequeue() {
+    return _queue.shift() || null;
+  }
+
+  function clear() {
+    _queue = [];
+    _stopWorker();
+    _hideQueueBanner();
+    console.log('[Queue] Cleared');
+  }
+
+  function length() { return _queue.length; }
+
+  // ── Background worker (spec: Phase 5) ────────────────────────────────────
+  function _startWorker() {
+    if (_bgWorker) return; // already running
+    console.log('[Queue] Background worker started (polling every ' + POLL_MS + 'ms)');
+    _bgWorker = setInterval(_processQueue, POLL_MS);
+  }
+
+  function _stopWorker() {
+    if (_bgWorker) { clearInterval(_bgWorker); _bgWorker = null; }
+  }
+
+  function _processQueue() {
+    if (!_queue.length) { _stopWorker(); return; }
+    if (ProviderManager.isGenerating()) return; // already running
+
+    const available = getFirstAvailable();
+    if (!available) {
+      // Update banner with current wait time
+      const waitSecs = Math.ceil(getMinWaitMs() / 1000);
+      _showQueueBanner(waitSecs);
+      console.log('[Queue] No provider available yet. Next available in ~' + waitSecs + 's');
+      return;
+    }
+
+    const req = dequeue();
+    if (!req) return;
+
+    const waitedMs = Date.now() - req.enqueuedAt;
+    console.log('[Queue] Provider', available, 'now available. Processing queued request (waited', Math.round(waitedMs/1000) + 's)');
+    _stopWorker();
+    _hideQueueBanner();
+
+    // Fire the queued generation
+    try { req.onReady(available); } catch(e) { console.error('[Queue] Error firing queued request:', e); }
+  }
+
+  // ── UI — queue status banner (spec: Phase 6) ──────────────────────────────
+  function _showQueueBanner(waitSecsLeft) {
+    const msg = typeof waitSecsLeft === 'number' && waitSecsLeft > 0
+      ? '⏳ High demand detected — generating your test cases in ~' + waitSecsLeft + 's…'
+      : '⏳ High demand detected — generating your test cases shortly…';
+
+    // Update existing banner or create new one
+    const existing = document.getElementById('queue-status-banner');
+    if (existing) {
+      existing.textContent = msg;
+    } else {
+      showAdoBanner(
+        '<span id="queue-status-banner">' + msg + '</span>'
+        + ' <button onclick="RequestQueueManager.cancelQueue()" style="margin-left:10px;padding:2px 10px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:4px;cursor:pointer;font-size:11px">Cancel</button>',
+        'info',
+        180000   // 3 min max — worker clears it when done
+      );
+    }
+  }
+
+  function _hideQueueBanner() {
+    if (typeof hideAdoBanner === 'function') hideAdoBanner();
+  }
+
+  // Cancel queued request (user pressed Cancel in banner)
+  function cancelQueue() {
+    console.log('[Queue] Cancelled by user');
+    clear();
+    showToast('Generation cancelled', '✕');
+  }
+
+  return { enqueue, dequeue, clear, length, getFirstAvailable, getMinWaitMs, cancelQueue, _processQueue };
+})();
+
+window.RequestQueueManager = RequestQueueManager; // expose for banner cancel button
+
+
 
 // ════════════════════════════════════════════════════════════════════════════
 // _callProviderWithFallback(requestBody, signal)
@@ -7651,49 +7788,29 @@ async function _callProviderWithFallback(requestBody, signal) {
     const wait = ProviderManager.getMinCooldownSecs();
     _consecutiveAllFailures++;
 
-    // Build specific message listing which providers are cooling down
-    const coolingDown = Object.entries(ProviderManager._state.cooldown)
-      .filter(([,t]) => t > Date.now())
-      .map(([p,t]) => ProviderManager.getConfig(p).name + ' (~' + Math.ceil((t-Date.now())/1000) + 's)')
-      .join(', ');
-
     const isDailyHit = _consecutiveAllFailures >= CONSECUTIVE_FAIL_THRESHOLD;
-    let msg = wait > 5
-      ? 'Rate limited: ' + (coolingDown || 'all providers') + '. '
-        + 'Retrying automatically in ' + wait + 's…'
-      : 'No AI providers available right now.';
+    console.warn('[Fallback] toTry empty — all providers cooling. Wait:', wait + 's | Daily hit:', isDailyHit);
+    console.log('[Queue] Enqueueing from toTry-empty path. Cooldowns:',
+      ProviderManager.getStatusSummary().cooldowns);
 
-    if (isDailyHit) {
-      msg += ' You may have hit the daily free-tier limit.';
-      if (!ProviderManager._state.keys.gemini) {
-        msg += ' Add a free GEMINI_API_KEY (aistudio.google.com) for a second provider.';
-      } else if (!ProviderManager._state.keys.groq) {
-        msg += ' Add a free GROQ_API_KEY (console.groq.com) for a second provider.';
-      }
+    // Daily limit: cannot queue — different recovery path
+    if (isDailyHit && wait > 3600) {
+      let msg = 'Free-tier daily limit reached. ';
+      if (!ProviderManager._state.keys.gemini) msg += 'Add a free GEMINI_API_KEY (aistudio.google.com) to continue.';
+      else if (!ProviderManager._state.keys.groq) msg += 'Add a free GROQ_API_KEY (console.groq.com) to continue.';
+      else msg += 'Limits reset at midnight UTC.';
+      throw new Error(msg);
     }
 
-    // Auto-retry when cooldown expires — no manual click needed
-    if (wait > 0 && wait < 180) {
-      showAdoBanner(msg, 'warning', (wait + 3) * 1000);
-      console.log('[Fallback] All providers cooling down. Auto-retry in', wait, 'seconds');
+    // Queue the request — background worker auto-retries when available
+    RequestQueueManager.enqueue(() => {
+      console.log('[Queue] Auto-retrying from toTry-empty path');
+      generate();
+    });
 
-      // Countdown display
-      const retryAt = Date.now() + wait * 1000;
-      const _autoRetryTimer = setInterval(() => {
-        const rem = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
-        if (rem === 0) {
-          clearInterval(_autoRetryTimer);
-          // Only auto-retry if user hasn't navigated away or started a new generation
-          if (!ProviderManager.isGenerating()) {
-            console.log('[Fallback] Cooldown expired — auto-retrying generation');
-            generate();
-          }
-        }
-      }, 1000);
-    } else {
-      showAdoBanner(msg, 'warning', 15000);
-    }
-    throw new Error(msg);
+    const _q = new Error('__QUEUED__');
+    _q.isQueued = true;
+    throw _q;
   }
 
   console.log('[Fallback] Provider order:', toTry.join(' → '), '| Max attempts:', toTry.length);
@@ -7873,74 +7990,47 @@ async function _callProviderWithFallback(requestBody, signal) {
     }
   }
 
-  // ── All providers exhausted ──────────────────────────────────────────────
+  // ── All providers exhausted — QUEUE the request (spec: Phase 3) ────────────
   _consecutiveAllFailures++;
   const wait    = ProviderManager.getMinCooldownSecs();
   const tried   = [...ProviderManager._state.triedProviders];
   const billing = _consecutiveAllFailures >= CONSECUTIVE_FAIL_THRESHOLD;
 
-  console.warn('[Fallback] All providers failed. Tried:', tried, '| lastStatus:', lastStatus, '| Consecutive failures:', _consecutiveAllFailures);
+  console.warn('[Fallback] All providers rate-limited. Tried:', tried,
+    '| Wait:', wait + 's', '| Consecutive:', _consecutiveAllFailures);
 
   const wasTooLarge = lastStatus === 413
     || (lastErr && (lastErr.message.includes('too large') || lastErr.message.includes('token limit')));
 
-  // Build a precise, non-misleading message
-  const triedNames = tried.map(p => ProviderManager.getConfig(p).name).join(', ');
-  const onlyOneTried = tried.length === 1;
-  const triedLabel  = onlyOneTried ? triedNames : 'All tried providers (' + triedNames + ')';
-
-  let finalMsg = '';
+  // ── Token-limit: cannot queue, must inform user ───────────────────────────
   if (wasTooLarge) {
-    finalMsg = 'Document too large for available AI providers. '
-      + 'Try one of: (1) Shorten your requirement text, '
-      + '(2) Add a Gemini API key in Settings (free, handles large documents), '
-      + 'or (3) Use a smaller section of your FRD.';
-  } else if (wait > 5) {
-    // Show countdown + specific provider(s) + actionable fix
-    const onlyGemini = tried.length === 1 && tried[0] === 'gemini';
-    const onlyGroq   = tried.length === 1 && tried[0] === 'groq';
-    finalMsg = triedLabel + ' hit a rate limit — the API resets in ~' + wait + 's. '
-      + 'Click Generate again after waiting, or ';
-    if (onlyGemini) {
-      finalMsg += 'add a free GROQ_API_KEY (console.groq.com — 30 req/min) in Cloudflare Pages → Settings → Environment Variables for instant fallback.';
-    } else if (onlyGroq) {
-      finalMsg += 'add a free GEMINI_API_KEY (aistudio.google.com) in Settings for instant fallback.';
-    } else {
-      finalMsg += 'wait ' + wait + 's and try again.';
-    }
-  } else {
-    finalMsg = triedLabel + ' are temporarily unavailable. Click Generate to retry.';
-  }
-  if (billing && !wasTooLarge) {
-    finalMsg += ' You may have hit the free-tier daily limit — check your API quota at the provider dashboard.';
-  }
-  // ── Show error with live countdown timer ──────────────────────────────────
-  // Instead of just throwing, show the error in a banner with a live countdown.
-  // When timer reaches 0, auto-retry generation if user hasn't navigated away.
-  if (!wasTooLarge && wait > 5) {
-    const retryAt    = Date.now() + (wait * 1000);
-    const bannerId   = 'rl-countdown-banner';
-
-    // Show initial banner with retry button
-    showAdoBanner(
-      finalMsg + ' <button id="rl-retry-btn" onclick="generate()" style="margin-left:10px;padding:3px 12px;background:var(--indigo,#6366f1);color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600">↺ Retry Now</button>',
-      'warning', (wait + 5) * 1000
-    );
-
-    // Live countdown updater
-    const _countdownInterval = setInterval(() => {
-      const remaining = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
-      const btn = document.getElementById('rl-retry-btn');
-      if (btn) btn.textContent = remaining > 0 ? ('↺ Retry in ' + remaining + 's') : '↺ Retry Now';
-      if (remaining === 0) {
-        clearInterval(_countdownInterval);
-        // Auto-clear banner and let user retry manually — don't auto-fire generate()
-        // as they may have navigated to a different section
-      }
-    }, 1000);
+    throw new Error('Document too large for available AI providers. '
+      + 'Try: (1) Shorten your requirement text, '
+      + '(2) Use a single-section format instead of All Sections, '
+      + 'or (3) Add a Gemini API key (free, 1M token limit).');
   }
 
-  throw new Error(finalMsg);
+  // ── Daily limit exhausted: cannot recover until midnight UTC ─────────────
+  if (billing && wait > 3600) {
+    let msg = 'Free-tier daily limit reached for all configured providers. ';
+    if (!ProviderManager._state.keys.gemini) msg += 'Add a free GEMINI_API_KEY (aistudio.google.com) to continue now.';
+    else if (!ProviderManager._state.keys.groq) msg += 'Add a free GROQ_API_KEY (console.groq.com) to continue now.';
+    else msg += 'Limits reset at midnight UTC.';
+    throw new Error(msg);
+  }
+
+  // ── Rate limit: QUEUE the request — DO NOT fail ───────────────────────────
+  // Background worker will auto-retry when a provider becomes available.
+  // User sees a progress banner, not an error message.
+  RequestQueueManager.enqueue((_availableProvider) => {
+    console.log('[Queue] Auto-retrying generation with provider:', _availableProvider);
+    generate();
+  });
+
+  // Throw a sentinel that generate()'s catch block recognises as "queued, not failed"
+  const _queued = new Error('__QUEUED__');
+  _queued.isQueued = true;
+  throw _queued;
 }
 
 
@@ -9049,6 +9139,18 @@ Make the output production-ready and specific to ${platform}. Use real field nam
     if (err.name === 'AbortError') {
       // Stopped intentionally — stopGeneration() already handled UI cleanup
       return;
+    }
+
+    // ── Queued sentinel — request is in queue, not failed ──────────────────
+    // RequestQueueManager enqueued the request and will auto-retry.
+    // The queue banner is already visible. Do not show an error.
+    if (err.isQueued || err.message === '__QUEUED__') {
+      console.log('[Generate] Request queued — waiting for rate limit to clear');
+      _isGenerating = false;
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('outputContent').className = 'output-content';
+      document.getElementById('statusDot').className = 'status-dot';
+      return; // exit silently — queue handles the rest
     }
 
     // ── Build a specific, actionable error message ──────────────────────────
