@@ -43,8 +43,9 @@ function resolveProvider(requestedProvider, env, userKeys) {
   const uk = userKeys || {};
   const preferred = (requestedProvider || e.AI_PROVIDER || '').toLowerCase();
   const candidates = preferred
-    ? [preferred, ...['claude','gemini','groq'].filter(p => p !== preferred)]
-    : ['claude','gemini','groq'];
+    // Option A: cost-optimised default — Groq (free) → Gemini (cheap) → Claude (paid last)
+    ? [preferred, ...['groq', 'gemini', 'claude'].filter(p => p !== preferred)]
+    : ['groq', 'gemini', 'claude'];
 
   for (const p of candidates) {
     const key = uk[p] || {

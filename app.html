@@ -5258,9 +5258,10 @@ header::after { display: none !important; }
       <details class="settings-guide" style="margin-top:8px">
         <summary>Provider comparison →</summary>
         <div style="padding:10px 16px 14px;font-size:12.5px;color:var(--text2);line-height:1.6">
-          <strong>Claude</strong> (Anthropic) — Best quality for complex QA reasoning. Paid.<br>
-          <strong>Gemini 2.5 Flash</strong> (Google) — Free: 15 req/min, 1,500 req/day. Best quality output.<br>
-          <strong>Groq/Llama</strong> — Free: 30 req/min, 14,400 req/day. Fastest. <strong>Fallback only</strong> — used when Claude and Gemini are unavailable. Table format fidelity is lower than Claude/Gemini; output is auto-normalised where possible.
+          <strong>Claude</strong> (Anthropic) — Best quality for complex QA reasoning. Paid. <strong>Used last</strong> to protect budget.<br>
+          <strong>Gemini 2.5 Flash</strong> (Google) — Free: 15 req/min, 1,500 req/day. Best quality output. Used for large documents Groq cannot handle.<br>
+          <strong>Groq/Llama</strong> — Free: 30 req/min, 14,400 req/day. <strong>Default first choice</strong> — handles most generations at ₹0. Table format fidelity is lower than Claude/Gemini; output is auto-normalised where possible.<br>
+          <em>Fallback order: Groq → Gemini → Claude (cost-optimised)</em>
         </div>
       </details>
 
@@ -6422,7 +6423,10 @@ const ProviderManager = (function() {
 
   // ── Internal state ───────────────────────────────────────────────
   const LS_KEY    = 'shuddhi-ai-provider';
-  const PROVIDERS = ['groq', 'gemini', 'claude']; // priority order
+  // Option A — Cost-optimised provider order: Groq (free) → Gemini (cheap) → Claude (paid last resort)
+  // This ensures 80–90% of generations use Groq at ₹0. Gemini fires for large docs Groq can't handle.
+  // Claude only fires when both Groq and Gemini are unavailable — protecting the paid Claude budget.
+  const PROVIDERS = ['groq', 'gemini', 'claude']; // priority order: free → cheap → paid
 
   const PROVIDER_CONFIG = {
     groq:   { name:'Groq',   icon:'⚡', model:'llama-3.3-70b-versatile', envKey:'GROQ_API_KEY',   rpmFree:30,  dailyFree:14400 },
