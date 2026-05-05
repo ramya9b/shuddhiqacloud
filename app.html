@@ -6956,6 +6956,10 @@ function selectPlatform(value) {
   // Update hidden input (for form reads)
   document.getElementById('platform').value = value;
 
+  // Clear any stale validation error (e.g. "Please select a platform"
+  // that showed before the user made a selection)
+  if (typeof hideError === 'function') hideError();
+
   // Update card highlight
   document.querySelectorAll('.platform-card').forEach(c => {
     c.classList.toggle('selected', c.dataset.value === value);
@@ -7010,6 +7014,9 @@ function renderModuleChips(platform) {
 function selectModule(value, chipEl) {
   // Update hidden select
   document.getElementById('module').value = value;
+
+  // Clear any stale validation error
+  if (typeof hideError === 'function') hideError();
 
   // Highlight selected chip
   document.querySelectorAll('.module-chip').forEach(c => c.classList.remove('selected'));
@@ -13894,6 +13901,8 @@ window.parseStepsArr = parseStepsArr;
 <script>
 // ── DEF-003: Flow description char counter + large input guard ────
 function updateFlowCharCount(textarea) {
+  // Clear any stale validation error when user starts typing
+  if (typeof hideError === 'function') hideError();
   const len = (textarea.value || '').length;
   const el  = document.getElementById('flowCharCount');
   if (!el) return;
