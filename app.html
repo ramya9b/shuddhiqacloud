@@ -8495,14 +8495,21 @@ async function generate() {
 
   // Guard via ProviderManager — with stuck-flag detection
   if (ProviderManager.isGenerating()) {
-    // Detect stuck flag: if generating for >2 minutes, force-reset
+    // Detect stuck flag: if generating for >60s, force-reset (reduced from 120s).
+    // Providers typically fail or succeed within 45s.
     const startedAt = ProviderManager._state.generateStartedAt || 0;
     const stuckMs   = Date.now() - startedAt;
-    if (stuckMs > 120000) {
+    if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
+      const _sb = document.getElementById('stopBtn');
+      if (_sb) _sb.style.display = 'none';
+      const _gb = document.getElementById('genBtn');
+      if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
+      showToast('Previous generation timed out — ready to try again.', '⚠️');
     } else {
       console.log('[Generate] Blocked — already generating (' + Math.round(stuckMs/1000) + 's elapsed)');
+      showToast('Still generating — please wait (' + Math.round(stuckMs/1000) + 's elapsed)…', '⏳');
       return;
     }
   }
@@ -13513,18 +13520,41 @@ function saveProviderChoice(){
 /* DUP REMOVED: selectProvider V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
 
 function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
-  // ProviderManager.init() already set these — sync for legacy code
-  ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
-  const pills={claude:claudeKey,gemini:geminiKey,groq:groqKey};
-  Object.entries(pills).forEach(([p,hasKey])=>{
-    const el=document.getElementById('pill-status-'+p);
-    if(!el) return;
-    el.textContent=hasKey?'✓ Set':'— Not set';
-    el.className='pill-status '+(hasKey?'ok':'off');
+  // ProviderManager.init() already set keys + active provider.
+  // Call init() only once here to sync legacy flags — do NOT call again
+  // if ProviderManager is already initialized (prevents double-init flip-flopping).
+  if (!ProviderManager.isInitialized()) {
+    ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
+  }
+
+  // Update pill status badges
+  const pills = { claude: claudeKey, gemini: geminiKey, groq: groqKey };
+  Object.entries(pills).forEach(([p, hasKey]) => {
+    const el = document.getElementById('pill-status-' + p);
+    if (!el) return;
+    el.textContent = hasKey ? '✓ Set' : '— Not set';
+    el.className   = 'pill-status ' + (hasKey ? 'ok' : 'off');
   });
-  const savedP=(() =>{try{return localStorage.getItem('shuddhi-ai-provider')||'';}catch(e){return '';}})();
-  const provider=savedP||activeProvider||(claudeKey?'claude':geminiKey?'gemini':groqKey?'groq':'claude');
-  selectProvider(provider,false);
+
+  // Determine correct provider using same cost-optimised priority as PROVIDERS array:
+  // savedPreference > envProvider > groq (free) > gemini (cheap) > claude (paid last)
+  const savedP = (() => { try { return localStorage.getItem('shuddhi-ai-provider') || ''; } catch(e) { return ''; } })();
+  const keys   = { claude: claudeKey, gemini: geminiKey, groq: groqKey };
+  const provider = (savedP && keys[savedP] ? savedP : null)
+    || (activeProvider && keys[activeProvider] ? activeProvider : null)
+    || (keys.groq   ? 'groq'   : null)   // free first
+    || (keys.gemini ? 'gemini' : null)   // cheap second
+    || (keys.claude ? 'claude' : null)   // paid last
+    || 'groq';
+
+  // Only call selectProvider if the active provider actually needs to change
+  // to avoid generating spurious "X → Y" console logs on every page load.
+  if (provider !== ProviderManager.getActive()) {
+    selectProvider(provider, false);
+  } else {
+    // Already correct — just sync the UI without logging a switch
+    if (typeof _updateProviderUI === 'function') _updateProviderUI(provider);
+  }
 }
 /* DUP REMOVED: applySettingsStatus V2 — was identical/older copy of V1; JS hoisting meant V2 silently overrode V1 */
 
