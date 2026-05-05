@@ -3351,6 +3351,34 @@ header::after { display: none !important; }
     position: relative;
   }
   .hdr-icon-btn:hover { border-color: var(--border2); background: var(--surface2); }
+
+  /* Custom tooltip for header buttons — appears ABOVE button, right-aligned
+     Replaces native title= to prevent overlap with adjacent elements */
+  .hdr-has-tooltip { position: relative; }
+  .hdr-has-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    white-space: nowrap;
+    background: var(--text, #1e293b);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 500;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    padding: 5px 10px;
+    border-radius: 7px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .15s, transform .15s;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  }
+  .hdr-has-tooltip:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .hdr-cta-btn {
     display: flex; align-items: center; gap: 6px;
     background: var(--grad); color: #fff; border: none;
@@ -5022,7 +5050,11 @@ header::after { display: none !important; }
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings">⚙️</button>
 
       <!-- P2 — New Session: clears conversation history (distinct from + New Requirement) -->
-      <button id="newSessionBtn" class="hdr-icon-btn" onclick="newSession()" title="Clear conversation history (start fresh)" aria-label="New session" style="display:none;font-size:13px;padding:6px 10px">
+      <!-- title removed — replaced with CSS tooltip below to prevent overlap with + New Requirement button -->
+      <button id="newSessionBtn" class="hdr-icon-btn hdr-has-tooltip" onclick="newSession()"
+              aria-label="Clear conversation history (start fresh)"
+              data-tooltip="Clear conversation history (start fresh)"
+              style="display:none;font-size:13px;padding:6px 10px;width:auto">
         ↻ New Session
       </button>
 
