@@ -5083,6 +5083,180 @@ header::after { display: none !important; }
     <div id="adoPATMissingBadge" style="display:none" aria-hidden="true"></div>
   </div>
 
+
+  <!-- ════════════════════════════════════════════════════════════
+       WEEK 1 — FIRST-RUN WELCOME MODAL
+       Shows only when no provider key is configured.
+       Guides user to get a free Gemini key in 30 seconds.
+       ════════════════════════════════════════════════════════════ -->
+  <style>
+    /* Welcome modal overlay */
+    #welcomeOverlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(15,15,30,.72);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      animation: wFadeIn .25s ease;
+    }
+    @keyframes wFadeIn { from { opacity:0 } to { opacity:1 } }
+    #welcomeModal {
+      background: var(--surface, #fff);
+      border: 1.5px solid var(--border2, #e2e8f0);
+      border-radius: 18px;
+      width: 100%; max-width: 480px;
+      padding: 32px 28px 24px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.22);
+      animation: wSlideUp .28s cubic-bezier(.16,1,.3,1);
+      position: relative;
+    }
+    @keyframes wSlideUp { from { transform:translateY(24px);opacity:0 } to { transform:translateY(0);opacity:1 } }
+    .w-logo {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: linear-gradient(135deg,var(--indigo,#5B5FEF),var(--violet,#8B5CF6));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; margin-bottom: 16px;
+      box-shadow: 0 6px 18px rgba(91,95,239,.35);
+    }
+    .w-title {
+      font-size: 20px; font-weight: 800; color: var(--text,#1e293b);
+      margin-bottom: 6px; line-height: 1.2;
+    }
+    .w-sub {
+      font-size: 13.5px; color: var(--text3,#64748b); line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .w-provider-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .w-provider-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 11px;
+      border: 1.5px solid var(--border2,#e2e8f0);
+      background: var(--surface2,#f8fafc);
+      cursor: pointer; transition: all .15s; width: 100%; text-align: left;
+    }
+    .w-provider-btn:hover { border-color: var(--indigo,#5B5FEF); background: rgba(91,95,239,.05); }
+    .w-provider-btn.selected { border-color: var(--indigo,#5B5FEF); background: rgba(91,95,239,.07); }
+    .w-provider-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+    .w-provider-info { flex: 1; }
+    .w-provider-name { font-size: 13px; font-weight: 700; color: var(--text,#1e293b); }
+    .w-provider-desc { font-size: 11.5px; color: var(--text3,#64748b); margin-top: 1px; }
+    .w-badge {
+      font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700;
+      background: rgba(16,185,129,.12); color: #059669; border: 1px solid rgba(16,185,129,.2);
+    }
+    .w-key-row {
+      display: none; flex-direction: column; gap: 6px;
+      padding: 12px 14px; border-radius: 11px;
+      background: var(--surface,#fff); border: 1.5px solid var(--indigo,#5B5FEF);
+      margin-bottom: 8px;
+    }
+    .w-key-row.visible { display: flex; }
+    .w-key-row label { font-size: 11.5px; font-weight: 700; color: var(--text2,#475569); }
+    .w-key-row a { color: var(--indigo,#5B5FEF); font-size: 11px; margin-left: auto; text-decoration: none; }
+    .w-key-row a:hover { text-decoration: underline; }
+    .w-key-input-row { display: flex; gap: 8px; align-items: center; }
+    .w-key-input {
+      flex: 1; padding: 8px 11px; border-radius: 8px;
+      border: 1.5px solid var(--border2,#e2e8f0);
+      background: var(--surface2,#f8fafc); color: var(--text,#1e293b);
+      font-size: 12.5px; font-family: 'JetBrains Mono', monospace; outline: none;
+    }
+    .w-key-input:focus { border-color: var(--indigo,#5B5FEF); }
+    .w-key-save-btn {
+      padding: 8px 14px; border-radius: 8px; border: none;
+      background: var(--indigo,#5B5FEF); color: #fff;
+      font-size: 12px; font-weight: 700; cursor: pointer; transition: opacity .15s;
+      white-space: nowrap;
+    }
+    .w-key-save-btn:hover { opacity: .88; }
+    .w-key-hint { font-size: 11px; color: var(--text3,#64748b); line-height: 1.4; }
+    .w-start-btn {
+      width: 100%; padding: 13px; border-radius: 11px; border: none;
+      background: linear-gradient(135deg,var(--indigo,#5B5FEF),var(--violet,#8B5CF6));
+      color: #fff; font-size: 14px; font-weight: 800; cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      box-shadow: 0 6px 20px rgba(91,95,239,.35);
+      transition: all .18s; margin-top: 4px;
+    }
+    .w-start-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,95,239,.45); }
+    .w-start-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .w-skip { text-align: center; margin-top: 10px; }
+    .w-skip a {
+      font-size: 12px; color: var(--text3,#64748b); cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .w-skip a:hover { color: var(--text2,#475569); }
+    .w-saved-badge {
+      display: none; font-size: 10px; padding: 2px 7px; border-radius: 8px;
+      background: rgba(16,185,129,.12); color: #059669; font-weight: 700; margin-left: 6px;
+    }
+  </style>
+
+  <div id="welcomeOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Welcome to Shuddhi QA">
+    <div id="welcomeModal">
+      <div class="w-logo">🧪</div>
+      <div class="w-title">Welcome to Shuddhi QA</div>
+      <div class="w-sub">
+        Generate production-ready test cases from any requirement document in seconds.
+        Add one free API key to get started — takes 30 seconds.
+      </div>
+
+      <div class="w-provider-options">
+        <!-- Gemini option -->
+        <button class="w-provider-btn selected" onclick="wSelectProvider('gemini')" id="wBtn-gemini">
+          <span class="w-provider-icon">✦</span>
+          <div class="w-provider-info">
+            <div class="w-provider-name">Gemini 2.5 Flash <span class="w-badge">Recommended</span></div>
+            <div class="w-provider-desc">Google · Free · 1M token context · Best for large documents</div>
+          </div>
+        </button>
+        <!-- Groq option -->
+        <button class="w-provider-btn" onclick="wSelectProvider('groq')" id="wBtn-groq">
+          <span class="w-provider-icon">⚡</span>
+          <div class="w-provider-info">
+            <div class="w-provider-name">Groq / Llama <span class="w-badge">Free</span></div>
+            <div class="w-provider-desc">Free · Fastest · Best for quick generations</div>
+          </div>
+        </button>
+        <!-- Claude option -->
+        <button class="w-provider-btn" onclick="wSelectProvider('claude')" id="wBtn-claude">
+          <span class="w-provider-icon">🤖</span>
+          <div class="w-provider-info">
+            <div class="w-provider-name">Claude (Anthropic)</div>
+            <div class="w-provider-desc">Best quality · Paid API required</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Key input row — shown per provider -->
+      <div class="w-key-row visible" id="wKeyRow">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <label id="wKeyLabel">Gemini API Key</label>
+          <a id="wKeyLink" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">
+            → Get free key ↗
+          </a>
+        </div>
+        <div class="w-key-input-row">
+          <input type="password" id="wKeyInput" class="w-key-input"
+            placeholder="AIzaSy…" autocomplete="off" spellcheck="false"
+            oninput="wKeyInputChanged()" />
+          <button class="w-key-save-btn" onclick="wSaveKey()">Save</button>
+          <span class="w-saved-badge" id="wSavedBadge">✓ Saved</span>
+        </div>
+        <div class="w-key-hint" id="wKeyHint">
+          Free at <strong>aistudio.google.com</strong> — sign in with Google → Create API Key → copy &amp; paste above.
+        </div>
+      </div>
+
+      <button class="w-start-btn" id="wStartBtn" onclick="wStartGenerating()">
+        Start Generating Test Cases →
+      </button>
+      <div class="w-skip">
+        <a onclick="wDismiss(true)">I already have keys configured — skip setup</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ════════════════════════════════════════════════════════════
        SETTINGS MODAL
        ════════════════════════════════════════════════════════════ -->
@@ -11129,7 +11303,212 @@ renderHistory();
   } catch (e) {
     // Network error or running outside Vercel — silently continue with manual key entry
   }
+
+  // ── Week 1 Fix 1: Show welcome modal if no provider key is configured ──────
+  // Delay slightly so ProviderManager.init() has settled
+  setTimeout(() => {
+    const _firstRunDone = localStorage.getItem('shuddhi-first-run-done');
+    if (!_firstRunDone && !ProviderManager.hasAnyKey()) {
+      showWelcomeModal();
+    } else {
+      // Week 1 Fix 2: Pre-load sample for first-time users who do have a key
+      // Auto-fill D365 F&O AP invoice sample if form is completely blank
+      const _hasNoInput = !document.getElementById('flowDesc').value.trim()
+        && !document.getElementById('platform').value;
+      if (_hasNoInput && !localStorage.getItem('shuddhi-first-run-done')) {
+        setTimeout(() => {
+          if (typeof fillSample === 'function') fillSample('fo');
+          localStorage.setItem('shuddhi-first-run-done', '1');
+        }, 500);
+      }
+    }
+  }, 400);
 })();
+
+// ═══════════════════════════════════════════════════════════════
+// WEEK 1 — WELCOME MODAL JS
+// ═══════════════════════════════════════════════════════════════
+
+let _wSelectedProvider = 'gemini';
+
+const _W_PROVIDER_META = {
+  gemini: {
+    label: 'Gemini API Key',
+    placeholder: 'AIzaSy…',
+    hint: 'Free at <strong>aistudio.google.com</strong> — sign in → Create API Key → copy & paste above.',
+    link: 'https://aistudio.google.com/app/apikey',
+    linkText: '→ Get free key ↗',
+    lsKey: 'shuddhi-user-gemini-key',
+  },
+  groq: {
+    label: 'Groq API Key',
+    placeholder: 'gsk_…',
+    hint: 'Free at <strong>console.groq.com</strong> — sign in → API Keys → Create → copy & paste above.',
+    link: 'https://console.groq.com/keys',
+    linkText: '→ Get free key ↗',
+    lsKey: 'shuddhi-user-groq-key',
+  },
+  claude: {
+    label: 'Claude API Key',
+    placeholder: 'sk-ant-api03-…',
+    hint: 'Paid key from <strong>console.anthropic.com</strong> — sign in → API Keys → Create.',
+    link: 'https://console.anthropic.com/settings/keys',
+    linkText: '→ Get key ↗',
+    lsKey: 'shuddhi-user-claude-key',
+  },
+};
+
+function showWelcomeModal() {
+  const overlay = document.getElementById('welcomeOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function wSelectProvider(p) {
+  _wSelectedProvider = p;
+  document.querySelectorAll('.w-provider-btn').forEach(b => b.classList.remove('selected'));
+  const btn = document.getElementById('wBtn-' + p);
+  if (btn) btn.classList.add('selected');
+
+  const meta = _W_PROVIDER_META[p];
+  if (!meta) return;
+  const input = document.getElementById('wKeyInput');
+  const label = document.getElementById('wKeyLabel');
+  const hint  = document.getElementById('wKeyHint');
+  const link  = document.getElementById('wKeyLink');
+  const badge = document.getElementById('wSavedBadge');
+  if (input) { input.placeholder = meta.placeholder; input.value = localStorage.getItem(meta.lsKey) || ''; }
+  if (label) label.textContent = meta.label;
+  if (hint)  hint.innerHTML = meta.hint;
+  if (link)  { link.href = meta.link; link.textContent = meta.linkText; }
+  if (badge) badge.style.display = 'none';
+  wUpdateStartBtn();
+}
+
+function wKeyInputChanged() {
+  document.getElementById('wSavedBadge').style.display = 'none';
+  wUpdateStartBtn();
+}
+
+function wSaveKey() {
+  const input = document.getElementById('wKeyInput');
+  const val   = (input?.value || '').trim();
+  const meta  = _W_PROVIDER_META[_wSelectedProvider];
+  if (!meta || !val) return;
+  localStorage.setItem(meta.lsKey, val);
+  const badge = document.getElementById('wSavedBadge');
+  if (badge) badge.style.display = 'inline';
+  wUpdateStartBtn();
+}
+
+function wUpdateStartBtn() {
+  const input = document.getElementById('wKeyInput');
+  const val   = (input?.value || '').trim();
+  const meta  = _W_PROVIDER_META[_wSelectedProvider];
+  const alreadySaved = meta && !!localStorage.getItem(meta.lsKey);
+  const btn   = document.getElementById('wStartBtn');
+  if (btn) btn.disabled = !val && !alreadySaved;
+}
+
+function wStartGenerating() {
+  // Save key if not yet saved
+  const input = document.getElementById('wKeyInput');
+  const val   = (input?.value || '').trim();
+  const meta  = _W_PROVIDER_META[_wSelectedProvider];
+  if (meta && val) localStorage.setItem(meta.lsKey, val);
+
+  // Set as active provider
+  if (typeof selectProvider === 'function') selectProvider(_wSelectedProvider, true);
+
+  // Sync the "Use Your Own Key" settings inputs
+  const inputMap = { gemini: 'userGeminiKey', groq: 'userGroqKey', claude: 'userClaudeKey' };
+  const settingsInputId = inputMap[_wSelectedProvider];
+  if (settingsInputId) {
+    const el = document.getElementById(settingsInputId);
+    if (el && val) el.value = val;
+    const badge = document.getElementById(settingsInputId + 'Badge');
+    if (badge && val) badge.style.display = 'inline';
+    const body = document.getElementById('userKeyBody');
+    if (body && val) body.style.display = 'block';
+  }
+
+  wDismiss(false);
+  showToast('Key saved! Ready to generate test cases 🎉', '✅');
+
+  // Week 1 Fix 2: Auto-fill sample on first run
+  setTimeout(() => {
+    const _hasNoInput = !document.getElementById('flowDesc').value.trim()
+      && !document.getElementById('platform').value;
+    if (_hasNoInput && typeof fillSample === 'function') {
+      fillSample('fo');
+      showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
+    }
+  }, 300);
+}
+
+function wDismiss(markDone) {
+  const overlay = document.getElementById('welcomeOverlay');
+  if (overlay) {
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity .2s';
+    setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 220);
+  }
+  if (markDone) localStorage.setItem('shuddhi-first-run-done', '1');
+  // Always mark done after first dismiss regardless
+  localStorage.setItem('shuddhi-first-run-done', '1');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// WEEK 1 FIX 3 — ACTIONABLE ERROR MESSAGES
+// Wraps showError to append step-by-step guidance for known errors.
+// ═══════════════════════════════════════════════════════════════
+const _ACTIONABLE_ERRORS = [
+  {
+    match: /gemini.*invalid|invalid.*gemini|gemini.*key.*not valid/i,
+    action: '→ Get a fresh free key at aistudio.google.com (30 sec)\n→ Paste it in Settings → Use Your Own Key → Gemini field',
+  },
+  {
+    match: /gemini.*not enabled|API_NOT_ENABLED|generative language/i,
+    action: '→ Go to console.cloud.google.com → APIs → search "Generative Language API" → Enable\n→ Or get a fresh key from aistudio.google.com (works immediately)',
+  },
+  {
+    match: /gemini.*all available models|all.*models.*failed/i,
+    action: '→ Most likely cause: GEMINI_API_KEY not set in Cloudflare Pages → Settings → Environment Variables\n→ Or: Generative Language API not enabled — console.cloud.google.com → APIs\n→ Quick fix: add your own key in Settings → Use Your Own Key → Gemini',
+  },
+  {
+    match: /claude.*invalid|invalid.*claude|claude.*expired|CLAUDE_API_KEY.*invalid/i,
+    action: '→ Check your key at console.anthropic.com → API Keys\n→ If revoked, create a new key and update CLAUDE_API_KEY in Cloudflare Pages → Settings → Environment Variables',
+  },
+  {
+    match: /no ai provider|no provider configured/i,
+    action: '→ Open Settings (⚙️) → Use Your Own Key\n→ Add a free Gemini key from aistudio.google.com\n→ Click Save, then Generate again',
+  },
+  {
+    match: /document too large|token limit|12k token/i,
+    action: '→ Try "Output Format: Single Section" instead of All Sections\n→ Or shorten your requirement document to under 3,000 words\n→ Adding a Gemini key handles documents up to 1M tokens (Settings → Use Your Own Key)',
+  },
+];
+
+const _origShowError = window.showError || function(msg) {
+  const e = document.getElementById('errorMsg');
+  if (e) { e.textContent = msg; e.className = 'error-msg visible'; }
+};
+
+window.showError = function(msg) {
+  // Find a matching actionable hint
+  const match = _ACTIONABLE_ERRORS.find(e => e.match.test(msg));
+  if (match) {
+    const e = document.getElementById('errorMsg');
+    if (e) {
+      e.innerHTML =
+        '<strong>' + msg + '</strong>' +
+        '<div style="margin-top:7px;font-size:11.5px;opacity:.92;line-height:1.6;white-space:pre-line">' +
+        match.action + '</div>';
+      e.className = 'error-msg visible';
+      return;
+    }
+  }
+  _origShowError(msg);
+};
 
 // ═══════════════════════════════════════════════════════════════
 // FEATURE 2 — INLINE EDIT MODE
