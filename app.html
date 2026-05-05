@@ -11315,19 +11315,26 @@ renderHistory();
   // ── Week 1 Fix 1: Show welcome modal if no provider key is configured ──────
   // Delay slightly so ProviderManager.init() has settled
   setTimeout(() => {
-    const _firstRunDone = localStorage.getItem('shuddhi-first-run-done');
+    const _firstRunDone  = localStorage.getItem('shuddhi-first-run-done');
+    const _sampleShown   = localStorage.getItem('shuddhi-sample-shown');
+
     if (!_firstRunDone && !ProviderManager.hasAnyKey()) {
+      // New user, no keys — show setup wizard
       showWelcomeModal();
-    } else {
-      // Week 1 Fix 2: Pre-load sample for first-time users who do have a key
-      // Auto-fill D365 F&O AP invoice sample if form is completely blank
+    } else if (!_sampleShown) {
+      // Week 1 Fix 2: First visit with keys already configured (e.g. admin/returning user)
+      // Pre-fill D365 F&O sample so they see a working form immediately.
+      // Uses a SEPARATE flag so it fires independently of first-run-done.
       const _hasNoInput = !document.getElementById('flowDesc').value.trim()
         && !document.getElementById('platform').value;
-      if (_hasNoInput && !localStorage.getItem('shuddhi-first-run-done')) {
+      if (_hasNoInput) {
         setTimeout(() => {
-          if (typeof fillSample === 'function') fillSample('fo');
-          localStorage.setItem('shuddhi-first-run-done', '1');
-        }, 500);
+          if (typeof fillSample === 'function') {
+            fillSample('fo');
+            localStorage.setItem('shuddhi-sample-shown', '1');
+            showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
+          }
+        }, 600);
       }
     }
   }, 400);
@@ -11440,6 +11447,7 @@ function wStartGenerating() {
   }
 
   wDismiss(false);
+  localStorage.setItem('shuddhi-sample-shown', '1');
   showToast('Key saved! Ready to generate test cases 🎉', '✅');
 
   // Week 1 Fix 2: Auto-fill sample on first run
@@ -11460,10 +11468,10 @@ function wDismiss(markDone) {
     overlay.style.transition = 'opacity .2s';
     setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 220);
   }
-  // Always mark done after any dismiss
   localStorage.setItem('shuddhi-first-run-done', '1');
+  localStorage.setItem('shuddhi-sample-shown', '1');
 
-  // Fix 2: Auto-fill sample if form is still blank after dismissing
+  // Always pre-fill sample after dismissing modal if form is blank
   setTimeout(() => {
     const _hasNoInput = !document.getElementById('flowDesc').value.trim()
       && !document.getElementById('platform').value;
