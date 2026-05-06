@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v4.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v5.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -1662,7 +1662,9 @@ if (typeof marked !== 'undefined') {
 
   .settings-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(.96);
-    z-index: 10001; width: min(660px, 96vw); max-height: 92vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    z-index: 10001; width: min(660px, 96vw);
+    max-height: min(92vh, 780px);
+    overflow: hidden;
     background: var(--surface); border: 1px solid var(--border2);
     border-radius: 20px; box-shadow: 0 32px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06);
     display: none; flex-direction: column;
@@ -1674,7 +1676,8 @@ if (typeof marked !== 'undefined') {
   .settings-header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 22px 24px 18px; border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 1; border-radius: 20px 20px 0 0;
+    flex-shrink: 0;
+    border-radius: 20px 20px 0 0;
     background: linear-gradient(135deg, rgba(91,95,239,.08) 0%, rgba(139,92,246,.05) 100%);
     backdrop-filter: blur(12px);
   }
@@ -1683,6 +1686,7 @@ if (typeof marked !== 'undefined') {
     border-bottom: 1px solid var(--border);
     background: var(--surface2);
     overflow-x: auto; scrollbar-width: none;
+    flex-shrink: 0;
   }
   .settings-tabs::-webkit-scrollbar { display: none; }
   .settings-tab {
@@ -1697,7 +1701,18 @@ if (typeof marked !== 'undefined') {
     color: var(--indigo); border-bottom-color: var(--indigo);
     background: linear-gradient(180deg, rgba(91,95,239,.08) 0%, transparent 100%);
   }
-  .settings-panel { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
+  .settings-panel {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 16px;
+    overflow-y: auto; overflow-x: hidden;
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+  .settings-panel::-webkit-scrollbar { width: 5px; }
+  .settings-panel::-webkit-scrollbar-track { background: transparent; }
+  .settings-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
   .settings-section { }
   .settings-section-title {
     font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 4px;
@@ -4255,7 +4270,9 @@ header::after { display: none !important; }
     /* Settings modal full width */
     .settings-modal { width: 100% !important; max-width: 100% !important;
       border-radius: 16px 16px 0 0 !important; bottom: 0 !important;
-      top: auto !important; max-height: 90vh !important; overflow-y: auto !important; }
+      top: auto !important; max-height: 90vh !important; overflow: hidden !important; transform: none !important; }
+    .settings-modal.open { transform: none !important; }
+    .settings-panel { max-height: calc(90vh - 130px) !important; }
 
     /* Welcome modal full width */
     #welcomeModal { border-radius: 16px 16px 0 0 !important; max-width: 100% !important; }
@@ -5383,7 +5400,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v4.9</span>
+      <span class="sb-badge">v5.0</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6209,7 +6226,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v4.9</div>
+          <div class="settings-about-val">v5.0</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -15446,7 +15463,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.9</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v5.0</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -16075,78 +16092,102 @@ window.copyShareLink = function() {
   var _cooldownTimer = null;
   var _originalBtnText = '⚡ Generate Test Cases';
 
-  // CSS for progress bar — injected once
+  // CSS for cooldown UI — injected once
   var style = document.createElement('style');
   style.textContent = [
-    '#cooldownBar{height:3px;background:var(--border2);border-radius:0 0 2px 2px;overflow:hidden;display:none}',
+    '#cooldownWrap{margin-top:10px;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(91,95,239,.25);background:linear-gradient(135deg,rgba(91,95,239,.06),rgba(139,92,246,.04));display:none;flex-direction:column;gap:8px}',
+    '#cooldownWrap.visible{display:flex}',
+    '#cooldownHeader{display:flex;align-items:center;justify-content:space-between;gap:8px}',
+    '#cooldownTitle{font-size:12.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}',
+    '#cooldownTimer{font-size:13px;font-weight:800;color:var(--indigo);font-family:"JetBrains Mono",monospace;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:2px 10px}',
+    '#cooldownMsg{font-size:11.5px;color:var(--text2);line-height:1.5}',
+    '#cooldownBarTrack{height:5px;background:var(--border2);border-radius:3px;overflow:hidden}',
     '#cooldownBarFill{height:100%;width:100%;background:linear-gradient(90deg,var(--indigo,#5B5FEF),var(--violet,#8B5CF6));transition:width 1s linear;border-radius:inherit}',
-    '#cooldownMsg{text-align:center;font-size:11px;color:var(--text3);margin-top:4px;min-height:16px}',
-    '#cooldownOverride{font-size:10.5px;color:var(--text3);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;margin-top:2px;display:none}',
-    '#cooldownOverride:hover{color:var(--indigo)}',
+    '#cooldownOverride{font-size:11px;color:var(--indigo);font-weight:600;text-decoration:none;cursor:pointer;background:none;border:1px solid rgba(91,95,239,.25);border-radius:6px;padding:4px 12px;transition:all .15s;align-self:flex-start}',
+    '#cooldownOverride:hover{background:rgba(91,95,239,.08);border-color:var(--indigo)}',
     '.gen-btn:disabled{opacity:1!important}',
-    '.gen-btn.cooling{background:linear-gradient(135deg,#64748b,#94a3b8)!important;box-shadow:none!important;cursor:not-allowed!important;transform:none!important;animation:none!important}',
+    '.gen-btn.cooling{background:linear-gradient(135deg,#475569,#64748b)!important;box-shadow:0 2px 8px rgba(71,85,105,.3)!important;cursor:not-allowed!important;transform:none!important;animation:none!important}',
   ].join('');
   document.head.appendChild(style);
 
   // Inject cooldown UI below generate button row
   function _injectUI() {
     var actionsRow = document.querySelector('.form-actions-row');
-    if (!actionsRow || document.getElementById('cooldownBar')) return;
+    if (!actionsRow || document.getElementById('cooldownWrap')) return;
 
     var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:2px;';
+    wrap.id = 'cooldownWrap';
 
-    var bar = document.createElement('div');
-    bar.id = 'cooldownBar';
-    var fill = document.createElement('div');
-    fill.id = 'cooldownBarFill';
-    bar.appendChild(fill);
+    // Header: title + timer badge
+    var header = document.createElement('div');
+    header.id = 'cooldownHeader';
+    var title = document.createElement('div');
+    title.id = 'cooldownTitle';
+    title.innerHTML = '⏱ Cooldown';
+    var timer = document.createElement('div');
+    timer.id = 'cooldownTimer';
+    timer.textContent = '—';
+    header.appendChild(title);
+    header.appendChild(timer);
 
+    // Message
     var msg = document.createElement('div');
     msg.id = 'cooldownMsg';
 
+    // Progress bar
+    var track = document.createElement('div');
+    track.id = 'cooldownBarTrack';
+    var fill = document.createElement('div');
+    fill.id = 'cooldownBarFill';
+    track.appendChild(fill);
+
+    // Override button
     var override = document.createElement('button');
     override.id = 'cooldownOverride';
-    override.textContent = 'Generate now anyway →';
+    override.textContent = '⚡ Generate now anyway';
     override.onclick = function() { _cancelCooldown(true); };
 
-    wrap.appendChild(bar);
+    wrap.appendChild(header);
     wrap.appendChild(msg);
+    wrap.appendChild(track);
     wrap.appendChild(override);
     actionsRow.parentNode.insertBefore(wrap, actionsRow.nextSibling);
   }
 
   function _startCooldown(provider, secs) {
-    var btn  = document.getElementById('genBtn');
-    var bar  = document.getElementById('cooldownBar');
-    var fill = document.getElementById('cooldownBarFill');
-    var msg  = document.getElementById('cooldownMsg');
-    var ov   = document.getElementById('cooldownOverride');
+    var btn   = document.getElementById('genBtn');
+    var wrap  = document.getElementById('cooldownWrap');
+    var fill  = document.getElementById('cooldownBarFill');
+    var msg   = document.getElementById('cooldownMsg');
+    var timer = document.getElementById('cooldownTimer');
+    var ov    = document.getElementById('cooldownOverride');
     if (!btn) return;
 
     var remaining = secs;
+    var pName = provider.charAt(0).toUpperCase() + provider.slice(1);
 
     // Disable button + style
     btn.disabled = true;
     btn.classList.add('cooling');
     btn.querySelector('.btn-text').textContent = '⏱ Ready in ' + remaining + 's…';
 
-    // Show bar
-    if (bar)  { bar.style.display = 'block'; }
-    if (fill) { fill.style.width = '100%'; }
-    if (msg)  { msg.textContent = 'Cooling down for best quality — ' + provider.charAt(0).toUpperCase()+provider.slice(1) + ' needs ' + secs + 's between requests'; }
-    if (ov)   { ov.style.display = 'block'; }
+    // Show cooldown card
+    if (wrap)  { wrap.classList.add('visible'); }
+    if (timer) { timer.textContent = remaining + 's'; }
+    if (fill)  { fill.style.transition = 'none'; fill.style.width = '100%'; }
+    if (msg)   { msg.textContent = pName + ' needs ' + secs + 's between requests for best quality. Waiting ensures 40+ TCs every time.'; }
+    if (ov)    { ov.style.display = 'inline-block'; }
 
     // Animate bar shrink
     setTimeout(function() {
-      if (fill) fill.style.width = '0%';
-      if (fill) fill.style.transition = 'width ' + secs + 's linear';
+      if (fill) { fill.style.transition = 'width ' + secs + 's linear'; fill.style.width = '0%'; }
     }, 100);
 
     // Countdown
     _cooldownTimer = setInterval(function() {
       remaining--;
-      if (btn) btn.querySelector('.btn-text').textContent = '⏱ Ready in ' + remaining + 's…';
+      if (btn)   btn.querySelector('.btn-text').textContent = '⏱ Ready in ' + remaining + 's…';
+      if (timer) timer.textContent = remaining + 's';
       if (remaining <= 0) { _cancelCooldown(false); }
     }, 1000);
   }
@@ -16155,28 +16196,32 @@ window.copyShareLink = function() {
     clearInterval(_cooldownTimer);
     _cooldownTimer = null;
 
-    var btn  = document.getElementById('genBtn');
-    var bar  = document.getElementById('cooldownBar');
-    var fill = document.getElementById('cooldownBarFill');
-    var msg  = document.getElementById('cooldownMsg');
-    var ov   = document.getElementById('cooldownOverride');
+    var btn   = document.getElementById('genBtn');
+    var wrap  = document.getElementById('cooldownWrap');
+    var fill  = document.getElementById('cooldownBarFill');
+    var msg   = document.getElementById('cooldownMsg');
+    var timer = document.getElementById('cooldownTimer');
+    var ov    = document.getElementById('cooldownOverride');
 
     if (btn) {
       btn.disabled = false;
       btn.classList.remove('cooling');
       btn.classList.add('form-ready');
       btn.querySelector('.btn-text').textContent = _originalBtnText;
-      // Pop animation to signal ready
       btn.style.transform = 'scale(1.03)';
       setTimeout(function(){ btn.style.transform = ''; }, 200);
     }
-    if (bar)  { bar.style.display = 'none'; }
-    if (fill) { fill.style.transition = 'none'; fill.style.width = '100%'; }
-    if (msg)  { msg.textContent = isOverride ? '⚠️ Generating early — quality may be reduced' : '✅ Ready! Quality generation guaranteed.'; }
-    if (ov)   { ov.style.display = 'none'; }
+    if (timer) { timer.textContent = '✓'; }
+    if (fill)  { fill.style.transition = 'none'; fill.style.width = isOverride ? '0%' : '100%'; }
+    if (msg)   { msg.textContent = isOverride ? '⚠️ Generating early — quality may be reduced' : '✅ Ready! Full quality generation available.'; }
+    if (ov)    { ov.style.display = 'none'; }
 
-    // Clear message after 3s
-    setTimeout(function() { if (msg) msg.textContent = ''; }, 3000);
+    // Fade out the card after 3s
+    setTimeout(function() {
+      if (wrap) { wrap.classList.remove('visible'); }
+      if (timer) timer.textContent = '—';
+      if (msg)   msg.textContent = '';
+    }, 3000);
   }
 
   // Hook into TC count change — fires when finalizeOutput completes
