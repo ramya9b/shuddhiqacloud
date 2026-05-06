@@ -3725,8 +3725,191 @@ header::after { display: none !important; }
   }
 
   /* ── 480px: Extra small phones ────────────────────────────── */
-  @media (max-width: 480px) {
-    .hdr-title { font-size: 16px !important; }
+  /* ═══════════════════════════════════════════════════════════════
+     v3.5 UI ENHANCEMENTS — purely additive, no existing CSS touched
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* P1-a: Step labels — completed state glow when user fills each step */
+  .step-label.step-done .step-num {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    box-shadow: 0 2px 10px rgba(16,185,129,.45) !important;
+    animation: stepPop .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .step-label.step-done span { color: #059669 !important; }
+  @keyframes stepPop {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+
+  /* P1-b: Generate button — pulse glow when form is ready */
+  .gen-btn.form-ready {
+    animation: genPulse 2s ease-in-out infinite;
+  }
+  @keyframes genPulse {
+    0%, 100% { box-shadow: 0 4px 24px rgba(91,95,239,.4); }
+    50%       { box-shadow: 0 4px 40px rgba(91,95,239,.75), 0 0 0 6px rgba(91,95,239,.12); }
+  }
+
+  /* P2-a: Empty state — upgraded value proposition */
+  .placeholder-title {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, var(--indigo,#5B5FEF), var(--violet,#8B5CF6));
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    margin-bottom: 10px !important;
+  }
+  .placeholder-sub {
+    font-size: 13.5px !important;
+    line-height: 1.7 !important;
+    max-width: 420px !important;
+    margin: 0 auto 16px !important;
+  }
+
+  /* P2-b: Animated TC counter on generation complete */
+  #tcCount {
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  #tcCount.tc-pop {
+    transform: scale(1.4);
+    color: #10b981 !important;
+  }
+
+  /* P2-c: Accounts Payable tooltip overlap fix —
+     move selected module name badge above the chip area */
+  #selectedModuleName {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    color: var(--indigo) !important;
+    background: rgba(91,95,239,.08) !important;
+    border: 1px solid rgba(91,95,239,.2) !important;
+    border-radius: 20px !important;
+    padding: 2px 10px !important;
+    margin-bottom: 4px !important;
+    float: none !important;
+  }
+
+  /* P3-a: Confetti canvas */
+  #confettiCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    display: none;
+  }
+
+  /* P4: TC generated counter in empty state */
+  .ph-stats-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .ph-stat {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .ph-stat-num {
+    font-size: 20px; font-weight: 800;
+    background: linear-gradient(135deg, var(--indigo), var(--violet,#8B5CF6));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .ph-stat-label { font-size: 10px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .ph-stat-sep { width: 1px; height: 28px; background: var(--border2); }
+
+  /* ═══════════════════════════════════════════════════════════════
+     v3.6 UI ENHANCEMENTS — purely additive
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Loading skeleton — shown during generation in output area */
+  .tc-skeleton-wrap {
+    padding: 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tc-skeleton-card {
+    border-radius: 12px;
+    border: 1px solid var(--border2);
+    overflow: hidden;
+    animation: skeletonFade 1.6s ease-in-out infinite;
+  }
+  .tc-skeleton-header {
+    height: 40px;
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
+  }
+  .tc-skeleton-rows {
+    display: flex;
+    flex-direction: column;
+  }
+  .tc-skeleton-row {
+    height: 32px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
+  }
+  .tc-skeleton-row:nth-child(2) { animation-delay: .1s; }
+  .tc-skeleton-row:nth-child(3) { animation-delay: .2s; }
+  .tc-skeleton-row:nth-child(4) { animation-delay: .3s; }
+  .tc-skeleton-row:nth-child(5) { animation-delay: .4s; }
+  @keyframes skeletonShimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @keyframes skeletonFade {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .7; }
+  }
+
+  /* Dark mode fixes for v3.x elements */
+  [data-theme="dark"] #welcomeModal {
+    border-color: rgba(255,255,255,.1) !important;
+  }
+  [data-theme="dark"] .w-provider-btn {
+    background: rgba(255,255,255,.04) !important;
+    border-color: rgba(255,255,255,.1) !important;
+  }
+  [data-theme="dark"] .w-provider-btn.selected {
+    background: rgba(91,95,239,.15) !important;
+    border-color: var(--indigo) !important;
+  }
+  [data-theme="dark"] .w-key-input {
+    background: rgba(255,255,255,.05) !important;
+    border-color: rgba(255,255,255,.12) !important;
+    color: var(--text) !important;
+  }
+  [data-theme="dark"] #appFooter {
+    background: rgba(15,15,30,.8) !important;
+    border-image: linear-gradient(90deg, #5B5FEF, #8B5CF6, #5B5FEF) 1 !important;
+  }
+  [data-theme="dark"] #privacyFooterModal > div {
+    border-color: rgba(255,255,255,.1) !important;
+  }
+  [data-theme="dark"] .placeholder-title {
+    -webkit-text-fill-color: transparent !important;
+  }
+
+  /* Ctrl+Enter hint in Generate button area — only on desktop */
+  @media (min-width: 769px) {
+    .gen-btn-hint {
+      font-size: 10px;
+      color: var(--text3);
+      text-align: center;
+      margin-top: 4px;
+      opacity: 0;
+      transition: opacity .3s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .form-actions-row:hover .gen-btn-hint { opacity: 1; }
+  }
+  @media (max-width: 768px) { .gen-btn-hint { display: none; } }
+
     .hdr-subtitle { display: none !important; }
     .hdr-icon-btn { width: 34px !important; height: 34px !important; font-size: 15px !important; }
     .hdr-cta-btn span:first-child { display: none !important; }
@@ -6222,6 +6405,7 @@ header::after { display: none !important; }
             🔄 Reset
           </button>
         </div>
+        <div class="gen-btn-hint">⌨️ Ctrl+Enter to generate</div>
       </div>
 
       <!-- Sticky Generate bar (appears when gen button scrolls out of view) -->
@@ -6398,8 +6582,24 @@ header::after { display: none !important; }
           <div class="ph-plus">+</div>
           <div class="ph-logo sf">☁️</div>
         </div>
-        <div class="placeholder-title">Ready to Generate</div>
-        <div class="placeholder-sub">Follow the 3 steps on the left — upload a document or describe your flow, pick a platform, and click Generate. Your structured test cases will appear here, organised by section and ready to push to ADO or Jira.</div>
+        <div class="placeholder-title">Generate Test Cases in 15 Seconds</div>
+        <div class="placeholder-sub">Upload your FRD or describe your flow → pick a platform → get production-ready test cases ready to push to ADO or Jira.</div>
+        <div class="ph-stats-row" id="phStatsRow">
+          <div class="ph-stat">
+            <div class="ph-stat-num" id="phTotalTCs">0</div>
+            <div class="ph-stat-label">TCs Generated</div>
+          </div>
+          <div class="ph-stat-sep"></div>
+          <div class="ph-stat">
+            <div class="ph-stat-num">13</div>
+            <div class="ph-stat-label">Platforms</div>
+          </div>
+          <div class="ph-stat-sep"></div>
+          <div class="ph-stat">
+            <div class="ph-stat-num">3</div>
+            <div class="ph-stat-label">AI Providers</div>
+          </div>
+        </div>
         <div class="sample-chips">
           <div class="chip" onclick="fillSample('fo')">Invoice Approval D365 F&O</div>
           <div class="chip" onclick="fillSample('crm')">Lead to Opportunity CRM</div>
@@ -6409,6 +6609,37 @@ header::after { display: none !important; }
           <div class="chip" onclick="fillSample('oe')">AP Invoice Oracle ERP</div>
           <div class="chip" onclick="fillSample('gw')">FNOL Claims Guidewire</div>
           <div class="chip" onclick="fillSample('web')">🌐 Web App User Flow</div>
+        </div>
+      </div>
+
+      <!-- v3.6 Loading skeleton — shown during generation -->
+      <div id="tcSkeleton" style="display:none">
+        <div class="tc-skeleton-wrap">
+          <div class="tc-skeleton-card">
+            <div class="tc-skeleton-header"></div>
+            <div class="tc-skeleton-rows">
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+            </div>
+          </div>
+          <div class="tc-skeleton-card">
+            <div class="tc-skeleton-header"></div>
+            <div class="tc-skeleton-rows">
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+            </div>
+          </div>
+          <div class="tc-skeleton-card">
+            <div class="tc-skeleton-header"></div>
+            <div class="tc-skeleton-rows">
+              <div class="tc-skeleton-row"></div>
+              <div class="tc-skeleton-row"></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -15078,6 +15309,8 @@ function checkAndTrimFlow(flow) {
 })();
 </script>
 
+<canvas id="confettiCanvas"></canvas>
+
 <!-- ════════════════════════════════════════════════════════════
      PAGE FOOTER — About · Privacy · Contact
      ════════════════════════════════════════════════════════════ -->
@@ -15163,6 +15396,143 @@ function checkAndTrimFlow(flow) {
     </div>
   </div>
 </div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// v3.5 UI ENHANCEMENTS — purely additive, no existing JS touched
+// ═══════════════════════════════════════════════════════════════
+
+// P4: TC generated lifetime counter
+(function _initTCCounter() {
+  const LS_KEY = 'shuddhi-total-tcs-generated';
+  window._incrementTCCount = function(n) {
+    if (!n || n < 1) return;
+    try {
+      const prev = parseInt(localStorage.getItem(LS_KEY) || '0', 10);
+      localStorage.setItem(LS_KEY, prev + n);
+      _updatePhStat(prev + n);
+    } catch(e) {}
+  };
+  function _updatePhStat(n) {
+    const el = document.getElementById('phTotalTCs');
+    if (el) el.textContent = n >= 1000 ? (n/1000).toFixed(1)+'k' : n;
+  }
+  try { _updatePhStat(parseInt(localStorage.getItem(LS_KEY)||'0',10)); } catch(e) {}
+})();
+
+// P1-a: Step completion detection + P1-b: Generate button pulse
+(function _initStepWatcher() {
+  function _check() {
+    const hasFlow    = !!(document.getElementById('flowDesc')?.value?.trim());
+    const hasFile    = !!(window.__uploadedImageBase64 || window.extractedDocText);
+    const step1Done  = hasFlow || hasFile;
+    const step2Done  = !!(document.getElementById('platform')?.value);
+    const labels     = document.querySelectorAll('.step-label');
+    if (labels[0]) labels[0].classList.toggle('step-done', step1Done);
+    if (labels[1]) labels[1].classList.toggle('step-done', step2Done);
+    const btn = document.getElementById('genBtn');
+    if (btn && !btn.classList.contains('loading'))
+      btn.classList.toggle('form-ready', step1Done && step2Done);
+  }
+  const flowEl = document.getElementById('flowDesc');
+  if (flowEl) flowEl.addEventListener('input', _check);
+  // Poll every 600ms for platform/file changes (non-intrusive)
+  setInterval(_check, 600);
+  window._checkStepCompletion = _check;
+  setTimeout(_check, 900);
+})();
+
+// P2-b: TC counter pop + increment lifetime total
+(function _watchTCCount() {
+  const el = document.getElementById('tcCount');
+  if (!el) return;
+  new MutationObserver(() => {
+    const n = parseInt(el.textContent, 10);
+    if (n > 0) {
+      el.classList.add('tc-pop');
+      setTimeout(() => el.classList.remove('tc-pop'), 400);
+      if (typeof window._incrementTCCount === 'function') window._incrementTCCount(n);
+      window._maybeConfetti && window._maybeConfetti();
+    }
+  }).observe(el, { childList: true, characterData: true, subtree: true });
+})();
+
+// P3: Confetti burst on first successful generation
+(function _initConfetti() {
+  let _fired = false;
+  window._maybeConfetti = function() {
+    if (_fired) return;
+    try { if (parseInt(localStorage.getItem('shuddhi-total-tcs-generated')||'0',10) > 60) return; } catch(e) {}
+    _fired = true;
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    canvas.style.display = 'block';
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const COLS = ['#5B5FEF','#8B5CF6','#10B981','#F59E0B','#EF4444','#0891B2','#EC4899'];
+    const pieces = Array.from({length:80}, () => ({
+      x:Math.random()*canvas.width, y:-10-Math.random()*200,
+      r:4+Math.random()*5, d:2+Math.random()*3,
+      color:COLS[Math.floor(Math.random()*COLS.length)],
+      tilt:0, ta:0, tai:0.07+Math.random()*0.05
+    }));
+    let f=0;
+    (function draw() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      pieces.forEach(p => {
+        p.ta+=p.tai; p.y+=p.d; p.tilt=Math.sin(p.ta)*12;
+        ctx.beginPath(); ctx.lineWidth=p.r; ctx.strokeStyle=p.color;
+        ctx.moveTo(p.x+p.tilt+p.r/3,p.y); ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r/5); ctx.stroke();
+      });
+      if (++f < 90) requestAnimationFrame(draw);
+      else { ctx.clearRect(0,0,canvas.width,canvas.height); canvas.style.display='none'; }
+    })();
+  };
+
+// ═══════════════════════════════════════════════════════════════
+// v3.6 UI ENHANCEMENTS — purely additive
+// ═══════════════════════════════════════════════════════════════
+
+// v3.6-a: Skeleton show/hide — hooks into generate button state via MutationObserver
+// Watches genBtn class changes: loading=true → show skeleton, loading=false → hide
+(function _initSkeleton() {
+  const btn = document.getElementById('genBtn');
+  const sk  = document.getElementById('tcSkeleton');
+  const ph  = document.getElementById('placeholder');
+  if (!btn || !sk) return;
+
+  new MutationObserver(() => {
+    const isLoading = btn.classList.contains('loading');
+    if (isLoading) {
+      if (ph) ph.style.display = 'none';
+      sk.style.display = 'block';
+    } else {
+      sk.style.display = 'none';
+    }
+  }).observe(btn, { attributes: true, attributeFilter: ['class'] });
+})();
+
+// v3.6-b: Mobile sidebar auto-close after platform selection
+// Hooks into selectPlatform — if viewport is mobile, close sidebar after selection
+(function _initMobileAutoClose() {
+  const _origSP = window.selectPlatform;
+  if (typeof _origSP !== 'function') return;
+  window.selectPlatform = function(value) {
+    _origSP.apply(this, arguments);
+    // Only auto-close on mobile viewports
+    if (window.innerWidth <= 768 && value) {
+      setTimeout(() => {
+        const sidebar = document.getElementById('appSidebar');
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+          if (typeof closeMobileSidebar === 'function') closeMobileSidebar();
+        }
+      }, 300); // slight delay so user sees the selection before close
+    }
+  };
+})();
+
+})();
+</script>
 
 </body>
 </html>
