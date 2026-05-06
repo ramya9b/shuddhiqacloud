@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v3.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v3.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5276,7 +5276,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v3.8</span>
+      <span class="sb-badge">v3.9</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6102,7 +6102,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v3.8</div>
+          <div class="settings-about-val">v3.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -10430,9 +10430,16 @@ Make the output production-ready and specific to ${platform}. Use real field nam
               rawMarkdown += parsed.delta.text;
               gotDelta = true;
             }
-            // v3.7: Claude usage — arrives in message_delta event
+            // v3.7: Claude usage — input_tokens in message_start, output_tokens in message_delta
+            if (parsed.type === 'message_start' && parsed.message?.usage) {
+              window._claudeInputTokens = parsed.message.usage.input_tokens || 0;
+            }
             if (parsed.type === 'message_delta' && parsed.usage) {
-              window._lastUsageEvent = { input: parsed.usage.input_tokens||0, output: parsed.usage.output_tokens||0, provider: 'claude' };
+              window._lastUsageEvent = {
+                input:    window._claudeInputTokens || 0,
+                output:   parsed.usage.output_tokens || 0,
+                provider: 'claude'
+              };
             }
           } catch {}
         }
@@ -15341,7 +15348,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.8</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.9</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
