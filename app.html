@@ -5644,6 +5644,7 @@ header::after { display: none !important; }
       <button class="settings-tab active" id="stab-claude" onclick="switchSettingsTab('claude')">🤖 Claude AI</button>
       <button class="settings-tab" id="stab-ado"    onclick="switchSettingsTab('ado')">🔷 Azure DevOps</button>
       <button class="settings-tab" id="stab-jira"  onclick="switchSettingsTab('jira')">🟦 Jira</button>
+      <button class="settings-tab" id="stab-usage"  onclick="switchSettingsTab('usage');window._renderUsagePanel&&window._renderUsagePanel()">📊 Usage & Cost</button>
       <button class="settings-tab" id="stab-about"  onclick="switchSettingsTab('about')">ℹ️ About</button>
     </div>
 
@@ -6096,7 +6097,12 @@ header::after { display: none !important; }
     </div>
 
     <!-- ── Panel: About ── -->
-    <div class="settings-panel" id="spanel-about" style="display:none">
+<!-- Panel: Usage & Cost (v3.7) -->
+    <div class="settings-panel" id="spanel-usage" style="display:none;flex-direction:column">
+      <div id="usageCostPanelSettings" style="padding:4px 0"></div>
+    </div>
+
+        <div class="settings-panel" id="spanel-about" style="display:none">
       <div class="settings-about-grid">
         <div class="settings-about-card">
           <div class="settings-about-icon">🧪</div>
@@ -6730,6 +6736,9 @@ header::after { display: none !important; }
           <span id="metaKeyBadge" style="display:none;font-size:10px;padding:1px 6px;
             border-radius:8px;background:rgba(16,185,129,.12);color:#059669;
             font-weight:700;margin-left:4px">Your key</span>
+        </div>
+        <div class="meta-item" id="metaCostWrap" style="display:none;color:var(--indigo);font-weight:700">
+          💰 <strong id="metaCost">₹0.00</strong>
         </div>
         <div class="token-badge" id="tokenBadge">✓ Complete</div>
       </div>
@@ -13542,7 +13551,7 @@ function closeSettings() {
 }
 
 function switchSettingsTab(tab) {
-  ['claude','ado','jira','about'].forEach(t => {
+  ['claude','ado','jira','usage','about'].forEach(t => {
     const tabBtn  = document.getElementById('stab-'   + t);
     const tabPane = document.getElementById('spanel-' + t);
     if (tabBtn)  tabBtn.classList.toggle('active', t === tab);
@@ -15541,5 +15550,99 @@ function checkAndTrimFlow(flow) {
 })();
 </script>
 
+<script>
+// =============================================================
+// v3.7: USAGE & COST TRACKING — purely additive
+// =============================================================
+(function _initUsageCostTracker() {
+  const PRICING={claude:{input:3.00,output:15.00},gemini:{input:0.075,output:0.30},groq:{input:0,output:0}};
+  const BUDGET_INR=250,WARN=0.80,PFX='shuddhi-v37-';
+  let _rate=83.5;
+
+  (async function(){
+    try{
+      const c=parseFloat(localStorage.getItem(PFX+'rate')||'0'),ts=parseInt(localStorage.getItem(PFX+'rate-ts')||'0',10);
+      if(c&&Date.now()-ts<86400000){_rate=c;return;}
+      const d=await(await fetch('https://api.exchangerate-api.com/v4/latest/USD')).json();
+      if(d?.rates?.INR>0){_rate=d.rates.INR;localStorage.setItem(PFX+'rate',_rate);localStorage.setItem(PFX+'rate-ts',Date.now());}
+    }catch(e){}
+  })();
+
+  function _month(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+  function _getUsage(){
+    const m=_month(),s=localStorage.getItem(PFX+'month');
+    if(s!==m){localStorage.setItem(PFX+'month',m);['claude','gemini','groq'].forEach(p=>['req','in','out'].forEach(k=>localStorage.setItem(PFX+p+'-'+k,'0')));}
+    return['claude','gemini','groq'].reduce((o,p)=>{o[p]={req:+localStorage.getItem(PFX+p+'-req')||0,input:+localStorage.getItem(PFX+p+'-in')||0,output:+localStorage.getItem(PFX+p+'-out')||0};return o;},{});
+  }
+  function _cost(p,i,o){const pr=PRICING[p]||{input:0,output:0};return((i*pr.input+o*pr.output)/1e6)*_rate;}
+  function _total(u){return['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,u[p].input,u[p].output),0);}
+
+  window._recordUsage=function(provider,inputTok,outputTok){
+    if(!provider)return;
+    _getUsage();
+    const p=provider.toLowerCase();
+    localStorage.setItem(PFX+p+'-req',(+localStorage.getItem(PFX+p+'-req')||0)+1);
+    localStorage.setItem(PFX+p+'-in', (+localStorage.getItem(PFX+p+'-in') ||0)+inputTok);
+    localStorage.setItem(PFX+p+'-out',(+localStorage.getItem(PFX+p+'-out')||0)+outputTok);
+    const c=_cost(p,inputTok,outputTok);
+    const el=document.getElementById('metaCost'),w=document.getElementById('metaCostWrap');
+    if(el){el.textContent=(c<0.01?'\u20b90.00':'\u20b9'+c.toFixed(2));if(w)w.style.display='';}
+    const u=_getUsage(),tot=_total(u),pct=tot/BUDGET_INR;
+    if(pct>=1)_warn(tot,true);else if(pct>=WARN)_warn(tot,false);
+    _render();
+  };
+
+  function _warn(tot,exceeded){
+    const pct=Math.round((tot/BUDGET_INR)*100);
+    const msg=exceeded
+      ?'\u20b9'+tot.toFixed(2)+' spent \u2014 \u20b9250 budget reached. <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:800;cursor:pointer;text-decoration:underline">View usage</a>'
+      :'\u20b9'+tot.toFixed(2)+' spent this month ('+pct+'% of \u20b9250). <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">View breakdown</a>';
+    if(typeof showAdoBanner==='function')showAdoBanner(msg,exceeded?'error':'warning',10000);
+  }
+
+  window._showRateLimitBanner=function(provider,waitSecs){
+    let secs=waitSecs||60,timer;
+    const pn=provider==='gemini'?'Gemini':provider==='claude'?'Claude':'Groq';
+    const msg=pn+' rate limit reached. Resets in: <strong id="_rls">'+secs+'s</strong>&nbsp;'
+      +'<button onclick="window._rlRetry&&window._rlRetry()" style="background:#fff;color:#b45309;border:none;border-radius:6px;padding:2px 10px;cursor:pointer;font-weight:700;font-size:12px">Wait & Retry</button>&nbsp;'
+      +'<button onclick="selectProvider(\'claude\');generate()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:2px 10px;cursor:pointer;font-size:12px">Use Claude</button>&nbsp;'
+      +'<a onclick="openSettings();switchSettingsTab(\'claude\')" style="color:rgba(255,255,255,.8);font-size:12px;cursor:pointer;text-decoration:underline">Add own key</a>';
+    if(typeof showAdoBanner==='function')showAdoBanner(msg,'warning',0);
+    timer=setInterval(()=>{secs--;const e=document.getElementById('_rls');if(e)e.textContent=secs+'s';if(secs<=0){clearInterval(timer);if(typeof hideAdoBanner==='function')hideAdoBanner();}},1000);
+    window._rlRetry=function(){clearInterval(timer);if(typeof hideAdoBanner==='function')hideAdoBanner();setTimeout(()=>{if(typeof generate==='function')generate();},300);};
+  };
+
+  function _render(){
+    const el=document.getElementById('usageCostPanel')||document.getElementById('usageCostPanelSettings');if(!el)return;
+    const u=_getUsage(),tot=_total(u),pct=Math.min(100,Math.round((tot/BUDGET_INR)*100));
+    const bar=pct>=100?'#EF4444':pct>=80?'#F59E0B':'#10B981';
+    const rows=['claude','gemini','groq'].map(p=>{
+      const d=u[p],c=_cost(p,d.input,d.output);
+      const ic=p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
+      const cs=p==='groq'?'₹0.00 (Free)':'₹'+c.toFixed(4);
+      const tk=d.input||d.output?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
+      return'<tr style="border-top:1px solid var(--border)"><td style="padding:8px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td><td style="padding:8px 10px;text-align:right;color:var(--text2)">'+d.req+'</td><td style="padding:8px 10px;text-align:right;color:var(--text2)">'+tk+'</td><td style="padding:8px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td></tr>';
+    }).join('');
+    el.innerHTML='<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px">📊 Usage & Cost — '+_month()+'</div>'
+      +'<table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr style="background:var(--surface2)"><th style="padding:7px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.5px">Provider</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Req</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th></tr></thead><tbody>'+rows+'</tbody>'
+      +'<tfoot><tr style="border-top:2px solid var(--border2);background:var(--surface2)"><td colspan="3" style="padding:8px 10px;font-weight:800;color:var(--text)">Total this month</td><td style="padding:8px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">₹'+tot.toFixed(2)+' / ₹'+BUDGET_INR+'</td></tr></tfoot></table>'
+      +'<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
+      +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
+      +(pct>=80?'<div style="margin-top:8px;font-size:11.5px;color:'+bar+';font-weight:600">⚠️ Approaching budget. Use Groq (free) for smaller docs.</div>':'')+'</div>'
+      +'<div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">'
+      +'<div style="font-size:10.5px;color:var(--text3)">Rate: $1 = ₹'+_rate.toFixed(1)+' · Live · Resets 1st of month</div>'
+      +'<button onclick="if(confirm(\'Reset usage counters?\')){'+"['claude','gemini','groq'].forEach(p=>['req','in','out'].forEach(k=>localStorage.removeItem('shuddhi-v37-'+p+'-'+k)));window._renderUsagePanel&&window._renderUsagePanel();}" + 'style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset</button></div>';
+  }
+  window._renderUsagePanel=function(){_render();const el2=document.getElementById("usageCostPanelSettings");if(el2){const orig=document.getElementById("usageCostPanel");if(orig)el2.innerHTML=orig.innerHTML;}};
+
+  // Hook into TC count change to record usage after generation
+  const tc=document.getElementById('tcCount');
+  if(tc)new MutationObserver(()=>{
+    setTimeout(()=>{const u=window._lastUsageEvent;if(u&&u.provider){window._recordUsage(u.provider,u.input||0,u.output||0);window._lastUsageEvent=null;}},600);
+  }).observe(tc,{childList:true,characterData:true,subtree:true});
+
+  _render();
+})();
+</script>
 </body>
 </html>

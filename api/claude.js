@@ -335,6 +335,16 @@ function normalizeStream(provider, upstreamBody) {
             : json.choices?.[0]?.finish_reason;
 
           if (isFinished) {
+            // v3.7: Extract exact token counts from final chunk → emit usage event to frontend
+            let _usage = null;
+            if (provider === 'gemini' && json.usageMetadata) {
+              _usage = { input: json.usageMetadata.promptTokenCount||0, output: json.usageMetadata.candidatesTokenCount||0, provider:'gemini' };
+            } else if (provider === 'groq' && json.usage) {
+              _usage = { input: json.usage.prompt_tokens||0, output: json.usage.completion_tokens||0, provider:'groq' };
+            }
+            if (_usage) {
+              controller.enqueue(encoder.encode(`event: usage\ndata: ${JSON.stringify(_usage)}\n\n`));
+            }
             controller.enqueue(encoder.encode(
               `event: message_stop\ndata: ${JSON.stringify({ type: 'message_stop' })}\n\n`
             ));
