@@ -7309,17 +7309,32 @@ function setPriority(p, el) {
 
 function fillSample(key) {
   const s = samples[key];
+  if (!s) return;
   selectPlatform(s.platform);
-  // After chips render, select the right module
+  // Wait for module chips to render (renderModuleChips is sync but
+  // sidebar re-layout may need an extra frame — 300ms is safe)
   setTimeout(() => {
     const chip = [...document.querySelectorAll('.module-chip')]
-      .find(c => c.dataset.module === s.module);
+      .find(c => c.dataset.module === s.module || c.textContent.trim() === s.module);
     if (chip) selectModule(s.module, chip);
-    else { document.getElementById('module').value = s.module; }
-  }, 50);
-  document.getElementById('flowDesc').value = s.flow;
-  document.getElementById('roles').value    = s.roles;
-  document.getElementById('integrations').value = s.integrations;
+    else {
+      // Fallback: set value directly if chip not found
+      const moduleEl = document.getElementById('module');
+      if (moduleEl) moduleEl.value = s.module;
+      const nameEl = document.getElementById('selectedModuleName');
+      if (nameEl) { nameEl.textContent = '✓ ' + s.module; nameEl.style.display = 'inline-block'; }
+    }
+  }, 300);
+  const flowEl = document.getElementById('flowDesc');
+  if (flowEl) {
+    flowEl.value = s.flow;
+    // Trigger char count update
+    if (typeof updateFlowCharCount === 'function') updateFlowCharCount(flowEl);
+  }
+  const rolesEl = document.getElementById('roles');
+  if (rolesEl) rolesEl.value = s.roles || '';
+  const intEl = document.getElementById('integrations');
+  if (intEl) intEl.value = s.integrations || '';
 }
 
 function showToast(msg, emoji = '\u2705') {
@@ -11315,30 +11330,37 @@ renderHistory();
   // ── Week 1 Fix 1: Show welcome modal if no provider key is configured ──────
   // Delay slightly so ProviderManager.init() has settled
   setTimeout(() => {
-    const _firstRunDone  = localStorage.getItem('shuddhi-first-run-done');
-    const _sampleShown   = localStorage.getItem('shuddhi-sample-shown');
+    const _firstRunDone = localStorage.getItem('shuddhi-first-run-done');
 
     if (!_firstRunDone && !ProviderManager.hasAnyKey()) {
       // New user, no keys — show setup wizard
+      // (wDismiss will call fillSample after modal closes)
       showWelcomeModal();
-    } else if (!_sampleShown) {
-      // Week 1 Fix 2: First visit with keys already configured (e.g. admin/returning user)
-      // Pre-fill D365 F&O sample so they see a working form immediately.
-      // Uses a SEPARATE flag so it fires independently of first-run-done.
-      const _hasNoInput = !document.getElementById('flowDesc').value.trim()
-        && !document.getElementById('platform').value;
-      if (_hasNoInput) {
-        setTimeout(() => {
-          if (typeof fillSample === 'function') {
-            fillSample('fo');
-            localStorage.setItem('shuddhi-sample-shown', '1');
-            showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
-          }
-        }, 600);
-      }
+    } else {
+      // Week 1 Fix 2: Pre-fill D365 F&O sample whenever form is blank.
+      // Fires on first visit AND after "+ New Requirement" resets the form.
+      // No flag check — always help the user with a starting point.
+      _fillSampleIfBlank();
     }
-  }, 400);
+  }, 500);
 })();
+
+// Fill sample whenever the form is completely empty — called on page load
+// and can be called again after resetForm() if needed.
+function _fillSampleIfBlank() {
+  const _hasNoInput = !document.getElementById('flowDesc').value.trim()
+    && !document.getElementById('platform').value;
+  if (_hasNoInput && typeof fillSample === 'function') {
+    setTimeout(() => {
+      fillSample('fo');
+      // Only show the toast on very first ever visit
+      if (!localStorage.getItem('shuddhi-sample-shown')) {
+        showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
+        localStorage.setItem('shuddhi-sample-shown', '1');
+      }
+    }, 300);
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // WEEK 1 — WELCOME MODAL JS
@@ -11450,15 +11472,8 @@ function wStartGenerating() {
   localStorage.setItem('shuddhi-sample-shown', '1');
   showToast('Key saved! Ready to generate test cases 🎉', '✅');
 
-  // Week 1 Fix 2: Auto-fill sample on first run
-  setTimeout(() => {
-    const _hasNoInput = !document.getElementById('flowDesc').value.trim()
-      && !document.getElementById('platform').value;
-    if (_hasNoInput && typeof fillSample === 'function') {
-      fillSample('fo');
-      showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
-    }
-  }, 300);
+  // Fill sample after modal closes if form is still blank
+  setTimeout(() => _fillSampleIfBlank(), 400);
 }
 
 function wDismiss(markDone) {
@@ -11469,17 +11484,8 @@ function wDismiss(markDone) {
     setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 220);
   }
   localStorage.setItem('shuddhi-first-run-done', '1');
-  localStorage.setItem('shuddhi-sample-shown', '1');
-
-  // Always pre-fill sample after dismissing modal if form is blank
-  setTimeout(() => {
-    const _hasNoInput = !document.getElementById('flowDesc').value.trim()
-      && !document.getElementById('platform').value;
-    if (_hasNoInput && typeof fillSample === 'function') {
-      fillSample('fo');
-      showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
-    }
-  }, 350);
+  // Fill sample after modal closes if form is blank
+  setTimeout(() => _fillSampleIfBlank(), 350);
 }
 
 // ═══════════════════════════════════════════════════════════════
