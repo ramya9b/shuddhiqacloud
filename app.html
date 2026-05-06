@@ -3082,7 +3082,20 @@ header::after { display: none !important; }
     font-family: 'JetBrains Mono', monospace;
   }
 
-  .sb-footer { padding: 12px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .sb-footer { padding: 12px 14px; border-top: 1px solid var(--border); flex-shrink: 0; padding-bottom: 56px; /* clears page footer */ }
+
+  /* Footer: adjust left margin when sidebar collapses */
+  #appSidebar.collapsed ~ * #appFooter,
+  #appSidebar.collapsed + #mainWrap #appFooter { margin-left: 0 !important; }
+
+  /* Footer responsive */
+  @media (max-width: 768px) {
+    #appFooter { margin-left: 0 !important; padding: 8px 16px !important; }
+    #appFooter .footer-right { display: none !important; }
+  }
+  @media (max-width: 480px) {
+    #appFooter { display: none !important; }
+  }
 
   .sb-user { display: flex; align-items: center; gap: 9px; padding: 4px; cursor: pointer; }
   .sb-avatar {
@@ -4296,6 +4309,89 @@ header::after { display: none !important; }
   .pc-group-header.open .pc-group-chevron { transform: rotate(0deg); }
   .pc-group-header:not(.open) .pc-group-chevron { transform: rotate(-90deg); }
 
+  /* ── v3.4 UI Polish ─────────────────────────────────────────────────────── */
+
+  /* 1. Active platform group header highlight
+        When a platform inside the group is selected, the group header gets
+        a subtle indigo tint so users know which group is active             */
+  .pc-group-header.has-selection {
+    background: rgba(91,95,239,.07);
+    border-radius: 8px;
+  }
+  .pc-group-header.has-selection .pc-group-name {
+    color: var(--indigo, #5B5FEF);
+  }
+  .pc-group-header.has-selection .pc-group-chevron {
+    color: var(--indigo, #5B5FEF);
+  }
+
+  /* 2. Module chips — pill style with better selected state */
+  .module-chip {
+    padding: 5px 13px !important;
+    border-radius: 20px !important;
+    font-size: 11.5px !important;
+    border: 1.5px solid var(--border2) !important;
+    background: var(--surface) !important;
+    color: var(--text2) !important;
+    font-weight: 500 !important;
+    transition: all .15s !important;
+    white-space: nowrap !important;
+  }
+  .module-chip:hover {
+    border-color: var(--indigo, #5B5FEF) !important;
+    background: rgba(91,95,239,.05) !important;
+    color: var(--indigo, #5B5FEF) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 8px rgba(91,95,239,.15) !important;
+  }
+  .module-chip.selected {
+    border-color: var(--indigo, #5B5FEF) !important;
+    background: linear-gradient(135deg, rgba(91,95,239,.12), rgba(139,92,246,.12)) !important;
+    color: var(--indigo, #5B5FEF) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(91,95,239,.2) !important;
+  }
+
+  /* 3. Platform & Module section hint — more refined */
+  .sb-platform-hint {
+    font-size: 10px !important;
+    color: var(--text3) !important;
+    padding: 4px 2px 8px !important;
+    font-weight: 600 !important;
+    letter-spacing: .3px !important;
+    text-transform: uppercase !important;
+  }
+
+  /* 4. Version badge — gradient instead of flat indigo */
+  .sb-badge {
+    background: linear-gradient(135deg, var(--indigo, #5B5FEF), var(--violet, #8B5CF6)) !important;
+    box-shadow: 0 2px 6px rgba(91,95,239,.35) !important;
+    font-size: 9.5px !important;
+    letter-spacing: .3px !important;
+  }
+
+  /* 5. Active nav item — stronger left indicator */
+  .sb-item.active {
+    background: linear-gradient(90deg, rgba(91,95,239,.1), rgba(91,95,239,.04)) !important;
+    color: var(--indigo) !important;
+  }
+  .sb-item.active::before {
+    width: 4px !important;
+    height: 22px !important;
+    background: linear-gradient(180deg, var(--indigo), var(--violet, #8B5CF6)) !important;
+    border-radius: 0 4px 4px 0 !important;
+    box-shadow: 2px 0 8px rgba(91,95,239,.3) !important;
+  }
+
+  /* 6. sb-group-label — slightly more prominent */
+  .sb-group-label {
+    font-size: 10px !important;
+    letter-spacing: 1px !important;
+    color: var(--text3) !important;
+    font-weight: 800 !important;
+    padding: 14px 10px 4px !important;
+  }
+
   /* Group items — collapsible */
   .pc-group-items {
     display: none;
@@ -5007,7 +5103,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v2.0</span>
+      <span class="sb-badge">v3.4</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -7303,6 +7399,21 @@ function selectPlatform(value) {
   document.querySelectorAll('.platform-card').forEach(c => {
     c.classList.toggle('selected', c.dataset.value === value);
   });
+
+  // v3.4 UI: highlight the group header that contains the selected platform
+  document.querySelectorAll('.pc-group-header').forEach(h => h.classList.remove('has-selection'));
+  if (value) {
+    const selectedCard = document.querySelector(`.platform-card[data-value="${CSS.escape(value)}"]`);
+    if (selectedCard) {
+      const groupItems = selectedCard.closest('.pc-group-items');
+      if (groupItems) {
+        const groupHeader = groupItems.previousElementSibling;
+        if (groupHeader && groupHeader.classList.contains('pc-group-header')) {
+          groupHeader.classList.add('has-selection');
+        }
+      }
+    }
+  }
 
   // Show module field
   const moduleField = document.getElementById('moduleField');
@@ -9842,11 +9953,11 @@ Do NOT output until all 5 steps pass.`;
 
   const formatInstructions = {
     full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
-    e2e:         "Generate ONLY Section 1 (Test Summary table) then Section 2 (End-to-End Test Cases). Do NOT generate Pre-Generation Extraction or Gap Analysis sections — go straight to the Test Summary table then TC tables. STRICT LIMIT: maximum 8 test cases. OUTPUT FORMAT: ONLY pipe tables — no prose, no paragraphs, no numbered lists. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names." + _verbosityBudget,
-    field:       "Generate ONLY Section 1 (Test Summary table) then Section 3 (Field Validation Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages." + _verbosityBudget,
-    integration: "Generate ONLY Section 1 (Test Summary table) then Section 4 (Integration Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC." + _verbosityBudget,
-    negative:    "Generate ONLY Section 1 (Test Summary table) then Section 5 (Negative Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: (1) ONE step per row. (2) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (3) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (4) REQUIRED: exact error message, validation text, access denied." + _verbosityBudget,
-    smoke:       "Generate ONLY Section 1 (Test Summary table) then Smoke/Sanity test cases. Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. ONE step per row. Aim for 5–8 critical-path smoke tests, each with minimum 10 step rows." + _verbosityBudget,
+    e2e:         "Generate ONLY Section 1 (Test Summary table) then Section 2 (End-to-End Test Cases). Do NOT generate Pre-Generation Extraction or Gap Analysis sections — go straight to the Test Summary table then TC tables. MINIMUM 5 test cases, MAXIMUM 8 test cases — never generate fewer than 5. OUTPUT FORMAT: ONLY pipe tables — no prose, no paragraphs, no numbered lists. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row — each step on its own table row with blank Title. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names." + _verbosityBudget,
+    field:       "Generate ONLY Section 1 (Test Summary table) then Section 3 (Field Validation Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. MINIMUM 5 test cases. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row — each step on its own table row with blank Title. Include boundary values, specific D365 field names, exact error messages." + _verbosityBudget,
+    integration: "Generate ONLY Section 1 (Test Summary table) then Section 4 (Integration Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. MINIMUM 5 test cases. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row — each step on its own table row with blank Title. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC." + _verbosityBudget,
+    negative:    "Generate ONLY Section 1 (Test Summary table) then Section 5 (Negative Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. MINIMUM 5 test cases. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row — each step on its own table row with blank Title. TRIGGER + VERIFY steps MUST show failure/error — NEVER success. FORBIDDEN: 'Login successful', 'Page loads', 'Success'. REQUIRED: exact error message, validation text, access denied." + _verbosityBudget,
+    smoke:       "Generate ONLY Section 1 (Test Summary table) then Smoke/Sanity test cases. Do NOT generate Pre-Generation or Gap Analysis sections. MINIMUM 5 test cases. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. ONE step per row — each step on its own table row with blank Title. Minimum 10 step rows per TC." + _verbosityBudget,
     testdata:    "Generate ONLY Section 6 (Test Data Requirements): Data Category | Field Name | D365/ERP Table Source | Sample Valid Value | Sample Invalid Value | Data Type | Constraints | Environment. Also include Section 1 (Test Summary).",
     metadata:    "Generate ONLY Section 7 (Test Case Metadata): TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact. Never skip a test case.",
     scenarios:   "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget,
@@ -14095,11 +14206,13 @@ function toggleSidebar(){
   const mainWrap=document.getElementById('mainWrap');
   const bulkBar=document.getElementById('bulkActionBar');
   const btn=document.getElementById('sbCollapseBtn');
+  const footer=document.getElementById('appFooter');
   if(!sidebar) return;
   const isCollapsed=sidebar.classList.toggle('collapsed');
   document.body.classList.toggle('sidebar-collapsed',isCollapsed);
   if(mainWrap) mainWrap.style.marginLeft=isCollapsed?'64px':'260px';
   if(bulkBar) bulkBar.style.left=isCollapsed?'64px':'260px';
+  if(footer)  footer.style.marginLeft=isCollapsed?'64px':'260px';
   if(btn) btn.textContent=isCollapsed?'▶':'◀';
   const lbl=document.querySelector('.sb-collapse-strip-label');
   if(lbl) lbl.textContent=isCollapsed?'Expand':'Collapse';
@@ -14126,9 +14239,11 @@ function closeMobileSidebar(){
     const saved=localStorage.getItem(SIDEBAR_STATE_KEY);
     if(saved==='1'){
       const s=document.getElementById('appSidebar'),m=document.getElementById('mainWrap');
+      const f=document.getElementById('appFooter');
       if(s) s.classList.add('collapsed');
       document.body.classList.add('sidebar-collapsed');
       if(m) m.style.marginLeft='64px';
+      if(f) f.style.marginLeft='64px';
       const lbl=document.querySelector('.sb-collapse-strip-label');
       if(lbl) lbl.textContent='Expand';
     }
@@ -14967,21 +15082,24 @@ function checkAndTrimFlow(flow) {
      PAGE FOOTER — About · Privacy · Contact
      ════════════════════════════════════════════════════════════ -->
 <footer id="appFooter" style="
-  width:100%; margin-top:auto;
-  border-top:1px solid var(--border);
-  background:var(--surface2);
-  padding:12px 24px;
+  width:100%;
+  margin-left:260px;
+  border-top:3px solid transparent;
+  border-image: linear-gradient(90deg, var(--indigo,#5B5FEF), var(--violet,#8B5CF6), var(--indigo,#5B5FEF)) 1;
+  background:var(--surface);
+  box-shadow: 0 -2px 16px rgba(91,95,239,.08);
+  padding:10px 28px;
   display:flex; align-items:center; justify-content:space-between;
   flex-wrap:wrap; gap:8px;
   font-size:11.5px; color:var(--text3);
   box-sizing:border-box;
-  position:relative; z-index:1;
+  position:relative; z-index:10;
 ">
   <!-- Left: branding + version -->
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.3</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.4</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -14990,7 +15108,7 @@ function checkAndTrimFlow(flow) {
   </div>
 
   <!-- Right: links -->
-  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+  <div class="footer-right" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
     <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
       style="color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .15s"
       onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
@@ -15012,7 +15130,7 @@ function checkAndTrimFlow(flow) {
       📧 Contact
     </a>
     <span style="color:var(--border2)">·</span>
-    <span>© 2025 Shuddhi QA</span>
+    <span>© 2026 Shuddhi QA</span>
   </div>
 </footer>
 
