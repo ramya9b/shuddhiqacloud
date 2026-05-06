@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v5.3 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v5.4 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5412,7 +5412,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v5.3</span>
+      <span class="sb-badge">v5.4</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6242,7 +6242,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v5.3</div>
+          <div class="settings-about-val">v5.4</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -10323,7 +10323,7 @@ Do NOT stop generating until ALL 6 steps pass.`;
   // _verbosityBudget appended to every format that includes 0a/0b sections.
   // Prevents Gemini 2.5 Flash from generating 250k+ chars of analysis before any TC tables,
   // which caused the 30s timeout to fire mid-stream with 0 TCs parsed.
-  const _verbosityBudget = ' CRITICAL OUTPUT RULES: (1) Sections 0a and 0b: MAXIMUM 2 bullet points each — no prose, no paragraphs, no explanations. (2) After section 0b, output TC tables IMMEDIATELY — no transitional text. (3) EVERY TC must have MINIMUM 10 numbered steps — never fewer. (4) MINIMUM 40 TCs total — if you reach section 7 with fewer than 40, go back and add more TCs to earlier sections. (5) Do NOT stop generating until you have 40+ TCs with 10+ steps each. TARGET: 50+ TCs.';
+  const _verbosityBudget = ' CRITICAL OUTPUT RULES: (1) Section 0a: ONE line only — module name and scope. Section 0b: MAXIMUM 2 gaps listed, no prose. (2) Output the Test Summary table IMMEDIATELY after section 0b. (3) Then output TC tables — ONE row per step, no prose between TCs. (4) MINIMUM 40 TCs total with MINIMUM 10 steps each. Do NOT write paragraphs or explanations — only tables. TARGET: 50+ TCs.';
 
   const formatInstructions = {
     full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
@@ -11226,7 +11226,7 @@ function finalizeOutput(elapsed, platform, module) {
         + 'Platform: ' + platform + '\n'
         + 'Module: ' + (module || 'General') + '\n'
         + 'Format: ' + outputFormat + _visionNote + '\n'
-        + (flow ? 'Context: ' + flow.substring(0, 500) : '');
+        + (flow ? 'Context: ' + flow.substring(0, 500) : (document.getElementById('flowDesc')?.value || '').substring(0, 500));
     ConversationManager.append('user', _userForHistory);
     ConversationManager.append('assistant', rawMarkdown);
     if (typeof _updateNewSessionBtnVisibility === 'function') _updateNewSessionBtnVisibility();
@@ -13654,7 +13654,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v5.3';
+  if (ver)  ver.textContent  = 'v5.4';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
   // Try to run diagnostics if available
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14644,7 +14644,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v5.3';
+  if (version)  version.textContent  = 'v5.4';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15489,7 +15489,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v5.3</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v5.4</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
     <span style="color:rgba(255,255,255,.7)">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
@@ -16561,8 +16561,20 @@ window.copyShareLink = function() {
       '- Output ONLY the single table row, nothing else, no headers, no explanation';
 
     try {
-      // Use existing provider infrastructure
+      // Use existing provider infrastructure — pick a non-cooling provider
       var provider = (typeof ProviderManager !== 'undefined') ? ProviderManager.getActive() : 'claude';
+
+      // If active provider is cooling down, pick next available (regen is small — any provider works)
+      if (typeof ProviderManager !== 'undefined' && ProviderManager.isCoolingDown && ProviderManager.isCoolingDown(provider)) {
+        var fallbacks = ['claude', 'gemini', 'groq'].filter(function(p) {
+          return p !== provider && ProviderManager.hasKey && ProviderManager.hasKey(p) && !ProviderManager.isCoolingDown(p);
+        });
+        if (fallbacks.length > 0) {
+          provider = fallbacks[0];
+        }
+        // else use original provider anyway — regen is worth a brief retry
+      }
+
       var userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
       var apiKey   = userKeys[provider] || '';
 
