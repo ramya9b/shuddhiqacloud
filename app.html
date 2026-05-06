@@ -3733,6 +3733,35 @@ header::after { display: none !important; }
     .bulk-btn span { display: none; }
     .bulk-btn { padding: 6px 10px !important; }
     .push-btn { font-size: 12px !important; padding: 8px 12px !important; }
+
+    /* Meta bar — hide less important items on phone */
+    #metaProviderWrap { display: none !important; }
+    .meta-item:nth-child(3) { display: none !important; }
+
+    /* Welcome modal — full screen on phone */
+    #welcomeModal {
+      border-radius: 14px 14px 0 0 !important;
+      max-height: 95vh !important;
+      margin-top: auto !important;
+    }
+    #welcomeOverlay {
+      align-items: flex-end !important;
+      padding: 0 !important;
+    }
+
+    /* Settings modal — full screen on phone */
+    .settings-modal {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 100% !important;
+      border-radius: 0 !important;
+      top: 0 !important;
+      right: 0 !important;
+      transform: none !important;
+    }
+
+    /* Generate button — full width */
+    .generate-btn-row { padding: 12px 14px !important; }
   }
 
 
@@ -3996,6 +4025,51 @@ header::after { display: none !important; }
     .atab-icon { display: none; }
     .artifact-tab { padding: 0 8px !important; }
     .atab-label { font-size: 11px !important; }
+  }
+
+  /* ── v3.3 Mobile layout fixes ─────────────────────────────── */
+  @media (max-width: 768px) {
+    /* Header — stack provider pills below title */
+    .hdr-right { gap: 4px !important; flex-wrap: wrap; }
+    .hdr-cta-btn { font-size: 12px !important; padding: 7px 12px !important; }
+
+    /* Generate button full width */
+    #genBtn { font-size: 14px !important; }
+
+    /* Output TC table — hide less important columns */
+    .tg-col-pri { display: none !important; }
+    .tg-col-type { display: none !important; }
+    .tg-table-wrap { padding: 0 8px 8px !important; }
+
+    /* Meta bar — wrap on small screens */
+    .meta-bar { flex-wrap: wrap; gap: 6px !important; padding: 8px 12px !important; }
+    .meta-item { font-size: 11px !important; }
+
+    /* Settings modal full width */
+    .settings-modal { width: 100% !important; max-width: 100% !important;
+      border-radius: 16px 16px 0 0 !important; bottom: 0 !important;
+      top: auto !important; max-height: 90vh !important; overflow-y: auto !important; }
+
+    /* Welcome modal full width */
+    #welcomeModal { border-radius: 16px 16px 0 0 !important; max-width: 100% !important; }
+    #welcomeOverlay { align-items: flex-end !important; }
+
+    /* TC expand row single column */
+    .tg-exp-cols { grid-template-columns: 1fr !important; }
+
+    /* Filter bar scroll */
+    .filter-bar, #filterBar { overflow-x: auto; white-space: nowrap; }
+
+    /* Action buttons smaller */
+    .tg-act-btn { padding: 4px 6px !important; font-size: 11px !important; }
+  }
+
+  @media (max-width: 480px) {
+    /* TC table — further hide step count on very small screens */
+    .tg-col-id { max-width: 52px !important; font-size: 11px !important; }
+    .tg-col-sc { font-size: 12px !important; }
+    .tg-steps-chip { font-size: 11px !important; padding: 3px 7px !important; }
+    .meta-bar .meta-item { font-size: 10px !important; }
   }
 
 
@@ -5746,37 +5820,73 @@ header::after { display: none !important; }
     <div class="settings-panel" id="spanel-about" style="display:none">
       <div class="settings-about-grid">
         <div class="settings-about-card">
-          <div class="settings-about-icon">🤖</div>
-          <div class="settings-about-label">AI Model</div>
-          <div class="settings-about-val">Claude Sonnet 4.6</div>
+          <div class="settings-about-icon">🧪</div>
+          <div class="settings-about-label">Product</div>
+          <div class="settings-about-val">Shuddhi QA</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v2.0</div>
+          <div class="settings-about-val">v3.3</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
           <div class="settings-about-label">Platforms</div>
-          <div class="settings-about-val">8 supported</div>
+          <div class="settings-about-val">13 supported</div>
+        </div>
+        <div class="settings-about-card">
+          <div class="settings-about-icon">🤖</div>
+          <div class="settings-about-label">AI Providers</div>
+          <div class="settings-about-val">Claude · Gemini · Groq</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">📤</div>
           <div class="settings-about-label">Export formats</div>
-          <div class="settings-about-val">7 formats</div>
+          <div class="settings-about-val">Excel · PDF · ADO · Jira · MD</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🔒</div>
-          <div class="settings-about-label">API Proxy</div>
-          <div class="settings-about-val">/api/claude</div>
-        </div>
-        <div class="settings-about-card">
-          <div class="settings-about-icon">🔷</div>
-          <div class="settings-about-label">ADO Proxy</div>
-          <div class="settings-about-val">/api/ado</div>
+          <div class="settings-about-label">Data storage</div>
+          <div class="settings-about-val">Browser only · No server logs</div>
         </div>
       </div>
-      <div style="margin-top:20px">
+
+      <!-- Developer info -->
+      <div style="margin-top:20px;padding:16px;border-radius:12px;background:var(--surface2);border:1px solid var(--border2)">
+        <div class="settings-section-title" style="margin-bottom:12px">👩‍💻 Developer</div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--violet));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">R</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:var(--text)">Ramya</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px">Senior QA Engineer · Alpha Variance Solutions · Bengaluru</div>
+            <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+              <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
+                style="font-size:11.5px;color:var(--indigo);text-decoration:none;display:flex;align-items:center;gap:4px">
+                🐙 github.com/ramya9b
+              </a>
+              <a href="https://shuddhiqacloud.pages.dev" target="_blank" rel="noopener"
+                style="font-size:11.5px;color:var(--indigo);text-decoration:none">
+                🌐 shuddhiqacloud.pages.dev
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy statement -->
+      <div style="margin-top:14px;padding:16px;border-radius:12px;background:var(--surface2);border:1px solid var(--border2)">
+        <div class="settings-section-title" style="margin-bottom:10px">🔒 Privacy &amp; Data</div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.7">
+          <div style="margin-bottom:6px">✅ <strong>No data stored on servers</strong> — your requirement documents and generated test cases never leave your browser except as API calls to AI providers.</div>
+          <div style="margin-bottom:6px">✅ <strong>API keys stored locally</strong> — keys you add in Settings are saved only in your browser's localStorage. They are sent directly to AI providers and never logged by this application.</div>
+          <div style="margin-bottom:6px">✅ <strong>No account required</strong> — no sign-up, no email, no tracking cookies.</div>
+          <div style="margin-bottom:6px">⚠️ <strong>AI providers</strong> — requests are processed by Anthropic (Claude), Google (Gemini), or Groq. Each provider's own privacy policy applies to your prompts.</div>
+          <div>📧 <strong>Contact:</strong> Raise issues at <a href="https://github.com/ramya9b" target="_blank" rel="noopener" style="color:var(--indigo)">github.com/ramya9b</a></div>
+        </div>
+      </div>
+
+      <!-- Runtime status -->
+      <div style="margin-top:14px">
         <div class="settings-section-title">Runtime Status</div>
         <div id="aboutRuntimeStatus" style="font-size:13px;color:var(--text2);margin-top:12px;line-height:1.8;font-family:'JetBrains Mono',monospace"></div>
       </div>
@@ -6074,6 +6184,21 @@ header::after { display: none !important; }
               <button class="exp-btn" id="exportAllBtn" onclick="exportAllFormats();closeMoreExports()" disabled
                 style="width:100%;text-align:left;border:none;border-radius:7px;background:rgba(99,102,241,0.06)">📦 Export All ZIP</button>
             </div>
+          </div>
+
+          <!-- Feedback buttons — moved to export toolbar for contextual visibility -->
+          <div id="feedbackBtns" style="display:none;align-items:center;gap:4px;margin-left:auto;flex-shrink:0">
+            <span style="font-size:11px;color:var(--text3);margin-right:2px;white-space:nowrap">Rate:</span>
+            <button id="feedbackGood" onclick="submitFeedback('good')"
+              style="padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:13px;transition:all .15s;line-height:1"
+              title="Good output"
+              onmouseover="this.style.borderColor='#10b981';this.style.background='rgba(16,185,129,.08)'"
+              onmouseout="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'">👍</button>
+            <button id="feedbackBad" onclick="submitFeedback('bad')"
+              style="padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:13px;transition:all .15s;line-height:1"
+              title="Poor output"
+              onmouseover="this.style.borderColor='#ef4444';this.style.background='rgba(239,68,68,.08)'"
+              onmouseout="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'">👎</button>
           </div>
         </div>
       </div>
@@ -9717,11 +9842,11 @@ Do NOT output until all 5 steps pass.`;
 
   const formatInstructions = {
     full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
-    e2e:         "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis (max 3 bullets each). Then generate ONLY Section 2 (End-to-End Test Cases). STRICT LIMIT: maximum 8 test cases for E2E format — do NOT exceed 8 TCs. OUTPUT FORMAT: ONLY pipe tables — no prose, no paragraphs, no numbered lists. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    field:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    integration: "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 4 (Integration Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    negative:    "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 5 (Negative Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: (1) ONE step per row. (2) SETUP steps (login/open) may have positive expected. (3) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (4) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (5) REQUIRED: exact error message, validation text, access denied. Apply OUTPUT VALIDATION GATE. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    smoke:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Smoke/Sanity test cases. Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. ONE step per row. Aim for 8–15 critical-path smoke tests, each with minimum 10 step rows. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
+    e2e:         "Generate ONLY Section 1 (Test Summary table) then Section 2 (End-to-End Test Cases). Do NOT generate Pre-Generation Extraction or Gap Analysis sections — go straight to the Test Summary table then TC tables. STRICT LIMIT: maximum 8 test cases. OUTPUT FORMAT: ONLY pipe tables — no prose, no paragraphs, no numbered lists. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names." + _verbosityBudget,
+    field:       "Generate ONLY Section 1 (Test Summary table) then Section 3 (Field Validation Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages." + _verbosityBudget,
+    integration: "Generate ONLY Section 1 (Test Summary table) then Section 4 (Integration Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC." + _verbosityBudget,
+    negative:    "Generate ONLY Section 1 (Test Summary table) then Section 5 (Negative Test Cases). Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. CRITICAL: (1) ONE step per row. (2) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (3) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (4) REQUIRED: exact error message, validation text, access denied." + _verbosityBudget,
+    smoke:       "Generate ONLY Section 1 (Test Summary table) then Smoke/Sanity test cases. Do NOT generate Pre-Generation or Gap Analysis sections. OUTPUT FORMAT: ONLY pipe tables. Use the 5-column format: | Title | Step Action | Step Expected Result | Assigned To | State |. State = Design. ONE step per row. Aim for 5–8 critical-path smoke tests, each with minimum 10 step rows." + _verbosityBudget,
     testdata:    "Generate ONLY Section 6 (Test Data Requirements): Data Category | Field Name | D365/ERP Table Source | Sample Valid Value | Sample Invalid Value | Data Type | Constraints | Environment. Also include Section 1 (Test Summary).",
     metadata:    "Generate ONLY Section 7 (Test Case Metadata): TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact. Never skip a test case.",
     scenarios:   "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget,
@@ -10556,7 +10681,15 @@ function finalizeOutput(elapsed, platform, module) {
       _pWrap.style.display = '';
       if (_pBadge) _pBadge.style.display = _isUserKey ? 'inline' : 'none';
     }
-  } catch(e) { /* non-critical — meta bar badge */ }
+    // Show feedback buttons after successful generation
+    const _fb = document.getElementById('feedbackBtns');
+    if (_fb) {
+      _fb.style.display = 'flex';
+      // Reset to unvoted state
+      document.getElementById('feedbackGood').style.background = 'var(--surface2)';
+      document.getElementById('feedbackBad').style.background  = 'var(--surface2)';
+    }
+  } catch(e) { /* non-critical */ }
 
   document.getElementById('copyBtn').disabled = false;
   document.getElementById('copyXlsBtn').disabled = false;
@@ -11552,8 +11685,31 @@ function wDismiss(markDone) {
   setTimeout(() => _fillSampleIfBlank(), 350);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// WEEK 1 FIX 3 — ACTIONABLE ERROR MESSAGES
+// ── Fix 5: Feedback function ─────────────────────────────────────────────────
+function submitFeedback(rating) {
+  const goodBtn = document.getElementById('feedbackGood');
+  const badBtn  = document.getElementById('feedbackBad');
+  const provider = ProviderManager.getActive();
+  const platform = document.getElementById('platform')?.value || '';
+  const format   = document.getElementById('outputFormat')?.value || '';
+  const tcCount  = document.getElementById('tcCount')?.textContent || '0';
+
+  if (rating === 'good') {
+    if (goodBtn) { goodBtn.style.background = 'rgba(16,185,129,.15)'; goodBtn.style.borderColor = '#10b981'; }
+    if (badBtn)  { badBtn.style.background  = 'var(--surface2)'; badBtn.style.borderColor = 'var(--border2)'; }
+    showToast('Thanks for the feedback! 🙏', '✅');
+  } else {
+    if (badBtn)  { badBtn.style.background  = 'rgba(239,68,68,.12)'; badBtn.style.borderColor = '#ef4444'; }
+    if (goodBtn) { goodBtn.style.background = 'var(--surface2)'; goodBtn.style.borderColor = 'var(--border2)'; }
+    showToast('Thanks — feedback noted. Try switching provider in Settings for better output.', '📝');
+  }
+
+  // Log feedback to console for now (can be extended to send to analytics)
+  console.log('[Feedback]', {
+    rating, provider, platform, format, tcCount,
+    timestamp: new Date().toISOString()
+  });
+}
 // Wraps showError to append step-by-step guidance for known errors.
 // ═══════════════════════════════════════════════════════════════
 const _ACTIONABLE_ERRORS = [
@@ -12450,13 +12606,29 @@ var SECTION_SUITE_MAP = {
 };
 
 function getSectionSuiteName(sectionTitle) {
-  // Inline map — no dependency on outer scope (TDZ-safe)
   const SUITE_MAP = (typeof SECTION_SUITE_MAP !== 'undefined' && SECTION_SUITE_MAP) || {
-    'E2E':         'E2E Test Cases',
-    'End-to-End':  'E2E Test Cases',
-    'Field':       'Field Validation',
-    'Integration': 'Integration Tests',
-    'Negative':    'Negative Test Cases'
+    'E2E':              'E2E Test Cases',
+    'End-to-End':       'E2E Test Cases',
+    'End to End':       'E2E Test Cases',
+    'Functional':       'E2E Test Cases',   // AI sometimes outputs "Functional" — map to E2E
+    'Functional Test':  'E2E Test Cases',
+    'Happy Path':       'E2E Test Cases',
+    'Positive':         'E2E Test Cases',
+    'Field':            'Field Validation',
+    'Field Valid':      'Field Validation',
+    'Input Valid':      'Field Validation',
+    'Form Valid':       'Field Validation',
+    'Integration':      'Integration Tests',
+    'Cross-Module':     'Integration Tests',
+    'API Test':         'Integration Tests',
+    'Negative':         'Negative Test Cases',
+    'Error':            'Negative Test Cases',
+    'Edge':             'Edge Cases',
+    'Boundary':         'Edge Cases',
+    'Smoke':            'Smoke Tests',
+    'Sanity':           'Smoke Tests',
+    'Test Data':        'Test Data',
+    'Metadata':         'Metadata',
   };
   const t = sectionTitle || '';
   for (const key of Object.keys(SUITE_MAP)) {
@@ -12582,10 +12754,26 @@ async function pushToADOFull() {
           const title = cells[0] || 'Untitled';
           const _splitST = raw => {
             if (!raw) return [];
+            // 1. Split on real newlines first
             const byNL = raw.split('\n').map(s=>s.trim()).filter(Boolean);
             if (byNL.length > 1) return byNL;
+            // 2. Split on numbered steps: "1. ... 2. ... 3. ..."
+            const byNum = raw.split(/(?<!\d)(?=\d{1,2}\.\s)/).map(s=>s.trim()).filter(Boolean);
+            if (byNum.length > 1) return byNum;
+            // 3. Split on semicolons before numbered steps
             const bySC = raw.split(/;\s*(?=\d+\.\s)/).map(s=>s.trim()).filter(Boolean);
-            return bySC.length > 1 ? bySC : (byNL.length ? byNL : [raw.trim()]);
+            if (bySC.length > 1) return bySC;
+            // 4. Split on any semicolons (fallback)
+            const bySemi = raw.split(/;\s+/).map(s=>s.trim()).filter(Boolean);
+            if (bySemi.length > 1) return bySemi;
+            // 5. NEW: Split on sentence boundaries for long concatenated steps
+            // Gemini sometimes puts "Navigate to X. Click Y. Verify Z." all in one cell.
+            // Only split if >120 chars AND has multiple sentences with capital letters.
+            if (raw.length > 120) {
+              const bySentence = raw.split(/\.\s+(?=[A-Z])/).map(s => s.trim().replace(/\.$/,'')).filter(s => s.length > 5);
+              if (bySentence.length > 2) return bySentence.map((s,i) => i < bySentence.length-1 ? s+'.' : s);
+            }
+            return byNL.length ? byNL : [raw.trim()];
           };
           const actions   = _splitST(cells[1]||'');
           const expecteds = _splitST(cells[2]||'');
@@ -13295,6 +13483,13 @@ const TYPE_REGISTRY = [
 
 function getTCType(sectionTitle) {
   const s = (sectionTitle||'').toLowerCase();
+  // Explicit E2E mapping — AI sometimes outputs "Functional" as a section header
+  // which must be treated as E2E, not a separate unknown category
+  if (/^functional(\s+test(s)?)?$/i.test(s.trim()) ||
+      s.includes('end-to-end') || s.includes('end to end') ||
+      s.includes('2. end') || s.includes('e2e')) {
+    return { type:'E2E', cls:'tg-type-e2e' };
+  }
   for (const reg of TYPE_REGISTRY) {
     if (reg.sectionKeys.some(k => s.includes(k))) return { type:reg.type, cls:reg.cls };
   }
@@ -13345,22 +13540,34 @@ function buildTGRow(tc) {
   if (/\d+\./.test(raw)) {
     // Has numbered steps — split on semicolon+number OR newline+number
     stepsArr = raw
-      .split(/;\s*(?=\d+\.)|\n\s*(?=\d+\.)/)
+      .split(/;\s*(?=\d+\.)|[\n\r]+\s*(?=\d+\.)/)
       .map(s => s.trim())
       .filter(Boolean);
-    // Fallback: split on whitespace before "N." pattern
+    // Fallback: split on whitespace before "N." pattern (handles space-separated steps)
     if (stepsArr.length === 1) {
       stepsArr = raw
-        .split(/\s+(?=\d+\.)/)
+        .split(/\s{2,}(?=\d+\.)|\t(?=\d+\.)/)
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+    // Final fallback: aggressive split on any "N." not at start of string
+    if (stepsArr.length === 1 && (raw.match(/\d+\./g)||[]).length > 1) {
+      stepsArr = raw
+        .split(/(?<=\S)\s+(?=\d+\.)/)
         .map(s => s.trim())
         .filter(Boolean);
     }
   } else {
     // No numbers — split on semicolons or newlines
     stepsArr = raw
-      .split(/;|\n/)
+      .split(/;|\n|\r/)
       .map(s => s.trim())
       .filter(Boolean);
+  }
+  // Last resort: if still 1 item but raw has multiple sentences, split on '. ' boundaries
+  if (stepsArr.length === 1 && raw.length > 80) {
+    const sentenceSplit = raw.split(/\.\s+(?=[A-Z])/).map(s => s.trim()).filter(s => s.length > 5);
+    if (sentenceSplit.length > 1) stepsArr = sentenceSplit;
   }
   const cnt = Math.max(stepsArr.length, (raw.match(/\d+\./g)||[]).length, 1);
   const stepsHtml = stepsArr.map((s, i) => {
@@ -14755,6 +14962,89 @@ function checkAndTrimFlow(flow) {
 
 })();
 </script>
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE FOOTER — About · Privacy · Contact
+     ════════════════════════════════════════════════════════════ -->
+<footer id="appFooter" style="
+  width:100%; margin-top:auto;
+  border-top:1px solid var(--border);
+  background:var(--surface2);
+  padding:12px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:8px;
+  font-size:11.5px; color:var(--text3);
+  box-sizing:border-box;
+  position:relative; z-index:1;
+">
+  <!-- Left: branding + version -->
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
+    <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.3</span>
+    <span style="color:var(--border2)">·</span>
+    <span>AI Test Intelligence</span>
+    <span style="color:var(--border2)">·</span>
+    <span>Built by <strong style="color:var(--text2)">Ramya</strong>,
+      Senior QA Engineer · Bengaluru</span>
+  </div>
+
+  <!-- Right: links -->
+  <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
+      style="color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .15s"
+      onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
+      🐙 GitHub
+    </a>
+    <a onclick="openSettings();switchSettingsTab('about')" style="cursor:pointer;
+      color:var(--text3);text-decoration:none;transition:color .15s"
+      onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
+      ℹ️ About
+    </a>
+    <a onclick="document.getElementById('privacyFooterModal').style.display='flex'" style="cursor:pointer;
+      color:var(--text3);text-decoration:none;transition:color .15s"
+      onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
+      🔒 Privacy
+    </a>
+    <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
+      style="color:var(--text3);text-decoration:none;transition:color .15s"
+      onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
+      📧 Contact
+    </a>
+    <span style="color:var(--border2)">·</span>
+    <span>© 2025 Shuddhi QA</span>
+  </div>
+</footer>
+
+<!-- Privacy modal (lightweight — triggered from footer) -->
+<div id="privacyFooterModal" style="
+  display:none; position:fixed; inset:0; z-index:10001;
+  background:rgba(15,15,30,.65); backdrop-filter:blur(5px);
+  align-items:center; justify-content:center; padding:16px;
+" onclick="if(event.target===this)this.style.display='none'">
+  <div style="
+    background:var(--surface); border:1.5px solid var(--border2);
+    border-radius:16px; width:100%; max-width:440px; max-height:80vh;
+    overflow-y:auto; padding:28px 24px; position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+  ">
+    <button onclick="document.getElementById('privacyFooterModal').style.display='none'"
+      style="position:absolute;top:14px;right:16px;background:none;border:none;
+             font-size:18px;cursor:pointer;color:var(--text3);padding:4px">✕</button>
+    <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:16px">🔒 Privacy &amp; Data</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.75;display:flex;flex-direction:column;gap:10px">
+      <div>✅ <strong>No data stored on servers</strong> — your requirement documents and generated test cases never leave your browser except as API calls to AI providers.</div>
+      <div>✅ <strong>API keys stored locally</strong> — keys you add in Settings are saved only in your browser's localStorage. They are sent directly to AI providers and never logged by this application.</div>
+      <div>✅ <strong>No account required</strong> — no sign-up, no email, no tracking cookies.</div>
+      <div>✅ <strong>No advertisements</strong> — Shuddhi QA is ad-free. No third-party trackers.</div>
+      <div>⚠️ <strong>AI providers</strong> — requests are processed by Anthropic (Claude), Google (Gemini), or Groq. Each provider's own privacy policy applies to your prompts.</div>
+      <div>📧 <strong>Contact / Issues:</strong>
+        <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
+          style="color:var(--indigo)">github.com/ramya9b</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
