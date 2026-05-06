@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v3.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v4.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5276,7 +5276,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v3.9</span>
+      <span class="sb-badge">v4.0</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6102,7 +6102,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v3.9</div>
+          <div class="settings-about-val">v4.0</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -15348,7 +15348,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v3.9</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.0</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -15559,13 +15559,14 @@ function checkAndTrimFlow(flow) {
 
 <script>
 // =============================================================
-// v3.7: USAGE & COST TRACKING — purely additive
+// v4.0: USAGE & COST — Month Dropdown + Day-wise + Gen Log + CSV Export
 // =============================================================
 (function _initUsageCostTracker() {
   const PRICING={claude:{input:3.00,output:15.00},gemini:{input:0.075,output:0.30},groq:{input:0,output:0}};
-  const BUDGET_INR=250,WARN=0.80,PFX='shuddhi-v37-';
-  let _rate=83.5;
+  const BUDGET=250, WARN=0.80, PFX='shuddhi-v37-';
+  let _rate=83.5, _viewMonth=null;
 
+  // Live exchange rate (once per day)
   (async function(){
     try{
       const c=parseFloat(localStorage.getItem(PFX+'rate')||'0'),ts=parseInt(localStorage.getItem(PFX+'rate-ts')||'0',10);
@@ -15575,32 +15576,92 @@ function checkAndTrimFlow(flow) {
     }catch(e){}
   })();
 
-  function _month(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
-  function _getUsage(){
-    const m=_month(),s=localStorage.getItem(PFX+'month');
-    if(s!==m){localStorage.setItem(PFX+'month',m);['claude','gemini','groq'].forEach(p=>['req','in','out'].forEach(k=>localStorage.setItem(PFX+p+'-'+k,'0')));}
-    return['claude','gemini','groq'].reduce((o,p)=>{o[p]={req:+localStorage.getItem(PFX+p+'-req')||0,input:+localStorage.getItem(PFX+p+'-in')||0,output:+localStorage.getItem(PFX+p+'-out')||0};return o;},{});
-  }
-  function _cost(p,i,o){const pr=PRICING[p]||{input:0,output:0};return((i*pr.input+o*pr.output)/1e6)*_rate;}
-  function _total(u){return['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,u[p].input,u[p].output),0);}
+  function _curMonth(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+  function _fmtMonth(m){const[y,mo]=m.split('-');const names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return names[parseInt(mo,10)-1]+' '+y;}
+  function _fmtDate(iso){const d=new Date(iso);return String(d.getDate()).padStart(2,'0')+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 
+  // Month-aware summary storage
+  function _getMonthUsage(m){
+    m=m||_curMonth();
+    return['claude','gemini','groq'].reduce((o,p)=>{
+      o[p]={req:+localStorage.getItem(PFX+m+'-'+p+'-req')||0,input:+localStorage.getItem(PFX+m+'-'+p+'-in')||0,output:+localStorage.getItem(PFX+m+'-'+p+'-out')||0};
+      return o;
+    },{});
+  }
+
+  // Day-wise storage
+  function _getDayUsage(m){
+    m=m||_curMonth();
+    const[y,mo]=m.split('-');
+    const days=new Date(y,mo,0).getDate();
+    const result=[];
+    for(let d=1;d<=days;d++){
+      const key=m+'-'+String(d).padStart(2,'0');
+      const tot=['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,+localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||0,+localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||0),0);
+      if(tot>0||d<=new Date().getDate()&&m===_curMonth()) result.push({date:y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'),label:String(d).padStart(2,'0')+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo,10)-1],cost:tot,gemini:_cost('gemini',+localStorage.getItem(PFX+'day-'+key+'-gemini-in')||0,+localStorage.getItem(PFX+'day-'+key+'-gemini-out')||0),claude:_cost('claude',+localStorage.getItem(PFX+'day-'+key+'-claude-in')||0,+localStorage.getItem(PFX+'day-'+key+'-claude-out')||0)});
+    }
+    return result.reverse().slice(0,10); // last 10 days with data
+  }
+
+  // Generation history
+  function _getGenLog(){try{return JSON.parse(localStorage.getItem(PFX+'gen-log')||'[]');}catch(e){return[];}}
+  function _addGenLog(provider,inputTok,outputTok,cost,tcCount){
+    const log=_getGenLog();
+    log.unshift({ts:new Date().toISOString(),provider,input:inputTok,output:outputTok,cost,tcs:tcCount||0});
+    if(log.length>20)log.pop();
+    localStorage.setItem(PFX+'gen-log',JSON.stringify(log));
+  }
+
+  function _cost(p,i,o){const pr=PRICING[p]||{input:0,output:0};return((i*pr.input+o*pr.output)/1e6)*_rate;}
+  function _totalU(u){return['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,u[p].input,u[p].output),0);}
+
+  // Get all months that have any data (last 12)
+  function _getAvailableMonths(){
+    const months=[];
+    const now=new Date();
+    for(let i=0;i<12;i++){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      const m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+      const u=_getMonthUsage(m);
+      const tot=_totalU(u);
+      months.push({key:m,label:_fmtMonth(m),cost:tot,hasData:tot>0});
+    }
+    return months;
+  }
+
+  // Record usage
   window._recordUsage=function(provider,inputTok,outputTok){
     if(!provider)return;
-    _getUsage();
     const p=provider.toLowerCase();
-    localStorage.setItem(PFX+p+'-req',(+localStorage.getItem(PFX+p+'-req')||0)+1);
-    localStorage.setItem(PFX+p+'-in', (+localStorage.getItem(PFX+p+'-in') ||0)+inputTok);
-    localStorage.setItem(PFX+p+'-out',(+localStorage.getItem(PFX+p+'-out')||0)+outputTok);
+    const m=_curMonth();
+    const today=m+'-'+String(new Date().getDate()).padStart(2,'0');
+
+    // Monthly summary
+    localStorage.setItem(PFX+m+'-'+p+'-req',(+localStorage.getItem(PFX+m+'-'+p+'-req')||0)+1);
+    localStorage.setItem(PFX+m+'-'+p+'-in', (+localStorage.getItem(PFX+m+'-'+p+'-in') ||0)+inputTok);
+    localStorage.setItem(PFX+m+'-'+p+'-out',(+localStorage.getItem(PFX+m+'-'+p+'-out')||0)+outputTok);
+
+    // Day-wise
+    localStorage.setItem(PFX+'day-'+today+'-'+p+'-in', (+localStorage.getItem(PFX+'day-'+today+'-'+p+'-in') ||0)+inputTok);
+    localStorage.setItem(PFX+'day-'+today+'-'+p+'-out',(+localStorage.getItem(PFX+'day-'+today+'-'+p+'-out')||0)+outputTok);
+
     const c=_cost(p,inputTok,outputTok);
+    const tcCount=parseInt(document.getElementById('tcCount')?.textContent||'0',10);
+    _addGenLog(p,inputTok,outputTok,c,tcCount);
+
+    // Meta bar badge
     const el=document.getElementById('metaCost'),w=document.getElementById('metaCostWrap');
     if(el){el.textContent=(c<0.01?'\u20b90.00':'\u20b9'+c.toFixed(2));if(w)w.style.display='';}
-    const u=_getUsage(),tot=_total(u),pct=tot/BUDGET_INR;
+
+    // Budget warning
+    const u=_getMonthUsage(m),tot=_totalU(u),pct=tot/BUDGET;
     if(pct>=1)_warn(tot,true);else if(pct>=WARN)_warn(tot,false);
+
     _render();
   };
 
   function _warn(tot,exceeded){
-    const pct=Math.round((tot/BUDGET_INR)*100);
+    const pct=Math.round((tot/BUDGET)*100);
     const msg=exceeded
       ?'\u20b9'+tot.toFixed(2)+' spent \u2014 \u20b9250 budget reached. <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:800;cursor:pointer;text-decoration:underline">View usage</a>'
       :'\u20b9'+tot.toFixed(2)+' spent this month ('+pct+'% of \u20b9250). <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">View breakdown</a>';
@@ -15619,36 +15680,160 @@ function checkAndTrimFlow(flow) {
     window._rlRetry=function(){clearInterval(timer);if(typeof hideAdoBanner==='function')hideAdoBanner();setTimeout(()=>{if(typeof generate==='function')generate();},300);};
   };
 
+  // CSV Export
+  window._exportUsageCSV=function(type){
+    const m=_viewMonth||_curMonth();
+    let csv,filename;
+    if(type==='month'){
+      const u=_getMonthUsage(m);
+      csv='Month,Provider,Requests,Input Tokens,Output Tokens,Cost (INR)\n';
+      ['claude','gemini','groq'].forEach(p=>{
+        csv+=_fmtMonth(m)+','+p.charAt(0).toUpperCase()+p.slice(1)+','+u[p].req+','+u[p].input+','+u[p].output+','+_cost(p,u[p].input,u[p].output).toFixed(4)+'\n';
+      });
+      filename='shuddhi-usage-'+m+'.csv';
+    } else {
+      csv='Date,Provider,Input Tokens,Output Tokens,Cost (INR)\n';
+      const[y,mo]=m.split('-');
+      const days=new Date(y,mo,0).getDate();
+      for(let d=1;d<=days;d++){
+        const key=m+'-'+String(d).padStart(2,'0');
+        const label=String(d).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo,10)-1]+'-'+y;
+        ['claude','gemini','groq'].forEach(p=>{
+          const i=+localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||0;
+          const o=+localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||0;
+          if(i||o) csv+=label+','+p.charAt(0).toUpperCase()+p.slice(1)+','+i+','+o+','+_cost(p,i,o).toFixed(4)+'\n';
+        });
+      }
+      filename='shuddhi-usage-daily-'+m+'.csv';
+    }
+    const a=document.createElement('a');
+    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download=filename; a.click();
+  };
+
   function _render(){
-    const el=document.getElementById('usageCostPanel')||document.getElementById('usageCostPanelSettings');if(!el)return;
-    const u=_getUsage(),tot=_total(u),pct=Math.min(100,Math.round((tot/BUDGET_INR)*100));
+    const el=document.getElementById('usageCostPanel')||document.getElementById('usageCostPanelSettings');
+    if(!el)return;
+    const m=_viewMonth||_curMonth();
+    const u=_getMonthUsage(m);
+    const tot=_totalU(u),pct=Math.min(100,Math.round((tot/BUDGET)*100));
     const bar=pct>=100?'#EF4444':pct>=80?'#F59E0B':'#10B981';
+    const months=_getAvailableMonths();
+    const isCurrentMonth=m===_curMonth();
+
+    // Month dropdown options
+    const opts=months.map(mo=>'<option value="'+mo.key+'"'+(mo.key===m?' selected':'')+'>'+mo.label+(mo.hasData?' — \u20b9'+mo.cost.toFixed(2):'')+'</option>').join('');
+
+    // Monthly summary rows
     const rows=['claude','gemini','groq'].map(p=>{
       const d=u[p],c=_cost(p,d.input,d.output);
       const ic=p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
       const cs=p==='groq'?'₹0.00 (Free)':'₹'+c.toFixed(4);
       const tk=d.input||d.output?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
-      return'<tr style="border-top:1px solid var(--border)"><td style="padding:8px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td><td style="padding:8px 10px;text-align:right;color:var(--text2)">'+d.req+'</td><td style="padding:8px 10px;text-align:right;color:var(--text2)">'+tk+'</td><td style="padding:8px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td></tr>';
+      return'<tr style="border-top:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td><td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td><td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td><td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'" >'+cs+'</td></tr>';
     }).join('');
-    el.innerHTML='<div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px">📊 Usage & Cost — '+_month()+'</div>'
-      +'<table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr style="background:var(--surface2)"><th style="padding:7px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.5px">Provider</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Req</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th><th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th></tr></thead><tbody>'+rows+'</tbody>'
-      +'<tfoot><tr style="border-top:2px solid var(--border2);background:var(--surface2)"><td colspan="3" style="padding:8px 10px;font-weight:800;color:var(--text)">Total this month</td><td style="padding:8px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">₹'+tot.toFixed(2)+' / ₹'+BUDGET_INR+'</td></tr></tfoot></table>'
-      +'<div style="margin-top:12px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
-      +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
-      +(pct>=80?'<div style="margin-top:8px;font-size:11.5px;color:'+bar+';font-weight:600">⚠️ Approaching budget. Use Groq (free) for smaller docs.</div>':'')+'</div>'
-      +'<div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">'
-      +'<div style="font-size:10.5px;color:var(--text3)">Rate: $1 = ₹'+_rate.toFixed(1)+' · Live · Resets 1st of month</div>'
-      +'<button onclick="if(confirm(\'Reset usage counters?\')){'+"['claude','gemini','groq'].forEach(p=>['req','in','out'].forEach(k=>localStorage.removeItem('shuddhi-v37-'+p+'-'+k)));window._renderUsagePanel&&window._renderUsagePanel();}" + 'style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset</button></div>';
-  }
-  window._renderUsagePanel=function(){_render();const el2=document.getElementById("usageCostPanelSettings");if(el2){const orig=document.getElementById("usageCostPanel");if(orig)el2.innerHTML=orig.innerHTML;}};
 
-  // Hook into TC count change to record usage after generation
+    // Day-wise breakdown
+    const days=_getDayUsage(m);
+    const maxCost=Math.max(...days.map(d=>d.cost),0.01);
+    const dayRows=days.length?days.map(d=>{
+      const barW=Math.round((d.cost/maxCost)*80);
+      const hasCost=d.cost>0;
+      return'<tr style="border-top:1px solid var(--border)"><td style="padding:6px 10px;color:var(--text2);font-size:12px;white-space:nowrap">'+d.label+'</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:#0891B2">'+( d.gemini>0?'₹'+d.gemini.toFixed(3):'—')+'</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+( d.claude>0?'₹'+d.claude.toFixed(3):'—')+'</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-weight:700;font-size:12px;color:'+(hasCost?bar:'var(--text3)')+'">'+( hasCost?'₹'+d.cost.toFixed(3):'₹0')+'</td>'
+        +'<td style="padding:6px 10px;min-width:80px"><div style="height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:'+barW+'%;background:'+bar+';border-radius:3px"></div></div></td>'
+        +'</tr>';
+    }).join(''):'<tr><td colspan="5" style="padding:12px 10px;text-align:center;color:var(--text3);font-size:12px">No data for this month yet</td></tr>';
+
+    // Generation log
+    const log=_getGenLog().filter(g=>{
+      const gm=g.ts.substring(0,7);
+      return gm===m;
+    }).slice(0,10);
+    const logRows=log.length?log.map(g=>{
+      const ic=g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
+      const tk=g.input||g.output?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
+      return'<tr style="border-top:1px solid var(--border)"><td style="padding:6px 10px;font-size:11.5px;color:var(--text2);white-space:nowrap">'+_fmtDate(g.ts)+'</td>'
+        +'<td style="padding:6px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+g.tcs+' TCs</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+tk+'</td>'
+        +'<td style="padding:6px 10px;text-align:right;font-weight:700;font-size:11.5px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+(g.provider==='groq'?'₹0.00':'₹'+g.cost.toFixed(4))+'</td>'
+        +'</tr>';
+    }).join(''):'<tr><td colspan="5" style="padding:12px 10px;text-align:center;color:var(--text3);font-size:12px">No generations recorded this month</td></tr>';
+
+    el.innerHTML=
+      // Header row: title + month dropdown + export buttons
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">'
+        +'<div style="font-size:13px;font-weight:800;color:var(--text)">📊 Usage & Cost</div>'
+        +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+          +'<select onchange="window._switchUsageMonth&&window._switchUsageMonth(this.value)" style="font-size:12px;padding:4px 8px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer">'+opts+'</select>'
+          +'<button onclick="window._exportUsageCSV(\'month\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Monthly CSV</button>'
+          +'<button onclick="window._exportUsageCSV(\'day\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Daily CSV</button>'
+        +'</div>'
+      +'</div>'
+
+      // Monthly summary table
+      +'<table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:4px"><thead><tr style="background:var(--surface2)">'
+        +'<th style="padding:7px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.5px">Provider</th>'
+        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Req</th>'
+        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
+        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
+        +'</tr></thead><tbody>'+rows+'</tbody>'
+        +'<tfoot><tr style="border-top:2px solid var(--border2);background:var(--surface2)">'
+          +'<td colspan="3" style="padding:7px 10px;font-weight:800;color:var(--text)">Total — '+_fmtMonth(m)+'</td>'
+          +'<td style="padding:7px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">₹'+tot.toFixed(2)+' / ₹'+BUDGET+'</td>'
+        +'</tr></tfoot></table>'
+
+      // Budget bar
+      +'<div style="margin:10px 0 16px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
+        +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
+        +(pct>=80?'<div style="margin-top:6px;font-size:11px;color:'+bar+';font-weight:600">⚠️ Approaching budget. Use Groq (free) for smaller docs.</div>':'')
+      +'</div>'
+
+      // Day-wise breakdown
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📅 Daily Breakdown</div>'
+      +'<div style="overflow-x:auto;margin-bottom:16px"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--surface2)">'
+        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:#0891B2;font-size:10px;text-transform:uppercase">Gemini</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Claude</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Total</th>'
+        +'<th style="padding:6px 10px;color:var(--text3);font-size:10px;text-transform:uppercase">Bar</th>'
+        +'</tr></thead><tbody>'+dayRows+'</tbody></table></div>'
+
+      // Generation log
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📋 Recent Generations</div>'
+      +'<div style="overflow-x:auto;margin-bottom:14px"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--surface2)">'
+        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date & Time</th>'
+        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Provider</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">TCs</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
+        +'</tr></thead><tbody>'+logRows+'</tbody></table></div>'
+
+      // Footer: rate + reset
+      +'<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">'
+        +'<div style="font-size:10.5px;color:var(--text3)">$1 = ₹'+_rate.toFixed(1)+' (live) · Resets 1st of month</div>'
+        +'<button onclick="if(confirm(\'Reset all usage data?\')){'
+          +"Object.keys(localStorage).filter(k=>k.startsWith('shuddhi-v37-')).forEach(k=>localStorage.removeItem(k));"
+          +'window._renderUsagePanel&&window._renderUsagePanel();}" '
+          +'style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
+      +'</div>';
+  }
+
+  window._switchUsageMonth=function(m){ _viewMonth=m; _render(); };
+  window._renderUsagePanel=function(){ _render(); const el2=document.getElementById('usageCostPanelSettings'); if(el2){const orig=document.getElementById('usageCostPanel');if(orig)el2.innerHTML=orig.innerHTML;} };
+
+  // Hook into TC count change
   const tc=document.getElementById('tcCount');
   if(tc)new MutationObserver(()=>{
     setTimeout(()=>{const u=window._lastUsageEvent;if(u&&u.provider){window._recordUsage(u.provider,u.input||0,u.output||0);window._lastUsageEvent=null;}},600);
   }).observe(tc,{childList:true,characterData:true,subtree:true});
 
   _render();
+})();
+
 })();
 </script>
 </body>
