@@ -8435,8 +8435,38 @@ window.RequestQueueManager = RequestQueueManager;
 //   - No retry storm (2s gap between attempts)
 // ════════════════════════════════════════════════════════════════════════════
 
+// Enterprise platforms always generate large system prompts (~4k tokens).
+// Groq's ~12k total context (input+output) is exceeded before any TCs are written.
+// Skipping Groq for these platforms eliminates a guaranteed 413 + 2-3s wasted latency.
+const _ENTERPRISE_PLATFORMS = new Set([
+  'D365 F&O','D365 CRM','D365 BC','D365+Salesforce',
+  'Salesforce Sales','Salesforce Service','Salesforce CPQ',
+  'SAP','Oracle ERP','Workday','Guidewire','ServiceNow',
+  'Enterprise ERP'
+]);
+
 async function _callProviderWithFallback(requestBody, signal) {
-  const toTry = ProviderManager.getOrderedProviders();
+  // Option B: detect enterprise platform from the request body system prompt
+  // and remove Groq from the provider list — it will always 413 on these.
+  const _platformHint = (function() {
+    const sys = requestBody.system || '';
+    for (const p of _ENTERPRISE_PLATFORMS) {
+      if (sys.includes(p)) return p;
+    }
+    return null;
+  })();
+  const _skipGroq = !!_platformHint;
+
+  let toTry = ProviderManager.getOrderedProviders();
+
+  // Filter Groq out for enterprise platforms — straight to Gemini → Claude
+  if (_skipGroq && toTry.length > 1) {
+    const withoutGroq = toTry.filter(p => p !== 'groq');
+    if (withoutGroq.length > 0) {
+      toTry = withoutGroq;
+      console.log('[Option B] Enterprise platform detected (' + _platformHint + ') — skipping Groq, using:', toTry.join(' → '));
+    }
+  }
 
   if (!toTry.length) {
     const wait = ProviderManager.getMinCooldownSecs();
@@ -8591,9 +8621,9 @@ async function _callProviderWithFallback(requestBody, signal) {
 
         let toastMsg;
         if (isTooLarge) {
-          toastMsg = provName + ': document too large for token limit.';
+          // Calm, informational message — not an error, just provider routing
           if (nextName) {
-            toastMsg += ' Switching to ' + nextName + '…';
+            toastMsg = 'ℹ️ Switching to ' + nextName + ' (optimised for larger documents)…';
           } else {
             toastMsg = provName + ' token limit exceeded. Please shorten your requirement, or add a Gemini API key in Settings (free, 1M token limit).';
           }
