@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v4.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v4.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5276,6 +5276,83 @@ header::after { display: none !important; }
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden; line-height: 1.5;
   }
+
+  /* =============================================================
+     v4.9 TIER A — Quick wins: smooth scroll, focus rings, gen btn
+     ============================================================= */
+  html { scroll-behavior: smooth; }
+  :focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; border-radius: 4px; }
+
+  .gen-btn.form-ready {
+    animation: genPulseV49 2.8s ease-in-out infinite;
+  }
+  @keyframes genPulseV49 {
+    0%,100% { box-shadow: 0 4px 20px rgba(91,95,239,.4), 0 0 0 0 rgba(91,95,239,.25); }
+    50%      { box-shadow: 0 8px 30px rgba(91,95,239,.6), 0 0 0 10px rgba(91,95,239,.0); }
+  }
+
+  .form-actions-row { position: relative; }
+
+  .output-empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 60px 24px; text-align: center; gap: 16px;
+  }
+  .output-empty-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, rgba(91,95,239,.1), rgba(139,92,246,.06));
+    border: 1.5px solid rgba(91,95,239,.15); border-radius: 20px;
+    display: flex; align-items: center; justify-content: center; font-size: 32px;
+    box-shadow: 0 4px 20px rgba(91,95,239,.1);
+    animation: emptyFloatV49 3s ease-in-out infinite;
+  }
+  @keyframes emptyFloatV49 {
+    0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); }
+  }
+  .output-empty-title { font-size: 16px; font-weight: 800; color: var(--text); letter-spacing: -.01em; }
+  .output-empty-desc  { font-size: 13px; color: var(--text3); line-height: 1.6; max-width: 320px; }
+  .output-empty-steps { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+  .output-empty-step  {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 12px; font-size: 11.5px; color: var(--text2); font-weight: 600;
+  }
+
+  /* =============================================================
+     v4.9 TIER B — TC output rows: card style + richer sections
+     ============================================================= */
+  .tg-row-main { transition: background .15s, transform .1s; border-bottom: 1px solid var(--border); }
+  .tg-row-main:hover {
+    background: linear-gradient(135deg, rgba(91,95,239,.04), rgba(139,92,246,.02)) !important;
+    transform: translateX(2px);
+  }
+  .tg-row-main.tg-row-open {
+    background: linear-gradient(135deg, rgba(91,95,239,.07), rgba(139,92,246,.04)) !important;
+    border-left: 3px solid var(--indigo);
+  }
+  .tg-tc-id {
+    background: rgba(91,95,239,.08); border: 1px solid rgba(91,95,239,.2);
+    border-radius: 20px; padding: 2px 9px !important;
+    font-size: 11px !important; font-weight: 700;
+  }
+  .tg-badge {
+    font-size: 10.5px !important; padding: 2px 9px !important;
+    border-radius: 20px; font-weight: 700 !important;
+    letter-spacing: .02em; border: 1px solid transparent;
+  }
+  .tg-pri-high     { background: rgba(239,68,68,.08)  !important; color: #B91C1C !important; border-color: rgba(239,68,68,.2)  !important; }
+  .tg-pri-medium   { background: rgba(245,158,11,.08) !important; color: #92400E !important; border-color: rgba(245,158,11,.2) !important; }
+  .tg-pri-low      { background: rgba(16,185,129,.08) !important; color: #065F46 !important; border-color: rgba(16,185,129,.2) !important; }
+  .tg-pri-critical { background: rgba(220,38,38,.12)  !important; color: #7F1D1D !important; border-color: rgba(220,38,38,.25) !important; }
+  .tg-row-expanded td { background: linear-gradient(180deg, rgba(91,95,239,.05), rgba(91,95,239,.02)) !important; }
+  .tg-expand-content { border-left: 3px solid var(--indigo) !important; border-radius: 0 8px 8px 0; margin: 6px 12px !important; }
+  .tg-steps-chip {
+    background: rgba(91,95,239,.07) !important; border: 1px solid rgba(91,95,239,.22) !important;
+    color: var(--indigo) !important; font-weight: 700 !important;
+    transition: all .18s !important; box-shadow: 0 1px 3px rgba(91,95,239,.1);
+  }
+  .tg-steps-chip:hover { background: rgba(91,95,239,.14) !important; box-shadow: 0 2px 8px rgba(91,95,239,.2); transform: translateY(-1px); }
+  .tg-act-btn { border-radius: 8px !important; transition: all .15s !important; }
+  .tg-act-btn:hover { background: rgba(91,95,239,.08) !important; border-color: var(--indigo) !important; transform: scale(1.08); }
 </style>
 <!-- ── Theme: apply saved preference immediately (prevents FOUC) ── -->
 <script>
@@ -5306,7 +5383,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v4.7</span>
+      <span class="sb-badge">v4.9</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6132,7 +6209,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v4.7</div>
+          <div class="settings-about-val">v4.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6713,7 +6790,18 @@ header::after { display: none !important; }
       </div>
 
       <!-- Output -->
-      <div class="output-content" id="outputContent"></div>
+      <div class="output-content" id="outputContent">
+        <div class="output-empty-state" id="outputEmptyState">
+          <div class="output-empty-icon">🧪</div>
+          <div class="output-empty-title">Ready to Generate Test Cases</div>
+          <div class="output-empty-desc">Paste your business requirement or user story above, select your platform and module, then click Generate.</div>
+          <div class="output-empty-steps">
+            <div class="output-empty-step">1️⃣ Select Platform</div>
+            <div class="output-empty-step">2️⃣ Describe Requirement</div>
+            <div class="output-empty-step">3️⃣ Click Generate ⚡</div>
+          </div>
+        </div>
+      </div>
 
       <!-- Pagination -->
       <div id="tcPagination"></div>
@@ -8060,7 +8148,7 @@ function resetForm() {
   if (_pg) { _pg.classList.remove('visible'); _pg.innerHTML = ''; }
   const _ba = document.getElementById('bulkActionBar');
   if (_ba) _ba.classList.remove('visible');
-  document.getElementById('outputContent').innerHTML = '';
+  document.getElementById('outputContent').innerHTML = ''; var _oes = document.getElementById('outputEmptyState'); if (_oes) _oes.remove();
   document.getElementById('placeholder').style.display = '';
   document.getElementById('metaBar').className = 'meta-bar';
   document.getElementById('errorMsg').className = 'error-msg';
@@ -15358,7 +15446,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.7</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.9</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -16109,6 +16197,114 @@ window.copyShareLink = function() {
       }
     }).observe(tc, { childList: true, characterData: true, subtree: true });
   }
+
+})();
+</script>
+
+<script>
+// ================================================================
+// v4.8: AUTO-CONTINUATION — fix #1 output consistency
+// When < 5 TCs detected after generation, automatically sends a
+// follow-up "continue" prompt to get remaining TCs.
+// Purely additive — hooks into existing TC count MutationObserver.
+// Zero changes to generate(), finalizeOutput(), or any existing fn.
+// ================================================================
+(function _initAutoContinuation() {
+
+  var MAX_RETRIES   = 1;    // only 1 auto-continuation per generation
+  var MIN_TC_TARGET = 5;    // below this → trigger continuation
+  var _retryCount   = 0;
+  var _inContinuation = false;
+  var _lastRawMarkdown = '';
+
+  // Reset on each new generation start
+  var origGenerate = window.generate;
+  window.generate = async function() {
+    _retryCount = 0;
+    _inContinuation = false;
+    _lastRawMarkdown = '';
+    return origGenerate.apply(this, arguments);
+  };
+
+  // Watch TC count — fires after finalizeOutput sets it
+  var tc = document.getElementById('tcCount');
+  if (!tc) return;
+
+  new MutationObserver(function() {
+    // Skip if we're inside a continuation already (prevent infinite loop)
+    if (_inContinuation) return;
+
+    // Skip bulk generation
+    if (document.getElementById('bulkProgress') &&
+        document.getElementById('bulkProgress').style.display !== 'none') return;
+
+    var count = parseInt(tc.textContent || '0', 10);
+    if (count <= 0) return;
+
+    // If we already got good output, reset retry count
+    if (count >= 10) { _retryCount = 0; return; }
+
+    // Low TC count — attempt continuation if within retry budget
+    if (count < MIN_TC_TARGET && _retryCount < MAX_RETRIES) {
+      _retryCount++;
+
+      setTimeout(function() {
+        // Double-check count is still low (MutationObserver can fire multiple times)
+        var currentCount = parseInt(tc.textContent || '0', 10);
+        if (currentCount >= MIN_TC_TARGET) return;
+
+        // Don't retry if already generating
+        if (typeof _isGenerating !== 'undefined' && _isGenerating) return;
+
+        var provider = (typeof ProviderManager !== 'undefined')
+          ? ProviderManager.getActive() : 'gemini';
+        var provName = provider === 'gemini' ? 'Gemini' : provider === 'claude' ? 'Claude' : 'Groq';
+
+        // Show continuation banner
+        if (typeof showAdoBanner === 'function') {
+          showAdoBanner(
+            '\uD83D\uDD04 Only ' + currentCount + ' TC' + (currentCount !== 1 ? 's' : '') +
+            ' detected from ' + provName + '. Auto-continuing to reach target of 40+ TCs\u2026 ' +
+            '<span style="font-size:11px;opacity:.8">(1 of 1 retry)</span>',
+            'info', 0
+          );
+        }
+
+        // Capture current markdown before continuation
+        _lastRawMarkdown = (typeof rawMarkdown !== 'undefined') ? rawMarkdown : '';
+
+        // Inject continuation prompt into ConversationManager
+        // This makes the next generate() call a continuation, not a fresh start
+        if (typeof ConversationManager !== 'undefined' && _lastRawMarkdown) {
+          // Add the partial assistant response to history
+          ConversationManager.append('assistant', _lastRawMarkdown);
+          // Add continuation user message
+          ConversationManager.append('user',
+            'You only generated ' + currentCount + ' test case' + (currentCount !== 1 ? 's' : '') +
+            '. Please continue and generate the remaining test cases. ' +
+            'The target is at least 40 test cases total. ' +
+            'Continue generating from where you left off — DO NOT repeat any test cases already generated. ' +
+            'Output ONLY the remaining test case table rows in the same format, no preamble.'
+          );
+        }
+
+        // Trigger continuation after a short delay
+        _inContinuation = true;
+        setTimeout(function() {
+          if (typeof hideAdoBanner === 'function') hideAdoBanner();
+          if (typeof generate === 'function') {
+            // Flag this as a continuation so generate() knows to use history
+            window._isContinuation = true;
+            generate().finally(function() {
+              _inContinuation = false;
+              window._isContinuation = false;
+            });
+          }
+        }, 2000);
+
+      }, 1500); // wait 1.5s for finalizeOutput to fully complete
+    }
+  }).observe(tc, { childList: true, characterData: true, subtree: true });
 
 })();
 </script>
