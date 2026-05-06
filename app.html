@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v4.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v4.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -3930,8 +3930,7 @@ header::after { display: none !important; }
     .bulk-btn { padding: 6px 10px !important; }
     .push-btn { font-size: 12px !important; padding: 8px 12px !important; }
 
-    /* Meta bar — hide less important items on phone */
-    #metaProviderWrap { display: none !important; }
+    /* Meta bar — hide module on phone (less critical), keep provider visible */
     .meta-item:nth-child(3) { display: none !important; }
 
     /* Welcome modal — full screen on phone */
@@ -3986,6 +3985,7 @@ header::after { display: none !important; }
     padding-top: 8px !important;
   }
   .sb-platform-section #moduleField label { font-size: 10.5px !important; font-weight: 700 !important; color: var(--text2) !important; }
+  .sb-platform-section #moduleField label { margin-bottom: 6px !important; display: flex !important; }
   .sb-platform-section #moduleSearch { font-size: 12px !important; padding: 6px 10px 6px 28px !important; }
   .sb-platform-section #moduleGrid {
     max-height: 130px !important;
@@ -5275,7 +5275,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v4.1</span>
+      <span class="sb-badge">v4.5</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6101,7 +6101,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v4.1</div>
+          <div class="settings-about-val">v4.5</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6640,23 +6640,6 @@ header::after { display: none !important; }
 
       <!-- Error -->
       <div class="error-msg" id="errorMsg"></div>
-
-      <!-- Priority / Section Filter Bar (shown after generation) -->
-      <div id="filterBar" style="display:none;padding:8px 16px 0;flex-wrap:wrap;align-items:center;gap:6px;border-bottom:0.5px solid var(--border)">
-        <span style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-right:4px">FILTER:</span>
-        <button class="filter-btn active" data-filter="all"    onclick="applyOutputFilter('all')"         >All</button>
-        <button class="filter-btn"        data-filter="e2e"    onclick="applyOutputFilter('e2e')"         >E2E</button>
-        <button class="filter-btn"        data-filter="field"  onclick="applyOutputFilter('field')"       >Field Validation</button>
-        <button class="filter-btn"        data-filter="int"    onclick="applyOutputFilter('int')"         >Integration</button>
-        <button class="filter-btn"        data-filter="neg"    onclick="applyOutputFilter('neg')"         >Negative</button>
-        <button class="filter-btn"        data-filter="meta"   onclick="applyOutputFilter('meta')"        >Metadata</button>
-        <div style="margin-left:auto;display:flex;gap:6px">
-          <button class="filter-btn" onclick="collapseAllSections()"                                      >⊟ Collapse All</button>
-          <button class="filter-btn" onclick="expandAllSections()"                                        >⊞ Expand All</button>
-          <button class="filter-btn" onclick="window.print()" title="Print test cases">🖨️ Print</button>
-          <button class="filter-btn" id="shareLinkBtn" onclick="copyShareLink()" title="Copy shareable link">🔗 Share</button>
-        </div>
-      </div>
 
       <!-- Stat summary cards (hidden until generation) -->
       <div id="outputStats">
@@ -15344,7 +15327,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.1</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.5</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -15370,11 +15353,6 @@ function checkAndTrimFlow(flow) {
       color:var(--text3);text-decoration:none;transition:color .15s"
       onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
       ℹ️ About
-    </a>
-    <a onclick="document.getElementById('privacyFooterModal').style.display='flex'" style="cursor:pointer;
-      color:var(--text3);text-decoration:none;transition:color .15s"
-      onmouseover="this.style.color='var(--indigo)'" onmouseout="this.style.color='var(--text3)'">
-      🔒 Privacy
     </a>
     <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
       style="color:var(--text3);text-decoration:none;transition:color .15s"
@@ -15634,7 +15612,8 @@ function checkAndTrimFlow(flow) {
   }
   function addGenLog(provider, inputTok, outputTok, c, tcs) {
     var log = getGenLog();
-    log.unshift({ ts:new Date().toISOString(), provider:provider, input:inputTok, output:outputTok, cost:c, tcs:tcs||0 });
+    var platform = (document.getElementById('metaPlatform') || {}).textContent || '';
+    log.unshift({ ts:new Date().toISOString(), provider:provider, input:inputTok, output:outputTok, cost:c, tcs:tcs||0, platform:platform });
     if (log.length > 20) log.pop();
     localStorage.setItem(PFX+'gen-log', JSON.stringify(log));
   }
@@ -15793,14 +15772,16 @@ function checkAndTrimFlow(flow) {
     var logRows = log.length ? log.map(function(g) {
       var ic = g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
       var tk = (g.input||g.output)?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
+      var plat = g.platform || '—';
       return '<tr style="border-top:1px solid var(--border)">'
         +'<td style="padding:5px 10px;font-size:11px;color:var(--text2);white-space:nowrap">'+fmtDateTime(g.ts)+'</td>'
         +'<td style="padding:5px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
+        +'<td style="padding:5px 10px;font-size:11px;color:var(--text2)">'+plat+'</td>'
         +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+g.tcs+' TCs</td>'
         +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+tk+'</td>'
         +'<td style="padding:5px 10px;text-align:right;font-weight:700;font-size:11px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+'\u20b9'+(g.provider==='groq'?'0.00':g.cost.toFixed(4))+'</td>'
         +'</tr>';
-    }).join('') : '<tr><td colspan="5" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No generations this month</td></tr>';
+    }).join('') : '<tr><td colspan="6" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No generations this month</td></tr>';
 
     el.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
@@ -15838,6 +15819,7 @@ function checkAndTrimFlow(flow) {
       +'<div style="overflow-x:auto;margin-bottom:12px"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--surface2)">'
         +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date &amp; Time</th>'
         +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Provider</th>'
+        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Platform</th>'
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">TCs</th>'
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
@@ -15865,6 +15847,168 @@ function checkAndTrimFlow(flow) {
   }
 
   renderPanel();
+})();
+</script>
+
+<script>
+// v4.2: Expose missing global functions referenced in onclick handlers
+
+// applyOutputFilter — delegates to the artifact tab system
+window.applyOutputFilter = function(filterKey) {
+  var keyMap = { all:'all', e2e:'e2e', field:'field', int:'integration', neg:'negative', meta:'metadata' };
+  var tabKey = keyMap[filterKey] || filterKey;
+  var tabBtn = document.getElementById('atab-' + tabKey);
+  if (typeof switchArtifactTab === 'function') switchArtifactTab(tabKey, tabBtn);
+};
+
+// copyShareLink — copies current URL to clipboard
+window.copyShareLink = function() {
+  var url = window.location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      if (typeof showToast === 'function') showToast('Link copied to clipboard', '\uD83D\uDD17');
+    }).catch(function() { prompt('Copy this link:', url); });
+  } else {
+    prompt('Copy this link:', url);
+  }
+};
+</script>
+
+<script>
+// ================================================================
+// v4.5: SMART COOLDOWN TIMER
+// Purely additive — hooks into finalizeOutput completion signal
+// Zero changes to generate(), finalizeOutput(), or any existing fn
+// ================================================================
+(function _initCooldownTimer() {
+
+  var COOLDOWN = { groq: 45, gemini: 30, claude: 15 };
+  var _cooldownTimer = null;
+  var _originalBtnText = '⚡ Generate Test Cases';
+
+  // CSS for progress bar — injected once
+  var style = document.createElement('style');
+  style.textContent = [
+    '#cooldownBar{height:3px;background:var(--border2);border-radius:0 0 2px 2px;overflow:hidden;display:none}',
+    '#cooldownBarFill{height:100%;width:100%;background:linear-gradient(90deg,var(--indigo,#5B5FEF),var(--violet,#8B5CF6));transition:width 1s linear;border-radius:inherit}',
+    '#cooldownMsg{text-align:center;font-size:11px;color:var(--text3);margin-top:4px;min-height:16px}',
+    '#cooldownOverride{font-size:10.5px;color:var(--text3);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;margin-top:2px;display:none}',
+    '#cooldownOverride:hover{color:var(--indigo)}',
+    '.gen-btn:disabled{opacity:1!important}',
+    '.gen-btn.cooling{background:linear-gradient(135deg,#64748b,#94a3b8)!important;box-shadow:none!important;cursor:not-allowed!important;transform:none!important;animation:none!important}',
+  ].join('');
+  document.head.appendChild(style);
+
+  // Inject cooldown UI below generate button row
+  function _injectUI() {
+    var actionsRow = document.querySelector('.form-actions-row');
+    if (!actionsRow || document.getElementById('cooldownBar')) return;
+
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:2px;';
+
+    var bar = document.createElement('div');
+    bar.id = 'cooldownBar';
+    var fill = document.createElement('div');
+    fill.id = 'cooldownBarFill';
+    bar.appendChild(fill);
+
+    var msg = document.createElement('div');
+    msg.id = 'cooldownMsg';
+
+    var override = document.createElement('button');
+    override.id = 'cooldownOverride';
+    override.textContent = 'Generate now anyway →';
+    override.onclick = function() { _cancelCooldown(true); };
+
+    wrap.appendChild(bar);
+    wrap.appendChild(msg);
+    wrap.appendChild(override);
+    actionsRow.parentNode.insertBefore(wrap, actionsRow.nextSibling);
+  }
+
+  function _startCooldown(provider, secs) {
+    var btn  = document.getElementById('genBtn');
+    var bar  = document.getElementById('cooldownBar');
+    var fill = document.getElementById('cooldownBarFill');
+    var msg  = document.getElementById('cooldownMsg');
+    var ov   = document.getElementById('cooldownOverride');
+    if (!btn) return;
+
+    var remaining = secs;
+
+    // Disable button + style
+    btn.disabled = true;
+    btn.classList.add('cooling');
+    btn.querySelector('.btn-text').textContent = '⏱ Ready in ' + remaining + 's…';
+
+    // Show bar
+    if (bar)  { bar.style.display = 'block'; }
+    if (fill) { fill.style.width = '100%'; }
+    if (msg)  { msg.textContent = 'Cooling down for best quality — ' + provider.charAt(0).toUpperCase()+provider.slice(1) + ' needs ' + secs + 's between requests'; }
+    if (ov)   { ov.style.display = 'block'; }
+
+    // Animate bar shrink
+    setTimeout(function() {
+      if (fill) fill.style.width = '0%';
+      if (fill) fill.style.transition = 'width ' + secs + 's linear';
+    }, 100);
+
+    // Countdown
+    _cooldownTimer = setInterval(function() {
+      remaining--;
+      if (btn) btn.querySelector('.btn-text').textContent = '⏱ Ready in ' + remaining + 's…';
+      if (remaining <= 0) { _cancelCooldown(false); }
+    }, 1000);
+  }
+
+  function _cancelCooldown(isOverride) {
+    clearInterval(_cooldownTimer);
+    _cooldownTimer = null;
+
+    var btn  = document.getElementById('genBtn');
+    var bar  = document.getElementById('cooldownBar');
+    var fill = document.getElementById('cooldownBarFill');
+    var msg  = document.getElementById('cooldownMsg');
+    var ov   = document.getElementById('cooldownOverride');
+
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('cooling');
+      btn.classList.add('form-ready');
+      btn.querySelector('.btn-text').textContent = _originalBtnText;
+      // Pop animation to signal ready
+      btn.style.transform = 'scale(1.03)';
+      setTimeout(function(){ btn.style.transform = ''; }, 200);
+    }
+    if (bar)  { bar.style.display = 'none'; }
+    if (fill) { fill.style.transition = 'none'; fill.style.width = '100%'; }
+    if (msg)  { msg.textContent = isOverride ? '⚠️ Generating early — quality may be reduced' : '✅ Ready! Quality generation guaranteed.'; }
+    if (ov)   { ov.style.display = 'none'; }
+
+    // Clear message after 3s
+    setTimeout(function() { if (msg) msg.textContent = ''; }, 3000);
+  }
+
+  // Hook into TC count change — fires when finalizeOutput completes
+  var _lastTCCount = 0;
+  var tc = document.getElementById('tcCount');
+  if (tc) {
+    new MutationObserver(function() {
+      var count = parseInt(tc.textContent || '0', 10);
+      if (count > 0 && count !== _lastTCCount) {
+        _lastTCCount = count;
+        // Get active provider to determine cooldown duration
+        var provider = (typeof ProviderManager !== 'undefined')
+          ? ProviderManager.getActive()
+          : 'gemini';
+        var secs = COOLDOWN[provider] || 30;
+        _injectUI();
+        setTimeout(function() { _startCooldown(provider, secs); }, 800);
+      }
+    }).observe(tc, { childList: true, characterData: true, subtree: true });
+  }
+
 })();
 </script>
 
