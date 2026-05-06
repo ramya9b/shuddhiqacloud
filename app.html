@@ -7311,30 +7311,43 @@ function fillSample(key) {
   const s = samples[key];
   if (!s) return;
   selectPlatform(s.platform);
-  // Wait for module chips to render (renderModuleChips is sync but
-  // sidebar re-layout may need an extra frame — 300ms is safe)
-  setTimeout(() => {
+
+  // Fix: wait for module chips reliably — poll up to 20 times × 100ms = 2s
+  // renderModuleChips is sync but sidebar re-layout can delay DOM availability
+  let _chipAttempts = 0;
+  const _trySelectChip = () => {
     const chip = [...document.querySelectorAll('.module-chip')]
       .find(c => c.dataset.module === s.module || c.textContent.trim() === s.module);
-    if (chip) selectModule(s.module, chip);
-    else {
-      // Fallback: set value directly if chip not found
+    if (chip) {
+      selectModule(s.module, chip);
+    } else if (_chipAttempts++ < 20) {
+      setTimeout(_trySelectChip, 100);
+    } else {
+      // Final fallback: set value + badge directly
       const moduleEl = document.getElementById('module');
       if (moduleEl) moduleEl.value = s.module;
       const nameEl = document.getElementById('selectedModuleName');
       if (nameEl) { nameEl.textContent = '✓ ' + s.module; nameEl.style.display = 'inline-block'; }
     }
-  }, 300);
+  };
+  setTimeout(_trySelectChip, 100);
+
+  // Fill flow description
   const flowEl = document.getElementById('flowDesc');
   if (flowEl) {
     flowEl.value = s.flow;
-    // Trigger char count update
     if (typeof updateFlowCharCount === 'function') updateFlowCharCount(flowEl);
   }
   const rolesEl = document.getElementById('roles');
   if (rolesEl) rolesEl.value = s.roles || '';
   const intEl = document.getElementById('integrations');
   if (intEl) intEl.value = s.integrations || '';
+
+  // Fix: set default format to End to End (not All Sections) for the sample
+  // "All Sections" generates 50+ TCs → 126s → stream timeout on Gemini/Groq.
+  // E2E generates 5–8 TCs → completes in 15–25s reliably on all providers.
+  const fmtEl = document.getElementById('outputFormat');
+  if (fmtEl && fmtEl.value === 'full') fmtEl.value = 'e2e';
 }
 
 function showToast(msg, emoji = '\u2705') {
@@ -10602,10 +10615,16 @@ function finalizeOutput(elapsed, platform, module) {
       let diagMsg;
       if (hasAnalysis && hasSummary && !hasTables) {
         // Most common: analysis + summary generated, but TC tables never arrived
-        // Root cause: stream timed out or was aborted before TC section
-        diagMsg = '⚠️ Analysis and summary received but test case tables are missing. '
-          + 'The stream may have timed out mid-generation. '
-          + 'Click Generate again — if it persists, try a shorter requirement or a different provider.';
+        // Root cause: "All Sections" output is too large — stream timed out before TC section.
+        const _curFmt = document.getElementById('outputFormat')?.value;
+        const _isAllSections = _curFmt === 'full';
+        diagMsg = '⚠️ Analysis received but test case tables are missing (stream timed out). '
+          + (_isAllSections
+            ? '<span onclick="document.getElementById(\'outputFormat\').value=\'e2e\';generate()" '
+              + 'style="cursor:pointer;font-weight:700;text-decoration:underline;color:var(--indigo)">'
+              + '→ Click here to retry with End-to-End only (recommended)</span>'
+              + ' — or switch Output Format to a single section and Generate again.'
+            : 'Click Generate again — if it persists, try switching to a different provider in Settings.');
       } else if (hasAnalysis && !hasSummary) {
         // Only analysis arrived — very early truncation
         diagMsg = '⚠️ Response was truncated very early (only analysis received, no test cases). '
