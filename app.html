@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v4.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v4.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -3945,7 +3945,6 @@ header::after { display: none !important; }
       padding: 0 !important;
     }
 
-    /* Settings modal — full screen on phone */
     /* Generate button — full width */
     .generate-btn-row { padding: 12px 14px !important; }
   }
@@ -5276,7 +5275,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v4.0</span>
+      <span class="sb-badge">v4.1</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -5634,7 +5633,7 @@ header::after { display: none !important; }
       <button class="settings-tab active" id="stab-claude" onclick="switchSettingsTab('claude')">🤖 Claude AI</button>
       <button class="settings-tab" id="stab-ado"    onclick="switchSettingsTab('ado')">🔷 Azure DevOps</button>
       <button class="settings-tab" id="stab-jira"  onclick="switchSettingsTab('jira')">🟦 Jira</button>
-      <button class="settings-tab" id="stab-usage"  onclick="switchSettingsTab('usage');window._renderUsagePanel&&window._renderUsagePanel()">📊 Usage & Cost</button>
+      <button class="settings-tab" id="stab-usage"  onclick="switchSettingsTab('usage');if(window._renderUsagePanel)window._renderUsagePanel()">📊 Usage &amp; Cost</button>
       <button class="settings-tab" id="stab-about"  onclick="switchSettingsTab('about')">ℹ️ About</button>
     </div>
 
@@ -6086,13 +6085,13 @@ header::after { display: none !important; }
       </details>
     </div>
 
-    <!-- ── Panel: About ── -->
-<!-- Panel: Usage & Cost (v3.7) -->
+    <!-- Panel: Usage & Cost (v4.0) -->
     <div class="settings-panel" id="spanel-usage" style="display:none;flex-direction:column">
       <div id="usageCostPanelSettings" style="padding:4px 0"></div>
     </div>
 
-        <div class="settings-panel" id="spanel-about" style="display:none">
+    <!-- ── Panel: About ── -->
+    <div class="settings-panel" id="spanel-about" style="display:none">
       <div class="settings-about-grid">
         <div class="settings-about-card">
           <div class="settings-about-icon">🧪</div>
@@ -6102,7 +6101,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v4.0</div>
+          <div class="settings-about-val">v4.1</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -10430,20 +10429,17 @@ Make the output production-ready and specific to ${platform}. Use real field nam
               rawMarkdown += parsed.delta.text;
               gotDelta = true;
             }
-            // v3.7: Claude usage — input_tokens in message_start, output_tokens in message_delta
-            if (parsed.type === 'message_start' && parsed.message?.usage) {
+            // v3.7: Claude input tokens in message_start
+            if (parsed.type === 'message_start' && parsed.message && parsed.message.usage) {
               window._claudeInputTokens = parsed.message.usage.input_tokens || 0;
             }
+            // v3.7: Claude output tokens in message_delta
             if (parsed.type === 'message_delta' && parsed.usage) {
-              window._lastUsageEvent = {
-                input:    window._claudeInputTokens || 0,
-                output:   parsed.usage.output_tokens || 0,
-                provider: 'claude'
-              };
+              window._lastUsageEvent = { input: window._claudeInputTokens || 0, output: parsed.usage.output_tokens || 0, provider: 'claude' };
             }
           } catch {}
         }
-        // v3.7: Gemini/Groq usage — custom SSE event emitted by proxy
+        // v3.7: Gemini/Groq usage SSE event from proxy
         if (line === 'event: usage') { window._pendingUsageEvent = true; continue; }
         if (window._pendingUsageEvent && line.startsWith('data: ')) {
           try { window._lastUsageEvent = JSON.parse(line.slice(6).trim()); } catch {}
@@ -15348,7 +15344,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.0</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.1</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -15557,283 +15553,320 @@ function checkAndTrimFlow(flow) {
 })();
 </script>
 
-<script>
-// =============================================================
-// v4.0: USAGE & COST — Month Dropdown + Day-wise + Gen Log + CSV Export
-// =============================================================
-(function _initUsageCostTracker() {
-  const PRICING={claude:{input:3.00,output:15.00},gemini:{input:0.075,output:0.30},groq:{input:0,output:0}};
-  const BUDGET=250, WARN=0.80, PFX='shuddhi-v37-';
-  let _rate=83.5, _viewMonth=null;
 
-  // Live exchange rate (once per day)
-  (async function(){
-    try{
-      const c=parseFloat(localStorage.getItem(PFX+'rate')||'0'),ts=parseInt(localStorage.getItem(PFX+'rate-ts')||'0',10);
-      if(c&&Date.now()-ts<86400000){_rate=c;return;}
-      const d=await(await fetch('https://api.exchangerate-api.com/v4/latest/USD')).json();
-      if(d?.rates?.INR>0){_rate=d.rates.INR;localStorage.setItem(PFX+'rate',_rate);localStorage.setItem(PFX+'rate-ts',Date.now());}
-    }catch(e){}
+<script>
+// ================================================================
+// v4.0: USAGE & COST — Month Dropdown, Day-wise, Gen Log, CSV Export
+// Purely additive — no existing code modified
+// ================================================================
+(function _initUsageCostTracker() {
+  var PRICING = { claude:{input:3.00,output:15.00}, gemini:{input:0.075,output:0.30}, groq:{input:0,output:0} };
+  var BUDGET = 250, WARN = 0.80, PFX = 'shuddhi-v37-';
+  var _rate = 83.5, _viewMonth = null;
+
+  // Live exchange rate
+  (function fetchRate() {
+    var c = parseFloat(localStorage.getItem(PFX+'rate')||'0');
+    var ts = parseInt(localStorage.getItem(PFX+'rate-ts')||'0', 10);
+    if (c && Date.now()-ts < 86400000) { _rate=c; return; }
+    fetch('https://api.exchangerate-api.com/v4/latest/USD')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var rate = d && d.rates && d.rates.INR;
+        if (rate>0) { _rate=rate; localStorage.setItem(PFX+'rate',rate); localStorage.setItem(PFX+'rate-ts',Date.now()); }
+      }).catch(function(){});
   })();
 
-  function _curMonth(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
-  function _fmtMonth(m){const[y,mo]=m.split('-');const names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return names[parseInt(mo,10)-1]+' '+y;}
-  function _fmtDate(iso){const d=new Date(iso);return String(d.getDate()).padStart(2,'0')+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+  var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  // Month-aware summary storage
-  function _getMonthUsage(m){
-    m=m||_curMonth();
-    return['claude','gemini','groq'].reduce((o,p)=>{
-      o[p]={req:+localStorage.getItem(PFX+m+'-'+p+'-req')||0,input:+localStorage.getItem(PFX+m+'-'+p+'-in')||0,output:+localStorage.getItem(PFX+m+'-'+p+'-out')||0};
+  function curMonth() {
+    var d = new Date();
+    return d.getFullYear()+'-'+(d.getMonth()+1+'').padStart(2,'0');
+  }
+  function fmtMonth(m) {
+    var parts = m.split('-');
+    return MONTH_NAMES[parseInt(parts[1],10)-1]+' '+parts[0];
+  }
+  function fmtDateTime(iso) {
+    var d = new Date(iso);
+    return (d.getDate()+'').padStart(2,'0')+' '+MONTH_NAMES[d.getMonth()]+' '+(d.getHours()+'').padStart(2,'0')+':'+(d.getMinutes()+'').padStart(2,'0');
+  }
+  function cost(p, i, o) {
+    var pr = PRICING[p]||{input:0,output:0};
+    return ((i*pr.input + o*pr.output)/1e6)*_rate;
+  }
+  function totalCost(u) {
+    return ['claude','gemini','groq'].reduce(function(s,p){ return s+cost(p,u[p].input,u[p].output); }, 0);
+  }
+
+  function getMonthUsage(m) {
+    m = m||curMonth();
+    return ['claude','gemini','groq'].reduce(function(o,p){
+      o[p] = {
+        req:    parseInt(localStorage.getItem(PFX+m+'-'+p+'-req')||'0',10),
+        input:  parseInt(localStorage.getItem(PFX+m+'-'+p+'-in') ||'0',10),
+        output: parseInt(localStorage.getItem(PFX+m+'-'+p+'-out')||'0',10)
+      };
       return o;
-    },{});
+    }, {});
   }
 
-  // Day-wise storage
-  function _getDayUsage(m){
-    m=m||_curMonth();
-    const[y,mo]=m.split('-');
-    const days=new Date(y,mo,0).getDate();
-    const result=[];
-    for(let d=1;d<=days;d++){
-      const key=m+'-'+String(d).padStart(2,'0');
-      const tot=['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,+localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||0,+localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||0),0);
-      if(tot>0||d<=new Date().getDate()&&m===_curMonth()) result.push({date:y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0'),label:String(d).padStart(2,'0')+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo,10)-1],cost:tot,gemini:_cost('gemini',+localStorage.getItem(PFX+'day-'+key+'-gemini-in')||0,+localStorage.getItem(PFX+'day-'+key+'-gemini-out')||0),claude:_cost('claude',+localStorage.getItem(PFX+'day-'+key+'-claude-in')||0,+localStorage.getItem(PFX+'day-'+key+'-claude-out')||0)});
+  function getDayUsage(m) {
+    m = m||curMonth();
+    var parts = m.split('-'), y = parts[0], mo = parts[1];
+    var days = new Date(y, parseInt(mo,10), 0).getDate();
+    var now = new Date(), result = [];
+    for (var d=1; d<=days; d++) {
+      var key = m+'-'+(d+'').padStart(2,'0');
+      var g = cost('gemini', parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-out')||'0',10));
+      var cl = cost('claude', parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-out')||'0',10));
+      var tot = g+cl;
+      var dayDate = new Date(y, parseInt(mo,10)-1, d);
+      if (tot > 0 || (m === curMonth() && d <= now.getDate())) {
+        result.push({ label:(d+'').padStart(2,'0')+' '+MONTH_NAMES[parseInt(mo,10)-1], gemini:g, claude:cl, cost:tot });
+      }
     }
-    return result.reverse().slice(0,10); // last 10 days with data
+    return result.reverse().slice(0,10);
   }
 
-  // Generation history
-  function _getGenLog(){try{return JSON.parse(localStorage.getItem(PFX+'gen-log')||'[]');}catch(e){return[];}}
-  function _addGenLog(provider,inputTok,outputTok,cost,tcCount){
-    const log=_getGenLog();
-    log.unshift({ts:new Date().toISOString(),provider,input:inputTok,output:outputTok,cost,tcs:tcCount||0});
-    if(log.length>20)log.pop();
-    localStorage.setItem(PFX+'gen-log',JSON.stringify(log));
+  function getGenLog() {
+    try { return JSON.parse(localStorage.getItem(PFX+'gen-log')||'[]'); } catch(e) { return []; }
+  }
+  function addGenLog(provider, inputTok, outputTok, c, tcs) {
+    var log = getGenLog();
+    log.unshift({ ts:new Date().toISOString(), provider:provider, input:inputTok, output:outputTok, cost:c, tcs:tcs||0 });
+    if (log.length > 20) log.pop();
+    localStorage.setItem(PFX+'gen-log', JSON.stringify(log));
   }
 
-  function _cost(p,i,o){const pr=PRICING[p]||{input:0,output:0};return((i*pr.input+o*pr.output)/1e6)*_rate;}
-  function _totalU(u){return['claude','gemini','groq'].reduce((s,p)=>s+_cost(p,u[p].input,u[p].output),0);}
-
-  // Get all months that have any data (last 12)
-  function _getAvailableMonths(){
-    const months=[];
-    const now=new Date();
-    for(let i=0;i<12;i++){
-      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-      const m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-      const u=_getMonthUsage(m);
-      const tot=_totalU(u);
-      months.push({key:m,label:_fmtMonth(m),cost:tot,hasData:tot>0});
+  function getAvailableMonths() {
+    var months = [], now = new Date();
+    for (var i=0; i<12; i++) {
+      var d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      var m = d.getFullYear()+'-'+(d.getMonth()+1+'').padStart(2,'0');
+      var u = getMonthUsage(m);
+      months.push({ key:m, label:fmtMonth(m), cost:totalCost(u), hasData:totalCost(u)>0 });
     }
     return months;
   }
 
-  // Record usage
-  window._recordUsage=function(provider,inputTok,outputTok){
-    if(!provider)return;
-    const p=provider.toLowerCase();
-    const m=_curMonth();
-    const today=m+'-'+String(new Date().getDate()).padStart(2,'0');
+  window._recordUsage = function(provider, inputTok, outputTok) {
+    if (!provider) return;
+    var p = provider.toLowerCase();
+    var m = curMonth();
+    var today = m+'-'+(new Date().getDate()+'').padStart(2,'0');
 
-    // Monthly summary
-    localStorage.setItem(PFX+m+'-'+p+'-req',(+localStorage.getItem(PFX+m+'-'+p+'-req')||0)+1);
-    localStorage.setItem(PFX+m+'-'+p+'-in', (+localStorage.getItem(PFX+m+'-'+p+'-in') ||0)+inputTok);
-    localStorage.setItem(PFX+m+'-'+p+'-out',(+localStorage.getItem(PFX+m+'-'+p+'-out')||0)+outputTok);
+    // Monthly
+    localStorage.setItem(PFX+m+'-'+p+'-req', (parseInt(localStorage.getItem(PFX+m+'-'+p+'-req')||'0',10)+1)+'');
+    localStorage.setItem(PFX+m+'-'+p+'-in',  (parseInt(localStorage.getItem(PFX+m+'-'+p+'-in') ||'0',10)+inputTok)+'');
+    localStorage.setItem(PFX+m+'-'+p+'-out', (parseInt(localStorage.getItem(PFX+m+'-'+p+'-out')||'0',10)+outputTok)+'');
 
-    // Day-wise
-    localStorage.setItem(PFX+'day-'+today+'-'+p+'-in', (+localStorage.getItem(PFX+'day-'+today+'-'+p+'-in') ||0)+inputTok);
-    localStorage.setItem(PFX+'day-'+today+'-'+p+'-out',(+localStorage.getItem(PFX+'day-'+today+'-'+p+'-out')||0)+outputTok);
+    // Daily
+    localStorage.setItem(PFX+'day-'+today+'-'+p+'-in',  (parseInt(localStorage.getItem(PFX+'day-'+today+'-'+p+'-in') ||'0',10)+inputTok)+'');
+    localStorage.setItem(PFX+'day-'+today+'-'+p+'-out', (parseInt(localStorage.getItem(PFX+'day-'+today+'-'+p+'-out')||'0',10)+outputTok)+'');
 
-    const c=_cost(p,inputTok,outputTok);
-    const tcCount=parseInt(document.getElementById('tcCount')?.textContent||'0',10);
-    _addGenLog(p,inputTok,outputTok,c,tcCount);
+    var c = cost(p, inputTok, outputTok);
+    var tcs = parseInt((document.getElementById('tcCount')||{}).textContent||'0', 10);
+    addGenLog(p, inputTok, outputTok, c, tcs);
 
-    // Meta bar badge
-    const el=document.getElementById('metaCost'),w=document.getElementById('metaCostWrap');
-    if(el){el.textContent=(c<0.01?'\u20b90.00':'\u20b9'+c.toFixed(2));if(w)w.style.display='';}
+    // Meta badge
+    var el = document.getElementById('metaCost'), w = document.getElementById('metaCostWrap');
+    if (el) { el.textContent = (c<0.01 ? '\u20b90.00' : '\u20b9'+c.toFixed(2)); if(w) w.style.display=''; }
 
     // Budget warning
-    const u=_getMonthUsage(m),tot=_totalU(u),pct=tot/BUDGET;
-    if(pct>=1)_warn(tot,true);else if(pct>=WARN)_warn(tot,false);
+    var u = getMonthUsage(m), tot = totalCost(u), pct = tot/BUDGET;
+    if (pct >= 1) warnBudget(tot, true);
+    else if (pct >= WARN) warnBudget(tot, false);
 
-    _render();
+    renderPanel();
   };
 
-  function _warn(tot,exceeded){
-    const pct=Math.round((tot/BUDGET)*100);
-    const msg=exceeded
-      ?'\u20b9'+tot.toFixed(2)+' spent \u2014 \u20b9250 budget reached. <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:800;cursor:pointer;text-decoration:underline">View usage</a>'
-      :'\u20b9'+tot.toFixed(2)+' spent this month ('+pct+'% of \u20b9250). <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">View breakdown</a>';
-    if(typeof showAdoBanner==='function')showAdoBanner(msg,exceeded?'error':'warning',10000);
+  function warnBudget(tot, exceeded) {
+    var pct = Math.round((tot/BUDGET)*100);
+    var msg = exceeded
+      ? '\u20b9'+tot.toFixed(2)+' spent \u2014 \u20b9250 budget reached. <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:800;cursor:pointer;text-decoration:underline">View usage</a>'
+      : '\u20b9'+tot.toFixed(2)+' spent ('+pct+'% of \u20b9250). <a onclick="openSettings();switchSettingsTab(\'usage\')" style="color:#fff;font-weight:700;cursor:pointer;text-decoration:underline">View breakdown</a>';
+    if (typeof showAdoBanner === 'function') showAdoBanner(msg, exceeded?'error':'warning', 10000);
   }
 
-  window._showRateLimitBanner=function(provider,waitSecs){
-    let secs=waitSecs||60,timer;
-    const pn=provider==='gemini'?'Gemini':provider==='claude'?'Claude':'Groq';
-    const msg=pn+' rate limit reached. Resets in: <strong id="_rls">'+secs+'s</strong>&nbsp;'
-      +'<button onclick="window._rlRetry&&window._rlRetry()" style="background:#fff;color:#b45309;border:none;border-radius:6px;padding:2px 10px;cursor:pointer;font-weight:700;font-size:12px">Wait & Retry</button>&nbsp;'
+  window._showRateLimitBanner = function(provider, waitSecs) {
+    var secs = waitSecs||60, timer;
+    var pn = provider==='gemini'?'Gemini':provider==='claude'?'Claude':'Groq';
+    var msg = pn+' rate limit reached. Resets in: <strong id="_rls">'+secs+'s</strong>&nbsp;'
+      +'<button onclick="if(window._rlRetry)window._rlRetry()" style="background:#fff;color:#b45309;border:none;border-radius:6px;padding:2px 10px;cursor:pointer;font-weight:700;font-size:12px">Wait &amp; Retry</button>&nbsp;'
       +'<button onclick="selectProvider(\'claude\');generate()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:2px 10px;cursor:pointer;font-size:12px">Use Claude</button>&nbsp;'
       +'<a onclick="openSettings();switchSettingsTab(\'claude\')" style="color:rgba(255,255,255,.8);font-size:12px;cursor:pointer;text-decoration:underline">Add own key</a>';
-    if(typeof showAdoBanner==='function')showAdoBanner(msg,'warning',0);
-    timer=setInterval(()=>{secs--;const e=document.getElementById('_rls');if(e)e.textContent=secs+'s';if(secs<=0){clearInterval(timer);if(typeof hideAdoBanner==='function')hideAdoBanner();}},1000);
-    window._rlRetry=function(){clearInterval(timer);if(typeof hideAdoBanner==='function')hideAdoBanner();setTimeout(()=>{if(typeof generate==='function')generate();},300);};
+    if (typeof showAdoBanner === 'function') showAdoBanner(msg, 'warning', 0);
+    timer = setInterval(function() {
+      secs--;
+      var e = document.getElementById('_rls');
+      if (e) e.textContent = secs+'s';
+      if (secs <= 0) { clearInterval(timer); if (typeof hideAdoBanner==='function') hideAdoBanner(); }
+    }, 1000);
+    window._rlRetry = function() {
+      clearInterval(timer);
+      if (typeof hideAdoBanner==='function') hideAdoBanner();
+      setTimeout(function(){ if(typeof generate==='function') generate(); }, 300);
+    };
   };
 
   // CSV Export
-  window._exportUsageCSV=function(type){
-    const m=_viewMonth||_curMonth();
-    let csv,filename;
-    if(type==='month'){
-      const u=_getMonthUsage(m);
-      csv='Month,Provider,Requests,Input Tokens,Output Tokens,Cost (INR)\n';
-      ['claude','gemini','groq'].forEach(p=>{
-        csv+=_fmtMonth(m)+','+p.charAt(0).toUpperCase()+p.slice(1)+','+u[p].req+','+u[p].input+','+u[p].output+','+_cost(p,u[p].input,u[p].output).toFixed(4)+'\n';
+  window._exportUsageCSV = function(type) {
+    var m = _viewMonth||curMonth();
+    var csv, filename;
+    if (type === 'month') {
+      var u = getMonthUsage(m);
+      csv = 'Month,Provider,Requests,Input Tokens,Output Tokens,Cost (INR)\n';
+      ['claude','gemini','groq'].forEach(function(p) {
+        csv += fmtMonth(m)+','+p.charAt(0).toUpperCase()+p.slice(1)+','+u[p].req+','+u[p].input+','+u[p].output+','+cost(p,u[p].input,u[p].output).toFixed(4)+'\n';
       });
-      filename='shuddhi-usage-'+m+'.csv';
+      filename = 'shuddhi-usage-'+m+'.csv';
     } else {
-      csv='Date,Provider,Input Tokens,Output Tokens,Cost (INR)\n';
-      const[y,mo]=m.split('-');
-      const days=new Date(y,mo,0).getDate();
-      for(let d=1;d<=days;d++){
-        const key=m+'-'+String(d).padStart(2,'0');
-        const label=String(d).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo,10)-1]+'-'+y;
-        ['claude','gemini','groq'].forEach(p=>{
-          const i=+localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||0;
-          const o=+localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||0;
-          if(i||o) csv+=label+','+p.charAt(0).toUpperCase()+p.slice(1)+','+i+','+o+','+_cost(p,i,o).toFixed(4)+'\n';
+      var parts = m.split('-'), y=parts[0], mo=parts[1];
+      var days = new Date(y,parseInt(mo,10),0).getDate();
+      csv = 'Date,Provider,Input Tokens,Output Tokens,Cost (INR)\n';
+      for (var d=1; d<=days; d++) {
+        var key = m+'-'+(d+'').padStart(2,'0');
+        var label = (d+'').padStart(2,'0')+'-'+MONTH_NAMES[parseInt(mo,10)-1]+'-'+y;
+        ['claude','gemini','groq'].forEach(function(p) {
+          var i = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||'0',10);
+          var o = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||'0',10);
+          if (i||o) csv += label+','+p.charAt(0).toUpperCase()+p.slice(1)+','+i+','+o+','+cost(p,i,o).toFixed(4)+'\n';
         });
       }
-      filename='shuddhi-usage-daily-'+m+'.csv';
+      filename = 'shuddhi-usage-daily-'+m+'.csv';
     }
-    const a=document.createElement('a');
-    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download=filename; a.click();
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+    a.download = filename;
+    a.click();
   };
 
-  function _resetAllUsageData(){if(!confirm("Reset all usage data?"))return;Object.keys(localStorage).filter(function(k){return k.startsWith("shuddhi-v37-");}).forEach(function(k){localStorage.removeItem(k);});if(window._renderUsagePanel)window._renderUsagePanel();}
+  window._resetAllUsageData = function() {
+    if (!confirm('Reset all usage data?')) return;
+    Object.keys(localStorage).filter(function(k){ return k.indexOf('shuddhi-v37-')===0; }).forEach(function(k){ localStorage.removeItem(k); });
+    if (window._renderUsagePanel) window._renderUsagePanel();
+  };
 
-  function _render(){
-    const el=document.getElementById('usageCostPanel')||document.getElementById('usageCostPanelSettings');
-    if(!el)return;
-    const m=_viewMonth||_curMonth();
-    const u=_getMonthUsage(m);
-    const tot=_totalU(u),pct=Math.min(100,Math.round((tot/BUDGET)*100));
-    const bar=pct>=100?'#EF4444':pct>=80?'#F59E0B':'#10B981';
-    const months=_getAvailableMonths();
-    const isCurrentMonth=m===_curMonth();
+  window._switchUsageMonth = function(m) { _viewMonth = m; renderPanel(); };
 
-    // Month dropdown options
-    const opts=months.map(mo=>'<option value="'+mo.key+'"'+(mo.key===m?' selected':'')+'>'+mo.label+(mo.hasData?' — \u20b9'+mo.cost.toFixed(2):'')+'</option>').join('');
+  function renderPanel() {
+    var el = document.getElementById('usageCostPanelSettings');
+    if (!el) return;
+    var m = _viewMonth||curMonth();
+    var u = getMonthUsage(m);
+    var tot = totalCost(u), pct = Math.min(100, Math.round((tot/BUDGET)*100));
+    var bar = pct>=100?'#EF4444':pct>=80?'#F59E0B':'#10B981';
+    var months = getAvailableMonths();
 
-    // Monthly summary rows
-    const rows=['claude','gemini','groq'].map(p=>{
-      const d=u[p],c=_cost(p,d.input,d.output);
-      const ic=p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
-      const cs=p==='groq'?'₹0.00 (Free)':'₹'+c.toFixed(4);
-      const tk=d.input||d.output?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
-      return'<tr style="border-top:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td><td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td><td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td><td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'" >'+cs+'</td></tr>';
+    var opts = months.map(function(mo) {
+      return '<option value="'+mo.key+'"'+(mo.key===m?' selected':'')+'>'+mo.label+(mo.hasData?' \u2014 \u20b9'+mo.cost.toFixed(2):'')+'</option>';
     }).join('');
 
-    // Day-wise breakdown
-    const days=_getDayUsage(m);
-    const maxCost=Math.max(...days.map(d=>d.cost),0.01);
-    const dayRows=days.length?days.map(d=>{
-      const barW=Math.round((d.cost/maxCost)*80);
-      const hasCost=d.cost>0;
-      return'<tr style="border-top:1px solid var(--border)"><td style="padding:6px 10px;color:var(--text2);font-size:12px;white-space:nowrap">'+d.label+'</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:#0891B2">'+( d.gemini>0?'₹'+d.gemini.toFixed(3):'—')+'</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+( d.claude>0?'₹'+d.claude.toFixed(3):'—')+'</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-weight:700;font-size:12px;color:'+(hasCost?bar:'var(--text3)')+'">'+( hasCost?'₹'+d.cost.toFixed(3):'₹0')+'</td>'
-        +'<td style="padding:6px 10px;min-width:80px"><div style="height:6px;background:var(--border2);border-radius:3px"><div style="height:100%;width:'+barW+'%;background:'+bar+';border-radius:3px"></div></div></td>'
+    var provRows = ['claude','gemini','groq'].map(function(p) {
+      var d=u[p], c=cost(p,d.input,d.output);
+      var ic = p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
+      var cs = p==='groq'?'\u20b90.00 (Free)':'\u20b9'+c.toFixed(4);
+      var tk = (d.input||d.output)?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
+      return '<tr style="border-top:1px solid var(--border)">'
+        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td>'
+        +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td>'
+        +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td>'
+        +'<td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td>'
         +'</tr>';
-    }).join(''):'<tr><td colspan="5" style="padding:12px 10px;text-align:center;color:var(--text3);font-size:12px">No data for this month yet</td></tr>';
+    }).join('');
 
-    // Generation log
-    const log=_getGenLog().filter(g=>{
-      const gm=g.ts.substring(0,7);
-      return gm===m;
-    }).slice(0,10);
-    const logRows=log.length?log.map(g=>{
-      const ic=g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
-      const tk=g.input||g.output?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
-      return'<tr style="border-top:1px solid var(--border)"><td style="padding:6px 10px;font-size:11.5px;color:var(--text2);white-space:nowrap">'+_fmtDate(g.ts)+'</td>'
-        +'<td style="padding:6px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+g.tcs+' TCs</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+tk+'</td>'
-        +'<td style="padding:6px 10px;text-align:right;font-weight:700;font-size:11.5px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+(g.provider==='groq'?'₹0.00':'₹'+g.cost.toFixed(4))+'</td>'
+    var days = getDayUsage(m);
+    var maxCost = days.reduce(function(mx,d){ return Math.max(mx,d.cost); }, 0.01);
+    var dayRows = days.length ? days.map(function(d) {
+      var w = Math.round((d.cost/maxCost)*80);
+      return '<tr style="border-top:1px solid var(--border)">'
+        +'<td style="padding:5px 10px;color:var(--text2);font-size:12px">'+d.label+'</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-size:11.5px;color:#0891B2">'+(d.gemini>0?'\u20b9'+d.gemini.toFixed(3):'—')+'</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-size:11.5px;color:var(--text2)">'+(d.claude>0?'\u20b9'+d.claude.toFixed(3):'—')+'</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-weight:700;font-size:12px;color:'+(d.cost>0?bar:'var(--text3)')+'">'+'\u20b9'+d.cost.toFixed(3)+'</td>'
+        +'<td style="padding:5px 10px;min-width:60px"><div style="height:5px;background:var(--border2);border-radius:3px"><div style="height:100%;width:'+w+'%;background:'+bar+';border-radius:3px"></div></div></td>'
         +'</tr>';
-    }).join(''):'<tr><td colspan="5" style="padding:12px 10px;text-align:center;color:var(--text3);font-size:12px">No generations recorded this month</td></tr>';
+    }).join('') : '<tr><td colspan="5" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No data for this month</td></tr>';
 
-    el.innerHTML=
-      // Header row: title + month dropdown + export buttons
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">'
-        +'<div style="font-size:13px;font-weight:800;color:var(--text)">📊 Usage & Cost</div>'
-        +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
-          +'<select onchange="window._switchUsageMonth&&window._switchUsageMonth(this.value)" style="font-size:12px;padding:4px 8px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer">'+opts+'</select>'
-          +'<button onclick="window._exportUsageCSV(\'month\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Monthly CSV</button>'
-          +'<button onclick="window._exportUsageCSV(\'day\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Daily CSV</button>'
+    var log = getGenLog().filter(function(g){ return g.ts.substring(0,7)===m; }).slice(0,10);
+    var logRows = log.length ? log.map(function(g) {
+      var ic = g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
+      var tk = (g.input||g.output)?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
+      return '<tr style="border-top:1px solid var(--border)">'
+        +'<td style="padding:5px 10px;font-size:11px;color:var(--text2);white-space:nowrap">'+fmtDateTime(g.ts)+'</td>'
+        +'<td style="padding:5px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+g.tcs+' TCs</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+tk+'</td>'
+        +'<td style="padding:5px 10px;text-align:right;font-weight:700;font-size:11px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+'\u20b9'+(g.provider==='groq'?'0.00':g.cost.toFixed(4))+'</td>'
+        +'</tr>';
+    }).join('') : '<tr><td colspan="5" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No generations this month</td></tr>';
+
+    el.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
+        +'<div style="font-size:13px;font-weight:800;color:var(--text)">📊 Usage &amp; Cost</div>'
+        +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+          +'<select onchange="if(window._switchUsageMonth)window._switchUsageMonth(this.value)" style="font-size:12px;padding:4px 8px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer">'+opts+'</select>'
+          +'<button onclick="if(window._exportUsageCSV)window._exportUsageCSV(\'month\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Monthly CSV</button>'
+          +'<button onclick="if(window._exportUsageCSV)window._exportUsageCSV(\'day\')" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--indigo);cursor:pointer;font-weight:600">📥 Daily CSV</button>'
         +'</div>'
       +'</div>'
-
-      // Monthly summary table
       +'<table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:4px"><thead><tr style="background:var(--surface2)">'
-        +'<th style="padding:7px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.5px">Provider</th>'
-        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Req</th>'
-        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
-        +'<th style="padding:7px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
-        +'</tr></thead><tbody>'+rows+'</tbody>'
-        +'<tfoot><tr style="border-top:2px solid var(--border2);background:var(--surface2)">'
-          +'<td colspan="3" style="padding:7px 10px;font-weight:800;color:var(--text)">Total — '+_fmtMonth(m)+'</td>'
-          +'<td style="padding:7px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">₹'+tot.toFixed(2)+' / ₹'+BUDGET+'</td>'
-        +'</tr></tfoot></table>'
-
-      // Budget bar
-      +'<div style="margin:10px 0 16px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
-        +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
-        +(pct>=80?'<div style="margin-top:6px;font-size:11px;color:'+bar+';font-weight:600">⚠️ Approaching budget. Use Groq (free) for smaller docs.</div>':'')
-      +'</div>'
-
-      // Day-wise breakdown
-      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📅 Daily Breakdown</div>'
-      +'<div style="overflow-x:auto;margin-bottom:16px"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--surface2)">'
-        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date</th>'
-        +'<th style="padding:6px 10px;text-align:right;color:#0891B2;font-size:10px;text-transform:uppercase">Gemini</th>'
-        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Claude</th>'
-        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Total</th>'
-        +'<th style="padding:6px 10px;color:var(--text3);font-size:10px;text-transform:uppercase">Bar</th>'
-        +'</tr></thead><tbody>'+dayRows+'</tbody></table></div>'
-
-      // Generation log
-      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📋 Recent Generations</div>'
-      +'<div style="overflow-x:auto;margin-bottom:14px"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--surface2)">'
-        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date & Time</th>'
-        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Provider</th>'
-        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">TCs</th>'
+        +'<th style="padding:6px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.5px">Provider</th>'
+        +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Req</th>'
         +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
         +'<th style="padding:6px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
+        +'</tr></thead><tbody>'+provRows+'</tbody>'
+        +'<tfoot><tr style="border-top:2px solid var(--border2);background:var(--surface2)">'
+          +'<td colspan="3" style="padding:7px 10px;font-weight:800;color:var(--text)">Total \u2014 '+fmtMonth(m)+'</td>'
+          +'<td style="padding:7px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">&#8377;'+tot.toFixed(2)+' / &#8377;'+BUDGET+'</td>'
+        +'</tr></tfoot></table>'
+      +'<div style="margin:8px 0 14px">'
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
+        +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
+        +(pct>=80?'<div style="margin-top:6px;font-size:11px;color:'+bar+';font-weight:600">&#9888;&#65039; Approaching budget. Use Groq (free) for smaller docs.</div>':'')
+      +'</div>'
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📅 Daily Breakdown</div>'
+      +'<div style="overflow-x:auto;margin-bottom:14px"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--surface2)">'
+        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:#0891B2;font-size:10px;text-transform:uppercase">Gemini</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Claude</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Total</th>'
+        +'<th style="padding:5px 10px;color:var(--text3);font-size:10px;text-transform:uppercase">Bar</th>'
+        +'</tr></thead><tbody>'+dayRows+'</tbody></table></div>'
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📋 Recent Generations</div>'
+      +'<div style="overflow-x:auto;margin-bottom:12px"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--surface2)">'
+        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date &amp; Time</th>'
+        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Provider</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">TCs</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
+        +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
         +'</tr></thead><tbody>'+logRows+'</tbody></table></div>'
-
-      // Footer: rate + reset
       +'<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">'
-        +'<div style="font-size:10.5px;color:var(--text3)">$1 = ₹'+_rate.toFixed(1)+' (live) · Resets 1st of month</div>'
-        +'<button onclick="window._resetAllUsageData()" style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
+        +'<div style="font-size:10.5px;color:var(--text3)">$1 = &#8377;'+_rate.toFixed(1)+' (live) &middot; Resets 1st of month</div>'
+        +'<button onclick="if(window._resetAllUsageData)window._resetAllUsageData()" style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
       +'</div>';
   }
 
-  window._switchUsageMonth=function(m){ _viewMonth=m; _render(); };
-  window._renderUsagePanel=function(){ _render(); const el2=document.getElementById('usageCostPanelSettings'); if(el2){const orig=document.getElementById('usageCostPanel');if(orig)el2.innerHTML=orig.innerHTML;} };
+  window._renderUsagePanel = function() { renderPanel(); };
 
-  // Hook into TC count change
-  const tc=document.getElementById('tcCount');
-  if(tc)new MutationObserver(()=>{
-    setTimeout(()=>{const u=window._lastUsageEvent;if(u&&u.provider){window._recordUsage(u.provider,u.input||0,u.output||0);window._lastUsageEvent=null;}},600);
-  }).observe(tc,{childList:true,characterData:true,subtree:true});
+  // Hook into TC count to record usage after generation
+  var tc = document.getElementById('tcCount');
+  if (tc) {
+    new MutationObserver(function() {
+      setTimeout(function() {
+        var u = window._lastUsageEvent;
+        if (u && u.provider) {
+          window._recordUsage(u.provider, u.input||0, u.output||0);
+          window._lastUsageEvent = null;
+        }
+      }, 600);
+    }).observe(tc, {childList:true, characterData:true, subtree:true});
+  }
 
-  _render();
-})();
-
+  renderPanel();
 })();
 </script>
+
 </body>
 </html>
