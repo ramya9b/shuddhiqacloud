@@ -15711,6 +15711,8 @@ function checkAndTrimFlow(flow) {
     a.download=filename; a.click();
   };
 
+  function _resetAllUsageData(){if(!confirm("Reset all usage data?"))return;Object.keys(localStorage).filter(function(k){return k.startsWith("shuddhi-v37-");}).forEach(function(k){localStorage.removeItem(k);});if(window._renderUsagePanel)window._renderUsagePanel();}
+
   function _render(){
     const el=document.getElementById('usageCostPanel')||document.getElementById('usageCostPanelSettings');
     if(!el)return;
@@ -15815,10 +15817,7 @@ function checkAndTrimFlow(flow) {
       // Footer: rate + reset
       +'<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">'
         +'<div style="font-size:10.5px;color:var(--text3)">$1 = ₹'+_rate.toFixed(1)+' (live) · Resets 1st of month</div>'
-        +'<button onclick="if(confirm(\'Reset all usage data?\')){'
-          +"Object.keys(localStorage).filter(k=>k.startsWith('shuddhi-v37-')).forEach(k=>localStorage.removeItem(k));"
-          +'window._renderUsagePanel&&window._renderUsagePanel();}" '
-          +'style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
+        +'<button onclick="window._resetAllUsageData()" style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
       +'</div>';
   }
 
