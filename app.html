@@ -5970,8 +5970,8 @@ header::after { display: none !important; }
           <div class="field">
           <label>Output Format</label>
           <select id="outputFormat">
-            <option value="full">All Sections</option>
             <option value="e2e">End to End</option>
+            <option value="full">All Sections</option>
             <option value="field">Field Validation</option>
             <option value="integration">Integration</option>
             <option value="negative">Negative</option>
@@ -7054,7 +7054,7 @@ const samples = {
   wd: { platform:"Workday", module:"Payroll", flow:"HR Manager triggers payroll run for all active employees in the US pay group. System calculates gross pay based on time entries, salary, and overtime. Tax withholdings are computed per federal and state rules. Deductions are applied (health, 401k, garnishments). Net pay is calculated. Manager reviews payroll results and approves. System generates payslips and initiates ACH bank transfers. GL entries are posted to Oracle Financials.", roles:"HR Manager, Payroll Specialist, Finance Controller, Employee", integrations:"Oracle Financials GL, ADP for ACH, Workday Time Tracking, Benefits module" },
   oe: { platform:"Oracle ERP", module:"Oracle Fusion Financials", flow:"AP Accountant receives supplier invoice via email. Invoice is scanned and auto-matched against PO in Oracle Procurement. Three-way match is performed (PO, Receipt, Invoice). Discrepancies trigger an exception workflow routed to the Purchasing Manager. Approved invoice is posted to AP subledger. Payment run is scheduled and bank payment file is generated. GL journal entries are automatically created and period close tasks updated.", roles:"AP Accountant, Purchasing Manager, Finance Director, Supplier", integrations:"Oracle Procurement, Oracle Cash Management, Bank connectivity (SWIFT), Oracle GL" },
   gw: { platform:"Guidewire", module:"ClaimCenter – FNOL", flow:"Insured reports a motor claim via the online portal. FNOL details are captured (policy number, incident date, description, photos). ClaimCenter validates the policy is active and coverage applies. Claim is assigned to an adjuster based on claim type and territory. Initial reserve is set. Adjuster contacts insured and arranges vehicle inspection. Damage assessment is recorded and repair shop is approved. Payment is issued via BillingCenter integration.", roles:"Insured, Claims Adjuster, Supervisor, Repair Shop", integrations:"PolicyCenter for coverage validation, BillingCenter for payments, Document Management, External Valuation service" },
-  fo: { platform:"D365 F&O", module:"Accounts Payable", flow:"Vendor submits an invoice through the vendor portal. AP Clerk reviews the invoice and performs 3-way match with Purchase Order and Goods Receipt. If amount exceeds ₹50,000, Finance Manager approval is required via Power Automate workflow. After approval, payment is scheduled and vendor is notified via email. Payment journal is posted in General Ledger.", roles:"Vendor, AP Clerk, Finance Manager, GL Accountant", integrations:"Power Automate, Microsoft Outlook, Azure Service Bus" },
+  fo: { platform:"D365 F&O", module:"Accounts Payable", flow:"Vendor submits invoice via portal. AP Clerk performs 3-way match (Invoice, PO, Goods Receipt). If amount > ₹50,000, Finance Manager approves via workflow. Payment is scheduled and GL journal is posted.", roles:"Vendor, AP Clerk, Finance Manager, GL Accountant", integrations:"Power Automate, Outlook" },
   crm: { platform:"D365 CRM", module:"Opportunity Management", flow:"Sales Rep creates a Lead from a web form submission. Lead is qualified and converted to an Opportunity. Sales Manager assigns the opportunity to a team. Opportunity moves through stages: Qualify → Develop → Propose → Close. If deal value > $100K, VP approval is needed. Won opportunity triggers customer onboarding flow.", roles:"Sales Rep, Sales Manager, VP Sales, Customer", integrations:"Power Automate, Outlook, D365 F&O for customer creation" },
   sf: { platform:"Salesforce CPQ", module:"Quote Generation", flow:"Sales Rep adds products to an opportunity and initiates a CPQ quote. System applies configured price rules and discounts. If discount exceeds 20%, Sales Director must approve. Approved quote is sent to customer as PDF. Customer accepts quote which triggers order creation and contracts module.", roles:"Sales Rep, Sales Director, Finance, Customer", integrations:"Salesforce Contracts, DocuSign, ERP order sync" },
   web: { platform:"Web App", module:"User Authentication & Authorisation", flow:"New user visits the web application and clicks Register. They fill in name, email and password. System sends a verification email. User clicks the verification link and is redirected to the onboarding wizard. On first login, user sets up their profile. Subsequent logins use email + password with optional 2FA via OTP. Forgot Password flow sends a reset link valid for 15 minutes.", roles:"Guest User, Registered User, Admin", integrations:"SMTP email service, SMS gateway for OTP, OAuth2 provider (Google/Microsoft)" },
@@ -7310,29 +7310,36 @@ function setPriority(p, el) {
 function fillSample(key) {
   const s = samples[key];
   if (!s) return;
+
+  // Step 1: select platform (this clears module.value internally)
   selectPlatform(s.platform);
 
-  // Fix: wait for module chips reliably — poll up to 20 times × 100ms = 2s
-  // renderModuleChips is sync but sidebar re-layout can delay DOM availability
-  let _chipAttempts = 0;
-  const _trySelectChip = () => {
+  // Step 2: set module value directly on hidden input immediately —
+  // don't rely on chip timing. Also try to click the chip if available.
+  const _setModule = () => {
+    // Always set the hidden input directly — this is what generate() reads
+    const moduleEl = document.getElementById('module');
+    if (moduleEl) moduleEl.value = s.module;
+
+    // Show the selected name badge
+    const nameEl = document.getElementById('selectedModuleName');
+    if (nameEl) { nameEl.textContent = '✓ ' + s.module; nameEl.style.display = 'inline-block'; }
+
+    // Also highlight the chip visually if it exists
     const chip = [...document.querySelectorAll('.module-chip')]
       .find(c => c.dataset.module === s.module || c.textContent.trim() === s.module);
     if (chip) {
-      selectModule(s.module, chip);
-    } else if (_chipAttempts++ < 20) {
-      setTimeout(_trySelectChip, 100);
-    } else {
-      // Final fallback: set value + badge directly
-      const moduleEl = document.getElementById('module');
-      if (moduleEl) moduleEl.value = s.module;
-      const nameEl = document.getElementById('selectedModuleName');
-      if (nameEl) { nameEl.textContent = '✓ ' + s.module; nameEl.style.display = 'inline-block'; }
+      document.querySelectorAll('.module-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
     }
   };
-  setTimeout(_trySelectChip, 100);
 
-  // Fill flow description
+  // Run immediately + again after 200ms to survive any post-render resets
+  _setModule();
+  setTimeout(_setModule, 200);
+  setTimeout(_setModule, 500);
+
+  // Step 3: fill text fields
   const flowEl = document.getElementById('flowDesc');
   if (flowEl) {
     flowEl.value = s.flow;
@@ -7343,9 +7350,7 @@ function fillSample(key) {
   const intEl = document.getElementById('integrations');
   if (intEl) intEl.value = s.integrations || '';
 
-  // Fix: set default format to End to End (not All Sections) for the sample
-  // "All Sections" generates 50+ TCs → 126s → stream timeout on Gemini/Groq.
-  // E2E generates 5–8 TCs → completes in 15–25s reliably on all providers.
+  // Step 4: set format to E2E (not All Sections) — avoids stream timeout
   const fmtEl = document.getElementById('outputFormat');
   if (fmtEl && fmtEl.value === 'full') fmtEl.value = 'e2e';
 }
@@ -8769,7 +8774,16 @@ async function generate() {
   }
   const apiKey = document.getElementById('apiKey').value.trim();
   const platform = document.getElementById('platform').value;
-  const module = document.getElementById('module').value;
+  // Read module from hidden input — if empty, fall back to the visually selected chip
+  // (fixes case where fillSample set chip visually but hidden input was cleared by platform reset)
+  let module = document.getElementById('module').value;
+  if (!module) {
+    const selectedChip = document.querySelector('.module-chip.selected');
+    if (selectedChip) {
+      module = selectedChip.dataset.module || selectedChip.textContent.trim();
+      document.getElementById('module').value = module; // sync hidden input
+    }
+  }
   let flow = document.getElementById('flowDesc').value.trim();
   flow = (typeof checkAndTrimFlow === 'function') ? checkAndTrimFlow(flow) : flow;
   const roles = document.getElementById('roles').value.trim();
@@ -11367,12 +11381,13 @@ renderHistory();
 // Fill sample whenever the form is completely empty — called on page load
 // and can be called again after resetForm() if needed.
 function _fillSampleIfBlank() {
-  const _hasNoInput = !document.getElementById('flowDesc').value.trim()
-    && !document.getElementById('platform').value;
-  if (_hasNoInput && typeof fillSample === 'function') {
+  // Check if flow is blank — platform may already be set from previous session
+  // but flow being empty means the user has no requirement to generate from
+  const _flowEmpty = !document.getElementById('flowDesc').value.trim();
+  const _noFile    = !window.__uploadedImageBase64 && !window.extractedDocText;
+  if (_flowEmpty && _noFile && typeof fillSample === 'function') {
     setTimeout(() => {
       fillSample('fo');
-      // Only show the toast on very first ever visit
       if (!localStorage.getItem('shuddhi-sample-shown')) {
         showToast('Sample loaded — click Generate to see test cases instantly!', '💡');
         localStorage.setItem('shuddhi-sample-shown', '1');
