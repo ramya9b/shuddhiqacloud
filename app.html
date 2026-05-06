@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v4.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v4.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -1662,40 +1662,49 @@ if (typeof marked !== 'undefined') {
 
   .settings-modal {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(.96);
-    z-index: 10001; width: min(640px, 94vw); max-height: 90vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    background: var(--surface); border: 1.5px solid var(--border2);
-    border-radius: 18px; box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    z-index: 10001; width: min(660px, 96vw); max-height: 92vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 20px; box-shadow: 0 32px 100px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06);
     display: none; flex-direction: column;
-    transition: transform .2s cubic-bezier(.34,1.56,.64,1), opacity .15s;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .18s;
   }
   .settings-modal.open {
     display: flex; transform: translate(-50%, -50%) scale(1);
   }
   .settings-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 24px 16px; border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; background: var(--surface); z-index: 1;
-    border-radius: 18px 18px 0 0;
+    padding: 22px 24px 18px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 1; border-radius: 20px 20px 0 0;
+    background: linear-gradient(135deg, rgba(91,95,239,.08) 0%, rgba(139,92,246,.05) 100%);
+    backdrop-filter: blur(12px);
   }
   .settings-tabs {
-    display: flex; gap: 4px; padding: 12px 16px 0;
+    display: flex; gap: 2px; padding: 10px 16px 0;
     border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    overflow-x: auto; scrollbar-width: none;
   }
+  .settings-tabs::-webkit-scrollbar { display: none; }
   .settings-tab {
     background: none; border: none; cursor: pointer;
-    padding: 8px 16px; border-radius: 8px 8px 0 0;
-    font-size: 13px; color: var(--text2); font-weight: 500;
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
-    transition: all .15s;
+    padding: 8px 14px; border-radius: 10px 10px 0 0;
+    font-size: 12.5px; color: var(--text2); font-weight: 600;
+    border-bottom: 2.5px solid transparent; margin-bottom: -1px;
+    transition: all .15s; white-space: nowrap; letter-spacing: .01em;
   }
-  .settings-tab:hover { color: var(--text); background: var(--d365-dim); }
-  .settings-tab.active { color: var(--d365); border-bottom-color: var(--d365); background: var(--d365-dim); }
-
-  .settings-panel { padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+  .settings-tab:hover { color: var(--text); background: rgba(91,95,239,.06); }
+  .settings-tab.active {
+    color: var(--indigo); border-bottom-color: var(--indigo);
+    background: linear-gradient(180deg, rgba(91,95,239,.08) 0%, transparent 100%);
+  }
+  .settings-panel { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
   .settings-section { }
-  .settings-section-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .settings-section-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
-  .settings-section-desc a { color: var(--d365); text-decoration: none; }
+  .settings-section-title {
+    font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px; letter-spacing: .01em;
+  }
+  .settings-section-desc { font-size: 12.5px; color: var(--text2); line-height: 1.6; }
+  .settings-section-desc a { color: var(--indigo); text-decoration: none; }
   .settings-section-desc a:hover { text-decoration: underline; }
 
   .settings-status-card {
@@ -1756,14 +1765,27 @@ if (typeof marked !== 'undefined') {
   .settings-steps code { font-family: 'JetBrains Mono',monospace; font-size: 11.5px; background: var(--surface2); padding: 1px 6px; border-radius: 4px; color: var(--d365); }
   .settings-steps strong { color: var(--text); }
 
-  .settings-about-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .settings-about-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
   .settings-about-card {
     background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 10px; padding: 14px; text-align: center;
+    border-radius: 12px; padding: 14px 12px; text-align: center;
+    transition: all .18s; cursor: default;
   }
-  .settings-about-icon { font-size: 22px; margin-bottom: 6px; }
-  .settings-about-label { font-size: 10.5px; color: var(--text3); font-family: 'JetBrains Mono',monospace; margin-bottom: 3px; }
-  .settings-about-val { font-size: 13px; font-weight: 600; color: var(--text); }
+  .settings-about-card:hover {
+    border-color: var(--indigo); transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(91,95,239,.12);
+    background: rgba(91,95,239,.03);
+  }
+  .settings-about-icon { font-size: 24px; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.12)); }
+  .settings-about-label { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono',monospace; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  .settings-about-val { font-size: 12.5px; font-weight: 700; color: var(--text); }
+
+  /* Rich section card wrapper */
+  .settings-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px; transition: border-color .18s;
+  }
+  .settings-card:hover { border-color: rgba(91,95,239,.3); }
 
 
   /* ── Hamburger button — desktop hidden, mobile visible ─── */
@@ -5150,23 +5172,32 @@ header::after { display: none !important; }
   #appSidebar.collapsed .sb-collapse-strip:hover { color: var(--indigo, #5B5FEF); }
   /* ── Provider pills ─────────────────────────────────────────── */
   .provider-pill {
-    display:flex;align-items:center;gap:10px;
-    padding:10px 14px;border-radius:10px;
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;border-radius:12px;
     border:1.5px solid var(--border2);background:var(--surface);
-    cursor:pointer;text-align:left;transition:all .15s;
+    cursor:pointer;text-align:left;transition:all .18s;
     font-family:'Plus Jakarta Sans',sans-serif;flex:1;min-width:140px;
+    position:relative;overflow:hidden;
   }
-  .provider-pill:hover { border-color:var(--indigo);background:rgba(91,95,239,.03); }
+  .provider-pill::before {
+    content:'';position:absolute;inset:0;opacity:0;transition:opacity .18s;
+    background:linear-gradient(135deg,rgba(91,95,239,.06),rgba(139,92,246,.04));
+  }
+  .provider-pill:hover { border-color:var(--indigo);transform:translateY(-1px);box-shadow:0 4px 16px rgba(91,95,239,.15); }
+  .provider-pill:hover::before { opacity:1; }
   .provider-pill.active {
     border-color:var(--indigo);background:rgba(91,95,239,.06);
-    box-shadow:0 0 0 3px rgba(91,95,239,.12);
+    box-shadow:0 0 0 3px rgba(91,95,239,.15), 0 4px 16px rgba(91,95,239,.12);
+    transform:translateY(-1px);
   }
-  .pill-icon { font-size:20px;flex-shrink:0; }
-  .pill-name { font-size:13px;font-weight:700;color:var(--text); }
-  .pill-sub  { font-size:10.5px;color:var(--text3);margin-top:1px; }
+  .provider-pill.active::before { opacity:1; }
+  .pill-icon { font-size:22px;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15)); }
+  .pill-name { font-size:13px;font-weight:800;color:var(--text);letter-spacing:-.01em; }
+  .pill-sub  { font-size:10.5px;color:var(--text3);margin-top:2px;line-height:1.3; }
   .pill-status {
-    margin-left:auto;font-size:10px;padding:2px 8px;border-radius:20px;
+    margin-left:auto;font-size:10px;padding:3px 9px;border-radius:20px;
     font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;
+    border:1px solid var(--border2);
   }
   .pill-status.ok  { background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.25); }
   .pill-status.off { background:var(--surface2);color:var(--text3);border:1px solid var(--border); }
@@ -5275,7 +5306,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v4.5</span>
+      <span class="sb-badge">v4.7</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -5618,14 +5649,14 @@ header::after { display: none !important; }
   <div class="settings-modal" id="settingsModal" role="dialog" aria-modal="true" aria-label="Settings">
 
     <div class="settings-header">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:20px">⚙️</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--violet));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 4px 12px rgba(91,95,239,.35)">⚙️</div>
         <div>
-          <div style="font-size:16px;font-weight:700">Settings</div>
-          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px">API Keys &amp; Connection Configuration</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.01em">Settings</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px;letter-spacing:.02em">API Keys &amp; Connection Configuration</div>
         </div>
       </div>
-      <button onclick="closeSettings()" class="ado-close" aria-label="Close settings">✕</button>
+      <button onclick="closeSettings()" class="ado-close" aria-label="Close settings" style="width:32px;height:32px;border-radius:8px;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .15s" onmouseover="this.style.background='var(--border2)'" onmouseout="this.style.background='var(--surface2)'">✕</button>
     </div>
 
     <!-- ── Tab bar ── -->
@@ -6101,7 +6132,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v4.5</div>
+          <div class="settings-about-val">v4.7</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -15327,7 +15358,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:700;color:var(--text2)">🧪 Shuddhi QA</span>
     <span style="padding:1px 7px;border-radius:8px;background:rgba(91,95,239,.1);
-                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.5</span>
+                 color:var(--indigo);font-weight:700;font-size:10.5px">v4.7</span>
     <span style="color:var(--border2)">·</span>
     <span>AI Test Intelligence</span>
     <span style="color:var(--border2)">·</span>
@@ -15768,20 +15799,88 @@ function checkAndTrimFlow(flow) {
         +'</tr>';
     }).join('') : '<tr><td colspan="5" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No data for this month</td></tr>';
 
-    var log = getGenLog().filter(function(g){ return g.ts.substring(0,7)===m; }).slice(0,10);
-    var logRows = log.length ? log.map(function(g) {
-      var ic = g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
-      var tk = (g.input||g.output)?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
-      var plat = g.platform || '—';
-      return '<tr style="border-top:1px solid var(--border)">'
-        +'<td style="padding:5px 10px;font-size:11px;color:var(--text2);white-space:nowrap">'+fmtDateTime(g.ts)+'</td>'
-        +'<td style="padding:5px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
-        +'<td style="padding:5px 10px;font-size:11px;color:var(--text2)">'+plat+'</td>'
-        +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+g.tcs+' TCs</td>'
-        +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+tk+'</td>'
-        +'<td style="padding:5px 10px;text-align:right;font-weight:700;font-size:11px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+'\u20b9'+(g.provider==='groq'?'0.00':g.cost.toFixed(4))+'</td>'
-        +'</tr>';
-    }).join('') : '<tr><td colspan="6" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No generations this month</td></tr>';
+    // v4.6: Smart Usage Intelligence — gap indicator + quality signal
+    var RECOMMENDED_DAILY = 8;
+    var todayKey = curMonth() + '-' + (new Date().getDate()+'').padStart(2,'0');
+    var todayReqs = ['claude','gemini','groq'].reduce(function(s,p){
+      return s + (parseInt(localStorage.getItem(PFX+'day-'+todayKey+'-'+p+'-req')||'0',10)||0);
+    }, 0);
+    // count from gen log for today
+    var allLog = getGenLog();
+    var todayStr = new Date().toISOString().substring(0,10);
+    todayReqs = allLog.filter(function(g){ return g.ts.substring(0,10)===todayStr; }).length;
+    var dailyPct = Math.min(100, Math.round((todayReqs/RECOMMENDED_DAILY)*100));
+    var dailyBar = dailyPct>=100?'#EF4444':dailyPct>=75?'#F59E0B':'#10B981';
+
+    var log = allLog.filter(function(g){ return g.ts.substring(0,7)===m; }).slice(0,10);
+
+    function getGapLabel(curTs, prevTs) {
+      if (!prevTs) return null;
+      var diffMs = new Date(prevTs).getTime() - new Date(curTs).getTime();
+      var diffSec = Math.abs(Math.round(diffMs/1000));
+      if (diffSec < 60) return { label: diffSec+'s gap', status: 'bad' };
+      if (diffSec < 120) return { label: Math.round(diffSec/60)+'m gap', status: 'warn' };
+      var h = Math.floor(diffSec/3600), mins = Math.floor((diffSec%3600)/60);
+      var label = h>0 ? h+'h '+(mins>0?mins+'m ':'')+'gap' : mins+'m gap';
+      return { label: label, status: 'good' };
+    }
+
+    function getQualitySignal(tcs, gap) {
+      if (!gap) return { icon: '✅', color: '#10B981', tip: 'First request of day' };
+      if (gap.status==='bad')  return { icon: '❌', color: '#EF4444', tip: 'Too fast — quality risk' };
+      if (gap.status==='warn') return { icon: '⚠️', color: '#F59E0B', tip: 'Short gap — may affect quality' };
+      return { icon: '✅', color: '#10B981', tip: 'Good gap — full quality' };
+    }
+
+    var logRows = '';
+    if (log.length) {
+      for (var li=0; li<log.length; li++) {
+        var g = log[li];
+        var ic = g.provider==='claude'?'🤖':g.provider==='gemini'?'✦':'⚡';
+        var tk = (g.input||g.output)?(((g.input+g.output)/1000).toFixed(1)+'k'):'—';
+        var plat = g.platform || '—';
+        var gap = getGapLabel(g.ts, li<log.length-1 ? log[li+1].ts : null);
+        var qs  = getQualitySignal(g.tcs, gap);
+        var gapHTML = '';
+        if (gap) {
+          var gapColor = gap.status==='bad'?'#EF4444':gap.status==='warn'?'#F59E0B':'#10B981';
+          gapHTML = '<tr>'
+            +'<td colspan="7" style="padding:2px 10px 2px 24px">'
+              +'<div style="display:flex;align-items:center;gap:6px;font-size:10px;color:'+gapColor+'">'
+                +'<div style="width:1px;height:14px;background:'+gapColor+';opacity:.4"></div>'
+                +'<span>↕ '+gap.label+'</span>'
+              +'</div>'
+            +'</td>'
+          +'</tr>';
+        }
+        logRows += '<tr style="border-top:1px solid var(--border)">'
+          +'<td style="padding:5px 10px;font-size:11px;color:var(--text2);white-space:nowrap">'+(g.ts?(g.ts.substring(11,16)):'—')+'</td>'
+          +'<td style="padding:5px 6px;font-size:14px;text-align:center" title="'+qs.tip+'">'+qs.icon+'</td>'
+          +'<td style="padding:5px 10px;font-size:11.5px;font-weight:600">'+ic+' '+g.provider.charAt(0).toUpperCase()+g.provider.slice(1)+'</td>'
+          +'<td style="padding:5px 10px;font-size:11px;color:var(--text2)">'+plat+'</td>'
+          +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+g.tcs+' TCs</td>'
+          +'<td style="padding:5px 10px;text-align:right;font-size:11px;color:var(--text2)">'+tk+'</td>'
+          +'<td style="padding:5px 10px;text-align:right;font-weight:700;font-size:11px;color:'+(g.provider==='groq'?'#10b981':'var(--text)')+'">'+'\u20b9'+(g.provider==='groq'?'0.00':g.cost.toFixed(4))+'</td>'
+          +'</tr>'
+          + gapHTML;
+      }
+    } else {
+      logRows = '<tr><td colspan="7" style="padding:12px;text-align:center;color:var(--text3);font-size:12px">No generations this month</td></tr>';
+    }
+
+    // Daily progress bar (today only)
+    var dailyProgressHTML = m===curMonth()
+      ? '<div style="margin-bottom:14px;padding:10px 12px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)">'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+            +'<div style="font-size:12px;font-weight:700;color:var(--text)">📈 Today\'s Usage</div>'
+            +'<div style="font-size:11px;color:var(--text3)">'+todayReqs+' of '+RECOMMENDED_DAILY+' recommended</div>'
+          +'</div>'
+          +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden">'
+            +'<div style="height:100%;width:'+dailyPct+'%;background:'+dailyBar+';border-radius:3px;transition:width .4s"></div>'
+          +'</div>'
+          +(dailyPct>=100?'<div style="margin-top:6px;font-size:11px;color:#EF4444;font-weight:600">⚠️ High usage today — consider resuming tomorrow for best quality</div>':'')
+        +'</div>'
+      : '';
 
     el.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
@@ -15816,8 +15915,10 @@ function checkAndTrimFlow(flow) {
         +'<th style="padding:5px 10px;color:var(--text3);font-size:10px;text-transform:uppercase">Bar</th>'
         +'</tr></thead><tbody>'+dayRows+'</tbody></table></div>'
       +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📋 Recent Generations</div>'
+      + dailyProgressHTML
       +'<div style="overflow-x:auto;margin-bottom:12px"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--surface2)">'
-        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Date &amp; Time</th>'
+        +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Time</th>'
+        +'<th style="padding:5px 6px;text-align:center;color:var(--text3);font-size:10px;text-transform:uppercase">Quality</th>'
         +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Provider</th>'
         +'<th style="padding:5px 10px;text-align:left;color:var(--text3);font-size:10px;text-transform:uppercase">Platform</th>'
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">TCs</th>'
