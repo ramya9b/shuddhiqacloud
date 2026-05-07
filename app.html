@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v7.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.6 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5938,7 +5938,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v7.5</span>
+      <span class="sb-badge">v7.6</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6357,7 +6357,7 @@ header::after { display: none !important; }
     <div class="settings-panel" id="spanel-claude">
       <div class="settings-section">
         <div class="settings-section-title">AI Provider</div>
-        <div class="settings-section-desc">Choose which AI generates test cases. Each provider needs its own API key in Vercel.</div>
+        <div class="settings-section-desc">Choose which AI generates test cases. Add your own API key below or use the shared free tier.</div>
       </div>
 
       <!-- Provider selector pills -->
@@ -6465,7 +6465,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card — keys from Vercel, no manual input needed -->
+      <!-- Active provider card -->
       <div id="activeProviderCard" style="border:1.5px solid var(--border2);border-radius:12px;
            overflow:visible;margin-bottom:16px;transition:border-color .2s">
         <!-- Header -->
@@ -6487,13 +6487,13 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Key status row — read-only, from Vercel -->
+          <!-- Key status row -->
           <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;
                background:var(--surface2);border-radius:9px;border:1px solid var(--border)">
             <span style="font-size:14px" id="activeKeyStatusIcon">✅</span>
             <div style="flex:1">
               <div style="font-size:12px;font-weight:700;color:var(--text)"
-                   id="activeKeyStatusLabel">API key configured in Vercel</div>
+                   id="activeKeyStatusLabel">API key configured</div>
               <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace"
                    id="activeEnvKey">Checking…</div>
             </div>
@@ -6521,16 +6521,16 @@ header::after { display: none !important; }
       <!-- Test result -->
       <div class="settings-test-result" id="claudeTestResult" style="display:none"></div>
 
-      <!-- Vercel setup guide -->
+      <!-- API key setup guide -->
       <details class="settings-guide">
-        <summary>How to add a key in Vercel →</summary>
+        <summary>How to get a free API key →</summary>
         <ol class="settings-steps">
           <li>Get your free API key from the provider link above</li>
-          <li>Add key once: Vercel → Project → Settings → Environment Variables</li>
+          <li>Add key once: Cloudflare Pages → Settings → Environment Variables</li>
           <li>Name: <code id="guideEnvKey">GEMINI_API_KEY</code> or <code>GROQ_API_KEY</code> → paste value → Save</li>
-          <li>Run <code>vercel --prod --force</code> to deploy</li>
-          <li>Switch provider anytime from this Settings panel — no Vercel changes needed!</li>
-          <li><strong>Privacy:</strong> Only your preference choices are stored in browser localStorage (provider selection, ADO org name, assigned-to email). No API keys or secrets ever leave Vercel's server.</li>
+          <li>Redeploy on Cloudflare Pages to apply</li>
+          <li>Switch provider anytime from this Settings panel — no redeployment needed!</li>
+          <li><strong>Privacy:</strong> Only your preference choices are stored in browser localStorage (provider selection, ADO org name, assigned-to email). No API keys or secrets ever leave Cloudflare's server.</li>
         </ol>
       </details>
 
@@ -6745,7 +6745,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Manual config (when not set via Vercel) -->
+      <!-- Manual config -->
       <div id="jiraManualSection">
         <div class="settings-field-label">Jira Base URL</div>
         <input type="text" id="settingsJiraUrl" placeholder="https://yourcompany.atlassian.net" autocomplete="off"
@@ -6777,13 +6777,13 @@ header::after { display: none !important; }
         <div class="settings-hint">
           💡 These settings are saved locally in your browser (localStorage).<br>
           For production: add <code>JIRA_BASE_URL</code>, <code>JIRA_EMAIL</code>, <code>JIRA_API_TOKEN</code>
-          as Vercel Environment Variables — credentials stay server-side.
+          in Settings → Jira tab.
         </div>
       </div>
 
-      <!-- Vercel section (when configured via env) -->
+      <!-- Jira configured section -->
       <div id="jiraVercelSection" style="display:none">
-        <div class="settings-field-label">Vercel Environment Variables</div>
+        <div class="settings-field-label">Saved Configuration</div>
         <div class="settings-env-row">
           <span class="settings-env-name">JIRA_BASE_URL</span>
           <span class="settings-env-val">https://•••.atlassian.net</span>
@@ -6799,7 +6799,7 @@ header::after { display: none !important; }
           <span class="settings-env-val">ATATT3x••••••••</span>
           <div class="conn-badge ok">Configured ✓</div>
         </div>
-        <div class="settings-hint">🔒 Jira credentials are stored server-side in Vercel. The browser never sees them.</div>
+        <div class="settings-hint">🔒 Jira credentials are saved in your browser localStorage only.</div>
       </div>
 
       <!-- Test result -->
@@ -6814,7 +6814,7 @@ header::after { display: none !important; }
           <li>Enter your Jira Base URL, email, and token above</li>
           <li>Click <strong>Test</strong> to verify the connection</li>
           <li>Once connected, use the <strong>Jira Ticket ID</strong> field in the main form</li>
-          <li>For production: add the 3 variables to Vercel Environment Variables</li>
+          <li>Enter your Jira details in Settings → Jira tab</li>
         </ol>
       </details>
     </div>
@@ -6843,7 +6843,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v7.5</div>
+          <div class="settings-about-val">v7.6</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7011,7 +7011,7 @@ header::after { display: none !important; }
             Add <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_BASE_URL</code>,
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_EMAIL</code> and
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_API_TOKEN</code>
-            to Vercel env vars to enable auto-fetch.
+            in Settings → Jira tab to enable auto-fetch.
           </div>
         </div>
         </div>
@@ -7487,11 +7487,11 @@ header::after { display: none !important; }
                       background:rgba(0,135,90,.05);border:1px solid rgba(0,135,90,.2);border-radius:8px">
             <span style="font-size:16px">🔐</span>
             <div style="flex:1;font-size:12.5px;color:#005a28">
-              <strong>PAT is secured via Vercel Environment Variable</strong> — not exposed to browser
+              <strong>PAT saved in your browser</strong> — configure in Settings → Azure DevOps
             </div>
             <span style="font-size:10px;padding:2px 8px;border-radius:6px;background:rgba(0,135,90,.1);
                          border:1px solid rgba(0,135,90,.3);color:#00875a;font-family:'JetBrains Mono',monospace;
-                         white-space:nowrap">ADO_PAT ✓ VERCEL ENV</span>
+                         white-space:nowrap">PAT ✓ Saved</span>
           </div>
         </div>
 
@@ -7987,7 +7987,7 @@ function _updateProviderUI(provider) {
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
   if (statusIcon)  statusIcon.textContent  = hasK ? '✅' : '⚠️';
-  if (statusLabel) statusLabel.textContent = hasK ? 'API key configured in Vercel' : 'Key not found — add ' + (meta.envKey||'') + ' to Vercel env vars';
+  if (statusLabel) statusLabel.textContent = hasK ? 'API key configured' : 'Key not found — add ' + (meta.envKey||'') + ' to Vercel env vars';
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
@@ -12722,8 +12722,7 @@ async function initADOModal() {
     } else {
       if (display) display.textContent = 'PAT not configured';
       if (errEl) {
-        errEl.textContent = '⚠️ ADO_PAT / DEVOPS_PAT not set in Vercel Environment Variables. ' +
-                            'Add it in Vercel → Project Settings → Environment Variables.';
+        errEl.textContent = '⚠️ ADO PAT not configured. Go to Settings → Azure DevOps and enter your PAT.';
         errEl.style.display = '';
       }
       return;
@@ -12800,7 +12799,7 @@ async function initADOModal() {
     if (display) display.textContent = 'Error loading';
     if (errEl) {
       errEl.textContent = '❌ Failed to load configuration: ' + e.message +
-                          '. Check your network and Vercel deployment.';
+                          '. Check your network connection.';
       errEl.style.display = '';
     }
   }
@@ -13479,7 +13478,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v7.5';
+  if (ver)  ver.textContent  = 'v7.6';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -13716,7 +13715,7 @@ async function testClaudeConnection() {
 
         displayMsg = errText
           ? 'Provider error: ' + errText.substring(0, 120)
-          : 'Internal proxy error (500). Check Vercel function logs for details.';
+          : 'Internal proxy error (500). Check Cloudflare Pages function logs.';
       } else if (res.status === 429 || isSwitch) {
         displayMsg = errText || 'Rate limit or quota exceeded. Try again later.';
       } else if (res.status === 401) {
@@ -14494,7 +14493,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v7.5';
+  if (version)  version.textContent  = 'v7.6';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -14765,11 +14764,11 @@ function checkJiraSettingsStatus() {
   const sub   = document.getElementById('jiraStatusSub');
   const btn   = document.getElementById('jiraTestBtn');
   const manual  = document.getElementById('jiraManualSection');
-  const vercel  = document.getElementById('jiraVercelSection');
+  const vercel  = document.getElementById('jiraVercelSection'); // hidden compat stub
 
   if (window.__jiraConfigured) {
     if (icon)   icon.textContent   = '🔐';
-    if (label)  label.textContent  = 'Jira configured via Vercel Environment Variables';
+    if (label)  label.textContent  = 'Jira configured — ready to use';
     if (label)  label.style.color  = '#00875a';
     if (sub)    sub.textContent    = 'JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN are set server-side.';
     if (btn)    btn.style.display  = 'block';
@@ -14785,13 +14784,13 @@ function checkJiraSettingsStatus() {
       if (icon)   icon.textContent  = '💾';
       if (label)  label.textContent = 'Jira configured via browser settings';
       if (label)  label.style.color = '#0369A1';
-      if (sub)    sub.textContent   = 'Credentials stored locally — add Vercel env vars for production.';
+      if (sub)    sub.textContent   = 'Credentials stored in your browsers for production.';
       if (btn)    btn.style.display = 'block';
     } else {
       if (icon)   icon.textContent  = '⚠️';
       if (label)  label.textContent = 'Jira not configured';
       if (label)  label.style.color = '#b45309';
-      if (sub)    sub.textContent   = 'Enter credentials below or add Vercel environment variables.';
+      if (sub)    sub.textContent   = 'Enter your Jira credentials belownt variables.';
       if (btn)    btn.style.display = 'none';
     }
   } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
@@ -15282,7 +15281,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.5</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.6</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -17336,9 +17335,243 @@ window.copyShareLink = function() {
 })();
 </script>
 
+
+
+<!-- ════════════════════════════════════════════════════════════
+     v7.4 FREE TRIAL MODAL
+     Shown after 3 free generations — get own key to continue
+════════════════════════════════════════════════════════════════ -->
+<div id="freeTrialModal" style="display:none;position:fixed;inset:0;z-index:300002;
+  align-items:center;justify-content:center;">
+  <!-- Backdrop -->
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px)"></div>
+
+  <!-- Card -->
+  <div style="position:relative;z-index:1;background:var(--surface);
+    border:1.5px solid rgba(232,162,32,.25);border-radius:20px;
+    padding:28px 26px;width:min(460px,94vw);
+    box-shadow:0 24px 80px rgba(0,0,0,.5)">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:40px;margin-bottom:10px">🧪</div>
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;
+                  color:var(--text);letter-spacing:-.02em;margin-bottom:6px">
+        You've used your 3 free generations!
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">
+        Shuddhi QA is <strong style="color:var(--text)">free forever</strong> — just add your own AI key.<br>
+        Both options below are <strong style="color:#059669">completely free</strong>.
+      </div>
+    </div>
+
+    <!-- Free key options -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+
+      <!-- Groq -->
+      <a href="https://console.groq.com/keys" target="_blank" rel="noopener"
+        style="display:flex;flex-direction:column;align-items:center;gap:6px;
+               padding:14px 12px;border-radius:12px;text-decoration:none;
+               border:1.5px solid rgba(20,184,166,.25);background:rgba(20,184,166,.06);
+               transition:all .2s;cursor:pointer"
+        onmouseover="this.style.borderColor='rgba(20,184,166,.5)';this.style.background='rgba(20,184,166,.1)'"
+        onmouseout="this.style.borderColor='rgba(20,184,166,.25)';this.style.background='rgba(20,184,166,.06)'">
+        <span style="font-size:22px">⚡</span>
+        <span style="font-size:13px;font-weight:700;color:#0f766e">Get free Groq key</span>
+        <span style="font-size:10.5px;color:var(--text3);text-align:center">
+          ⏱ 30 seconds · Fastest AI · Free forever
+        </span>
+        <span style="font-size:10px;color:#14B8A6;font-family:'JetBrains Mono',monospace">
+          console.groq.com →
+        </span>
+      </a>
+
+      <!-- Gemini -->
+      <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+        style="display:flex;flex-direction:column;align-items:center;gap:6px;
+               padding:14px 12px;border-radius:12px;text-decoration:none;
+               border:1.5px solid rgba(91,95,239,.25);background:rgba(91,95,239,.06);
+               transition:all .2s;cursor:pointer"
+        onmouseover="this.style.borderColor='rgba(91,95,239,.5)';this.style.background='rgba(91,95,239,.1)'"
+        onmouseout="this.style.borderColor='rgba(91,95,239,.25)';this.style.background='rgba(91,95,239,.06)'">
+        <span style="font-size:22px">🔮</span>
+        <span style="font-size:13px;font-weight:700;color:var(--indigo)">Get free Gemini key</span>
+        <span style="font-size:10.5px;color:var(--text3);text-align:center">
+          ⏱ 30 seconds · Google account · Free forever
+        </span>
+        <span style="font-size:10px;color:var(--indigo);font-family:'JetBrains Mono',monospace">
+          aistudio.google.com →
+        </span>
+      </a>
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="flex:1;height:1px;background:var(--border2)"></div>
+      <span style="font-size:11px;color:var(--text3);white-space:nowrap">Already have a key? Paste it here</span>
+      <div style="flex:1;height:1px;background:var(--border2)"></div>
+    </div>
+
+    <!-- Provider selector + key input -->
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <select id="freeTrialProviderSelect"
+        style="background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;
+               padding:9px 12px;color:var(--text);font-size:13px;cursor:pointer;
+               font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;width:110px">
+        <option value="groq">Groq</option>
+        <option value="gemini">Gemini</option>
+        <option value="claude">Claude</option>
+      </select>
+      <input type="password" id="freeTrialKeyInput"
+        placeholder="Paste your API key here…"
+        style="flex:1;background:var(--surface);border:1.5px solid var(--border2);
+               border-radius:8px;padding:9px 14px;color:var(--text);
+               font-family:'JetBrains Mono',monospace;font-size:12px;
+               outline:none;transition:border-color .15s"
+        onfocus="this.style.borderColor='var(--indigo)'"
+        onblur="this.style.borderColor='var(--border2)'"
+        onkeydown="if(event.key==='Enter')_freeTrialSaveAndGenerate()"/>
+    </div>
+    <div id="freeTrialKeyError" style="font-size:11.5px;color:#ef4444;margin-bottom:10px;display:none"></div>
+
+    <!-- CTA button -->
+    <button onclick="_freeTrialSaveAndGenerate()"
+      style="width:100%;padding:12px;border-radius:10px;border:none;
+             background:linear-gradient(135deg,var(--indigo),var(--violet));
+             color:#fff;font-size:14px;font-weight:700;cursor:pointer;
+             font-family:'Plus Jakarta Sans',sans-serif;
+             box-shadow:0 4px 16px rgba(91,95,239,.35);transition:all .2s;
+             margin-bottom:12px">
+      ⚡ Save Key &amp; Generate Now
+    </button>
+
+    <!-- LinkedIn share option -->
+    <div style="border-top:1px solid var(--border2);padding-top:12px;text-align:center">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px">
+        — or unlock 10 more free generations —
+      </div>
+      <button onclick="_freeTrialShareLinkedIn()"
+        style="padding:9px 20px;border-radius:9px;
+               border:1.5px solid rgba(10,102,194,.3);background:rgba(10,102,194,.06);
+               color:#0a66c2;font-size:13px;font-weight:700;cursor:pointer;
+               font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;width:100%"
+        onmouseover="this.style.background='rgba(10,102,194,.12)'"
+        onmouseout="this.style.background='rgba(10,102,194,.06)'">
+        📤 Share on LinkedIn → Get 10 free generations
+      </button>
+      <div style="font-size:10.5px;color:var(--text3);margin-top:6px;line-height:1.5">
+        Opens LinkedIn with a pre-written post. Unlock 10 more generations instantly after sharing.
+      </div>
+    </div>
+
+    <!-- Dismiss -->
+    <div style="text-align:center;margin-top:10px">
+      <a onclick="document.getElementById('freeTrialModal').style.display='none'"
+        style="font-size:11.5px;color:var(--text3);cursor:pointer;
+               text-decoration:none;transition:color .15s"
+        onmouseover="this.style.color='var(--text)'"
+        onmouseout="this.style.color='var(--text3)'">
+        I'll add a key later — remind me next time
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function _initFreeTrialModal() {
+
+  var FREE_LS   = 'shuddhi-free-uses';
+  var BONUS_LS  = 'shuddhi-bonus-uses';
+  var FREE_LIMIT = 3;
+
+  window.showFreeTrialModal = function() {
+    var modal = document.getElementById('freeTrialModal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window._freeTrialSaveAndGenerate = function() {
+    var provider = (document.getElementById('freeTrialProviderSelect') || {}).value || 'groq';
+    var key      = ((document.getElementById('freeTrialKeyInput') || {}).value || '').trim();
+    var errEl    = document.getElementById('freeTrialKeyError');
+
+    if (!key || key.length < 8) {
+      if (errEl) { errEl.textContent = '❌ Please paste a valid API key first'; errEl.style.display = 'block'; }
+      return;
+    }
+    if (errEl) errEl.style.display = 'none';
+
+    /* Save key via existing saveUserKey function */
+    if (typeof saveUserKey === 'function') {
+      saveUserKey(provider, key);
+    } else {
+      /* Fallback — write directly */
+      var LS_MAP = { claude: 'shuddhi-key-claude', gemini: 'shuddhi-key-gemini', groq: 'shuddhi-key-groq' };
+      try { localStorage.setItem(LS_MAP[provider] || LS_MAP.groq, key); } catch(e) {}
+    }
+
+    /* Switch to chosen provider */
+    if (typeof selectProvider === 'function') selectProvider(provider, true);
+
+    /* Update input field in Settings panel too */
+    var inputMap = { claude: 'userClaudeKey', gemini: 'userGeminiKey', groq: 'userGroqKey' };
+    var inputEl = document.getElementById(inputMap[provider]);
+    if (inputEl) inputEl.value = key;
+
+    /* Reset free counter — they now have own key */
+    try { localStorage.setItem(FREE_LS, '0'); } catch(e) {}
+
+    /* Close modal */
+    var modal = document.getElementById('freeTrialModal');
+    if (modal) modal.style.display = 'none';
+
+    /* Generate immediately */
+    if (typeof showToast === 'function')
+      showToast(provider.charAt(0).toUpperCase()+provider.slice(1) + ' key saved — generating now! ⚡', '✅');
+    setTimeout(function() {
+      if (typeof generate === 'function') generate();
+    }, 300);
+  };
+
+  window._freeTrialShareLinkedIn = function() {
+    var text = encodeURIComponent(
+      "Just discovered Shuddhi QA — an AI tool that generates 40-70 production-ready test cases in 60 seconds! 🧪⚡\n\n" +
+      "Built specifically for D365, Salesforce, SAP, Power BI testing. Push directly to Azure DevOps or Jira.\n\n" +
+      "And it's completely FREE! → https://shuddhiqacloud.pages.dev\n\n" +
+      "#QA #Testing #D365 #Salesforce #AzureDevOps #QualityAssurance #TestAutomation"
+    );
+    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' +
+      encodeURIComponent('https://shuddhiqacloud.pages.dev') + '&summary=' + text, '_blank');
+
+    /* Grant bonus generations after click */
+    try {
+      var current = parseInt(localStorage.getItem(FREE_LS) || '0', 10);
+      var bonus   = parseInt(localStorage.getItem(BONUS_LS) || '0', 10);
+      localStorage.setItem(FREE_LS,   String(Math.max(0, current - 10)));
+      localStorage.setItem(BONUS_LS,  String(bonus + 1));
+    } catch(e) {}
+
+    var modal = document.getElementById('freeTrialModal');
+    if (modal) modal.style.display = 'none';
+    if (typeof showToast === 'function')
+      showToast('Thanks for sharing! 10 free generations unlocked 🎉', '🎁');
+  };
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    var modal = document.getElementById('freeTrialModal');
+    if (e.key === 'Escape' && modal && modal.style.display !== 'none')
+      modal.style.display = 'none';
+  });
+
+})();
+</script>
+
+<script>
 /* ══════════════════════════════════════════════════════════════
-   v7.3 ADO SETTINGS — localStorage-based URL + PAT storage
+   v7.5 ADO SETTINGS — localStorage-based URL + PAT storage
    Replaces broken Vercel env-var approach
+   Fixes: CORS (B2), btoa (B1), _origSwitch timing (B3),
+          double init (B4), window. prefix (B5), PAT warn (B6)
 ══════════════════════════════════════════════════════════════ */
 (function _initADOSettings() {
   var LS_URL  = 'shuddhi-ado-org-url';
