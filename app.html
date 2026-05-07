@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v5.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v5.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5421,7 +5421,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v5.8</span>
+      <span class="sb-badge">v5.9</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -5829,12 +5829,13 @@ header::after { display: none !important; }
       <div style="border:1.5px solid var(--border2);border-radius:12px;overflow:hidden;margin-bottom:16px;">
         <div style="padding:11px 16px;background:var(--surface2);border-bottom:1px solid var(--border);
                     display:flex;align-items:center;gap:8px;cursor:pointer"
-             onclick="var _ukb=document.getElementById('userKeyBody');_ukb.style.display=_ukb.style.display==='flex'?'none':'flex'">
+             onclick="var _ukb=document.getElementById('userKeyBody'),_ch=document.getElementById('userKeyChevron');_ukb.style.display=_ukb.style.display==='flex'?'none':'flex';if(_ch)_ch.style.transform=_ukb.style.display==='flex'?'rotate(180deg)':'rotate(0deg)'">
           <span style="font-size:14px">🔑</span>
           <span style="font-size:13px;font-weight:700;color:var(--text)">Use Your Own API Key</span>
           <span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(99,102,241,.1);
                        color:var(--indigo);font-weight:600;margin-left:4px">optional</span>
           <span style="font-size:11px;color:var(--text3);margin-left:auto">Your key = your limits, no shared quota</span>
+          <span id="userKeyChevron" style="font-size:10px;color:var(--text3);margin-left:6px;transition:transform .2s">▼</span>
         </div>
         <div id="userKeyBody" style="display:none;padding:14px 16px;flex-direction:column;gap:10px">
           <div style="font-size:12px;color:var(--text3);line-height:1.5;padding:8px 10px;
@@ -5894,7 +5895,7 @@ header::after { display: none !important; }
 
       <!-- Active provider card — keys from Vercel, no manual input needed -->
       <div id="activeProviderCard" style="border:1.5px solid var(--border2);border-radius:12px;
-           overflow:hidden;margin-bottom:16px;transition:border-color .2s">
+           overflow:visible;margin-bottom:16px;transition:border-color .2s">
         <!-- Header -->
         <div style="padding:14px 16px;background:var(--surface2);border-bottom:1px solid var(--border);
                     display:flex;align-items:center;gap:12px">
@@ -6251,7 +6252,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v5.8</div>
+          <div class="settings-about-val">v5.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -13663,7 +13664,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v5.8';
+  if (ver)  ver.textContent  = 'v5.9';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
   // Try to run diagnostics if available
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14653,7 +14654,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v5.8';
+  if (version)  version.textContent  = 'v5.9';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15498,7 +15499,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v5.8</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v5.9</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
     <span style="color:rgba(255,255,255,.7)">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
