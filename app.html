@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v6.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5882,7 +5882,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v6.9</span>
+      <span class="sb-badge">v7.0</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6776,7 +6776,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v6.9</div>
+          <div class="settings-about-val">v7.0</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -10600,7 +10600,7 @@ STEP 5 — Check E2E section.
 
 Do NOT stop generating until ALL 6 steps pass.`;
 
-  const _verbosityBudget = ' CRITICAL OUTPUT RULES: (1) Section 0a: ONE line only — module name and scope. Section 0b: MAXIMUM 2 gaps listed, no prose. (2) Output the Test Summary table IMMEDIATELY after section 0b. (3) Then output TC tables — ONE row per step, no prose between TCs. (4) MINIMUM 40 TCs total with MINIMUM 10 steps each. Do NOT write paragraphs or explanations — only tables. TARGET: 50+ TCs.';
+  const _verbosityBudget = ' CRITICAL OUTPUT RULES: (1) Section 0a: ONE line only — module name and scope. Section 0b: MAXIMUM 2 gaps listed, no prose. (2) Output the Test Summary table IMMEDIATELY after section 0b. (3) TC TABLE FORMAT — STRICT: Each markdown table row = exactly ONE step. NEVER use \\n inside a table cell. NEVER pack multiple steps into one cell with \\n2. \\n3. separators. Each numbered step MUST be its own table row. (4) MINIMUM 40 TCs total with MINIMUM 10 steps each — 10 separate rows per TC. Do NOT write paragraphs or explanations — only tables. TARGET: 50+ TCs.';
 
   const formatInstructions = {
     full:        "Generate all 8 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
@@ -13676,7 +13676,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v6.9';
+  if (ver)  ver.textContent  = 'v7.0';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14032,32 +14032,74 @@ function inferPriority(title) {
 
 function parseStepsArr(raw) {
   if (!raw) return [];
+
+  // Step 1: Normalise literal \n escape sequences (\\n from markdown cell packing)
+  var normalised = raw
+    .replace(/\\n/g, '\n')           // literal \n → real newline
+    .replace(/\\t/g, ' ')            // literal \t → space
+    .trim();
+
   var arr = [];
-  if (/\d+\./.test(raw)) {
-    arr = raw.split(/;\s*(?=\d+\.)|\n\s*(?=\d+\.)/).map(function(s){return s.trim();}).filter(Boolean);
-    if (arr.length === 1)
-      arr = raw.split(/\s+(?=\d+\.)/).map(function(s){return s.trim();}).filter(Boolean);
+
+  // Step 2: Try numbered split (most common AI output pattern)
+  if (/\d+\./.test(normalised)) {
+    // Split on newline/semicolon immediately before a digit+period
+    arr = normalised
+      .split(/[;\n\r]+\s*(?=\d+\.)|(?<=\S)\s{2,}(?=\d+\.)/)
+      .map(function(s){ return s.trim(); })
+      .filter(Boolean);
+
+    // If still one chunk — try splitting on whitespace before digit+period
+    if (arr.length === 1) {
+      arr = normalised
+        .split(/\s+(?=\d+\.)/)
+        .map(function(s){ return s.trim(); })
+        .filter(Boolean);
+    }
+
+    // If still one chunk but multiple numbers detected — sentence split fallback
+    if (arr.length === 1 && (normalised.match(/\d+\./g)||[]).length > 1) {
+      arr = normalised
+        .split(/(?<=\S)\s+(?=\d+\.)/)
+        .map(function(s){ return s.trim(); })
+        .filter(Boolean);
+    }
   } else {
-    arr = raw.split(/;|\n/).map(function(s){return s.trim();}).filter(Boolean);
+    // No numbering — split on newline or semicolon
+    arr = normalised
+      .split(/[;\n\r]+/)
+      .map(function(s){ return s.trim(); })
+      .filter(Boolean);
   }
+
+  // Step 3: Sentence-split fallback if still single chunk
+  if (arr.length === 1 && normalised.length > 80) {
+    var sentSplit = normalised
+      .split(/\.\s+(?=[A-Z])/)
+      .map(function(s){ return s.trim(); })
+      .filter(function(s){ return s.length > 5; });
+    if (sentSplit.length > 1) arr = sentSplit;
+  }
+
   return arr;
 }
 window.parseStepsArr = parseStepsArr;
 
 function buildTGRow(tc) {
-  const raw = tc.stepsRaw || '';
+  // Normalise literal \n sequences from AI cell-packed output
+  const raw = (tc.stepsRaw || '').replace(/\\n/g, '\n').replace(/\\t/g, ' ');
 
   let stepsArr = [];
   if (/\d+\./.test(raw)) {
 
     stepsArr = raw
-      .split(/;\s*(?=\d+\.)|[\n\r]+\s*(?=\d+\.)/)
+      .split(/[;\n\r]+\s*(?=\d+\.)|(?<=\S)\s{2,}(?=\d+\.)/)
       .map(s => s.trim())
       .filter(Boolean);
 
     if (stepsArr.length === 1) {
       stepsArr = raw
-        .split(/\s{2,}(?=\d+\.)|\t(?=\d+\.)/)
+        .split(/\s+(?=\d+\.)/)
         .map(s => s.trim())
         .filter(Boolean);
     }
@@ -14516,7 +14558,7 @@ function renderTestGenView() {
     const tcTitle = rawTitle.replace(/^TC[-\s]?\d+(?:\.\d+)?\s*[-–—:.\s]+/i,'').trim() || rawTitle;
     const priInfo = inferPriority(tcTitle||rawTitle);
     const refined = classifyTCByTitle(tcTitle||rawTitle, currentType.type, currentType.cls);
-    tgAllTCs.push({id:tcId, title:tcTitle, stepsRaw:cells[1]||'', expected:cells[2]||'',
+    tgAllTCs.push({id:tcId, title:tcTitle, stepsRaw:(cells[1]||'').replace(/\\n/g,'\n').replace(/\\t/g,' '), expected:(cells[2]||'').replace(/\\n/g,'\n'),
       section:currentSection, type:refined.type, typeCls:refined.cls,
       priority:priInfo.pri, priCls:priInfo.cls});
   }
@@ -14649,7 +14691,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v6.9';
+  if (version)  version.textContent  = 'v7.0';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15437,7 +15479,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v6.9</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.0</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
