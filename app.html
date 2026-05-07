@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v6.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v6.2 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5391,6 +5391,285 @@ header::after { display: none !important; }
   .provider-pill > div { min-width: 0; overflow: hidden; flex: 1; }
   .pill-status { flex-shrink: 0; }
   .pill-icon { flex-shrink: 0; }
+
+  /* ══════════════════════════════════════════════════════════════
+     v6.2 MOBILE POLISH — comprehensive touch-friendly overrides
+  ══════════════════════════════════════════════════════════════ */
+
+  @media (max-width: 768px) {
+
+    /* ── Main wrap: full width, no left margin ── */
+    #mainWrap {
+      margin-left: 0 !important;
+    }
+
+    /* ── Header: compact, touch-friendly ── */
+    #mainWrap > header {
+      padding: 0 12px !important;
+      height: 56px !important;
+    }
+    .hdr-icon-btn {
+      width: 34px !important;
+      height: 34px !important;
+      font-size: 15px !important;
+    }
+    .hdr-cta-btn, #newSessionBtn {
+      height: 34px !important;
+      padding: 0 12px !important;
+      font-size: 12px !important;
+    }
+    .hdr-actions { gap: 6px !important; }
+
+    /* ── Main grid: single column, no side padding ── */
+    .main-grid {
+      margin: 12px 10px 80px !important;
+      gap: 12px !important;
+    }
+
+    /* ── Form: full width, generous touch targets ── */
+    .form-card {
+      padding: 14px 12px !important;
+      border-radius: 12px !important;
+    }
+    .field label {
+      font-size: 12px !important;
+      margin-bottom: 5px !important;
+    }
+    .field select,
+    .field textarea,
+    .field input[type="text"],
+    .field input[type="password"] {
+      font-size: 14px !important; /* prevents iOS zoom on focus */
+      min-height: 44px !important;
+      padding: 10px 12px !important;
+      border-radius: 8px !important;
+    }
+    textarea#flowDesc {
+      min-height: 100px !important;
+      font-size: 14px !important;
+    }
+
+    /* ── Platform grid: 2 cols on mobile ── */
+    #platformGrid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 6px !important;
+    }
+    .platform-card {
+      padding: 8px 4px !important;
+      font-size: 10.5px !important;
+    }
+
+    /* ── Generate + Reset buttons: full width, tall ── */
+    .form-actions-row {
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+    .gen-btn {
+      width: 100% !important;
+      height: 52px !important;
+      font-size: 15px !important;
+      border-radius: 12px !important;
+    }
+    .reset-btn {
+      width: 100% !important;
+      height: 44px !important;
+      font-size: 13px !important;
+    }
+
+    /* ── Cooldown card: compact ── */
+    #cooldownWrap {
+      padding: 10px 12px !important;
+    }
+
+    /* ── TC output panel ── */
+    .artifact-panel, .output-panel {
+      padding: 12px 10px !important;
+      border-radius: 12px !important;
+      overflow-x: hidden !important;
+    }
+
+    /* ── Artifact tabs: scrollable row ── */
+    .artifact-tabs-row, .atab-row {
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+    }
+    .artifact-tabs-row::-webkit-scrollbar { display: none !important; }
+
+    /* ── TC table: horizontal scroll ── */
+    .tg-table-wrap {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      border-radius: 0 0 10px 10px !important;
+    }
+    .tg-table {
+      min-width: 600px !important; /* force scroll rather than squish */
+      font-size: 12px !important;
+    }
+    .tg-table th, .tg-table td {
+      padding: 8px 10px !important;
+    }
+
+    /* ── TC action buttons: bigger touch targets ── */
+    .tg-act-btn {
+      width: 32px !important;
+      height: 32px !important;
+      font-size: 14px !important;
+    }
+
+    /* ── Toolbar buttons: wrap on mobile ── */
+    .output-toolbar, .artifact-toolbar {
+      flex-wrap: wrap !important;
+      gap: 6px !important;
+    }
+
+    /* ── Settings modal: full screen on mobile ── */
+    .settings-modal {
+      width: 100% !important;
+      max-width: 100% !important;
+      max-height: 100dvh !important;
+      border-radius: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      transform: none !important;
+      margin: 0 !important;
+    }
+
+    /* ── Settings tabs: scrollable ── */
+    .settings-tabs {
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none !important;
+      gap: 4px !important;
+    }
+    .settings-tabs::-webkit-scrollbar { display: none !important; }
+    .settings-tab {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      font-size: 11.5px !important;
+      padding: 8px 12px !important;
+    }
+
+    /* ── Provider pills: 1 column on very small screens ── */
+    #providerPills {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* ── User key inputs: full width ── */
+    #userKeyBody input[type="password"] {
+      font-size: 14px !important;
+    }
+
+    /* ── Welcome modal: full screen ── */
+    #welcomeModal {
+      width: 100% !important;
+      max-width: 100% !important;
+      max-height: 100dvh !important;
+      border-radius: 0 !important;
+      overflow-y: auto !important;
+      padding: 20px 16px 32px !important;
+    }
+    .w-provider-options {
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+    .w-provider-btn {
+      width: 100% !important;
+      min-height: 56px !important;
+    }
+
+    /* ── Footer: minimal on mobile ── */
+    #appFooter {
+      padding: 8px 12px !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      align-items: flex-start !important;
+    }
+    #appFooter .footer-right { display: none !important; }
+
+    /* ── Regen modal: full screen ── */
+    #tcRegenBox {
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: 0 !important;
+      padding: 20px 16px !important;
+    }
+
+    /* ── Toast: full width on mobile ── */
+    .toast {
+      left: 12px !important;
+      right: 12px !important;
+      bottom: 16px !important;
+      width: auto !important;
+    }
+
+    /* ── Meta bar: scrollable ── */
+    .meta-bar {
+      overflow-x: auto !important;
+      flex-wrap: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+      gap: 8px !important;
+      scrollbar-width: none !important;
+    }
+    .meta-bar::-webkit-scrollbar { display: none !important; }
+  }
+
+  /* ── 480px and below: extra tight ── */
+  @media (max-width: 480px) {
+    .main-grid { margin: 8px 8px 70px !important; }
+    .form-card { padding: 12px 10px !important; }
+    .gen-btn { height: 50px !important; font-size: 14px !important; }
+    #platformGrid { grid-template-columns: repeat(2, 1fr) !important; }
+    .tg-table { font-size: 11px !important; }
+  }
+
+  /* ── v6.2 Onboarding wizard ─────────────────────────────────── */
+  .w-step-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    background: var(--border2); color: var(--text3);
+    transition: all .25s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .w-step-dot.active {
+    background: linear-gradient(135deg, var(--indigo), var(--violet));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(91,95,239,.35);
+  }
+  .w-step-dot.done {
+    background: rgba(16,185,129,.15);
+    color: #059669;
+    border: 1.5px solid rgba(16,185,129,.3);
+  }
+  .w-plat-btn {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; padding: 14px 8px;
+    border: 1.5px solid var(--border2); border-radius: 12px;
+    background: var(--surface); cursor: pointer;
+    font-size: 12px; font-weight: 700; color: var(--text2);
+    transition: all .18s; text-align: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .w-plat-btn:hover {
+    border-color: var(--indigo);
+    background: rgba(91,95,239,.05);
+    color: var(--indigo);
+    transform: translateY(-1px);
+  }
+  .w-plat-btn.selected {
+    border-color: var(--indigo);
+    background: rgba(91,95,239,.08);
+    color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(91,95,239,.1);
+  }
+
+  @media (max-width: 768px) {
+    #tourBtn span { display: none !important; }
+    #tourBtn { padding: 0 10px !important; min-width: 38px; justify-content: center; }
+  }
 </style>
 <!-- ── Theme: apply saved preference immediately (prevents FOUC) ── -->
 <script>
@@ -5421,7 +5700,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v6.1</span>
+      <span class="sb-badge">v6.2</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -5536,6 +5815,22 @@ header::after { display: none !important; }
 
       <!-- Settings -->
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings">⚙️</button>
+
+      <!-- Tour button -->
+      <button id="tourBtn" onclick="startTour()" title="See how Shuddhi QA works"
+              aria-label="Take a quick tour of Shuddhi QA"
+              style="display:flex;align-items:center;gap:6px;
+                     padding:0 14px;height:38px;border-radius:10px;
+                     border:1.5px solid rgba(91,95,239,.25);
+                     background:rgba(91,95,239,.06);
+                     color:var(--indigo);font-size:12.5px;font-weight:700;
+                     cursor:pointer;white-space:nowrap;flex-shrink:0;
+                     font-family:'Plus Jakarta Sans',sans-serif;
+                     transition:all .18s"
+              onmouseover="this.style.background='rgba(91,95,239,.12)';this.style.borderColor='var(--indigo)'"
+              onmouseout="this.style.background='rgba(91,95,239,.06)';this.style.borderColor='rgba(91,95,239,.25)'">
+        🎯 <span>How Shuddhi QA Works</span>
+      </button>
 
       <!-- P2 — New Session: styled as CTA button matching New Requirement -->
       <button id="newSessionBtn" onclick="newSession()"
@@ -5687,73 +5982,106 @@ header::after { display: none !important; }
 
   <div id="welcomeOverlay" style="display:none" role="dialog" aria-modal="true" aria-label="Welcome to Shuddhi QA">
     <div id="welcomeModal">
-      <!-- Close button top-right -->
-      <button onclick="wDismiss(true)" aria-label="Close"
-        style="position:absolute;top:14px;right:16px;background:none;border:none;
-               font-size:18px;cursor:pointer;color:var(--text3);line-height:1;padding:4px 6px;
-               border-radius:6px;transition:background .15s"
-        onmouseover="this.style.background='var(--surface2)'"
-        onmouseout="this.style.background='none'">✕</button>
-      <div class="w-logo">🧪</div>
-      <div class="w-title">Welcome to Shuddhi QA</div>
-      <div class="w-sub">
-        Generate production-ready test cases from any requirement document in seconds.
-        Add one free API key to get started — takes 30 seconds.
+
+      <!-- Step indicator bar -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px">
+        <div class="w-step-dot active" id="wDot1">1</div>
+        <div style="height:2px;width:28px;background:var(--border2);border-radius:1px" id="wLine1"></div>
+        <div class="w-step-dot" id="wDot2">2</div>
+        <div style="height:2px;width:28px;background:var(--border2);border-radius:1px" id="wLine2"></div>
+        <div class="w-step-dot" id="wDot3">3</div>
       </div>
 
-      <div class="w-provider-options">
-        <!-- Gemini option -->
-        <button class="w-provider-btn selected" onclick="wSelectProvider('gemini')" id="wBtn-gemini">
-          <span class="w-provider-icon">✦</span>
-          <div class="w-provider-info">
-            <div class="w-provider-name">Gemini 2.5 Flash <span class="w-badge">Recommended</span></div>
-            <div class="w-provider-desc">Google · Free · 1M token context · Best for large documents</div>
-          </div>
-        </button>
-        <!-- Groq option -->
-        <button class="w-provider-btn" onclick="wSelectProvider('groq')" id="wBtn-groq">
-          <span class="w-provider-icon">⚡</span>
-          <div class="w-provider-info">
-            <div class="w-provider-name">Groq / Llama <span class="w-badge">Free</span></div>
-            <div class="w-provider-desc">Free · Fastest · Best for quick generations</div>
-          </div>
-        </button>
-        <!-- Claude option -->
-        <button class="w-provider-btn" onclick="wSelectProvider('claude')" id="wBtn-claude">
-          <span class="w-provider-icon">🤖</span>
-          <div class="w-provider-info">
-            <div class="w-provider-name">Claude (Anthropic)</div>
-            <div class="w-provider-desc">Best quality · Paid API required</div>
-          </div>
-        </button>
+      <!-- STEP 1: Platform pick -->
+      <div id="wStep1">
+        <button onclick="wDismiss(true)" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);line-height:1;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='none'">✕</button>
+        <div class="w-logo">🧪</div>
+        <div class="w-title">Welcome to Shuddhi QA</div>
+        <div class="w-sub">Generate 40-70 production-ready test cases from any requirement in seconds. Set up in 3 steps.</div>
+        <div style="margin:16px 0 8px;font-size:12px;font-weight:700;color:var(--text2);text-align:left">Step 1 of 3 — What are you testing?</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
+          <button class="w-plat-btn selected" id="wPlat-d365" onclick="wPickPlatform('D365 F&amp;O','d365')"><span style="font-size:20px">🟦</span><span>Microsoft D365 F&amp;O</span></button>
+          <button class="w-plat-btn" id="wPlat-sf" onclick="wPickPlatform('Salesforce','sf')"><span style="font-size:20px">☁️</span><span>Salesforce</span></button>
+          <button class="w-plat-btn" id="wPlat-web" onclick="wPickPlatform('Web / Mobile App','web')"><span style="font-size:20px">🌐</span><span>Web / Mobile App</span></button>
+          <button class="w-plat-btn" id="wPlat-other" onclick="wPickPlatform('Other','other')"><span style="font-size:20px">⚙️</span><span>Other / Custom</span></button>
+        </div>
+        <button class="w-start-btn" onclick="wGoStep(2)" style="margin-top:4px">Next: Choose AI Provider →</button>
+        <div class="w-skip"><a onclick="wDismiss(true)">Already set up — skip this</a></div>
       </div>
 
-      <!-- Key input row — shown per provider -->
-      <div class="w-key-row visible" id="wKeyRow">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <label id="wKeyLabel">Gemini API Key</label>
-          <a id="wKeyLink" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">
-            → Get free key ↗
-          </a>
+      <!-- STEP 2: Provider + Key -->
+      <div id="wStep2" style="display:none">
+        <button onclick="wDismiss(true)" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);line-height:1;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='none'">✕</button>
+        <div class="w-logo">🤖</div>
+        <div class="w-title" style="font-size:20px">Connect Your AI</div>
+        <div class="w-sub">Add one free API key — takes 30 seconds. Stored in your browser only.</div>
+        <div style="margin:14px 0 8px;font-size:12px;font-weight:700;color:var(--text2);text-align:left">Step 2 of 3 — Pick an AI provider</div>
+        <div class="w-provider-options">
+          <button class="w-provider-btn selected" onclick="wSelectProvider('gemini')" id="wBtn-gemini">
+            <span class="w-provider-icon">✶</span>
+            <div class="w-provider-info">
+              <div class="w-provider-name">Gemini 2.5 Flash <span class="w-badge">Recommended</span></div>
+              <div class="w-provider-desc">Google · Free · 1M token context · Best for large documents</div>
+            </div>
+          </button>
+          <button class="w-provider-btn" onclick="wSelectProvider('groq')" id="wBtn-groq">
+            <span class="w-provider-icon">⚡</span>
+            <div class="w-provider-info">
+              <div class="w-provider-name">Groq / Llama <span class="w-badge">Free</span></div>
+              <div class="w-provider-desc">Free · Fastest · Best for quick generations</div>
+            </div>
+          </button>
+          <button class="w-provider-btn" onclick="wSelectProvider('claude')" id="wBtn-claude">
+            <span class="w-provider-icon">🤖</span>
+            <div class="w-provider-info">
+              <div class="w-provider-name">Claude (Anthropic)</div>
+              <div class="w-provider-desc">Best quality · Paid API required</div>
+            </div>
+          </button>
         </div>
-        <div class="w-key-input-row">
-          <input type="password" id="wKeyInput" class="w-key-input"
-            placeholder="AIzaSy…" autocomplete="off" spellcheck="false"
-            oninput="wKeyInputChanged()" />
-          <button class="w-key-save-btn" onclick="wSaveKey()">Save</button>
-          <span class="w-saved-badge" id="wSavedBadge">✓ Saved</span>
+        <div class="w-key-row visible" id="wKeyRow">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <label id="wKeyLabel">Gemini API Key</label>
+            <a id="wKeyLink" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">→ Get free key ↗</a>
+          </div>
+          <div class="w-key-input-row">
+            <input type="password" id="wKeyInput" class="w-key-input" placeholder="AIzaSy…" autocomplete="off" spellcheck="false" oninput="wKeyInputChanged()" />
+            <button class="w-key-save-btn" onclick="wSaveKey()">Save</button>
+            <span class="w-saved-badge" id="wSavedBadge">✓ Saved</span>
+          </div>
+          <div class="w-key-hint" id="wKeyHint">Free at <strong>aistudio.google.com</strong> — sign in with Google → Create API Key → copy &amp; paste above.</div>
         </div>
-        <div class="w-key-hint" id="wKeyHint">
-          Free at <strong>aistudio.google.com</strong> — sign in with Google → Create API Key → copy &amp; paste above.
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button onclick="wGoStep(1)" style="flex:1;padding:11px;border-radius:10px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer">← Back</button>
+          <button class="w-start-btn" id="wStartBtn" onclick="wGoStep3()" style="flex:2;margin-top:0">Next: Quick Start →</button>
         </div>
+        <div class="w-skip"><a onclick="wDismiss(true)">Already have keys — skip</a></div>
       </div>
 
-      <button class="w-start-btn" id="wStartBtn" onclick="wStartGenerating()">
-        Start Generating Test Cases →
-      </button>
-      <div class="w-skip">
-        <a onclick="wDismiss(true)">I already have keys configured — skip setup</a>
+      <!-- STEP 3: Quick Start Guide -->
+      <div id="wStep3" style="display:none">
+        <button onclick="wDismiss(true)" aria-label="Close" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);line-height:1;padding:4px 6px;border-radius:6px;transition:background .15s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='none'">✕</button>
+        <div class="w-logo">🚀</div>
+        <div class="w-title" style="font-size:20px">You’re all set!</div>
+        <div class="w-sub">Here’s how to generate your first test cases in 3 simple steps.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;text-align:left">
+          <div style="display:flex;gap:12px;padding:12px 14px;border-radius:10px;background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.12)">
+            <span style="font-size:22px;flex-shrink:0">📋</span>
+            <div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">Paste your requirement</div><div style="font-size:12px;color:var(--text3)">Drop an FRD, user story, or description in the text box. Or upload a PDF/image.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.15)">
+            <span style="font-size:22px;flex-shrink:0">⚡</span>
+            <div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">Click Generate Test Cases</div><div style="font-size:12px;color:var(--text3)">Get 40-70 test cases with full steps in under 60 seconds. Right-click any TC to regenerate.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15)">
+            <span style="font-size:22px;flex-shrink:0">🚀</span>
+            <div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">Push to ADO or Jira</div><div style="font-size:12px;color:var(--text3)">Export to Excel, push to Azure DevOps, or download as PDF with one click.</div></div>
+          </div>
+        </div>
+        <button class="w-start-btn" onclick="wStartGenerating()" style="background:linear-gradient(135deg,#10B981,#059669)">🎉 Start Generating Test Cases</button>
+        <div class="w-skip"><a onclick="wDismiss(true)">Dismiss</a></div>
       </div>
+
     </div>
   </div>
 
@@ -6258,7 +6586,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v6.1</div>
+          <div class="settings-about-val">v6.2</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6523,23 +6851,28 @@ header::after { display: none !important; }
           <!-- Output Language Selector -->
         <div class="field">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
-            <span>Output Language</span>
-            <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">Test cases will be generated in this language</span>
+            <span>🌍 Output Language</span>
+            <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">Full translation — Tier 1 languages</span>
           </label>
-          <select id="outputLanguage" title="Scenario titles translated; technical steps stay in English for accuracy" style="width:100%;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer">
-            <option value="English">🇬🇧 English (default)</option>
-            <option value="Telugu">🇮🇳 Telugu (తెలుగు)</option>
-            <option value="Hindi">🇮🇳 Hindi (हिंदी)</option>
-            <option value="Kannada">🇮🇳 Kannada (ಕನ್ನಡ)</option>
-            <option value="Tamil">🇮🇳 Tamil (தமிழ்)</option>
-            <option value="Marathi">🇮🇳 Marathi (मराठी)</option>
-            <option value="Arabic">🇸🇦 Arabic (العربية)</option>
-            <option value="French">🇫🇷 French (Français)</option>
-            <option value="German">🇩🇪 German (Deutsch)</option>
-            <option value="Spanish">🇪🇸 Spanish (Español)</option>
-            <option value="Japanese">🇯🇵 Japanese (日本語)</option>
-            <option value="Chinese">🇨🇳 Chinese (中文)</option>
+          <select id="outputLanguage"
+            title="Tier 1: complete professional QA translation. Tier 2: coming soon."
+            style="width:100%;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer"
+            onchange="(function(v){var h=document.getElementById('langHint');if(h)h.textContent=v==='English'?'':'✅ Full QA translation — all steps, titles and sections in '+v;})(this.value)">
+            <optgroup label="✅ Tier 1 — Full Support">
+              <option value="English">🇬🇧 English (default)</option>
+              <option value="Deutsch">🇩🇪 Deutsch</option>
+              <option value="Español">🇪🇸 Español</option>
+              <option value="Français">🇫🇷 Français</option>
+              <option value="Português (BR)">🇧🇷 Português (BR)</option>
+            </optgroup>
+            <optgroup label="🔜 Tier 2 — Coming Soon">
+              <option value="" disabled>🇯🇵 日本語</option>
+              <option value="" disabled>🇳🇱 Nederlands</option>
+              <option value="" disabled>🇮🇹 Italiano</option>
+              <option value="" disabled>🇵🇱 Polski</option>
+            </optgroup>
           </select>
+          <div id="langHint" style="font-size:11px;color:#059669;margin-top:4px;min-height:16px;font-weight:600"></div>
         </div>
         </div>
 
@@ -6842,6 +7175,16 @@ header::after { display: none !important; }
             <div class="output-empty-step">2️⃣ Describe Requirement</div>
             <div class="output-empty-step">3️⃣ Click Generate ⚡</div>
           </div>
+          <button onclick="startTour()"
+            style="margin-top:18px;padding:10px 24px;border-radius:10px;border:none;
+                   background:linear-gradient(135deg,var(--indigo),var(--violet));
+                   color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+                   font-family:'Plus Jakarta Sans',sans-serif;
+                   box-shadow:0 4px 14px rgba(91,95,239,.3);transition:all .2s"
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(91,95,239,.45)'"
+            onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(91,95,239,.3)'">
+            🎯 Take a 60-second Tour
+          </button>
         </div>
       </div>
 
@@ -8171,7 +8514,7 @@ function resetForm() {
   document.getElementById('roles').value = '';
   document.getElementById('integrations').value = '';
   document.getElementById('outputFormat').value  = 'full';
-  if (document.getElementById('outputLanguage')) document.getElementById('outputLanguage').value = 'English';
+  if (document.getElementById('outputLanguage')) { document.getElementById('outputLanguage').value = 'English'; var h=document.getElementById('langHint'); if(h) h.textContent=''; }
   // Close advanced fields on reset
   const adv = document.getElementById('advancedFields');
   const advT = document.getElementById('advancedToggle');
@@ -9483,16 +9826,9 @@ Minimum 10 step rows per test case. Do not deviate from this schema for any reas
 
 You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
 
-CRITICAL LANGUAGE RULE (HYBRID):
-- If outputLang is 'English (default)' or 'English': generate everything in English.
-- If outputLang is any other language (Telugu, Hindi, Kannada, etc.):
-  * Section headings (## 0a, ## 1., ## 2., etc.): translate to ${outputLang}
-  * Test case TITLE / scenario name: translate to ${outputLang}
-  * Step ACTION column: keep in English (technical accuracy)
-  * Step EXPECTED RESULT column: keep in English (technical accuracy)
-  * Assigned To, State columns: keep as English defaults
-  * Analysis text in 0a/0b sections: translate to ${outputLang}
-  This ensures QA engineers can follow technical steps while understanding scenario context in their language.
+CRITICAL LANGUAGE RULE:
+- If outputLang is 'English': generate everything in English (default behaviour).
+- If outputLang is 'Deutsch', 'Español', 'Français', or 'Português (BR)': translate ALL output fully into that language — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -9785,16 +10121,9 @@ PLATFORM-SPECIFIC EXPERTISE:
 - ServiceNow: Use table names (incident, change_request, cmdb_ci), SLA stages, Flow Designer steps.
 - Power BI: Map every report column to its D365/ERP source table and field name. Include cross-system verification steps.
 
-CRITICAL LANGUAGE RULE (HYBRID):
-- If outputLang is 'English (default)' or 'English': generate everything in English.
-- If outputLang is any other language (Telugu, Hindi, Kannada, etc.):
-  * Section headings (## 0a, ## 1., ## 2., etc.): translate to ${outputLang}
-  * Test case TITLE / scenario name: translate to ${outputLang}
-  * Step ACTION column: keep in English (technical accuracy)
-  * Step EXPECTED RESULT column: keep in English (technical accuracy)
-  * Assigned To, State columns: keep as English defaults
-  * Analysis text in 0a/0b sections: translate to ${outputLang}
-  This ensures QA engineers can follow technical steps while understanding scenario context in their language.
+CRITICAL LANGUAGE RULE:
+- If outputLang is 'English': generate everything in English (default behaviour).
+- If outputLang is 'Deutsch', 'Español', 'Français', or 'Português (BR)': translate ALL output fully into that language — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ═══════════════════════════════════════
 STEP WRITING RULES — MODELLED ON REAL PRODUCTION TEST CASES
@@ -12164,6 +12493,16 @@ function wStartGenerating() {
   // Set as active provider
   if (typeof selectProvider === 'function') selectProvider(_wSelectedProvider, true);
 
+  // Apply platform selection from step 1
+  if (typeof _wSelectedPlatform !== 'undefined' && _wSelectedPlatform) {
+    const platCards = document.querySelectorAll('.platform-card');
+    platCards.forEach(function(card) {
+      if ((card.dataset.platform || '').toLowerCase().includes(_wSelectedPlatform.toLowerCase().split(' ')[0])) {
+        card.click();
+      }
+    });
+  }
+
   // Sync the "Use Your Own Key" settings inputs
   const inputMap = { gemini: 'userGeminiKey', groq: 'userGroqKey', claude: 'userClaudeKey' };
   const settingsInputId = inputMap[_wSelectedProvider];
@@ -12182,6 +12521,41 @@ function wStartGenerating() {
 
   // Fill sample after modal closes if form is still blank
   setTimeout(() => _fillSampleIfBlank(), 400);
+}
+
+
+// ── 3-step onboarding wizard functions ─────────────────────────
+var _wSelectedPlatform = 'D365 F&O';
+
+function wGoStep(n) {
+  [1,2,3].forEach(function(i) {
+    var s = document.getElementById('wStep'+i);
+    if (s) s.style.display = i===n ? 'block' : 'none';
+    var d = document.getElementById('wDot'+i);
+    if (d) {
+      d.className = 'w-step-dot' + (i < n ? ' done' : i===n ? ' active' : '');
+      if (i < n) d.textContent = '✓';
+      else d.textContent = String(i);
+    }
+    var l = document.getElementById('wLine'+i);
+    if (l && i < 3) l.style.background = i < n ? 'rgba(16,185,129,.4)' : 'var(--border2)';
+  });
+}
+
+function wGoStep3() {
+  // Save key if entered
+  var input = document.getElementById('wKeyInput');
+  var val   = (input?.value || '').trim();
+  var meta  = (typeof _W_PROVIDER_META !== 'undefined') && _W_PROVIDER_META[_wSelectedProvider];
+  if (meta && val) localStorage.setItem(meta.lsKey, val);
+  wGoStep(3);
+}
+
+function wPickPlatform(name, id) {
+  _wSelectedPlatform = name;
+  document.querySelectorAll('.w-plat-btn').forEach(function(b) { b.classList.remove('selected'); });
+  var btn = document.getElementById('wPlat-' + id);
+  if (btn) btn.classList.add('selected');
 }
 
 function wDismiss(markDone) {
@@ -13666,7 +14040,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v6.1';
+  if (ver)  ver.textContent  = 'v6.2';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
   // Try to run diagnostics if available
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14656,7 +15030,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v6.1';
+  if (version)  version.textContent  = 'v6.2';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15501,7 +15875,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v6.1</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v6.2</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
     <span style="color:rgba(255,255,255,.7)">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
@@ -16732,6 +17106,255 @@ window.copyShareLink = function() {
       _setRegenLoading(false);
     }
   };
+
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════════
+     INTERACTIVE TOUR OVERLAY — v6.2
+     4-step spotlight tour with animated ring
+════════════════════════════════════════════════════════════════ -->
+
+<!-- Tour overlay HTML -->
+<div id="tourOverlay" style="display:none;position:fixed;inset:0;z-index:300000;pointer-events:none"></div>
+
+<div id="tourCard" style="display:none;position:fixed;z-index:300001;
+  background:var(--surface);border:1.5px solid rgba(91,95,239,.25);
+  border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,.35);
+  padding:20px 22px;width:min(340px,90vw);pointer-events:all">
+
+  <!-- Header row -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <!-- Step dots -->
+    <div style="display:flex;gap:6px" id="tourDots"></div>
+    <!-- Close -->
+    <button onclick="endTour()" aria-label="Close tour"
+      style="background:none;border:none;font-size:16px;cursor:pointer;
+             color:var(--text3);padding:2px 6px;border-radius:6px;
+             transition:background .15s;line-height:1"
+      onmouseover="this.style.background='var(--surface2)'"
+      onmouseout="this.style.background='none'">✕ Skip</button>
+  </div>
+
+  <!-- Content -->
+  <div id="tourEmoji" style="font-size:30px;margin-bottom:8px"></div>
+  <div id="tourTitle" style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;letter-spacing:-.01em"></div>
+  <div id="tourDesc" style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px"></div>
+
+  <!-- Tip badge -->
+  <div id="tourTip" style="font-size:11.5px;color:var(--indigo);background:rgba(91,95,239,.07);
+       border:1px solid rgba(91,95,239,.15);border-radius:8px;padding:7px 12px;
+       margin-bottom:14px;display:none;line-height:1.5"></div>
+
+  <!-- Actions -->
+  <div style="display:flex;gap:8px;align-items:center">
+    <button id="tourPrevBtn" onclick="tourPrev()"
+      style="padding:8px 18px;border-radius:9px;border:1.5px solid var(--border2);
+             background:var(--surface);color:var(--text2);font-size:13px;font-weight:600;
+             cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;display:none">
+      ← Back
+    </button>
+    <button id="tourNextBtn" onclick="tourNext()"
+      style="flex:1;padding:10px 18px;border-radius:9px;border:none;
+             background:linear-gradient(135deg,var(--indigo),var(--violet));
+             color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+             font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;
+             box-shadow:0 4px 14px rgba(91,95,239,.3)">
+    </button>
+  </div>
+
+  <!-- Step counter -->
+  <div id="tourCounter" style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px;
+       font-family:'JetBrains Mono',monospace"></div>
+</div>
+
+<!-- Spotlight ring -->
+<div id="tourRing" style="display:none;position:fixed;z-index:299999;
+  border:3px solid rgba(91,95,239,.8);border-radius:12px;
+  box-shadow:0 0 0 4000px rgba(0,0,0,.45),0 0 0 6px rgba(91,95,239,.2);
+  pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1)"></div>
+
+<script>
+(function _initTour() {
+
+  var STEPS = [
+    {
+      targetId:   'flowDesc',
+      emoji:      '\U0001f4cb',
+      title:      'Paste Your Requirement',
+      desc:       'Drop any FRD, user story, acceptance criteria, or plain text. Shuddhi QA understands natural language — no special format needed.',
+      tip:        '\U0001f4a1 Pro tip: Upload a PDF or paste a screenshot instead — vision input is fully supported.',
+      position:   'below'
+    },
+    {
+      targetId:   'platformGrid',
+      emoji:      '\U0001f3af',
+      title:      'Pick Your Platform',
+      desc:       'Select the enterprise platform you are testing — D365, Salesforce, SAP, Power BI, or Web/Mobile. This tailors every test case with real navigation paths and field names.',
+      tip:        '\U0001f4a1 Pro tip: Shuddhi QA auto-detects the platform from your pasted requirement.',
+      position:   'below'
+    },
+    {
+      targetId:   'genBtn',
+      emoji:      '\u26a1',
+      title:      'Generate Test Cases',
+      desc:       'Click to generate 40-70 production-ready test cases with full numbered steps, expected results, and priority ratings — in under 60 seconds.',
+      tip:        '\U0001f4a1 Pro tip: Right-click any test case row to regenerate just that one TC without re-running everything.',
+      position:   'above'
+    },
+    {
+      targetId:   'tgArtifactPanel',
+      emoji:      '\U0001f680',
+      title:      'Export & Push',
+      desc:       'Your test cases are ready. Use the toolbar to push directly to Azure DevOps or Jira, export to Excel, download as PDF, or copy as Markdown.',
+      tip:        '\U0001f4a1 Pro tip: Use the "More" button for Markdown and print options.',
+      position:   'above',
+      fallbackId: 'outputContent'
+    }
+  ];
+
+  var _step = 0;
+  var _ring = null;
+  var _card = null;
+
+  function _getEl(step) {
+    var el = document.getElementById(STEPS[step].targetId);
+    if (!el && STEPS[step].fallbackId) el = document.getElementById(STEPS[step].fallbackId);
+    return el;
+  }
+
+  function _positionRing(el) {
+    if (!el || !_ring) return;
+    var r = el.getBoundingClientRect();
+    var pad = 8;
+    _ring.style.left   = (r.left - pad) + 'px';
+    _ring.style.top    = (r.top  - pad) + 'px';
+    _ring.style.width  = (r.width  + pad*2) + 'px';
+    _ring.style.height = (r.height + pad*2) + 'px';
+    _ring.style.borderRadius = '12px';
+  }
+
+  function _positionCard(el, position) {
+    if (!_card) return;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var cw = _card.offsetWidth || 340;
+    var ch = _card.offsetHeight || 250;
+
+    var r = el ? el.getBoundingClientRect() : { left:vw/2-cw/2, top:vh/2-ch/2, bottom:vh/2+ch/2, right:vw/2+cw/2, width:0, height:0 };
+    var pad = 18;
+    var left, top;
+
+    if (position === 'below') {
+      top  = Math.min(r.bottom + pad, vh - ch - 10);
+      left = Math.max(10, Math.min(r.left, vw - cw - 10));
+    } else {
+      top  = Math.max(10, r.top - ch - pad);
+      left = Math.max(10, Math.min(r.left, vw - cw - 10));
+    }
+    // Clamp
+    if (top + ch > vh - 10) top = vh - ch - 10;
+    if (left + cw > vw - 10) left = vw - cw - 10;
+
+    _card.style.left = left + 'px';
+    _card.style.top  = top  + 'px';
+  }
+
+  function _renderStep() {
+    var s    = STEPS[_step];
+    var el   = _getEl(_step);
+    var card = document.getElementById('tourCard');
+    var ring = document.getElementById('tourRing');
+    _ring = ring; _card = card;
+
+    // Update dots
+    var dots = document.getElementById('tourDots');
+    dots.innerHTML = '';
+    STEPS.forEach(function(_, i) {
+      var d = document.createElement('div');
+      d.style.cssText = 'width:8px;height:8px;border-radius:50%;transition:all .2s;background:' +
+        (i < _step ? 'rgba(16,185,129,.6)' : i===_step ? 'var(--indigo)' : 'var(--border2)');
+      dots.appendChild(d);
+    });
+
+    // Update content
+    document.getElementById('tourEmoji').textContent = s.emoji;
+    document.getElementById('tourTitle').textContent = s.title;
+    document.getElementById('tourDesc').textContent  = s.desc;
+    var tipEl = document.getElementById('tourTip');
+    if (s.tip) { tipEl.textContent = s.tip; tipEl.style.display = 'block'; }
+    else        { tipEl.style.display = 'none'; }
+
+    // Buttons
+    var prev = document.getElementById('tourPrevBtn');
+    var next = document.getElementById('tourNextBtn');
+    prev.style.display = _step > 0 ? 'block' : 'none';
+    var isLast = _step === STEPS.length - 1;
+    next.textContent = isLast ? '\U0001f389 Done!' : 'Next \u2192';
+    next.style.background = isLast
+      ? 'linear-gradient(135deg,#10B981,#059669)'
+      : 'linear-gradient(135deg,var(--indigo),var(--violet))';
+
+    document.getElementById('tourCounter').textContent = 'Step ' + (_step+1) + ' of ' + STEPS.length;
+
+    // Scroll target into view
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+    // Position ring + card after brief delay for scroll
+    setTimeout(function() {
+      if (el) {
+        ring.style.display = 'block';
+        _positionRing(el);
+      } else {
+        ring.style.display = 'none';
+      }
+      card.style.display = 'block';
+      _positionCard(el, s.position);
+    }, 200);
+  }
+
+  window.startTour = function() {
+    _step = 0;
+    document.getElementById('tourOverlay').style.display = 'block';
+    _renderStep();
+  };
+
+  window.tourNext = function() {
+    if (_step >= STEPS.length - 1) { endTour(); return; }
+    _step++;
+    _renderStep();
+  };
+
+  window.tourPrev = function() {
+    if (_step <= 0) return;
+    _step--;
+    _renderStep();
+  };
+
+  window.endTour = function() {
+    document.getElementById('tourOverlay').style.display = 'none';
+    document.getElementById('tourCard').style.display    = 'none';
+    document.getElementById('tourRing').style.display    = 'none';
+    localStorage.setItem('shuddhi-tour-done', '1');
+  };
+
+  // Reposition on resize
+  window.addEventListener('resize', function() {
+    if (document.getElementById('tourCard').style.display !== 'none') {
+      var s  = STEPS[_step];
+      var el = _getEl(_step);
+      if (el) _positionRing(el);
+      _positionCard(el, s.position);
+    }
+  });
+
+  // Keyboard nav
+  document.addEventListener('keydown', function(e) {
+    if (document.getElementById('tourCard').style.display === 'none') return;
+    if (e.key === 'ArrowRight' || e.key === 'Enter') tourNext();
+    if (e.key === 'ArrowLeft')                        tourPrev();
+    if (e.key === 'Escape')                            endTour();
+  });
 
 })();
 </script>
