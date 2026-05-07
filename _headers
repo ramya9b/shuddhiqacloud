@@ -1,0 +1,40 @@
+# Cloudflare Pages _headers — v6.2 performance
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+# ── HTML: short cache, must-revalidate (app updates frequently)
+/app
+  Cache-Control: public, max-age=300, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# ── HTML fallback
+/app.html
+  Cache-Control: public, max-age=300, must-revalidate
+
+# ── Service worker: never cache (must always be fresh)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+# ── Manifest: short cache
+/manifest.json
+  Cache-Control: public, max-age=3600
+  Content-Type: application/manifest+json
+
+# ── Icons: long cache (content never changes)
+/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# ── API routes: no cache (live data)
+/api/*
+  Cache-Control: no-store
+  Access-Control-Allow-Origin: *
+
+/functions/api/*
+  Cache-Control: no-store
+
+# ── Security headers for all routes
+/*
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
