@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v6.6 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v6.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5871,7 +5871,7 @@ header::after { display: none !important; }
       <div class="sb-name">Shuddhi QA</div>
       <div class="sb-sub">AI Test Intelligence</div>
     </div>
-    <button class="sb-collapse-btn" id="sbCollapseBtn" onclick="toggleSidebar()" title="Collapse sidebar">◀</button>
+    <button class="sb-collapse-btn" id="sbCollapseBtn" onclick="toggleSidebar()" title="Collapse sidebar" data-tip="Collapse sidebar for more workspace">◀</button>
   </div>
 
   <nav class="sb-nav">
@@ -5882,7 +5882,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v6.6</span>
+      <span class="sb-badge">v6.7</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -5986,20 +5986,20 @@ header::after { display: none !important; }
       </div>
 
       <!-- Theme toggle -->
-      <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle theme"
+      <button id="themeToggleBtn" onclick="toggleTheme()" title="Toggle theme" data-tip="Switch between light and dark theme · Current theme shown by icon"
         class="hdr-icon-btn">🌙</button>
 
       <!-- Notification bell -->
-      <button class="hdr-icon-btn" title="Notifications" style="position:relative">
+      <button class="hdr-icon-btn" title="Notifications" data-tip="Notifications and alerts" style="position:relative">
         🔔
         <span style="position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--error);border:1.5px solid var(--surface)"></span>
       </button>
 
       <!-- Settings -->
-      <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings">⚙️</button>
+      <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" title="Settings" aria-label="Settings" data-tip="Configure AI provider, ADO/Jira integration and usage tracking">⚙️</button>
 
       <!-- Tour button -->
-      <button id="tourBtn" onclick="startTour()" title="See how Shuddhi QA works"
+      <button id="tourBtn" data-tip="Take a 60-second interactive tour of Shuddhi QA" onclick="startTour()" title="See how Shuddhi QA works"
               aria-label="Take a quick tour of Shuddhi QA"
               style="display:flex;align-items:center;gap:6px;
                      padding:0 14px;height:38px;border-radius:10px;
@@ -6015,8 +6015,8 @@ header::after { display: none !important; }
       </button>
 
       <!-- P2 — New Session: styled as CTA button matching New Requirement -->
-      <button id="newSessionBtn" onclick="newSession()"
-              aria-label="Clear conversation history (start fresh)"
+      <button id="newSessionBtn" onclick="newSession()" data-tip="Clear conversation history — generated TCs remain visible"
+              aria-label="Clear conversation history (start fresh)" data-tip="Clears AI conversation history — your generated test cases stay visible"
               style="display:none;align-items:center;gap:6px;
                      background:linear-gradient(135deg,#0f766e,#0891b2);color:#fff;border:none;
                      border-radius:10px;padding:0 18px;height:38px;
@@ -6028,7 +6028,7 @@ header::after { display: none !important; }
       </button>
 
       <!-- New Requirement CTA -->
-      <button class="hdr-cta-btn" onclick="resetForm()">
+      <button class="hdr-cta-btn" onclick="resetForm()" data-tip="Reset the form to start a new requirement from scratch">
         <span style="font-size:15px;font-weight:300">+</span> New Requirement
       </button>
     </div>
@@ -6306,7 +6306,7 @@ header::after { display: none !important; }
 
       <!-- Provider selector pills -->
       <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
-        <button class="provider-pill" id="pill-claude"   data-provider="claude"
+        <button class="provider-pill" id="pill-claude"   data-provider="claude"   data-tip="Claude Sonnet — best output quality, paid API required"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
           <span class="pill-icon">🤖</span>
           <div>
@@ -6315,7 +6315,7 @@ header::after { display: none !important; }
           </div>
           <span class="pill-status" id="pill-status-claude">—</span>
         </button>
-        <button class="provider-pill" id="pill-gemini"  data-provider="gemini"
+        <button class="provider-pill" id="pill-gemini"  data-provider="gemini"   data-tip="Gemini 2.5 Flash — free tier, 1M token context, best for large documents"
           data-key="GEMINI_API_KEY" data-url="https://aistudio.google.com">
           <span class="pill-icon">✦</span>
           <div>
@@ -6324,7 +6324,7 @@ header::after { display: none !important; }
           </div>
           <span class="pill-status" id="pill-status-gemini">—</span>
         </button>
-        <button class="provider-pill" id="pill-groq"    data-provider="groq"
+        <button class="provider-pill" id="pill-groq"    data-provider="groq"      data-tip="Groq Llama — free tier, fastest, best for quick generations"
           data-key="GROQ_API_KEY" data-url="https://console.groq.com">
           <span class="pill-icon">⚡</span>
           <div>
@@ -6402,7 +6402,7 @@ header::after { display: none !important; }
         </div>
 
         <!-- Clear all -->
-        <button onclick="clearAllUserKeys()"
+        <button onclick="clearAllUserKeys()" data-tip="Remove all personal API keys from browser storage"
           style="align-self:flex-start;padding:5px 14px;border-radius:7px;border:1px solid var(--border2);
                  background:var(--surface2);color:var(--text3);font-size:11px;cursor:pointer;margin-top:2px">
           Clear all saved keys
@@ -6444,14 +6444,14 @@ header::after { display: none !important; }
           </div>
           <!-- Action row -->
           <div style="display:flex;gap:8px">
-            <button id="claudeTestBtn"
+            <button id="claudeTestBtn" data-tip="Test your API key connection before generating" data-tip="Verify your API key works before generating test cases"
               style="flex:1;padding:10px;border-radius:9px;background:var(--surface2);
                      border:1.5px solid var(--border2);color:var(--text2);font-size:13px;
                      font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
                      transition:all .14s">
               🔌 Test Connection
             </button>
-            <button id="saveProviderBtn"
+            <button id="saveProviderBtn" data-tip="Set this as your active AI provider for all generations" data-tip="Set this as your active AI provider for all generations"
               style="flex:1;padding:10px;border-radius:9px;border:none;
                      background:linear-gradient(135deg,var(--indigo),var(--violet));
                      color:#fff;font-size:13px;font-weight:700;cursor:pointer;
@@ -6776,7 +6776,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v6.6</div>
+          <div class="settings-about-val">v6.7</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7021,14 +7021,14 @@ header::after { display: none !important; }
           <div class="field">
           <label>Test Priority</label>
           <div class="priority-row">
-            <div class="priority-btn active-high" onclick="setPriority('High', this)">🔴 High</div>
-            <div class="priority-btn" onclick="setPriority('Medium', this)">🟡 Medium</div>
-            <div class="priority-btn" onclick="setPriority('Low', this)">🟢 Low</div>
+            <div class="priority-btn active-high" onclick="setPriority('High', this)" data-tip="High priority — marks every TC as P1 in ADO/Jira">🔴 High</div>
+            <div class="priority-btn" onclick="setPriority('Medium', this)" data-tip="Medium priority — balanced for standard test cycles">🟡 Medium</div>
+            <div class="priority-btn" onclick="setPriority('Low', this)" data-tip="Low priority — suitable for edge case coverage">🟢 Low</div>
           </div>
         </div>
           <div class="field">
           <label>Output Format</label>
-          <select id="outputFormat">
+          <select id="outputFormat" data-tip="Choose which sections to generate — E2E is fastest, Full covers all 8 sections" data-tip="Choose which test case sections to generate — E2E is fastest, Full covers all 8 sections">
             <option value="e2e">End to End</option>
             <option value="full">All Sections</option>
             <option value="field">Field Validation</option>
@@ -7046,6 +7046,7 @@ header::after { display: none !important; }
           </label>
           <select id="outputLanguage"
             title="Tier 1: complete professional QA translation. Tier 2: coming soon."
+            data-tip="Tier 1: full professional QA translation. Tier 2 languages coming soon."
             style="width:100%;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer"
             onchange="(function(v){var h=document.getElementById('langHint');if(h)h.textContent=v==='English'?'':'✅ Full QA translation — all steps, titles and sections in '+v;})(this.value)">
             <optgroup label="✅ Tier 1 — Full Support">
@@ -7068,14 +7069,14 @@ header::after { display: none !important; }
 
         <!-- ══ ACTIONS ROW: Generate + Reset ══ -->
         <div class="form-actions-row">
-          <button class="gen-btn" id="genBtn" onclick="generate()">
+          <button class="gen-btn" id="genBtn" onclick="generate()" data-tip="Generate 40-70 test cases with full steps · Shortcut: Ctrl+Enter">
             <div class="spinner"></div>
             <span class="btn-text">⚡ Generate Test Cases</span>
           </button>
-          <button class="reset-btn" id="stopBtn" onclick="stopGeneration()" style="display:none;border-color:var(--error);color:var(--error)">
+          <button class="reset-btn" id="stopBtn" onclick="stopGeneration()" data-tip="Stop the current generation immediately" data-tip="Stop the current generation" style="display:none;border-color:var(--error);color:var(--error)">
             ⏹ Stop
           </button>
-          <button class="reset-btn" id="resetBtn" onclick="resetForm()" title="Clear &amp; Reset">
+          <button class="reset-btn" id="resetBtn" onclick="resetForm()" title="Clear &amp; Reset" data-tip="Clear form and start a new requirement from scratch">>
             🔄 Reset
           </button>
         </div>
@@ -7102,10 +7103,10 @@ header::after { display: none !important; }
         </div>
         <div class="export-row" style="position:relative;flex-wrap:nowrap;gap:6px">
           <!-- Primary exports — always visible -->
-          <button class="exp-btn" id="copyBtn" onclick="copyMarkdown()" disabled>📋 Markdown</button>
-          <button class="exp-btn edit-toggle-btn" id="editBtn" onclick="toggleEditMode()" disabled>✏️ Edit</button>
-          <button class="exp-btn" id="pdfBtn" onclick="exportPDF()" disabled>📑 PDF</button>
-          <button class="exp-btn" id="xlsBtn" onclick="exportExcel()" disabled>📊 Excel</button>
+          <button class="exp-btn" id="copyBtn" onclick="copyMarkdown()" disabled data-tip="Copy test cases as Markdown — paste into Confluence or Notion">📋 Markdown</button>
+          <button class="exp-btn edit-toggle-btn" id="editBtn" onclick="toggleEditMode()" data-tip="Edit test cases inline — click any cell to modify" disabled>✏️ Edit</button>
+          <button class="exp-btn" id="pdfBtn" onclick="exportPDF()" data-tip="Download as formatted PDF document" data-tip="Download all test cases as a formatted PDF" disabled>📑 PDF</button>
+          <button class="exp-btn" id="xlsBtn" onclick="exportExcel()" data-tip="Export to Excel — separate sheets per TC type" data-tip="Download as Excel with separate sheets per TC type" disabled>📊 Excel</button>
           <button class="exp-btn ado-btn" id="adoBtn" onclick="openADOModal()" disabled>🔷 ADO</button>
 
           <!-- More dropdown -->
@@ -7143,12 +7144,12 @@ header::after { display: none !important; }
           <!-- Feedback buttons — moved to export toolbar for contextual visibility -->
           <div id="feedbackBtns" style="display:none;align-items:center;gap:4px;margin-left:auto;flex-shrink:0">
             <span style="font-size:11px;color:var(--text3);margin-right:2px;white-space:nowrap">Rate:</span>
-            <button id="feedbackGood" onclick="submitFeedback('good')"
+            <button id="feedbackGood" data-tip="Good output — helps improve future generations" onclick="submitFeedback('good')"
               style="padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:13px;transition:all .15s;line-height:1"
               title="Good output"
               onmouseover="this.style.borderColor='#10b981';this.style.background='rgba(16,185,129,.08)'"
               onmouseout="this.style.borderColor='var(--border2)';this.style.background='var(--surface2)'">👍</button>
-            <button id="feedbackBad" onclick="submitFeedback('bad')"
+            <button id="feedbackBad" data-tip="Poor output — we'll use this to improve quality" onclick="submitFeedback('bad')"
               style="padding:4px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:13px;transition:all .15s;line-height:1"
               title="Poor output"
               onmouseover="this.style.borderColor='#ef4444';this.style.background='rgba(239,68,68,.08)'"
@@ -7218,16 +7219,16 @@ header::after { display: none !important; }
         </button>
 
         <div class="atab-right">
-          <button class="atab-action-btn" onclick="collapseAllSections()" title="Collapse all sections">
+          <button class="atab-action-btn" onclick="collapseAllSections()" title="Collapse all sections" data-tip="Collapse all TC rows to show titles only">
             <span>⊟</span><span class="atab-action-label">Collapse</span>
           </button>
-          <button class="atab-action-btn" onclick="expandAllSections()" title="Expand all sections">
+          <button class="atab-action-btn" onclick="expandAllSections()" title="Expand all sections" data-tip="Expand all TC rows to show full steps">
             <span>⊞</span><span class="atab-action-label">Expand</span>
           </button>
           <button class="atab-action-btn" onclick="window.print()" title="Print test cases">
             <span>🖨️</span>
           </button>
-          <button class="atab-action-btn" onclick="copyShareLink()" title="Copy shareable link">
+          <button class="atab-action-btn" onclick="copyShareLink()" data-tip="Copy a shareable link with your requirement pre-filled — send to teammates" title="Copy shareable link">
             <span>🔗</span><span class="atab-action-label">Share</span>
           </button>
         </div>
@@ -7669,7 +7670,7 @@ header::after { display: none !important; }
 
         <div class="ado-nav">
           <button class="ado-btn-back" onclick="adoGoToStep(1)">← Back</button>
-          <button class="ado-push-btn" style="flex:1" id="adoPushBtn" onclick="pushToADOFull()">
+          <button class="ado-push-btn" style="flex:1" id="adoPushBtn" data-tip="Push all test cases directly to Azure DevOps test plan" onclick="pushToADOFull()">
             <div class="spinner" id="adoSpinner"></div>
             <span id="adoPushLabel">🔷 Create Suite &amp; Push Test Cases</span>
           </button>
@@ -13671,7 +13672,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v6.6';
+  if (ver)  ver.textContent  = 'v6.7';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14103,7 +14104,7 @@ function buildTGRow(tc) {
     <td class="tg-col-exp tg-exp-short" onclick="tgRowClick(event,'${tc.id}')">${tc.expected||''}</td>
     <td class="tg-col-pri"><span class="tg-badge ${tc.priCls}">${tc.priority}</span></td>
     <td class="tg-col-act"><div class="tg-actions">
-      <button class="tg-act-btn tg-regen-btn" title="Regenerate this TC" onclick="tgRegenTC('${tc.id}');event.stopPropagation();" style="color:var(--indigo)">&#x1F504;</button>
+      <button class="tg-act-btn tg-regen-btn" title="Regenerate this TC" data-tip="Regenerate only this test case — all other TCs stay unchanged" onclick="tgRegenTC('${tc.id}');event.stopPropagation();" style="color:var(--indigo)">&#x1F504;</button>
       <button class="tg-act-btn" title="Copy" onclick="tgCopyRow('${tc.id}');event.stopPropagation();">&#128203;</button>
       <button class="tg-act-btn del" title="Remove" onclick="tgRemoveRow('${tc.id}',this);event.stopPropagation();">&#128465;</button>
     </div></td>
@@ -14621,7 +14622,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v6.6';
+  if (version)  version.textContent  = 'v6.7';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15409,7 +15410,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v6.6</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v6.7</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -16109,6 +16110,7 @@ window.copyShareLink = function() {
     var override = document.createElement('button');
     override.id = 'cooldownOverride';
     override.textContent = '⚡ Generate now anyway';
+    override.setAttribute('data-tip', 'Skip cooldown — may reduce TC quality on fast providers');
     override.onclick = function() { _cancelCooldown(true); };
 
     wrap.appendChild(header);
@@ -17070,6 +17072,292 @@ window.copyShareLink = function() {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeRecoveryModal();
   });
+
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════════
+     v6.7 GLOBAL TOOLTIP ENGINE
+     Single tooltip, smart positioning, 150ms delay, theme-aware
+════════════════════════════════════════════════════════════════ -->
+<style>
+  #sqaTip {
+    position: fixed;
+    z-index: 999999;
+    background: #1e293b;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.5;
+    padding: 7px 12px;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.3);
+    pointer-events: none;
+    max-width: 260px;
+    white-space: normal;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .15s ease, transform .15s ease;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  #sqaTip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  [data-theme="dark"] #sqaTip {
+    background: rgba(30,27,75,.97);
+    border-color: rgba(91,95,239,.3);
+    box-shadow: 0 6px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(91,95,239,.1);
+  }
+  /* Arrow pointer */
+  #sqaTip::before {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    background: inherit;
+    border: inherit;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    left: 50%; transform: translateX(-50%);
+  }
+  #sqaTip.tip-above::before { bottom: -5px; top: auto; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+  #sqaTip.tip-below::before { top: -5px;   bottom: auto; clip-path: polygon(50% 0, 0 100%, 100% 100%); }
+  #sqaTip.tip-left::before  { right: -5px; left: auto; clip-path: polygon(0 0, 100% 50%, 0 100%); top: 50%; transform: translateY(-50%); }
+  #sqaTip.tip-right::before { left: -5px;  right: auto; clip-path: polygon(100% 0, 0 50%, 100% 100%); top: 50%; transform: translateY(-50%); }
+</style>
+
+<div id="sqaTip" role="tooltip" aria-hidden="true"></div>
+
+<script>
+(function _initTooltips() {
+
+  var tip    = document.getElementById('sqaTip');
+  var _timer = null;
+  var _cur   = null;
+  var DELAY  = 150;  // ms before showing
+  var GAP    = 10;   // px gap between element and tooltip
+
+  function _show(el) {
+    var text = el.getAttribute('data-tip');
+    if (!text || !tip) return;
+    tip.textContent = text;
+    tip.className   = '';
+
+    // Position
+    var r   = el.getBoundingClientRect();
+    var tw  = tip.offsetWidth  || 200;
+    var th  = tip.offsetHeight || 36;
+    var vw  = window.innerWidth;
+    var vh  = window.innerHeight;
+    var pos, left, top;
+
+    // Prefer above
+    if (r.top - th - GAP > 0) {
+      pos  = 'above';
+      top  = r.top - th - GAP;
+      left = r.left + r.width / 2 - tw / 2;
+    } else if (r.bottom + th + GAP < vh) {
+      pos  = 'below';
+      top  = r.bottom + GAP;
+      left = r.left + r.width / 2 - tw / 2;
+    } else if (r.left - tw - GAP > 0) {
+      pos  = 'left';
+      left = r.left - tw - GAP;
+      top  = r.top + r.height / 2 - th / 2;
+    } else {
+      pos  = 'right';
+      left = r.right + GAP;
+      top  = r.top + r.height / 2 - th / 2;
+    }
+
+    // Clamp to viewport
+    left = Math.max(8, Math.min(left, vw - tw - 8));
+    top  = Math.max(8, Math.min(top,  vh - th - 8));
+
+    tip.style.left = left + 'px';
+    tip.style.top  = top  + 'px';
+    tip.className  = 'tip-' + pos;
+
+    requestAnimationFrame(function() {
+      tip.classList.add('visible');
+    });
+  }
+
+  function _hide() {
+    if (!tip) return;
+    tip.classList.remove('visible');
+    _cur = null;
+  }
+
+  // Event delegation — works for dynamically added elements
+  document.addEventListener('mouseover', function(e) {
+    var el = e.target.closest('[data-tip]');
+    if (!el || el === _cur) return;
+    _cur = el;
+    clearTimeout(_timer);
+    _timer = setTimeout(function() { _show(el); }, DELAY);
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    var el = e.target.closest('[data-tip]');
+    if (!el) return;
+    clearTimeout(_timer);
+    _hide();
+  });
+
+  // Hide on scroll and ESC
+  document.addEventListener('scroll', _hide, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') _hide();
+  });
+
+  // Hide on click
+  document.addEventListener('click', _hide);
+
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════════
+     v6.7 GLOBAL TOOLTIP ENGINE
+     Single tooltip at a time · 150ms delay · Smart positioning
+     Uses data-tip attribute — works on any element
+════════════════════════════════════════════════════════════════ -->
+<style>
+#shqaTip {
+  position: fixed;
+  z-index: 999999;
+  pointer-events: none;
+  background: #1e1b4b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 7px 12px;
+  border-radius: 8px;
+  max-width: 260px;
+  line-height: 1.5;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08);
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .15s ease, transform .15s ease;
+  display: none;
+}
+#shqaTip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+#shqaTip::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #1e1b4b;
+  transform: rotate(45deg);
+}
+#shqaTip.tip-above::before { bottom: -4px; left: 50%; margin-left: -4px; }
+#shqaTip.tip-below::before { top: -4px;    left: 50%; margin-left: -4px; }
+#shqaTip.tip-left::before  { right: -4px;  top: 50%;  margin-top: -4px; }
+#shqaTip.tip-right::before { left: -4px;   top: 50%;  margin-top: -4px; }
+</style>
+
+<div id="shqaTip" role="tooltip"></div>
+
+<script>
+(function _initTooltipEngine() {
+
+  var tip     = document.getElementById('shqaTip');
+  var _timer  = null;
+  var _active = null;
+  var DELAY   = 150;   // ms before showing
+  var GAP     = 10;    // px gap between element and tooltip
+
+  function _show(el) {
+    var text = el.getAttribute('data-tip');
+    if (!text || text === _active) return;
+    _active = text;
+    tip.textContent = text;
+    tip.style.display = 'block';
+    _position(el);
+    // Force reflow then animate
+    tip.classList.remove('visible');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        tip.classList.add('visible');
+      });
+    });
+  }
+
+  function _hide() {
+    _active = null;
+    tip.classList.remove('visible');
+    setTimeout(function() {
+      if (!_active) tip.style.display = 'none';
+    }, 160);
+  }
+
+  function _position(el) {
+    var r   = el.getBoundingClientRect();
+    var tw  = tip.offsetWidth  || 200;
+    var th  = tip.offsetHeight || 36;
+    var vw  = window.innerWidth;
+    var vh  = window.innerHeight;
+    var pad = 8;
+
+    // Prefer: above → below → right → left
+    var positions = [
+      { dir:'above', t: r.top  - th - GAP,    l: r.left + r.width/2  - tw/2 },
+      { dir:'below', t: r.bottom + GAP,        l: r.left + r.width/2  - tw/2 },
+      { dir:'right', t: r.top  + r.height/2 - th/2, l: r.right + GAP        },
+      { dir:'left',  t: r.top  + r.height/2 - th/2, l: r.left  - tw - GAP   },
+    ];
+
+    var chosen = null;
+    for (var i = 0; i < positions.length; i++) {
+      var p = positions[i];
+      if (p.t >= pad && p.t + th <= vh - pad &&
+          p.l >= pad && p.l + tw <= vw - pad) {
+        chosen = p; break;
+      }
+    }
+    if (!chosen) chosen = positions[0]; // fallback to above
+
+    // Clamp within viewport
+    chosen.l = Math.max(pad, Math.min(chosen.l, vw - tw - pad));
+    chosen.t = Math.max(pad, Math.min(chosen.t, vh - th - pad));
+
+    tip.style.left = chosen.l + 'px';
+    tip.style.top  = chosen.t + 'px';
+
+    // Arrow direction class
+    tip.className = tip.className.replace(/\btip-\w+\b/g, '');
+    tip.classList.add('tip-' + chosen.dir);
+  }
+
+  // ── Event delegation ──────────────────────────────────────────
+  document.addEventListener('mouseover', function(e) {
+    var el = e.target.closest('[data-tip]');
+    if (!el) return;
+    clearTimeout(_timer);
+    _timer = setTimeout(function() { _show(el); }, DELAY);
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    var el = e.target.closest('[data-tip]');
+    if (!el) return;
+    // Only hide if not moving to a child of the same element
+    var related = e.relatedTarget;
+    if (related && el.contains(related)) return;
+    clearTimeout(_timer);
+    _hide();
+  });
+
+  // Hide on scroll and click
+  document.addEventListener('scroll',   function() { clearTimeout(_timer); _hide(); }, true);
+  document.addEventListener('mousedown', function() { clearTimeout(_timer); _hide(); });
+  window.addEventListener('blur',        function() { clearTimeout(_timer); _hide(); });
 
 })();
 </script>
