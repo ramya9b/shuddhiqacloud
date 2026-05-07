@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shuddhi QA v6.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v6.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5421,7 +5421,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v6.0</span>
+      <span class="sb-badge">v6.1</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6258,7 +6258,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v6.0</div>
+          <div class="settings-about-val">v6.1</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6518,7 +6518,6 @@ header::after { display: none !important; }
             <option value="negative">Negative</option>
             <option value="smoke">Smoke</option>
             <option value="testdata">Test Data</option>
-            <option value="metadata">Metadata</option>
           </select>
         </div>
           <!-- Output Language Selector -->
@@ -6527,7 +6526,7 @@ header::after { display: none !important; }
             <span>Output Language</span>
             <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace">Test cases will be generated in this language</span>
           </label>
-          <select id="outputLanguage" style="width:100%;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer">
+          <select id="outputLanguage" title="Scenario titles translated; technical steps stay in English for accuracy" style="width:100%;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer">
             <option value="English">🇬🇧 English (default)</option>
             <option value="Telugu">🇮🇳 Telugu (తెలుగు)</option>
             <option value="Hindi">🇮🇳 Hindi (हिंदी)</option>
@@ -6693,12 +6692,6 @@ header::after { display: none !important; }
           <span class="atab-icon">⊟</span>
           <span class="atab-label">Test Data</span>
           <span class="atab-count" id="atab-count-testdata"></span>
-        </button>
-
-        <button class="artifact-tab atab-meta-style" id="atab-metadata" onclick="switchArtifactTab('metadata',this)">
-          <span class="atab-icon">≡</span>
-          <span class="atab-label">Metadata</span>
-          <span class="atab-count" id="atab-count-metadata"></span>
         </button>
 
         <div class="atab-right">
@@ -9490,7 +9483,16 @@ Minimum 10 step rows per test case. Do not deviate from this schema for any reas
 
 You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
 
-CRITICAL LANGUAGE RULE: Generate ALL test case output in ${outputLang}.
+CRITICAL LANGUAGE RULE (HYBRID):
+- If outputLang is 'English (default)' or 'English': generate everything in English.
+- If outputLang is any other language (Telugu, Hindi, Kannada, etc.):
+  * Section headings (## 0a, ## 1., ## 2., etc.): translate to ${outputLang}
+  * Test case TITLE / scenario name: translate to ${outputLang}
+  * Step ACTION column: keep in English (technical accuracy)
+  * Step EXPECTED RESULT column: keep in English (technical accuracy)
+  * Assigned To, State columns: keep as English defaults
+  * Analysis text in 0a/0b sections: translate to ${outputLang}
+  This ensures QA engineers can follow technical steps while understanding scenario context in their language.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -9661,18 +9663,7 @@ Use the 5-column format. ONE step per row. Apply OUTPUT VALIDATION GATE:
 Table: Data Type | Sample Valid Value | Sample Invalid Value | Notes
 Include specific URLs, test user accounts, API keys (masked), edge case values.
 
-## 7. Test Case Metadata
-| TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact |
 
-- TC ID: Match exactly (e.g. "TC001")
-- Preconditions: Browser + environment + test data + user role + prerequisites
-- Execution Type: Smoke | Regression | E2E | Integration | UAT | Negative
-- Risk Score: P0 (release blocker) | P1 (must-run) | P2 (regression) | P3 (edge case)
-- Automation Feasibility: YES or NO + 1-line reason
-- Tool & Layer: e.g. "Playwright / UI" or "Postman / API" or "N/A – Manual only"
-- Failure Impact: Business + system consequence if test fails
-
-Generate one row per test case. NEVER leave Preconditions blank. NEVER use backticks inside table cells.
 
 ═══════════════════════════════════════
 NOW GENERATE TEST CASES
@@ -9794,7 +9785,16 @@ PLATFORM-SPECIFIC EXPERTISE:
 - ServiceNow: Use table names (incident, change_request, cmdb_ci), SLA stages, Flow Designer steps.
 - Power BI: Map every report column to its D365/ERP source table and field name. Include cross-system verification steps.
 
-CRITICAL LANGUAGE RULE: Generate ALL test case output in ${outputLang}.
+CRITICAL LANGUAGE RULE (HYBRID):
+- If outputLang is 'English (default)' or 'English': generate everything in English.
+- If outputLang is any other language (Telugu, Hindi, Kannada, etc.):
+  * Section headings (## 0a, ## 1., ## 2., etc.): translate to ${outputLang}
+  * Test case TITLE / scenario name: translate to ${outputLang}
+  * Step ACTION column: keep in English (technical accuracy)
+  * Step EXPECTED RESULT column: keep in English (technical accuracy)
+  * Assigned To, State columns: keep as English defaults
+  * Analysis text in 0a/0b sections: translate to ${outputLang}
+  This ensures QA engineers can follow technical steps while understanding scenario context in their language.
 
 ═══════════════════════════════════════
 STEP WRITING RULES — MODELLED ON REAL PRODUCTION TEST CASES
@@ -10288,11 +10288,7 @@ If expected result is unclear: generate logical default (e.g. "System displays: 
 ## 6. Test Data Requirements
 Table: Data Category | Field Name | D365/ERP Table Source | Sample Valid Value | Sample Invalid Value | Data Type | Constraints | Environment
 
-## 7. Test Case Metadata
-| TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact |
 
-- TC ID: Match exactly to Title column (e.g. "TC001")
-- Preconditions: Environment + master data + user role + prerequisite transactions
 - Execution Type: Smoke | Regression | E2E | Integration | UAT | Negative
 - Risk Score: P0 (release blocker) | P1 (core business) | P2 (regression) | P3 (edge case)
 - Automation Feasibility: YES or NO + 1-line reason
@@ -10342,14 +10338,14 @@ Do NOT stop generating until ALL 6 steps pass.`;
   const _verbosityBudget = ' CRITICAL OUTPUT RULES: (1) Section 0a: ONE line only — module name and scope. Section 0b: MAXIMUM 2 gaps listed, no prose. (2) Output the Test Summary table IMMEDIATELY after section 0b. (3) Then output TC tables — ONE row per step, no prose between TCs. (4) MINIMUM 40 TCs total with MINIMUM 10 steps each. Do NOT write paragraphs or explanations — only tables. TARGET: 50+ TCs.';
 
   const formatInstructions = {
-    full:        "Generate all 9 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements, Test Case Metadata). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
-    e2e:         "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    field:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    integration: "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 4 (Integration Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    negative:    "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 5 (Negative Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: (1) ONE step per row. (2) SETUP steps (login/open) may have positive expected. (3) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (4) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (5) REQUIRED: exact error message, validation text, access denied. Apply OUTPUT VALIDATION GATE. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
-    smoke:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Smoke/Sanity test cases. Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. ONE step per row. Aim for 8–15 critical-path smoke tests, each with minimum 10 step rows. Then add Section 7 (Test Case Metadata)." + _verbosityBudget,
+    full:        "Generate all 8 sections (Pre-Generation Extraction, Gap Analysis, Test Summary, End-to-End, Field Validation, Integration, Negative, Test Data Requirements). TOKEN BUDGET: Keep sections 0a and 0b CONCISE (max 5 bullet points each, no extended prose) — the majority of output tokens must go to actual test case rows. CRITICAL: (1) Start with ## 0a Pre-Generation Extraction. (2) Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. (3) ONE step per row — never combine. Minimum 10 steps per TC. (4) Negative TCs: OUTPUT VALIDATION GATE — trigger/verify steps MUST show failure/error. (5) Integration TCs: use D365 Cross-Check Step Templates." + _verbosityBudget,
+    e2e:         "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Minimum 10 step rows per TC. Include D365 navigation paths and specific field names." + _verbosityBudget,
+    field:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Include boundary values, specific D365 field names, exact error messages." + _verbosityBudget,
+    integration: "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 4 (Integration Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: ONE step per row. Use D365 Cross-Check Step Templates: navigate → filter → read/sum → compare. Minimum 10 step rows per TC." + _verbosityBudget,
+    negative:    "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Section 5 (Negative Test Cases). Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. CRITICAL: (1) ONE step per row. (2) SETUP steps (login/open) may have positive expected. (3) TRIGGER + VERIFY steps MUST show failure/error — NEVER success. (4) FORBIDDEN: 'Login successful', 'Page loads', 'Success'. (5) REQUIRED: exact error message, validation text, access denied. Apply OUTPUT VALIDATION GATE." + _verbosityBudget,
+    smoke:       "First output ## 0a Pre-Generation Extraction and ## 0b Gap Analysis. Then generate ONLY Smoke/Sanity test cases. Use the 5-column format: Title | Step Action | Step Expected Result | Assigned To | State. State = Design. ONE step per row. Aim for 8–15 critical-path smoke tests, each with minimum 10 step rows." + _verbosityBudget,
     testdata:    "Generate ONLY Section 6 (Test Data Requirements): Data Category | Field Name | D365/ERP Table Source | Sample Valid Value | Sample Invalid Value | Data Type | Constraints | Environment. Also include Section 1 (Test Summary).",
-    metadata:    "Generate ONLY Section 7 (Test Case Metadata): TC ID | Preconditions | Execution Type | Risk Score | Automation Feasibility | Tool & Layer | Failure Impact. Never skip a test case.",
+    metadata:    "Generate ONLY Section 6 (Test Data Requirements). Table: Data Category | Field Name | Sample Valid Value | Sample Invalid Value.",
     scenarios:   "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 2 (End-to-End Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget,
     fields:      "First output ## 0a Pre-Generation Extraction. Then generate ONLY Section 3 (Field Validation Test Cases). Use the 5-column format. ONE step per row. State = Design." + _verbosityBudget
   };
@@ -13670,7 +13666,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v6.0';
+  if (ver)  ver.textContent  = 'v6.1';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
   // Try to run diagnostics if available
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14660,7 +14656,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v6.0';
+  if (version)  version.textContent  = 'v6.1';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15505,7 +15501,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v6.0</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v6.1</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
     <span style="color:rgba(255,255,255,.7)">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25)">·</span>
