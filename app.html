@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v7.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5938,7 +5938,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v7.8</span>
+      <span class="sb-badge">v7.9</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6843,7 +6843,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v7.8</div>
+          <div class="settings-about-val">v7.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -12696,11 +12696,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function adoRequest(method, url, _pat, body = null) {
+  // Resolve PAT: explicit arg > window.__manualAdoPAT > localStorage
+  var pat = _pat || window.__manualAdoPAT || window.__adoPAT || '';
+  if (!pat) {
+    try { pat = localStorage.getItem('shuddhi-ado-pat') || ''; } catch(e) {}
+  }
+  var org = window.__adoOrg || window.__adoDefaultOrg || '';
+  if (!org) {
+    try {
+      var rawUrl = localStorage.getItem('shuddhi-ado-org-url') || '';
+      var m = rawUrl.match(/dev\.azure\.com\/([^/]+)/);
+      org = m ? m[1] : '';
+    } catch(e) {}
+  }
 
   const res = await fetch('/api/ado', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url, method, body })
+    body: JSON.stringify({ url, method, body, pat, org })
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
@@ -12718,6 +12731,19 @@ async function initADOModal() {
   if (errEl)   errEl.style.display = 'none';
   if (display) display.textContent = '⏳ Checking…';
 
+  // v7.8 FIX: Load localStorage credentials FIRST before status check
+  var localPAT = '', localOrg = '', localProject = '';
+  try {
+    localPAT     = localStorage.getItem('shuddhi-ado-pat')     || '';
+    var rawUrl   = localStorage.getItem('shuddhi-ado-org-url') || '';
+    localProject = localStorage.getItem('shuddhi-ado-project') || '';
+    var m0 = rawUrl.match(/dev\.azure\.com\/([^/]+)/);
+    localOrg = m0 ? m0[1] : '';
+  } catch(e) {}
+  if (localPAT)     { window.__manualAdoPAT = localPAT; window.__adoPAT = localPAT; }
+  if (localOrg)     { window.__adoOrg = localOrg; }
+  if (localProject) { window.__adoDefaultProject = localProject; }
+
   try {
     const res = await fetch('/api/status');
     if (!res.ok) throw new Error('Status check failed: HTTP ' + res.status);
@@ -12725,22 +12751,32 @@ async function initADOModal() {
     const data = await res.json();
     const { adoKey = false, adoOrg = '', adoProject = '' } = data;
 
+    // Combine: env var PAT OR localStorage PAT
+    const hasPAT = adoKey || (localPAT.length > 10);
+    const org    = adoOrg || localOrg || window.__adoDefaultOrg || '';
+    const proj   = adoProject || localProject || '';
+
+    if (!hasPAT) {
+      if (display) display.textContent = 'PAT not configured';
+      if (errEl) {
+        errEl.textContent = '⚠️ ADO PAT not configured. Go to Settings \u2192 Azure DevOps and enter your PAT.';
+        errEl.style.display = '';
+      }
+      return;
+    }
+
     if (adoKey) {
       const manualRow = document.getElementById('adoPatManualRow');
       const envRow    = document.getElementById('adoPatEnvRow');
       if (manualRow) manualRow.style.display = 'none';
       if (envRow)    envRow.style.display    = 'flex';
     } else {
-      if (display) display.textContent = 'PAT not configured';
-      if (errEl) {
-        errEl.textContent = '⚠️ ADO PAT not configured. Go to Settings → Azure DevOps and enter your PAT.';
-        errEl.style.display = '';
-      }
-      return;
+      // localStorage PAT — show manual row pre-filled
+      const manualRow = document.getElementById('adoPatManualRow');
+      const envRow    = document.getElementById('adoPatEnvRow');
+      if (manualRow) manualRow.style.display = 'flex';
+      if (envRow)    envRow.style.display    = 'none';
     }
-
-    const org = adoOrg || window.__adoDefaultOrg ||
-                (typeof localStorage !== 'undefined' ? localStorage.getItem('shuddhi-ado-default-org') || '' : '');
 
     if (org) {
 
@@ -13491,7 +13527,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v7.8';
+  if (ver)  ver.textContent  = 'v7.9';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14506,7 +14542,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v7.8';
+  if (version)  version.textContent  = 'v7.9';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15327,7 +15363,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.8</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.9</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
