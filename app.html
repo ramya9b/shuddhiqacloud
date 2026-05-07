@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v6.3 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v6.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -3136,7 +3136,7 @@ header::after { display: none !important; }
 
   /* Footer: adjust left margin when sidebar collapses */
   #appSidebar.collapsed ~ * #appFooter,
-  #appSidebar.collapsed + #mainWrap #appFooter { margin-left: 0 !important; }
+  #appSidebar.collapsed + #mainWrap #appFooter { margin-left: 64px !important; width: calc(100% - 64px) !important; }
 
   /* Footer responsive */
   @media (max-width: 768px) {
@@ -5712,7 +5712,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v6.3</span>
+      <span class="sb-badge">v6.5</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6584,6 +6584,14 @@ header::after { display: none !important; }
 
     <!-- Panel: Usage & Cost (v4.0) -->
     <div class="settings-panel" id="spanel-usage" style="display:none;flex-direction:column">
+      <!-- Live rate indicator -->
+      <div style="display:flex;align-items:center;justify-content:space-between;
+           padding:8px 12px;margin-bottom:8px;border-radius:10px;
+           background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15)">
+        <span style="font-size:12px;color:var(--text2);font-weight:600">💱 Exchange Rate</span>
+        <span id="liveRateDisplay" style="font-size:12px;color:#059669;font-weight:700;
+              font-family:'JetBrains Mono',monospace">Fetching live rate…</span>
+      </div>
       <div id="usageCostPanelSettings" style="padding:4px 0"></div>
     </div>
 
@@ -6598,7 +6606,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v6.3</div>
+          <div class="settings-about-val">v6.5</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -10681,32 +10689,27 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       'provider:', ProviderManager.getActive()
     );
 
-    const _showRetryBanner = (msg) => {
-      showAdoBanner(
-        msg + ' <button onclick="generate()" style="margin-left:12px;padding:4px 12px;' +
-        'background:var(--indigo,#6366f1);color:#fff;border:none;border-radius:6px;' +
-        'cursor:pointer;font-size:12px;font-weight:600">↺ Retry Now</button>',
-        'warning', 20000
-      );
+    const _showRetryBanner = (type, customSubtitle) => {
+      if (typeof showRecoveryModal === 'function') {
+        showRecoveryModal(type, customSubtitle);
+      } else {
+        showAdoBanner('⚠️ Generation incomplete. Click Generate to retry.', 'warning', 20000);
+      }
     };
 
     if (rawLen > 50000 && hasSummary && !hasTCRow) {
 
       console.warn('[Generate] Large response (' + rawLen + ' chars) but no TC rows.',
         'Provider:', ProviderManager.getActive(), '| Elapsed:', elapsed + 's');
-      _showRetryBanner(
-        '⚠️ Analysis received (' + Math.round(rawLen/1000) + 'k chars) but TC tables are missing — stream was cut mid-generation.'
-      );
+      _showRetryBanner('stream_timeout', 'Analysis received (' + Math.round(rawLen/1000) + 'k chars) but TC tables are missing');
     } else if (rawLen > 500 && hasSummary && !hasTCRow) {
 
       console.warn('[Generate] Summary present but no TC rows. rawLen:', rawLen,
         '| Elapsed:', elapsed + 's | Provider:', ProviderManager.getActive());
-      _showRetryBanner(
-        '⚠️ Analysis and summary received but test case tables are missing. Elapsed: ' + elapsed + 's.'
-      );
+      _showRetryBanner('early_truncation', 'Analysis received but TC tables are missing. Elapsed: ' + elapsed + 's');
     } else if (rawLen > 50 && rawLen < 600 && !hasTCRow) {
       console.warn('[Generate] Very short response:', rawLen, 'chars — rate limit or error.');
-      _showRetryBanner('⚠️ Response too short (' + rawLen + ' chars) — rate limit or network error.');
+      _showRetryBanner('early_truncation', 'Response too short (' + rawLen + ' chars) — rate limit or network error');
     }
 
     finalizeOutput(elapsed, platform, module);
@@ -11254,13 +11257,7 @@ function finalizeOutput(elapsed, platform, module) {
 
         const _curFmt = document.getElementById('outputFormat')?.value;
         const _isAllSections = _curFmt === 'full';
-        diagMsg = '⚠️ Analysis received but test case tables are missing (stream timed out). '
-          + (_isAllSections
-            ? '<span onclick="document.getElementById(\'outputFormat\').value=\'e2e\';generate()" '
-              + 'style="cursor:pointer;font-weight:700;text-decoration:underline;color:var(--indigo)">'
-              + '→ Click here to retry with End-to-End only (recommended)</span>'
-              + ' — or switch Output Format to a single section and Generate again.'
-            : 'Click Generate again — if it persists, try switching to a different provider in Settings.');
+        diagMsg = 'stream_timeout';
       } else if (hasAnalysis && !hasSummary) {
 
         diagMsg = '⚠️ Response was truncated very early (only analysis received, no test cases). '
@@ -11276,7 +11273,11 @@ function finalizeOutput(elapsed, platform, module) {
           + 'Response may be incomplete. Click Generate to retry.';
       }
 
-      showAdoBanner(diagMsg, 'warning', 12000);
+      var _rType = (diagMsg === 'stream_timeout') ? 'stream_timeout'
+        : (diagMsg.includes('very early') || diagMsg.includes('too short')) ? 'early_truncation'
+        : (diagMsg.includes('could not be parsed')) ? 'parse_failed'
+        : 'low_count';
+      showRecoveryModal(_rType, null);
       console.warn('[Output Validation] Low TC count.', diagMsg);
     }
   }, 600);
@@ -13500,7 +13501,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v6.3';
+  if (ver)  ver.textContent  = 'v6.5';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14409,7 +14410,7 @@ function toggleSidebar(){
   document.body.classList.toggle('sidebar-collapsed',isCollapsed);
   if(mainWrap) mainWrap.style.marginLeft=isCollapsed?'64px':'260px';
   if(bulkBar) bulkBar.style.left=isCollapsed?'64px':'260px';
-  if(footer)  footer.style.marginLeft=isCollapsed?'64px':'260px';
+  if(footer)  { footer.style.marginLeft=isCollapsed?'64px':'260px'; footer.style.width=isCollapsed?'calc(100% - 64px)':'calc(100% - 260px)'; }
   if(btn) btn.textContent=isCollapsed?'▶':'◀';
   const lbl=document.querySelector('.sb-collapse-strip-label');
   if(lbl) lbl.textContent=isCollapsed?'Expand':'Collapse';
@@ -14450,7 +14451,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v6.3';
+  if (version)  version.textContent  = 'v6.5';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15221,59 +15222,62 @@ function checkAndTrimFlow(flow) {
      PAGE FOOTER — About · Privacy · Contact
      ════════════════════════════════════════════════════════════ -->
 <footer id="appFooter" style="
-  width:100%;
+  width:calc(100% - 260px);
   margin-left:260px;
   background: linear-gradient(135deg, #1e1b4b 0%, #1e3a5f 100%);
   border-top: none;
   box-shadow: 0 -4px 24px rgba(0,0,0,.25);
-  padding: 12px 28px;
+  padding: 12px 24px;
   display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:8px;
+  flex-wrap:nowrap; gap:8px;
   font-size:11.5px; color:rgba(255,255,255,.65);
   box-sizing:border-box;
   position:relative; z-index:10;
+  overflow:hidden;
 ">
   <!-- Left: branding + version + Privacy always visible -->
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em">🧪 Shuddhi QA</span>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
+    <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2)">v6.3</span>
-    <span style="color:rgba(255,255,255,.25)">·</span>
-    <span style="color:rgba(255,255,255,.7)">AI Test Intelligence</span>
-    <span style="color:rgba(255,255,255,.25)">·</span>
-    <span style="color:rgba(255,255,255,.7)">Built by <strong style="color:#fff;font-weight:700">Ramya</strong>,
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v6.5</span>
+    <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
+    <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
+    <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
+    <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">Built by <strong style="color:#fff;font-weight:700">Ramya</strong>,
       Senior QA Engineer · Bengaluru</span>
-    <span style="color:rgba(255,255,255,.25)">·</span>
+    <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <a onclick="document.getElementById('privacyFooterModal').style.display='flex'"
       style="cursor:pointer;color:rgba(255,255,255,.85);text-decoration:none;font-weight:600;
-             font-size:11.5px;transition:all .15s;padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.2)"
+             font-size:11.5px;transition:all .15s;padding:2px 8px;border-radius:6px;
+             border:1px solid rgba(255,255,255,.2);white-space:nowrap;flex-shrink:0"
       onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='#fff'"
       onmouseout="this.style.background='transparent';this.style.color='rgba(255,255,255,.85)'">
       🔒 Privacy
     </a>
   </div>
 
-  <!-- Right: links -->
-  <div class="footer-right" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+  <!-- Right: links — flex-shrink:0 so they never get clipped -->
+  <div class="footer-right" style="display:flex;align-items:center;gap:12px;flex-wrap:nowrap;flex-shrink:0">
     <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
-      style="color:rgba(255,255,255,.65);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .15s;font-weight:500"
+      style="color:rgba(255,255,255,.65);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .15s;font-weight:500;white-space:nowrap"
       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">
       🐙 GitHub
     </a>
     <a onclick="openSettings();switchSettingsTab('about')" style="cursor:pointer;
-      color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;font-weight:500"
+      color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;font-weight:500;white-space:nowrap"
       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">
       ℹ️ About
     </a>
     <a href="https://github.com/ramya9b" target="_blank" rel="noopener"
-      style="color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;font-weight:500"
+      style="color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;font-weight:500;white-space:nowrap"
       onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.65)'">
       📧 Contact
     </a>
     <span style="color:rgba(255,255,255,.2)">·</span>
-    <span style="color:rgba(255,255,255,.5);font-size:11px">© 2026 Shuddhi QA</span>
+    <span style="color:rgba(255,255,255,.5);font-size:11px;white-space:nowrap">© 2026 Shuddhi QA</span>
   </div>
 </footer>
+
 
 <!-- Privacy modal (lightweight — triggered from footer) -->
 <div id="privacyFooterModal" style="
@@ -15433,18 +15437,73 @@ function checkAndTrimFlow(flow) {
 (function _initUsageCostTracker() {
   var PRICING = { claude:{input:3.00,output:15.00}, gemini:{input:0.075,output:0.30}, groq:{input:0,output:0} };
   var BUDGET = 250, WARN = 0.80, PFX = 'shuddhi-v37-';
-  var _rate = 83.5, _viewMonth = null;
+  var _rate = 84.0;          // fallback rate (updated periodically)
+  var _rateFresh = false;    // true once a live rate is confirmed
+  var _viewMonth = null;
+
+  var FALLBACK_RATES = [84.0, 83.5, 83.8]; // rotating fallbacks if API down
+  var _fallbackIdx   = 0;
 
   (function fetchRate() {
-    var c = parseFloat(localStorage.getItem(PFX+'rate')||'0');
-    var ts = parseInt(localStorage.getItem(PFX+'rate-ts')||'0', 10);
-    if (c && Date.now()-ts < 86400000) { _rate=c; return; }
-    fetch('https://api.exchangerate-api.com/v4/latest/USD')
-      .then(function(r){return r.json();})
-      .then(function(d){
-        var rate = d && d.rates && d.rates.INR;
-        if (rate>0) { _rate=rate; localStorage.setItem(PFX+'rate',rate); localStorage.setItem(PFX+'rate-ts',Date.now()); }
-      }).catch(function(){});
+    var cached = parseFloat(localStorage.getItem(PFX+'rate')||'0');
+    var ts     = parseInt(localStorage.getItem(PFX+'rate-ts')||'0', 10);
+    var age    = Date.now() - ts;
+
+    // Use cache immediately (stale-while-revalidate)
+    if (cached > 0) {
+      _rate = cached;
+      _rateFresh = age < 86400000; // fresh if < 24h
+    }
+
+    // Always fetch if stale or missing — even if we already loaded the cache
+    var needsFetch = !cached || age >= 86400000;
+    if (!needsFetch) return;
+
+    function _doFetch(attempt) {
+      // Try primary API first, fallback to backup on failure
+      var urls = [
+        'https://api.exchangerate-api.com/v4/latest/USD',
+        'https://open.er-api.com/v6/latest/USD'
+      ];
+      var url = urls[attempt % urls.length];
+
+      fetch(url, { mode: 'cors', cache: 'no-store' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(d) {
+          var rate = (d && d.rates && d.rates.INR)
+                  || (d && d.conversion_rates && d.conversion_rates.INR);
+          if (rate > 70 && rate < 120) {   // sanity check: ₹70-120 is realistic
+            _rate = rate;
+            _rateFresh = true;
+            localStorage.setItem(PFX+'rate',    rate);
+            localStorage.setItem(PFX+'rate-ts', Date.now());
+            // Update any visible rate display
+            var rateEl = document.getElementById('liveRateDisplay');
+            if (rateEl) rateEl.textContent = '1 USD = ₹' + rate.toFixed(2) + ' (live)';
+          } else {
+            throw new Error('Rate out of range: ' + rate);
+          }
+        })
+        .catch(function(err) {
+          console.warn('[Rate] Fetch failed (attempt ' + (attempt+1) + '):', err.message);
+          if (attempt < 2) {
+            // Retry with backup API after 2s
+            setTimeout(function() { _doFetch(attempt + 1); }, 2000);
+          } else {
+            // All attempts failed — use rotating fallback
+            _rate = FALLBACK_RATES[_fallbackIdx % FALLBACK_RATES.length];
+            _fallbackIdx++;
+            _rateFresh = false;
+            console.warn('[Rate] Using fallback rate:', _rate);
+            var rateEl = document.getElementById('liveRateDisplay');
+            if (rateEl) rateEl.textContent = '1 USD \u2248 \u20b9' + _rate.toFixed(1) + ' (estimated)';
+          }
+        });
+    }
+    _doFetch(0);
   })();
 
   var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -16626,6 +16685,220 @@ window.copyShareLink = function() {
     if (e.key === 'ArrowRight' || e.key === 'Enter') tourNext();
     if (e.key === 'ArrowLeft')                        tourPrev();
     if (e.key === 'Escape')                            endTour();
+  });
+
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     v6.4 GENERATION RECOVERY MODAL
+     Smart popup replacing the old warning banner
+════════════════════════════════════════════════════════ -->
+<div id="genRecoveryModal" style="display:none;position:fixed;inset:0;z-index:200001;
+  align-items:center;justify-content:center;">
+  <!-- Backdrop -->
+  <div id="genRecoveryOverlay"
+    style="position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px)"
+    onclick="closeRecoveryModal()"></div>
+
+  <!-- Card -->
+  <div style="position:relative;z-index:1;background:var(--surface);
+    border:1.5px solid rgba(245,158,11,.3);border-radius:20px;
+    padding:28px 26px;width:min(460px,94vw);
+    box-shadow:0 24px 80px rgba(0,0,0,.45)">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:40px;height:40px;border-radius:12px;flex-shrink:0;
+          background:rgba(245,158,11,.12);border:1.5px solid rgba(245,158,11,.3);
+          display:flex;align-items:center;justify-content:center;font-size:20px">⚡</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.01em">
+            Generation Incomplete
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px" id="recoverySubtitle">
+            Stream timed out before tables were written
+          </div>
+        </div>
+      </div>
+      <button onclick="closeRecoveryModal()" aria-label="Close"
+        style="background:none;border:none;font-size:18px;cursor:pointer;
+          color:var(--text3);padding:2px 6px;border-radius:6px;line-height:1;
+          transition:background .15s;flex-shrink:0"
+        onmouseover="this.style.background='var(--surface2)'"
+        onmouseout="this.style.background='none'">✕</button>
+    </div>
+
+    <!-- What happened -->
+    <div id="recoveryExplanation"
+      style="font-size:13px;color:var(--text2);line-height:1.65;
+        padding:12px 14px;border-radius:10px;
+        background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);
+        margin-bottom:18px">
+    </div>
+
+    <!-- Action buttons -->
+    <div style="font-size:12px;font-weight:700;color:var(--text3);
+      text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">
+      What would you like to do?
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px" id="recoveryActions">
+      <!-- Actions injected dynamically -->
+    </div>
+
+    <!-- Tip -->
+    <div id="recoveryTip"
+      style="margin-top:14px;font-size:12px;color:var(--indigo);
+        background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.12);
+        border-radius:8px;padding:8px 12px;display:none;line-height:1.5">
+    </div>
+
+    <!-- Dismiss -->
+    <div style="text-align:center;margin-top:16px">
+      <a onclick="closeRecoveryModal()"
+        style="font-size:12px;color:var(--text3);cursor:pointer;
+          text-decoration:none;transition:color .15s"
+        onmouseover="this.style.color='var(--text)'"
+        onmouseout="this.style.color='var(--text3)'">
+        Dismiss — I'll handle it manually
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function _initRecoveryModal() {
+
+  var RECOVERY_BTN_BASE = 'display:flex;align-items:center;gap:10px;width:100%;' +
+    'padding:12px 16px;border-radius:12px;border:none;cursor:pointer;text-align:left;' +
+    'font-family:"Plus Jakarta Sans",sans-serif;font-size:13px;font-weight:600;' +
+    'transition:all .18s;';
+
+  var BTN_PRIMARY   = RECOVERY_BTN_BASE + 'background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;box-shadow:0 4px 14px rgba(91,95,239,.3)';
+  var BTN_SECONDARY = RECOVERY_BTN_BASE + 'background:var(--surface2);color:var(--text);border:1.5px solid var(--border2)';
+  var BTN_TEAL      = RECOVERY_BTN_BASE + 'background:linear-gradient(135deg,#0f766e,#0891b2);color:#fff;box-shadow:0 4px 14px rgba(8,145,178,.3)';
+
+  function _makeBtn(icon, label, desc, style, onclick) {
+    return '<button style="' + style + '" onclick="' + onclick + '">' +
+      '<span style="font-size:20px;flex-shrink:0">' + icon + '</span>' +
+      '<div style="min-width:0">' +
+        '<div>' + label + '</div>' +
+        '<div style="font-size:11.5px;opacity:.75;font-weight:500;margin-top:1px">' + desc + '</div>' +
+      '</div>' +
+    '</button>';
+  }
+
+  /* Recovery type configs */
+  var RECOVERY_CONFIGS = {
+
+    'stream_timeout': {
+      subtitle:     'AI generated analysis but ran out of time for TC tables',
+      explanation:  'The AI used most of its token budget on analysis (gap analysis, test summary) and ran out before writing the actual test case tables. This is common on the "Full" format which requests 8 sections at once.',
+      tip:          '💡 E2E-only format is 3× faster — it skips analysis sections and goes straight to test case tables.',
+      actions: function() {
+        return [
+          _makeBtn('🔄', 'Retry with E2E Only', 'Skips analysis — goes straight to TC tables (fastest fix)',
+            BTN_PRIMARY,
+            "closeRecoveryModal();document.getElementById('outputFormat').value='e2e';generate()"),
+          _makeBtn('⚡', 'Try Different Provider', 'Switch AI provider and retry automatically',
+            BTN_TEAL,
+            "closeRecoveryModal();_recoveryTryNextProvider()"),
+          _makeBtn('▶', 'Generate Again (Same Settings)', 'Full retry with current format and provider',
+            BTN_SECONDARY,
+            "closeRecoveryModal();generate()"),
+        ].join('');
+      }
+    },
+
+    'early_truncation': {
+      subtitle:     'Response was cut very early — rate limit or network issue',
+      explanation:  'Only the analysis section arrived before the connection dropped. This usually means the provider hit a rate limit or there was a brief network interruption.',
+      tip:          '💡 Switching to Gemini or Groq (free providers) often resolves rate limit issues immediately.',
+      actions: function() {
+        return [
+          _makeBtn('⚡', 'Try Different Provider', 'Switch AI provider and retry automatically',
+            BTN_PRIMARY,
+            "closeRecoveryModal();_recoveryTryNextProvider()"),
+          _makeBtn('▶', 'Generate Again', 'Retry with current settings after brief wait',
+            BTN_SECONDARY,
+            "closeRecoveryModal();generate()"),
+        ].join('');
+      }
+    },
+
+    'parse_failed': {
+      subtitle:     'Tables detected but could not be read',
+      explanation:  'The AI generated test case tables but used an unexpected format that the parser could not read. This is rare — usually a provider-specific formatting quirk.',
+      tip:          '💡 Try switching to Claude for the most consistent table formatting.',
+      actions: function() {
+        return [
+          _makeBtn('▶', 'Generate Again', 'The format issue is usually fixed on retry',
+            BTN_PRIMARY,
+            "closeRecoveryModal();generate()"),
+          _makeBtn('⚡', 'Try Different Provider', 'Switch to Claude for consistent formatting',
+            BTN_TEAL,
+            "closeRecoveryModal();_recoveryTryNextProvider()"),
+        ].join('');
+      }
+    },
+
+    'low_count': {
+      subtitle:     'Fewer test cases than expected were generated',
+      explanation:  'The generation completed but returned fewer test cases than the minimum target. This can happen with complex requirements that have many sections.',
+      tip:          '💡 Try increasing the format scope or adding more detail to your requirement.',
+      actions: function() {
+        return [
+          _makeBtn('🔄', 'Retry with E2E Only', 'Focus on End-to-End test cases only',
+            BTN_PRIMARY,
+            "closeRecoveryModal();document.getElementById('outputFormat').value='e2e';generate()"),
+          _makeBtn('▶', 'Generate Again', 'Full retry — often yields more TCs on second run',
+            BTN_SECONDARY,
+            "closeRecoveryModal();generate()"),
+        ].join('');
+      }
+    }
+  };
+
+  window.showRecoveryModal = function(type, customSubtitle) {
+    var cfg = RECOVERY_CONFIGS[type] || RECOVERY_CONFIGS['stream_timeout'];
+    var modal = document.getElementById('genRecoveryModal');
+    if (!modal) return;
+
+    document.getElementById('recoverySubtitle').textContent    = customSubtitle || cfg.subtitle;
+    document.getElementById('recoveryExplanation').textContent = cfg.explanation;
+    document.getElementById('recoveryActions').innerHTML       = cfg.actions();
+
+    var tipEl = document.getElementById('recoveryTip');
+    if (cfg.tip) { tipEl.textContent = cfg.tip; tipEl.style.display = 'block'; }
+    else          { tipEl.style.display = 'none'; }
+
+    modal.style.display = 'flex';
+  };
+
+  window.closeRecoveryModal = function() {
+    var modal = document.getElementById('genRecoveryModal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  /* Auto-switch to next non-cooling provider then retry */
+  window._recoveryTryNextProvider = function() {
+    if (typeof ProviderManager === 'undefined') { generate(); return; }
+    var current = ProviderManager.getActive();
+    var all     = ['groq', 'gemini', 'claude'];
+    var next    = all.find(function(p) {
+      return p !== current && ProviderManager.hasKey(p);
+    }) || all.find(function(p) { return p !== current; }) || current;
+
+    if (typeof selectProvider === 'function') selectProvider(next, true);
+    if (typeof showToast     === 'function') showToast('Switched to ' + next + ' — retrying…', '⚡');
+    setTimeout(function() { generate(); }, 400);
+  };
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeRecoveryModal();
   });
 
 })();
