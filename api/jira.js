@@ -1,64 +1,93 @@
 /**
- * api/jira.js — Jira REST API Proxy
- * Reads ticket details server-side — credentials never exposed to browser.
+ * functions/api/jira.js — Jira REST API Proxy (Cloudflare Pages Function)
  *
- * Required Vercel Environment Variables:
- *   JIRA_BASE_URL   — e.g. https://yourcompany.atlassian.net
- *   JIRA_EMAIL      — e.g. ramya@company.com (your Atlassian account email)
- *   JIRA_API_TOKEN  — Generate at: https://id.atlassian.com/manage/api-tokens
+ * Uses Cloudflare Pages onRequest format (NOT Vercel handler).
+ * env = context.env — Cloudflare Pages environment variables.
  *
- * Scopes needed: Read Jira Data (default for API tokens)
+ * Supports two modes:
+ *   1. Server-side credentials: set JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN
+ *      in Cloudflare Pages → Settings → Environment Variables
+ *   2. Browser-supplied credentials: sent in POST body (from Settings → Jira tab)
+ *
+ * Actions:
+ *   fetch_ticket     — fetch a Jira ticket by ID
+ *   test_connection  — verify credentials work
  */
 
-export default async function handler(req, res) {
-  const origin  = req.headers.origin || '';
-  const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
-  if (allowed) {
-    res.setHeader('Access-Control-Allow-Origin',  origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  } else {
-    // F-03 FIX: hard-reject disallowed origins. Previously the proxy continued
-    // processing — wasting Jira API quota — and only withheld CORS headers.
-    return res.status(403).json({ error: 'Origin not allowed' });
+export async function onRequest(context) {
+  const { request: req, env } = context;
+
+  const origin  = req.headers.get('origin') || '';
+  const allowed = origin.includes('localhost') || origin.includes('pages.dev') ||
+                  origin.includes('workers.dev') || origin === '';
+
+  const corsHeaders = {
+    'Access-Control-Allow-Origin':  allowed ? (origin || '*') : '',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+
+  if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
+  if (req.method !== 'POST')   return new Response(
+    JSON.stringify({ error: 'Method not allowed' }),
+    { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+
+  let body = {};
+  try { body = await req.json(); } catch(e) { body = {}; }
+
+  const { action, ticketId, baseUrl: bodyBaseUrl, email: bodyEmail, token: bodyToken } = body;
+
+  // Resolve credentials: body > env vars
+  const jiraBaseUrl = (bodyBaseUrl || env.JIRA_BASE_URL || '').replace(/\/$/, '');
+  const jiraEmail   = bodyEmail || env.JIRA_EMAIL   || '';
+  const jiraToken   = bodyToken || env.JIRA_API_TOKEN || '';
+
+  const respond = (data, status = 200) => new Response(
+    JSON.stringify(data),
+    { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+
+  if (!jiraBaseUrl || !jiraEmail || !jiraToken) {
+    return respond({
+      error: 'Jira not configured. Enter credentials in Settings → Jira tab, or add JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN in Cloudflare Pages → Settings → Environment Variables.'
+    }, 400);
   }
 
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST')   return res.status(405).json({ error: 'Method not allowed' });
+  const auth    = btoa(`${jiraEmail}:${jiraToken}`);
+  const headers = { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json' };
 
-  const { JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN } = process.env;
-
-  if (!JIRA_BASE_URL || !JIRA_EMAIL || !JIRA_API_TOKEN) {
-    return res.status(404).json({
-      error: 'Jira not configured. Add JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN to Vercel Environment Variables.'
-    });
+  // ── Action: test_connection ────────────────────────────────────
+  if (action === 'test_connection') {
+    try {
+      const resp = await fetch(`${jiraBaseUrl}/rest/api/3/myself`, { headers });
+      if (resp.ok) {
+        const data = await resp.json();
+        return respond({ success: true, displayName: data.displayName || jiraEmail });
+      }
+      if (resp.status === 401) return respond({ error: 'Authentication failed — check email and API token' }, 401);
+      return respond({ error: 'Jira API returned HTTP ' + resp.status }, resp.status);
+    } catch(e) {
+      return respond({ error: 'Network error: ' + e.message }, 500);
+    }
   }
 
-  const { ticketId } = req.body || {};
-  if (!ticketId || !ticketId.match(/^[A-Z][A-Z0-9]+-\d+$/)) {
-    return res.status(400).json({ error: 'Invalid Jira ticket ID format (expected e.g. PROJ-1234)' });
+  // ── Action: fetch_ticket ───────────────────────────────────────
+  if (!ticketId || !/^[A-Z][A-Z0-9]+-\d+$/.test(ticketId)) {
+    return respond({ error: 'Invalid Jira ticket ID format (expected e.g. PROJ-1234)' }, 400);
   }
-
-  const baseUrl = JIRA_BASE_URL.replace(/\/$/, '');
-  const auth    = Buffer.from(`${JIRA_EMAIL}:${JIRA_API_TOKEN}`).toString('base64');
 
   try {
-    const url  = `${baseUrl}/rest/api/3/issue/${encodeURIComponent(ticketId)}?fields=summary,description,issuetype,priority,labels,status,customfield_10016,customfield_10014`;
-    const resp = await fetch(url, {
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Accept':        'application/json',
-      }
-    });
+    const url  = `${jiraBaseUrl}/rest/api/3/issue/${encodeURIComponent(ticketId)}?fields=summary,description,issuetype,priority,labels,status,customfield_10016,customfield_10014`;
+    const resp = await fetch(url, { headers });
 
-    if (resp.status === 401) return res.status(401).json({ error: 'Jira authentication failed — check JIRA_EMAIL and JIRA_API_TOKEN' });
-    if (resp.status === 404) return res.status(404).json({ error: `Ticket ${ticketId} not found or no access` });
-    if (!resp.ok)            return res.status(resp.status).json({ error: `Jira API error: HTTP ${resp.status}` });
+    if (resp.status === 401) return respond({ error: 'Authentication failed — check email and API token' }, 401);
+    if (resp.status === 404) return respond({ error: `Ticket ${ticketId} not found or no access` }, 404);
+    if (!resp.ok)            return respond({ error: `Jira API error: HTTP ${resp.status}` }, resp.status);
 
     const data   = await resp.json();
     const fields = data.fields || {};
 
-    // Extract description text (Atlassian Document Format → plain text)
     const extractText = (node) => {
       if (!node) return '';
       if (typeof node === 'string') return node;
@@ -67,22 +96,18 @@ export default async function handler(req, res) {
       return '';
     };
 
-    // Find acceptance criteria — often in a custom field or description section
     let description = extractText(fields.description).trim();
     let acceptanceCriteria = '';
-
-    // Try to split AC from description if it contains "Acceptance Criteria"
     const acMatch = description.match(/acceptance criteria[\s\S]*/i);
     if (acMatch) {
       acceptanceCriteria = acMatch[0].replace(/^acceptance criteria:?\s*/i, '').trim();
       description = description.replace(/acceptance criteria[\s\S]*/i, '').trim();
     }
 
-    // Try custom field 10016 (sprint) or 10014 (epic link) for extra context
     const sprintField = fields.customfield_10016;
     const sprintName  = Array.isArray(sprintField) && sprintField[0]?.name ? sprintField[0].name : null;
 
-    return res.status(200).json({
+    return respond({
       id:                 data.key,
       summary:            fields.summary || '',
       description:        description.substring(0, 2000),
@@ -94,7 +119,7 @@ export default async function handler(req, res) {
       sprint:             sprintName             || '',
     });
 
-  } catch (err) {
-    return res.status(500).json({ error: `Proxy fetch failed: ${err.message}` });
+  } catch(e) {
+    return respond({ error: 'Proxy fetch failed: ' + e.message }, 500);
   }
 }

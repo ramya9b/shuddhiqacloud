@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v7.6 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5938,7 +5938,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v7.6</span>
+      <span class="sb-badge">v7.7</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6843,7 +6843,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v7.6</div>
+          <div class="settings-about-val">v7.7</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -13478,7 +13478,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v7.6';
+  if (ver)  ver.textContent  = 'v7.7';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14493,7 +14493,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v7.6';
+  if (version)  version.textContent  = 'v7.7';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -14801,20 +14801,53 @@ async function testJiraConnection() {
   const btn      = document.getElementById('jiraTestBtn');
   if (resultEl) { resultEl.style.display='block'; resultEl.className='settings-test-result'; resultEl.textContent='⏳ Testing Jira connection…'; }
   if (btn) btn.disabled = true;
+
+  /* Read credentials from inputs (live) or localStorage (saved) */
+  const urlEl   = document.getElementById('settingsJiraUrl');
+  const emailEl = document.getElementById('settingsJiraEmail');
+  const tokenEl = document.getElementById('settingsJiraToken');
+  let baseUrl = (urlEl   && urlEl.value.trim())   || '';
+  let email   = (emailEl && emailEl.value.trim()) || '';
+  let token   = (tokenEl && tokenEl.value.trim()) || '';
+
+  /* Fallback to localStorage */
+  if (!baseUrl || !email || !token) {
+    try {
+      const saved = JSON.parse(localStorage.getItem(JIRA_LS_KEY) || '{}');
+      if (!baseUrl) baseUrl = saved.url   || '';
+      if (!email)   email   = saved.email || '';
+      if (!token)   token   = saved.token || '';
+    } catch(e) {}
+  }
+
+  if (!baseUrl || !email || !token) {
+    if (resultEl) { resultEl.className='settings-test-result err'; resultEl.textContent='❌ Enter Jira URL, email and API token first'; }
+    if (btn) btn.disabled = false;
+    return;
+  }
+
   try {
     const res = await fetch('/api/jira', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'test' })
+      body: JSON.stringify({
+        action:  'test_connection',
+        baseUrl: baseUrl,
+        email:   email,
+        token:   token
+      })
     });
     const data = await res.json().catch(() => ({}));
-    if (res.ok) {
-      if (resultEl) { resultEl.className='settings-test-result ok'; resultEl.textContent='\u2705 Jira connected successfully'; }
+    if (res.ok && data.success) {
+      if (resultEl) { resultEl.className='settings-test-result ok'; resultEl.textContent='✅ Connected as ' + (data.displayName || email); }
+      /* auto-save on success */
+      if (typeof saveJiraSettings === 'function') saveJiraSettings();
+      if (typeof checkJiraSettingsStatus === 'function') checkJiraSettingsStatus();
     } else {
-      if (resultEl) { resultEl.className='settings-test-result err'; resultEl.textContent='❌ '+(data.error||'Connection failed'); }
+      if (resultEl) { resultEl.className='settings-test-result err'; resultEl.textContent='❌ ' + (data.error || 'Connection failed'); }
     }
   } catch(e) {
-    if (resultEl) { resultEl.className='settings-test-result err'; resultEl.textContent='❌ Network error: '+e.message; }
+    if (resultEl) { resultEl.className='settings-test-result err'; resultEl.textContent='❌ Network error: ' + e.message; }
   } finally {
     if (btn) btn.disabled = false;
   }
@@ -15281,7 +15314,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.6</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.7</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
