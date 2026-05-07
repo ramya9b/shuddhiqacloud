@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Shuddhi QA v2.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.3 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="Generate production-ready QA test cases for Microsoft Dynamics 365, Salesforce, Web Apps and Mobile in seconds. Export to Excel, PDF, Azure DevOps or Jira Zephyr. Built in Bengaluru 🇮🇳"/>
 <meta name="keywords" content="QA test cases, D365 testing, Salesforce QA, Azure DevOps, Jira Zephyr, test automation, Shuddhi QA, ERP testing, Claude AI"/>
 <meta name="author" content="Shuddhi QA — Made in Bengaluru"/>
@@ -143,12 +143,12 @@ nav{
 .nav-links a:hover{color:var(--text)}
 .nav-cta{
   padding:9px 22px;border-radius:8px;
-  background:var(--gradS);
-  color:#0b0d13;font-size:13px;font-weight:600;
+  background:linear-gradient(135deg,#5B5FEF,#8B5CF6);
+  color:#fff;font-size:13px;font-weight:600;
   text-decoration:none;transition:all .2s;
-  box-shadow:0 4px 16px rgba(232,162,32,.25);
+  box-shadow:0 4px 16px rgba(91,95,239,.3);
 }
-.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(232,162,32,.35)}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,239,.45)}
 
 /* ── Sections ──────────────────────────────────────────── */
 section{position:relative;z-index:1}
@@ -233,12 +233,12 @@ section{position:relative;z-index:1}
 }
 .btn-primary{
   padding:14px 32px;border-radius:10px;
-  background:var(--gradS);
-  color:#0b0d13;font-size:15px;font-weight:600;
+  background:linear-gradient(135deg,#5B5FEF,#8B5CF6);
+  color:#fff;font-size:15px;font-weight:600;
   text-decoration:none;transition:all .2s;
-  box-shadow:0 6px 24px rgba(232,162,32,.3);
+  box-shadow:0 6px 24px rgba(91,95,239,.35);
 }
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(232,162,32,.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(91,95,239,.5)}
 .btn-secondary{
   padding:14px 32px;border-radius:10px;
   border:1px solid var(--border2);
@@ -615,6 +615,33 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     nav .nav-cta { display: none; }
   }
 
+
+  /* ── Option C: Shared brand tokens with app ─────────────────
+     Indigo interactive + Gold brand — same as app.html sync   */
+  :root {
+    --indigo: #5B5FEF;
+    --violet: #8B5CF6;
+    --indigo-glow: rgba(91,95,239,.3);
+  }
+  /* Hero stat numbers: indigo (connects to app's indigo) */
+  .hero-stat-n {
+    background: linear-gradient(135deg, #E8A020, #F5B840) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+  }
+  /* Section highlights: indigo accent */
+  .feat-title {
+    color: #5B5FEF;
+  }
+  /* How-step number circles: indigo */
+  .how-step-num {
+    background: linear-gradient(135deg, #5B5FEF, #8B5CF6) !important;
+    box-shadow: 0 4px 14px rgba(91,95,239,.35) !important;
+  }
+  /* Light mode btn-primary fix */
+  html.light .btn-primary { color: #FFFFFF !important; }
+  html.light .nav-cta     { color: #FFFFFF !important; }
 </style>
 
 <script type="application/ld+json">
@@ -724,7 +751,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div class="hero-stat-l">Export Formats</div>
       </div>
       <div>
-        <div class="hero-stat-n">21</div>
+        <div class="hero-stat-n">9</div>
         <div class="hero-stat-l">Languages</div>
       </div>
       <div>
@@ -771,7 +798,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <div class="what-point-icon">📄</div>
           <div>
             <div class="what-point-title">Upload any document</div>
-            <div class="what-point-desc">PDF, DOCX or TXT — FDDs, BRDs, user stories, Confluence pages. Auto-detects language in 21 scripts including Hindi, Telugu, Tamil, Arabic.</div>
+            <div class="what-point-desc">PDF, DOCX or TXT — FDDs, BRDs, user stories, Confluence pages. Auto-detects language in the document. Output available in 9 languages.</div>
           </div>
         </div>
         <div class="what-point">
@@ -824,7 +851,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
       <div class="feat-card">
         <div class="feat-icon">🌐</div>
-        <div class="feat-title">21-Language Detection</div>
+        <div class="feat-title">9-Language Support</div>
         <div class="feat-desc">Uploads in Hindi, Telugu, Tamil, Kannada, Bengali, Arabic, German, French and 13 more languages are auto-detected and translated to English test cases.</div>
         <div class="feat-tags"><span class="feat-tag">Indian Scripts</span><span class="feat-tag">Auto-translate</span></div>
       </div>
@@ -1012,7 +1039,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
       <div class="how-step">
         <div class="how-num">2</div>
         <div class="how-step-title">Describe or Upload</div>
-        <div class="how-step-desc">Type your business flow, paste a user story, or upload a PDF/DOCX FDD. 21 languages supported.</div>
+        <div class="how-step-desc">Type your business flow, paste a user story, or upload a PDF/DOCX FDD. 9 languages supported (5 Tier 1 full translation + 4 coming soon).</div>
       </div>
       <div class="how-step">
         <div class="how-num">3</div>
