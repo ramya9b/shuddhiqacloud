@@ -6357,7 +6357,7 @@ header::after { display: none !important; }
     <div class="settings-panel" id="spanel-claude">
       <div class="settings-section">
         <div class="settings-section-title">AI Provider</div>
-        <div class="settings-section-desc">Choose which AI generates test cases. Each provider needs its own API key in Vercel.</div>
+        <div class="settings-section-desc">Choose which AI generates test cases. Add your own API key below or use the shared free tier.</div>
       </div>
 
       <!-- Provider selector pills -->
@@ -6465,7 +6465,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card — keys from Vercel, no manual input needed -->
+      <!-- Active provider card -->
       <div id="activeProviderCard" style="border:1.5px solid var(--border2);border-radius:12px;
            overflow:visible;margin-bottom:16px;transition:border-color .2s">
         <!-- Header -->
@@ -6487,13 +6487,13 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Key status row — read-only, from Vercel -->
+          <!-- Key status row -->
           <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;
                background:var(--surface2);border-radius:9px;border:1px solid var(--border)">
             <span style="font-size:14px" id="activeKeyStatusIcon">✅</span>
             <div style="flex:1">
               <div style="font-size:12px;font-weight:700;color:var(--text)"
-                   id="activeKeyStatusLabel">API key configured in Vercel</div>
+                   id="activeKeyStatusLabel">API key configured</div>
               <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace"
                    id="activeEnvKey">Checking…</div>
             </div>
@@ -6521,16 +6521,16 @@ header::after { display: none !important; }
       <!-- Test result -->
       <div class="settings-test-result" id="claudeTestResult" style="display:none"></div>
 
-      <!-- Vercel setup guide -->
+      <!-- API key setup guide -->
       <details class="settings-guide">
-        <summary>How to add a key in Vercel →</summary>
+        <summary>How to get a free API key →</summary>
         <ol class="settings-steps">
           <li>Get your free API key from the provider link above</li>
-          <li>Add key once: Vercel → Project → Settings → Environment Variables</li>
+          <li>Add key once: Cloudflare Pages → Settings → Environment Variables</li>
           <li>Name: <code id="guideEnvKey">GEMINI_API_KEY</code> or <code>GROQ_API_KEY</code> → paste value → Save</li>
-          <li>Run <code>vercel --prod --force</code> to deploy</li>
-          <li>Switch provider anytime from this Settings panel — no Vercel changes needed!</li>
-          <li><strong>Privacy:</strong> Only your preference choices are stored in browser localStorage (provider selection, ADO org name, assigned-to email). No API keys or secrets ever leave Vercel's server.</li>
+          <li>Redeploy on Cloudflare Pages to apply</li>
+          <li>Switch provider anytime from this Settings panel — no redeployment needed!</li>
+          <li><strong>Privacy:</strong> Only your preference choices are stored in browser localStorage (provider selection, ADO org name, assigned-to email). No API keys or secrets ever leave Cloudflare's server.</li>
         </ol>
       </details>
 
@@ -6745,7 +6745,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Manual config (when not set via Vercel) -->
+      <!-- Manual config -->
       <div id="jiraManualSection">
         <div class="settings-field-label">Jira Base URL</div>
         <input type="text" id="settingsJiraUrl" placeholder="https://yourcompany.atlassian.net" autocomplete="off"
@@ -6777,13 +6777,13 @@ header::after { display: none !important; }
         <div class="settings-hint">
           💡 These settings are saved locally in your browser (localStorage).<br>
           For production: add <code>JIRA_BASE_URL</code>, <code>JIRA_EMAIL</code>, <code>JIRA_API_TOKEN</code>
-          as Vercel Environment Variables — credentials stay server-side.
+          in Settings → Jira tab.
         </div>
       </div>
 
-      <!-- Vercel section (when configured via env) -->
+      <!-- Jira configured section -->
       <div id="jiraVercelSection" style="display:none">
-        <div class="settings-field-label">Vercel Environment Variables</div>
+        <div class="settings-field-label">Saved Configuration</div>
         <div class="settings-env-row">
           <span class="settings-env-name">JIRA_BASE_URL</span>
           <span class="settings-env-val">https://•••.atlassian.net</span>
@@ -6799,7 +6799,7 @@ header::after { display: none !important; }
           <span class="settings-env-val">ATATT3x••••••••</span>
           <div class="conn-badge ok">Configured ✓</div>
         </div>
-        <div class="settings-hint">🔒 Jira credentials are stored server-side in Vercel. The browser never sees them.</div>
+        <div class="settings-hint">🔒 Jira credentials are saved in your browser localStorage only.</div>
       </div>
 
       <!-- Test result -->
@@ -6814,7 +6814,7 @@ header::after { display: none !important; }
           <li>Enter your Jira Base URL, email, and token above</li>
           <li>Click <strong>Test</strong> to verify the connection</li>
           <li>Once connected, use the <strong>Jira Ticket ID</strong> field in the main form</li>
-          <li>For production: add the 3 variables to Vercel Environment Variables</li>
+          <li>Enter your Jira details in Settings → Jira tab</li>
         </ol>
       </details>
     </div>
@@ -7011,7 +7011,7 @@ header::after { display: none !important; }
             Add <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_BASE_URL</code>,
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_EMAIL</code> and
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_API_TOKEN</code>
-            to Vercel env vars to enable auto-fetch.
+            in Settings → Jira tab to enable auto-fetch.
           </div>
         </div>
         </div>
@@ -7487,11 +7487,11 @@ header::after { display: none !important; }
                       background:rgba(0,135,90,.05);border:1px solid rgba(0,135,90,.2);border-radius:8px">
             <span style="font-size:16px">🔐</span>
             <div style="flex:1;font-size:12.5px;color:#005a28">
-              <strong>PAT is secured via Vercel Environment Variable</strong> — not exposed to browser
+              <strong>PAT saved in your browser</strong> — configure in Settings → Azure DevOps
             </div>
             <span style="font-size:10px;padding:2px 8px;border-radius:6px;background:rgba(0,135,90,.1);
                          border:1px solid rgba(0,135,90,.3);color:#00875a;font-family:'JetBrains Mono',monospace;
-                         white-space:nowrap">ADO_PAT ✓ VERCEL ENV</span>
+                         white-space:nowrap">PAT ✓ Saved</span>
           </div>
         </div>
 
@@ -7987,7 +7987,7 @@ function _updateProviderUI(provider) {
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
   if (statusIcon)  statusIcon.textContent  = hasK ? '✅' : '⚠️';
-  if (statusLabel) statusLabel.textContent = hasK ? 'API key configured in Vercel' : 'Key not found — add ' + (meta.envKey||'') + ' to Vercel env vars';
+  if (statusLabel) statusLabel.textContent = hasK ? 'API key configured' : 'Key not found — add ' + (meta.envKey||'') + ' to Vercel env vars';
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
@@ -12722,8 +12722,7 @@ async function initADOModal() {
     } else {
       if (display) display.textContent = 'PAT not configured';
       if (errEl) {
-        errEl.textContent = '⚠️ ADO_PAT / DEVOPS_PAT not set in Vercel Environment Variables. ' +
-                            'Add it in Vercel → Project Settings → Environment Variables.';
+        errEl.textContent = '⚠️ ADO PAT not configured. Go to Settings → Azure DevOps and enter your PAT.';
         errEl.style.display = '';
       }
       return;
@@ -12800,7 +12799,7 @@ async function initADOModal() {
     if (display) display.textContent = 'Error loading';
     if (errEl) {
       errEl.textContent = '❌ Failed to load configuration: ' + e.message +
-                          '. Check your network and Vercel deployment.';
+                          '. Check your network connection.';
       errEl.style.display = '';
     }
   }
@@ -13716,7 +13715,7 @@ async function testClaudeConnection() {
 
         displayMsg = errText
           ? 'Provider error: ' + errText.substring(0, 120)
-          : 'Internal proxy error (500). Check Vercel function logs for details.';
+          : 'Internal proxy error (500). Check Cloudflare Pages function logs.';
       } else if (res.status === 429 || isSwitch) {
         displayMsg = errText || 'Rate limit or quota exceeded. Try again later.';
       } else if (res.status === 401) {
@@ -14765,11 +14764,11 @@ function checkJiraSettingsStatus() {
   const sub   = document.getElementById('jiraStatusSub');
   const btn   = document.getElementById('jiraTestBtn');
   const manual  = document.getElementById('jiraManualSection');
-  const vercel  = document.getElementById('jiraVercelSection');
+  const vercel  = document.getElementById('jiraVercelSection'); // hidden compat stub
 
   if (window.__jiraConfigured) {
     if (icon)   icon.textContent   = '🔐';
-    if (label)  label.textContent  = 'Jira configured via Vercel Environment Variables';
+    if (label)  label.textContent  = 'Jira configured — ready to use';
     if (label)  label.style.color  = '#00875a';
     if (sub)    sub.textContent    = 'JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN are set server-side.';
     if (btn)    btn.style.display  = 'block';
@@ -14785,13 +14784,13 @@ function checkJiraSettingsStatus() {
       if (icon)   icon.textContent  = '💾';
       if (label)  label.textContent = 'Jira configured via browser settings';
       if (label)  label.style.color = '#0369A1';
-      if (sub)    sub.textContent   = 'Credentials stored locally — add Vercel env vars for production.';
+      if (sub)    sub.textContent   = 'Credentials stored in your browsers for production.';
       if (btn)    btn.style.display = 'block';
     } else {
       if (icon)   icon.textContent  = '⚠️';
       if (label)  label.textContent = 'Jira not configured';
       if (label)  label.style.color = '#b45309';
-      if (sub)    sub.textContent   = 'Enter credentials below or add Vercel environment variables.';
+      if (sub)    sub.textContent   = 'Enter your Jira credentials belownt variables.';
       if (btn)    btn.style.display = 'none';
     }
   } catch(e){ /* C-07: intentionally silent — verified non-actionable */ }
