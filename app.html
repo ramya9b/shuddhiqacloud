@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v7.4 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v7.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
@@ -5938,7 +5938,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v7.4</span>
+      <span class="sb-badge">v7.5</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6843,7 +6843,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v7.4</div>
+          <div class="settings-about-val">v7.5</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7511,7 +7511,7 @@ header::after { display: none !important; }
 
         <!-- Validate button removed — enter org name directly -->
 
-        <!-- Organisation pre-configured from DEVOPS_ORG env var -->
+        <!-- Organisation from user settings -->
         <div id="adoOrgProjectRow" style="display:block">
 
           <!-- Org display (read-only — set from env) -->
@@ -7521,7 +7521,7 @@ header::after { display: none !important; }
               <span id="adoOrgEnvBadge" style="display:none;font-size:10px;padding:2px 8px;
                 border-radius:6px;background:rgba(0,120,212,.1);border:1px solid rgba(0,120,212,.25);
                 color:var(--d365);font-family:'JetBrains Mono',monospace;font-weight:700">
-                DEVOPS_ORG ✓
+                Saved ✓
               </span>
             </label>
             <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;
@@ -12790,7 +12790,7 @@ async function initADOModal() {
             </div>
             <div style="font-size:11.5px;color:var(--text3);margin-top:4px">
               &#128161; To pre-configure, add <code style="background:var(--surface2);padding:1px 6px;
-              border-radius:4px;font-family:monospace">DEVOPS_ORG</code> = your org name in Vercel env vars
+              border-radius:4px;font-family:monospace">Organisation URL</code> in Settings → Azure DevOps tab
             </div>`;
           orgSection.insertBefore(div, orgSection.firstChild);
         }
@@ -13479,7 +13479,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v7.4';
+  if (ver)  ver.textContent  = 'v7.5';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -13667,7 +13667,7 @@ async function autoLoadProjectsFromEnv(org, presetProject) {
     projSel.innerHTML = '<option value="">— Failed to load —</option>';
     let msg = e.message;
     if (msg.includes('401') || msg.includes('403')) msg = '⚠️ PAT expired or insufficient scope — go to Azure DevOps → User Settings (avatar top-right) → Personal Access Tokens → renew with Test Plans Read & Write scope.';
-    else if (msg.includes('404')) msg = `&#10060; Org "${org}" not found &#8212; check DEVOPS_ORG in Vercel`;
+    else if (msg.includes('404')) msg = `&#10060; Org "${org}" not found &#8212; check your Organisation URL in Settings → Azure DevOps`;
     if (errEl) { errEl.textContent = msg; errEl.style.display = ''; }
   }
 }
@@ -14494,7 +14494,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v7.4';
+  if (version)  version.textContent  = 'v7.5';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15282,7 +15282,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.4</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.5</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -17345,11 +17345,17 @@ window.copyShareLink = function() {
   var LS_PAT  = 'shuddhi-ado-pat';
   var LS_PROJ = 'shuddhi-ado-project';
 
-  /* Load saved values whenever ADO tab is opened */
+  /* FIX B4: single init — use readyState check only */
+  function _onReady(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn, { once: true });
+    } else {
+      setTimeout(fn, 500);
+    }
+  }
+
   function _loadSaved() {
-    var url  = '';
-    var pat  = '';
-    var proj = '';
+    var url = '', pat = '', proj = '';
     try {
       url  = localStorage.getItem(LS_URL)  || '';
       pat  = localStorage.getItem(LS_PAT)  || '';
@@ -17359,49 +17365,36 @@ window.copyShareLink = function() {
     var urlEl  = document.getElementById('adoOrgUrlInput');
     var patEl  = document.getElementById('adoPATInput');
     var projEl = document.getElementById('adoProjectInput');
-
     if (urlEl  && !urlEl.value)  urlEl.value  = url;
     if (patEl  && !patEl.value)  patEl.value  = pat;
     if (projEl && !projEl.value) projEl.value = proj;
 
-    /* Also populate hidden compat stubs used by pushToADOFull */
-    var orgHidden = document.getElementById('settingsAdoOrg');
+    var orgHidden  = document.getElementById('settingsAdoOrg');
+    var projHidden = document.getElementById('settingsAdoProject');
     if (orgHidden && url) {
       var m = url.match(/dev\.azure\.com\/([^/]+)/);
       if (m) orgHidden.value = m[1];
     }
-    var projHidden = document.getElementById('settingsAdoProject');
     if (projHidden && proj) projHidden.value = proj;
 
-    /* Expose to window for ADO push function */
-    if (url) window.__adoOrgUrl  = url;
-    if (pat) {
-      window.__manualAdoPAT = pat;
-      window.__adoPAT       = pat;
-    }
+    if (url)  window.__adoOrgUrl         = url;
+    if (pat)  { window.__manualAdoPAT    = pat; window.__adoPAT = pat; }
     if (proj) window.__adoDefaultProject = proj;
-
     _updateStatus(url, pat);
   }
 
-  /* Update status badge */
   function _updateStatus(url, pat) {
     var icon  = document.getElementById('adoStatusIcon');
     var label = document.getElementById('adoStatusLabel');
     var sub   = document.getElementById('adoStatusSub');
     if (!icon) return;
-
     var hasUrl = url && url.includes('dev.azure.com');
     var hasPat = pat && pat.length > 10;
-
     if (hasUrl && hasPat) {
       icon.textContent  = '✅';
       label.textContent = 'ADO configured — ready to push test cases';
       label.style.color = '#059669';
-      if (sub) {
-        var m = url.match(/dev\.azure\.com\/([^/]+)/);
-        sub.textContent = m ? 'Organisation: ' + m[1] : url;
-      }
+      if (sub) { var m = url.match(/dev\.azure\.com\/([^/]+)/); sub.textContent = m ? 'Organisation: ' + m[1] : url; }
     } else if (hasUrl && !hasPat) {
       icon.textContent  = '⚠️';
       label.textContent = 'Organisation URL set — PAT required';
@@ -17415,407 +17408,151 @@ window.copyShareLink = function() {
     }
   }
 
-  /* Called on any field change */
   window._adoFieldChanged = function() {
     var url = (document.getElementById('adoOrgUrlInput') || {}).value || '';
     var pat = (document.getElementById('adoPATInput')    || {}).value || '';
     _updateStatus(url, pat);
   };
 
-  /* Save settings */
+  /* FIX B1: safe btoa — handles non-Latin1 chars in PAT */
+  function _safeB64(str) {
+    try { return btoa(unescape(encodeURIComponent(str))); }
+    catch(e) { try { return btoa(str); } catch(e2) { return null; } }
+  }
+
+  function _showResult(res, type, msg) {
+    var styles = {
+      error:   'rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#ef4444',
+      warning: 'rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);color:#F59E0B',
+      success: 'rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#059669',
+      info:    'rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.15);color:var(--indigo)'
+    }[type] || '';
+    res.style.cssText = 'display:block;background:' + styles + ';padding:8px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px;font-family:"JetBrains Mono",monospace';
+    res.textContent = msg;
+  }
+
   window._adoSaveSettings = function() {
     var url  = ((document.getElementById('adoOrgUrlInput')  || {}).value || '').trim();
     var pat  = ((document.getElementById('adoPATInput')     || {}).value || '').trim();
     var proj = ((document.getElementById('adoProjectInput') || {}).value || '').trim();
-
-    var res = document.getElementById('adoSaveResult');
+    var res  = document.getElementById('adoSaveResult');
     if (!res) return;
 
-    if (!url) {
-      res.style.display = 'block';
-      res.style.background = 'rgba(239,68,68,.08)';
-      res.style.border = '1px solid rgba(239,68,68,.2)';
-      res.style.color  = '#ef4444';
-      res.textContent  = '❌ Organisation URL is required';
-      return;
-    }
-    if (!url.includes('dev.azure.com')) {
-      res.style.display = 'block';
-      res.style.background = 'rgba(239,68,68,.08)';
-      res.style.border = '1px solid rgba(239,68,68,.2)';
-      res.style.color  = '#ef4444';
-      res.textContent  = '❌ URL must include dev.azure.com — e.g. https://dev.azure.com/YourOrg';
-      return;
-    }
+    if (!url)                         { _showResult(res,'error','❌ Organisation URL is required'); return; }
+    if (!url.includes('dev.azure.com')){ _showResult(res,'error','❌ URL must be: https://dev.azure.com/YourOrg'); return; }
+    /* FIX B6: warn if PAT empty but don't block */
+    if (!pat) { _showResult(res,'warning','⚠️ URL saved. Add your PAT to enable ADO push.'); }
 
     try {
-      if (url)  localStorage.setItem(LS_URL,  url);
-      else      localStorage.removeItem(LS_URL);
-      if (pat)  localStorage.setItem(LS_PAT,  pat);
-      else      localStorage.removeItem(LS_PAT);
-      if (proj) localStorage.setItem(LS_PROJ, proj);
-      else      localStorage.removeItem(LS_PROJ);
+      if (url)  localStorage.setItem(LS_URL,  url);   else localStorage.removeItem(LS_URL);
+      if (pat)  localStorage.setItem(LS_PAT,  pat);   else localStorage.removeItem(LS_PAT);
+      if (proj) localStorage.setItem(LS_PROJ, proj);  else localStorage.removeItem(LS_PROJ);
     } catch(e) {}
 
-    /* Expose to window */
-    window.__adoOrgUrl          = url;
-    window.__manualAdoPAT       = pat;
-    window.__adoPAT             = pat;
-    window.__adoDefaultProject  = proj;
+    window.__adoOrgUrl         = url;
+    window.__manualAdoPAT      = pat;
+    window.__adoPAT            = pat;
+    window.__adoDefaultProject = proj;
 
-    var m = url.match(/dev\.azure\.com\/([^/]+)/);
-    var orgHidden = document.getElementById('settingsAdoOrg');
-    if (orgHidden && m) orgHidden.value = m[1];
-    var projHidden = document.getElementById('settingsAdoProject');
-    if (projHidden) projHidden.value = proj;
+    var m2 = url.match(/dev\.azure\.com\/([^/]+)/);
+    var oh = document.getElementById('settingsAdoOrg');
+    var ph = document.getElementById('settingsAdoProject');
+    if (oh && m2) oh.value = m2[1];
+    if (ph)       ph.value = proj;
 
     _updateStatus(url, pat);
 
-    res.style.display = 'block';
-    res.style.background = 'rgba(16,185,129,.08)';
-    res.style.border = '1px solid rgba(16,185,129,.2)';
-    res.style.color  = '#059669';
-    res.textContent  = '✅ Settings saved — ready to push test cases to ADO';
-
-    if (typeof showToast === 'function')
-      showToast('ADO settings saved ✅', '🔷');
-
+    if (pat) {
+      _showResult(res,'success','✅ Settings saved — ready to push test cases to ADO');
+      if (typeof showToast === 'function') showToast('ADO settings saved ✅', '🔷');
+    }
     setTimeout(function() { if (res) res.style.display = 'none'; }, 4000);
   };
 
-  /* Test connection */
+  /* FIX B2: test via Cloudflare proxy to avoid CORS */
   window._adoTestConnection = function() {
     var url = ((document.getElementById('adoOrgUrlInput') || {}).value || '').trim();
     var pat = ((document.getElementById('adoPATInput')    || {}).value || '').trim();
     var res = document.getElementById('adoSaveResult');
     if (!res) return;
 
-    if (!url || !pat) {
-      res.style.display = 'block';
-      res.style.background = 'rgba(245,158,11,.08)';
-      res.style.border = '1px solid rgba(245,158,11,.2)';
-      res.style.color  = '#F59E0B';
-      res.textContent  = '⚠️ Enter both Organisation URL and PAT to test';
-      return;
-    }
+    if (!url || !pat) { _showResult(res,'warning','⚠️ Enter both Organisation URL and PAT to test'); return; }
+
+    /* FIX B1: validate btoa encoding */
+    var b64 = _safeB64(':' + pat);
+    if (!b64) { _showResult(res,'error','❌ PAT contains invalid characters — re-copy from ADO'); return; }
 
     var btn = document.getElementById('adoTestBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'Testing…'; }
-    res.style.display = 'block';
-    res.style.background = 'rgba(91,95,239,.06)';
-    res.style.border = '1px solid rgba(91,95,239,.15)';
-    res.style.color  = 'var(--indigo)';
-    res.textContent  = '🔷 Testing connection to ADO…';
+    _showResult(res,'info','🔷 Testing connection to ADO…');
 
     var m = url.match(/dev\.azure\.com\/([^/]+)/);
     var org = m ? m[1] : '';
-    var testUrl = 'https://dev.azure.com/' + org + '/_apis/projects?api-version=7.0';
-    var b64 = btoa(':' + pat);
 
-    fetch(testUrl, { headers: { 'Authorization': 'Basic ' + b64 } })
-      .then(function(r) {
-        if (btn) { btn.disabled = false; btn.textContent = '🔷 Test Connection'; }
-        if (r.ok) {
-          res.style.background = 'rgba(16,185,129,.08)';
-          res.style.border = '1px solid rgba(16,185,129,.2)';
-          res.style.color  = '#059669';
-          res.textContent  = '✅ Connection successful! ADO is reachable and PAT is valid.';
-          _adoSaveSettings(); /* auto-save on success */
-        } else {
-          res.style.background = 'rgba(239,68,68,.08)';
-          res.style.border = '1px solid rgba(239,68,68,.2)';
-          res.style.color  = '#ef4444';
-          res.textContent  = '❌ Connection failed (HTTP ' + r.status + '). Check your URL and PAT scopes.';
-        }
-      })
-      .catch(function(e) {
-        if (btn) { btn.disabled = false; btn.textContent = '🔷 Test Connection'; }
-        res.style.background = 'rgba(239,68,68,.08)';
-        res.style.border = '1px solid rgba(239,68,68,.2)';
-        res.style.color  = '#ef4444';
-        res.textContent  = '❌ Network error — check your URL or try again. (' + (e.message||'') + ')';
-      });
+    function _onSuccess() {
+      if (btn) { btn.disabled = false; btn.textContent = '🔷 Test Connection'; }
+      _showResult(res,'success','✅ Connection successful! ADO is reachable and PAT is valid.');
+      window._adoSaveSettings(); /* FIX B5: use window. prefix */
+    }
+    function _onFail(status) {
+      if (btn) { btn.disabled = false; btn.textContent = '🔷 Test Connection'; }
+      _showResult(res,'error','❌ Connection failed (HTTP ' + status + '). Check URL and PAT scopes.');
+    }
+    function _onSavedAnyway() {
+      if (btn) { btn.disabled = false; btn.textContent = '🔷 Test Connection'; }
+      _showResult(res,'warning','⚠️ Could not verify — settings saved. Try pushing a TC to confirm.');
+      window._adoSaveSettings();
+    }
+
+    /* Primary: route through /api/ado proxy (no CORS issues) */
+    fetch('/api/ado', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action:'test_connection', org:org, pat:pat, baseUrl:'https://dev.azure.com/'+org })
+    })
+    .then(function(r) { return r.json().then(function(d){ return {ok:r.ok,status:r.status,data:d}; }); })
+    .then(function(result) {
+      if (result.ok || (result.data && result.data.success)) { _onSuccess(); }
+      else { _onFail((result.data && result.data.error) || result.status); }
+    })
+    .catch(function() {
+      /* Fallback: direct call — may work if ADO allows CORS for this origin */
+      fetch('https://dev.azure.com/' + org + '/_apis/projects?api-version=7.0',
+            { headers: { 'Authorization': 'Basic ' + b64 }, mode:'cors' })
+        .then(function(r) { r.ok ? _onSuccess() : _onFail(r.status); })
+        .catch(function() { _onSavedAnyway(); });
+    });
   };
 
-  /* Toggle PAT visibility */
   window._adoTogglePAT = function() {
     var inp = document.getElementById('adoPATInput');
     var btn = document.getElementById('adoPATToggle');
     if (!inp) return;
-    if (inp.type === 'password') {
-      inp.type = 'text';
-      if (btn) btn.textContent = '🙈';
-    } else {
-      inp.type = 'password';
-      if (btn) btn.textContent = '👁';
-    }
+    if (inp.type === 'password') { inp.type = 'text';     if (btn) btn.textContent = '🙈'; }
+    else                         { inp.type = 'password'; if (btn) btn.textContent = '👁'; }
   };
 
-  /* Clear settings */
   window._adoClearSettings = function() {
     if (!confirm('Clear all saved ADO settings?')) return;
-    try {
-      localStorage.removeItem(LS_URL);
-      localStorage.removeItem(LS_PAT);
-      localStorage.removeItem(LS_PROJ);
-    } catch(e) {}
-    ['adoOrgUrlInput','adoPATInput','adoProjectInput'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.value = '';
+    try { localStorage.removeItem(LS_URL); localStorage.removeItem(LS_PAT); localStorage.removeItem(LS_PROJ); } catch(e) {}
+    ['adoOrgUrlInput','adoPATInput','adoProjectInput'].forEach(function(id){
+      var el = document.getElementById(id); if (el) el.value = '';
     });
-    window.__adoOrgUrl = '';
-    window.__manualAdoPAT = '';
-    window.__adoPAT = '';
-    window.__adoDefaultProject = '';
-    _updateStatus('', '');
+    window.__adoOrgUrl = ''; window.__manualAdoPAT = ''; window.__adoPAT = ''; window.__adoDefaultProject = '';
+    _updateStatus('','');
     if (typeof showToast === 'function') showToast('ADO settings cleared', '🗑');
   };
 
-  /* Hook into settings tab switch to load saved values */
-  var _origSwitch = window.switchSettingsTab;
-  window.switchSettingsTab = function(tab) {
-    if (typeof _origSwitch === 'function') _origSwitch(tab);
-    if (tab === 'ado') {
-      setTimeout(_loadSaved, 50);
-    }
-  };
+  /* FIX B3: lazy _origSwitch — capture at call time not init time */
+  window.switchSettingsTab = (function(_prev) {
+    return function(tab) {
+      if (typeof _prev === 'function') _prev(tab);
+      if (tab === 'ado') setTimeout(_loadSaved, 50);
+    };
+  }(window.switchSettingsTab));
 
-  /* Load on page init too (for pushToADOFull to have access) */
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(_loadSaved, 500);
-  });
-  /* Also load immediately if DOM already ready */
-  if (document.readyState !== 'loading') {
-    setTimeout(_loadSaved, 500);
-  }
-
-})();
-
-<!-- ════════════════════════════════════════════════════════════
-     v7.4 FREE TRIAL MODAL
-     Shown after 3 free generations — get own key to continue
-════════════════════════════════════════════════════════════════ -->
-<div id="freeTrialModal" style="display:none;position:fixed;inset:0;z-index:300002;
-  align-items:center;justify-content:center;">
-  <!-- Backdrop -->
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px)"></div>
-
-  <!-- Card -->
-  <div style="position:relative;z-index:1;background:var(--surface);
-    border:1.5px solid rgba(232,162,32,.25);border-radius:20px;
-    padding:28px 26px;width:min(460px,94vw);
-    box-shadow:0 24px 80px rgba(0,0,0,.5)">
-
-    <!-- Header -->
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:40px;margin-bottom:10px">🧪</div>
-      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;
-                  color:var(--text);letter-spacing:-.02em;margin-bottom:6px">
-        You've used your 3 free generations!
-      </div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6">
-        Shuddhi QA is <strong style="color:var(--text)">free forever</strong> — just add your own AI key.<br>
-        Both options below are <strong style="color:#059669">completely free</strong>.
-      </div>
-    </div>
-
-    <!-- Free key options -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
-
-      <!-- Groq -->
-      <a href="https://console.groq.com/keys" target="_blank" rel="noopener"
-        style="display:flex;flex-direction:column;align-items:center;gap:6px;
-               padding:14px 12px;border-radius:12px;text-decoration:none;
-               border:1.5px solid rgba(20,184,166,.25);background:rgba(20,184,166,.06);
-               transition:all .2s;cursor:pointer"
-        onmouseover="this.style.borderColor='rgba(20,184,166,.5)';this.style.background='rgba(20,184,166,.1)'"
-        onmouseout="this.style.borderColor='rgba(20,184,166,.25)';this.style.background='rgba(20,184,166,.06)'">
-        <span style="font-size:22px">⚡</span>
-        <span style="font-size:13px;font-weight:700;color:#0f766e">Get free Groq key</span>
-        <span style="font-size:10.5px;color:var(--text3);text-align:center">
-          ⏱ 30 seconds · Fastest AI · Free forever
-        </span>
-        <span style="font-size:10px;color:#14B8A6;font-family:'JetBrains Mono',monospace">
-          console.groq.com →
-        </span>
-      </a>
-
-      <!-- Gemini -->
-      <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
-        style="display:flex;flex-direction:column;align-items:center;gap:6px;
-               padding:14px 12px;border-radius:12px;text-decoration:none;
-               border:1.5px solid rgba(91,95,239,.25);background:rgba(91,95,239,.06);
-               transition:all .2s;cursor:pointer"
-        onmouseover="this.style.borderColor='rgba(91,95,239,.5)';this.style.background='rgba(91,95,239,.1)'"
-        onmouseout="this.style.borderColor='rgba(91,95,239,.25)';this.style.background='rgba(91,95,239,.06)'">
-        <span style="font-size:22px">🔮</span>
-        <span style="font-size:13px;font-weight:700;color:var(--indigo)">Get free Gemini key</span>
-        <span style="font-size:10.5px;color:var(--text3);text-align:center">
-          ⏱ 30 seconds · Google account · Free forever
-        </span>
-        <span style="font-size:10px;color:var(--indigo);font-family:'JetBrains Mono',monospace">
-          aistudio.google.com →
-        </span>
-      </a>
-    </div>
-
-    <!-- Divider -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-      <div style="flex:1;height:1px;background:var(--border2)"></div>
-      <span style="font-size:11px;color:var(--text3);white-space:nowrap">Already have a key? Paste it here</span>
-      <div style="flex:1;height:1px;background:var(--border2)"></div>
-    </div>
-
-    <!-- Provider selector + key input -->
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <select id="freeTrialProviderSelect"
-        style="background:var(--surface2);border:1.5px solid var(--border2);border-radius:8px;
-               padding:9px 12px;color:var(--text);font-size:13px;cursor:pointer;
-               font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;width:110px">
-        <option value="groq">Groq</option>
-        <option value="gemini">Gemini</option>
-        <option value="claude">Claude</option>
-      </select>
-      <input type="password" id="freeTrialKeyInput"
-        placeholder="Paste your API key here…"
-        style="flex:1;background:var(--surface);border:1.5px solid var(--border2);
-               border-radius:8px;padding:9px 14px;color:var(--text);
-               font-family:'JetBrains Mono',monospace;font-size:12px;
-               outline:none;transition:border-color .15s"
-        onfocus="this.style.borderColor='var(--indigo)'"
-        onblur="this.style.borderColor='var(--border2)'"
-        onkeydown="if(event.key==='Enter')_freeTrialSaveAndGenerate()"/>
-    </div>
-    <div id="freeTrialKeyError" style="font-size:11.5px;color:#ef4444;margin-bottom:10px;display:none"></div>
-
-    <!-- CTA button -->
-    <button onclick="_freeTrialSaveAndGenerate()"
-      style="width:100%;padding:12px;border-radius:10px;border:none;
-             background:linear-gradient(135deg,var(--indigo),var(--violet));
-             color:#fff;font-size:14px;font-weight:700;cursor:pointer;
-             font-family:'Plus Jakarta Sans',sans-serif;
-             box-shadow:0 4px 16px rgba(91,95,239,.35);transition:all .2s;
-             margin-bottom:12px">
-      ⚡ Save Key &amp; Generate Now
-    </button>
-
-    <!-- LinkedIn share option -->
-    <div style="border-top:1px solid var(--border2);padding-top:12px;text-align:center">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:8px">
-        — or unlock 10 more free generations —
-      </div>
-      <button onclick="_freeTrialShareLinkedIn()"
-        style="padding:9px 20px;border-radius:9px;
-               border:1.5px solid rgba(10,102,194,.3);background:rgba(10,102,194,.06);
-               color:#0a66c2;font-size:13px;font-weight:700;cursor:pointer;
-               font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;width:100%"
-        onmouseover="this.style.background='rgba(10,102,194,.12)'"
-        onmouseout="this.style.background='rgba(10,102,194,.06)'">
-        📤 Share on LinkedIn → Get 10 free generations
-      </button>
-      <div style="font-size:10.5px;color:var(--text3);margin-top:6px;line-height:1.5">
-        Opens LinkedIn with a pre-written post. Unlock 10 more generations instantly after sharing.
-      </div>
-    </div>
-
-    <!-- Dismiss -->
-    <div style="text-align:center;margin-top:10px">
-      <a onclick="document.getElementById('freeTrialModal').style.display='none'"
-        style="font-size:11.5px;color:var(--text3);cursor:pointer;
-               text-decoration:none;transition:color .15s"
-        onmouseover="this.style.color='var(--text)'"
-        onmouseout="this.style.color='var(--text3)'">
-        I'll add a key later — remind me next time
-      </a>
-    </div>
-  </div>
-</div>
-
-<script>
-(function _initFreeTrialModal() {
-
-  var FREE_LS   = 'shuddhi-free-uses';
-  var BONUS_LS  = 'shuddhi-bonus-uses';
-  var FREE_LIMIT = 3;
-
-  window.showFreeTrialModal = function() {
-    var modal = document.getElementById('freeTrialModal');
-    if (modal) modal.style.display = 'flex';
-  };
-
-  window._freeTrialSaveAndGenerate = function() {
-    var provider = (document.getElementById('freeTrialProviderSelect') || {}).value || 'groq';
-    var key      = ((document.getElementById('freeTrialKeyInput') || {}).value || '').trim();
-    var errEl    = document.getElementById('freeTrialKeyError');
-
-    if (!key || key.length < 8) {
-      if (errEl) { errEl.textContent = '❌ Please paste a valid API key first'; errEl.style.display = 'block'; }
-      return;
-    }
-    if (errEl) errEl.style.display = 'none';
-
-    /* Save key via existing saveUserKey function */
-    if (typeof saveUserKey === 'function') {
-      saveUserKey(provider, key);
-    } else {
-      /* Fallback — write directly */
-      var LS_MAP = { claude: 'shuddhi-key-claude', gemini: 'shuddhi-key-gemini', groq: 'shuddhi-key-groq' };
-      try { localStorage.setItem(LS_MAP[provider] || LS_MAP.groq, key); } catch(e) {}
-    }
-
-    /* Switch to chosen provider */
-    if (typeof selectProvider === 'function') selectProvider(provider, true);
-
-    /* Update input field in Settings panel too */
-    var inputMap = { claude: 'userClaudeKey', gemini: 'userGeminiKey', groq: 'userGroqKey' };
-    var inputEl = document.getElementById(inputMap[provider]);
-    if (inputEl) inputEl.value = key;
-
-    /* Reset free counter — they now have own key */
-    try { localStorage.setItem(FREE_LS, '0'); } catch(e) {}
-
-    /* Close modal */
-    var modal = document.getElementById('freeTrialModal');
-    if (modal) modal.style.display = 'none';
-
-    /* Generate immediately */
-    if (typeof showToast === 'function')
-      showToast(provider.charAt(0).toUpperCase()+provider.slice(1) + ' key saved — generating now! ⚡', '✅');
-    setTimeout(function() {
-      if (typeof generate === 'function') generate();
-    }, 300);
-  };
-
-  window._freeTrialShareLinkedIn = function() {
-    var text = encodeURIComponent(
-      "Just discovered Shuddhi QA — an AI tool that generates 40-70 production-ready test cases in 60 seconds! 🧪⚡\n\n" +
-      "Built specifically for D365, Salesforce, SAP, Power BI testing. Push directly to Azure DevOps or Jira.\n\n" +
-      "And it's completely FREE! → https://shuddhiqacloud.pages.dev\n\n" +
-      "#QA #Testing #D365 #Salesforce #AzureDevOps #QualityAssurance #TestAutomation"
-    );
-    window.open('https://www.linkedin.com/sharing/share-offsite/?url=' +
-      encodeURIComponent('https://shuddhiqacloud.pages.dev') + '&summary=' + text, '_blank');
-
-    /* Grant bonus generations after click */
-    try {
-      var current = parseInt(localStorage.getItem(FREE_LS) || '0', 10);
-      var bonus   = parseInt(localStorage.getItem(BONUS_LS) || '0', 10);
-      localStorage.setItem(FREE_LS,   String(Math.max(0, current - 10)));
-      localStorage.setItem(BONUS_LS,  String(bonus + 1));
-    } catch(e) {}
-
-    var modal = document.getElementById('freeTrialModal');
-    if (modal) modal.style.display = 'none';
-    if (typeof showToast === 'function')
-      showToast('Thanks for sharing! 10 free generations unlocked 🎉', '🎁');
-  };
-
-  /* Close on Escape */
-  document.addEventListener('keydown', function(e) {
-    var modal = document.getElementById('freeTrialModal');
-    if (e.key === 'Escape' && modal && modal.style.display !== 'none')
-      modal.style.display = 'none';
-  });
+  /* FIX B4: single init path only */
+  _onReady(_loadSaved);
 
 })();
 </script>
