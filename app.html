@@ -5202,11 +5202,11 @@ header::after { display: none !important; }
   #appSidebar.collapsed .sb-collapse-strip:hover { color: var(--indigo, #5B5FEF); }
   /* ── Provider pills ─────────────────────────────────────────── */
   .provider-pill {
-    display:flex;align-items:center;gap:12px;
-    padding:12px 16px;border-radius:12px;
+    display:flex;align-items:center;gap:10px;
+    padding:12px 14px;border-radius:12px;
     border:1.5px solid var(--border2);background:var(--surface);
     cursor:pointer;text-align:left;transition:all .18s;
-    font-family:'Plus Jakarta Sans',sans-serif;flex:1;min-width:140px;
+    font-family:'Plus Jakarta Sans',sans-serif;width:100%;
     position:relative;overflow:hidden;
   }
   .provider-pill::before {
@@ -5772,7 +5772,7 @@ header::after { display: none !important; }
 
     <!-- ── Tab bar ── -->
     <div class="settings-tabs">
-      <button class="settings-tab active" id="stab-claude" onclick="switchSettingsTab('claude')">🤖 Claude AI</button>
+      <button class="settings-tab active" id="stab-claude" onclick="switchSettingsTab('claude')">🧠 AI Provider</button>
       <button class="settings-tab" id="stab-ado"    onclick="switchSettingsTab('ado')">🔷 Azure DevOps</button>
       <button class="settings-tab" id="stab-jira"  onclick="switchSettingsTab('jira')">🟦 Jira</button>
       <button class="settings-tab" id="stab-usage"  onclick="switchSettingsTab('usage');if(window._renderUsagePanel)window._renderUsagePanel()">📊 Usage &amp; Cost</button>
@@ -5787,7 +5787,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Provider selector pills -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px" id="providerPills">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px" id="providerPills">
         <button class="provider-pill" id="pill-claude"   data-provider="claude"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
           <span class="pill-icon">🤖</span>
