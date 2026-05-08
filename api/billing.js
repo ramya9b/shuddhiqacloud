@@ -151,56 +151,55 @@ export default async function handler(req) {
   }
 
   // ── Action: get_spending ──────────────────────────────────────
-  // Calls the v1beta spending information endpoint.
-  // Returns all 4 cost fields shown in Google Cloud Console:
-  //   cost (gross), savings, totalCost (net), forecasted.
+  // Tries multiple endpoints to fetch all 4 cost fields from Google Cloud.
+  // Requires cloud-platform.read-only scope (broader than cloud-billing.readonly).
   if (action === 'get_spending') {
     if (!billingAccountId) return respond({ error: 'billingAccountId required' }, 400);
     const safe = billingAccountId.replace(/[^A-Z0-9\-]/gi, '');
-    const data  = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
-    if (data._error) return respond({ spending: null, note: data.message });
 
-    // Helper: extract numeric INR/USD value from a Google Money object
-    // Handles multiple field naming conventions across v1beta versions
+    // Helper: parse Google Money proto → JS number
     function extractMoney(obj) {
       if (!obj) return null;
-      const money = obj.spendingAmount || obj.amount || obj.cost || obj.totalSpend || null;
+      const money = obj.spendingAmount || obj.amount || obj.cost || obj.totalSpend || obj.netCost || null;
       if (!money) return null;
       return parseFloat(money.units || '0') + (money.nanos || 0) / 1e9;
     }
 
-    // Root of spend data — try all known wrapper names Google may use
-    const root = data.spendingInfo || data.currentMonthSpending || data;
+    // Attempt 1: v1beta getSpendingInformation (cloud-platform.read-only required)
+    let data = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
+    let root = null;
+    if (!data._error) {
+      root = data.spendingInfo || data.currentMonthSpending || data;
+      if (extractMoney(root) === null) root = null; // no usable data
+    }
 
-    const currency = (
-      root.spendingAmount?.currencyCode ||
-      root.amount?.currencyCode         ||
-      root.cost?.currencyCode           ||
-      'INR'
-    );
-    const symbol = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
+    // Attempt 2: v1beta billingAccount details (may include spend in some account types)
+    if (!root) {
+      const acctDetail = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}`);
+      if (!acctDetail._error) {
+        const alt = acctDetail.spendingInfo || acctDetail.currentMonthSpending || null;
+        if (alt && extractMoney(alt) !== null) { root = alt; data = acctDetail; }
+      }
+    }
 
-    // Extract all 4 values — null if field absent in this API version
+    if (!root || extractMoney(root) === null) {
+      return respond({
+        spending: null,
+        note: data._error ? data.message : 'Spending data not in API response',
+        hint: 'Disconnect and reconnect to grant the cloud-platform.read-only scope.',
+        rawKeys: (!data._error && data) ? Object.keys(data).join(', ') : null,
+      });
+    }
+
+    const currency = root.spendingAmount?.currencyCode || root.amount?.currencyCode || 'INR';
+    const symbol   = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
     const cost      = extractMoney(root);
-    const savings   = extractMoney(root.savings || root.discount || null);
-    const totalCost = extractMoney(
-      root.totalSpend || root.totalCost || root.netCost || root.netSpend || null
-    ) ?? (cost !== null && savings !== null ? cost - savings : cost);
-    const forecasted = extractMoney(
-      root.forecastedSpend || root.forecastedCost || root.forecastedTotal || null
-    );
+    const savings   = extractMoney(root.savings  || root.discount  || null);
+    const totalCost = extractMoney(root.totalSpend || root.totalCost || root.netCost || null)
+                      ?? (cost !== null && savings !== null ? cost - savings : cost);
+    const forecasted = extractMoney(root.forecastedSpend || root.forecastedCost || root.forecastedTotal || null);
 
-    return respond({
-      spending: {
-        cost,        // gross spend before savings/discounts
-        savings,     // discounts / credits applied (null if none)
-        totalCost,   // net amount actually charged  (cost - savings)
-        forecasted,  // predicted spend for rest of month (null if unavailable)
-        currency,
-        symbol,
-      },
-      raw: data,     // raw response for debugging unknown API structures
-    });
+    return respond({ spending: { cost, savings, totalCost, forecasted, currency, symbol }, raw: data });
   }
 
   return respond({ error: `Unknown action: ${action}` }, 400);
