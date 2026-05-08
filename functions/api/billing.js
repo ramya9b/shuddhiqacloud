@@ -8,6 +8,7 @@
 const BILLING_BASE = 'https://cloudbilling.googleapis.com/v1';
 const BILLING_V1B  = 'https://cloudbilling.googleapis.com/v1beta';
 const BUDGET_BASE  = 'https://billingbudgets.googleapis.com/v1';
+const BUDGET_V1B1  = 'https://billingbudgets.googleapis.com/v1beta1';
 
 export async function onRequest(context) {
   const { request: req } = context;
@@ -102,51 +103,91 @@ export async function onRequest(context) {
     });
   }
 
+  // ── Action: get_spending ──────────────────────────────────────────
+  // Tries 4 endpoints using only cloud-billing.readonly scope (no warning).
   if (action === 'get_spending') {
     if (!billingAccountId) return respond({ error: 'billingAccountId required' }, 400);
     const safe = billingAccountId.replace(/[^A-Z0-9\-]/gi, '');
 
     function extractMoney(obj) {
-      if (!obj) return null;
-      const money = obj.spendingAmount || obj.amount || obj.cost || obj.totalSpend || obj.netCost || null;
-      if (!money) return null;
-      return parseFloat(money.units || '0') + (money.nanos || 0) / 1e9;
+      if (obj === null || obj === undefined) return null;
+      if (typeof obj === 'number') return obj;
+      if (typeof obj === 'string') { const n = parseFloat(obj); return isNaN(n) ? null : n; }
+      const units = obj.units !== undefined ? parseFloat(obj.units || '0') : null;
+      if (units !== null) return units + (obj.nanos || 0) / 1e9;
+      return null;
     }
+
+    function unwrapSpend(node) {
+      if (!node) return null;
+      const moneyField = node.spendingAmount || node.currentSpend || node.amount ||
+                         node.cost || node.totalSpend || null;
+      if (!moneyField) return null;
+      const val = extractMoney(moneyField);
+      return val !== null ? { val, currency: moneyField.currencyCode || 'INR' } : null;
+    }
+
+    let found = null; let savings = null; let total = null; let forecast = null;
+    const diag = [];
 
     // Attempt 1: v1beta getSpendingInformation
-    let data = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
-    let root = null;
-    if (!data._error) {
-      root = data.spendingInfo || data.currentMonthSpending || data;
-      if (extractMoney(root) === null) root = null;
+    const a1 = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
+    diag.push({ a: 1, ok: !a1._error, keys: a1._error ? a1.message : Object.keys(a1).join(',') });
+    if (!a1._error) {
+      const root = a1.spendingInfo || a1.currentMonthSpending || a1;
+      found    = unwrapSpend(root) || null;
+      savings  = extractMoney(root.savings   || root.discount    || null);
+      total    = extractMoney(root.totalSpend || root.totalCost  || null);
+      forecast = extractMoney(root.forecastedSpend || root.forecastedCost || null);
     }
 
-    // Attempt 2: v1beta billingAccount details
-    if (!root) {
-      const acctDetail = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}`);
-      if (!acctDetail._error) {
-        const alt = acctDetail.spendingInfo || acctDetail.currentMonthSpending || null;
-        if (alt && extractMoney(alt) !== null) { root = alt; data = acctDetail; }
+    // Attempt 2: Budget API v1 currentSpend
+    if (!found) {
+      const a2 = await gcpGet(`${BUDGET_BASE}/billingAccounts/${safe}/budgets?pageSize=20`);
+      diag.push({ a: 2, ok: !a2._error, count: a2.budgets?.length || 0,
+                  sample: a2.budgets?.[0] ? Object.keys(a2.budgets[0]).join(',') : null });
+      if (!a2._error && a2.budgets) {
+        for (const b of a2.budgets) {
+          const cs = b.currentSpend || b.spendingAmount || b.usedAmount || null;
+          if (cs) { const v = unwrapSpend({ spendingAmount: cs }); if (v) { found = v; break; } }
+        }
       }
     }
 
-    if (!root || extractMoney(root) === null) {
-      return respond({
-        spending: null,
-        note: data._error ? data.message : 'Spending data not in API response',
-        hint: 'Disconnect and reconnect to grant the cloud-platform.read-only scope.',
-      });
+    // Attempt 3: Budget API v1beta1
+    if (!found) {
+      const a3 = await gcpGet(`${BUDGET_V1B1}/billingAccounts/${safe}/budgets?pageSize=20`);
+      diag.push({ a: 3, ok: !a3._error, count: a3.budgets?.length || 0,
+                  sample: a3.budgets?.[0] ? Object.keys(a3.budgets[0]).join(',') : null });
+      if (!a3._error && a3.budgets) {
+        for (const b of a3.budgets) {
+          const cs = b.currentSpend || b.spendingAmount || b.usedAmount || b.currentPeriodSpend || null;
+          if (cs) { const v = unwrapSpend({ spendingAmount: cs }); if (v) { found = v; break; } }
+        }
+      }
     }
 
-    const currency = root.spendingAmount?.currencyCode || root.amount?.currencyCode || 'INR';
-    const symbol   = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
-    const cost      = extractMoney(root);
-    const savings   = extractMoney(root.savings || root.discount || null);
-    const totalCost = extractMoney(root.totalSpend || root.totalCost || root.netCost || null)
-                      ?? (cost !== null && savings !== null ? cost - savings : cost);
-    const forecasted = extractMoney(root.forecastedSpend || root.forecastedCost || root.forecastedTotal || null);
+    // Attempt 4: v1beta billingAccount details
+    if (!found) {
+      const a4 = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}`);
+      diag.push({ a: 4, ok: !a4._error, keys: a4._error ? a4.message : Object.keys(a4).join(',') });
+      if (!a4._error) {
+        const root = a4.spendingInfo || a4.currentMonthSpending || null;
+        if (root) found = unwrapSpend(root);
+      }
+    }
 
-    return respond({ spending: { cost, savings, totalCost, forecasted, currency, symbol }, raw: data });
+    if (!found) return respond({ spending: null, diagnostics: diag,
+      note: 'Spending data not returned by any billing API endpoint for this account.' });
+
+    const currency  = found.currency || 'INR';
+    const symbol    = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
+    const totalCost = total ?? (found.val !== null && savings !== null ? found.val - savings : found.val);
+
+    return respond({
+      spending: { cost: found.val, savings, totalCost, forecasted: forecast, currency, symbol },
+      diagnostics: diag,
+    });
   }
 
   return respond({ error: `Unknown action: ${action}` }, 400);
