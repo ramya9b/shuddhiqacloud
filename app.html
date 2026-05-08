@@ -12189,7 +12189,15 @@ renderHistory();
   try {
     const res_data = await res.json();
     const { claudeKey, adoKey, adoOrg = '', adoProject = '',
-            geminiKey = false, groqKey = false, aiProvider = '' } = res_data;
+            geminiKey = false, groqKey = false, aiProvider = '',
+            googleClientId = '' } = res_data;
+
+    // Expose googleClientId globally immediately — billing module reads this
+    if (googleClientId) {
+      window._googleClientId = googleClientId;
+      // Notify billing module if it initialised before status loaded
+      if (window._onGoogleClientId) window._onGoogleClientId(googleClientId);
+    }
 
     ProviderManager.init({ claudeKey, geminiKey, groqKey, aiProvider });
 
@@ -18289,52 +18297,24 @@ window.copyShareLink = function() {
     } catch(e) {}
   }
 
-  // Hook into existing applySettingsStatus which is called after status.js loads
-  var _origApply = window.applySettingsStatus;
-  window.applySettingsStatus = function(claudeKey, adoKey, geminiKey, groqKey, activeProvider, extra) {
-    if (typeof _origApply === 'function') {
-      _origApply(claudeKey, adoKey, geminiKey, groqKey, activeProvider, extra);
-    }
-    // extra contains googleClientId from updated status.js
-    if (extra && extra.googleClientId) {
-      _clientId = extra.googleClientId;
-      window._googleClientId = _clientId;
-    }
-  };
-
-  // Also intercept the raw status fetch response to capture googleClientId
-  var _origFetch = window.fetch;
-  window.fetch = function(url) {
-    var args = Array.prototype.slice.call(arguments);
-    var p = _origFetch.apply(window, args);
-    if (typeof url === 'string' && url.includes('/api/status')) {
-      p.then(function(r) {
-        return r.clone().json().then(function(data) {
-          if (data && data.googleClientId) {
-            _clientId = data.googleClientId;
-            window._googleClientId = _clientId;
-            // Restore session if we now have a client ID and a saved token
-            setTimeout(_tryRestoreSession, 100);
-          }
-        }).catch(function() {});
-      }).catch(function() {});
-    }
-    return p;
-  };
-
-  // CSS for spin animation (billing spinner reuses it)
-  if (!document.getElementById('gcpSpinStyle')) {
-    var s = document.createElement('style');
-    s.id  = 'gcpSpinStyle';
-    s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
-    document.head.appendChild(s);
+  // ── Bootstrap ──────────────────────────────────────────────────
+  // Pick up client ID from whichever arrives first:
+  //   A) window._googleClientId already set by checkEnvStatus (fast path)
+  //   B) _onGoogleClientId callback fired by checkEnvStatus after we register it
+  function _applyClientId(id) {
+    if (!id) return;
+    _clientId = id;
+    window._googleClientId = id;
+    // If user had a session token, restore the panel automatically
+    _tryRestoreSession();
   }
 
-  // Defer init to after DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', _tryRestoreSession);
+  // Fast path: status already loaded before this script ran
+  if (window._googleClientId) {
+    _applyClientId(window._googleClientId);
   } else {
-    setTimeout(_tryRestoreSession, 300);
+    // Slow path: register callback for when checkEnvStatus finishes
+    window._onGoogleClientId = _applyClientId;
   }
 
 })();

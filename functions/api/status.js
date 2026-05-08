@@ -27,6 +27,7 @@ export async function onRequest(context) {
     adoKey:         !!(env.DEVOPS_PAT || env.ADO_PAT),
     adoOrg:         env.DEVOPS_ORG  || env.ADO_ORG  || '',
     adoProject:     env.DEVOPS_PROJECT || env.ADO_PROJECT || '',
+    googleClientId: env.GOOGLE_CLIENT_ID || '',
   }), {
     status: 200,
     headers: {
