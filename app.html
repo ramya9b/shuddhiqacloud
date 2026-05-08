@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v8.3 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v8.4 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.3 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.4 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5943,7 +5943,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v8.3</span>
+      <span class="sb-badge">v8.4</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6949,7 +6949,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v8.3</div>
+          <div class="settings-about-val" id="aboutVersion">v8.4</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6984,16 +6984,16 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v8.3 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v8.4 — Billing Sync</div>
         </div>
       </div>
 
-      <!-- v8.3 Changelog -->
+      <!-- v8.4 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v8.3
+          🆕 What's New in v8.4
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -7134,8 +7134,8 @@ header::after { display: none !important; }
                      padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s;
                      font-family:'JetBrains Mono',monospace"
               onfocus="this.style.borderColor='var(--d365)'" onblur="this.style.borderColor='var(--border2)'"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();fetchJiraTicket();}"/>
-            <button onclick="fetchJiraTicket()" id="jiraFetchBtn"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.fetchJiraTicket();}"/>
+            <button onclick="window.fetchJiraTicket()" id="jiraFetchBtn"
               style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--d365);
                      background:var(--d365-dim);color:var(--d365);font-size:12.5px;font-weight:600;
                      cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0">
@@ -13757,7 +13757,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v8.3';
+  if (ver)  ver.textContent  = 'v8.4';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14772,7 +14772,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v8.3';
+  if (version)  version.textContent  = 'v8.4';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15136,6 +15136,7 @@ window.loadJiraSettings        = loadJiraSettings;
 window.saveJiraSettings        = saveJiraSettings;
 window.checkJiraSettingsStatus = checkJiraSettingsStatus;
 window.testJiraConnection      = testJiraConnection;
+
 window.handleProviderRateLimit = handleProviderRateLimit;
 
 const _failedProviders  = new Set();
@@ -15594,7 +15595,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.3</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.4</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -18665,6 +18666,161 @@ window.copyShareLink = function() {
     // Slow path: register callback for when checkEnvStatus finishes
     window._onGoogleClientId = _applyClientId;
   }
+
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
+     fetchJiraTicket — Standalone script block (runs last)
+     Kept separate from the Jira settings block to guarantee
+     global scope availability when onclick fires.
+════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── _jiraFetchStatus helper ─────────────────────────────────
+  function _jiraFetchStatus(type, msg) {
+    var el = document.getElementById('jiraFetchStatus');
+    if (!el) return;
+    el.style.display = msg ? 'block' : 'none';
+    if (!msg) return;
+    var styles = {
+      success: { bg: 'rgba(16,185,129,.08)',  color: '#059669', border: 'rgba(16,185,129,.2)'  },
+      error:   { bg: 'rgba(239,68,68,.07)',   color: '#DC2626', border: 'rgba(239,68,68,.2)'   },
+      warn:    { bg: 'rgba(245,158,11,.07)',  color: '#B45309', border: 'rgba(245,158,11,.2)'  },
+      loading: { bg: 'rgba(99,102,241,.07)', color: 'var(--indigo)', border: 'rgba(99,102,241,.2)' },
+    };
+    var s = styles[type] || styles.loading;
+    el.style.background   = s.bg;
+    el.style.color        = s.color;
+    el.style.border       = '1px solid ' + s.border;
+    el.style.borderRadius = '6px';
+    el.style.padding      = '6px 10px';
+    el.textContent        = msg;
+    if (type === 'success' || type === 'error') {
+      clearTimeout(el._jfsTimer);
+      el._jfsTimer = setTimeout(function() { el.style.display = 'none'; }, 8000);
+    }
+  }
+
+  // ── fetchJiraTicket ─────────────────────────────────────────
+  // Calls /api/jira → fetch_ticket, then auto-fills the
+  // Business Flow (flowDesc) textarea with structured context.
+  window.fetchJiraTicket = async function fetchJiraTicket() {
+    var ticketInput = document.getElementById('jiraTicketId');
+    var labelEl     = document.getElementById('jiraFetchLabel');
+    var btn         = document.getElementById('jiraFetchBtn');
+    var flowEl      = document.getElementById('flowDesc');
+
+    if (!ticketInput || !ticketInput.value.trim()) {
+      _jiraFetchStatus('warn', '\u26a0\ufe0f Enter a ticket ID first (e.g. PROJ-1234)');
+      return;
+    }
+
+    var ticketId = ticketInput.value.trim().toUpperCase();
+
+    // Validate PROJECT-123 format
+    if (!/^[A-Z][A-Z0-9]+-[0-9]+$/.test(ticketId)) {
+      _jiraFetchStatus('error', '\u274c Invalid format — use PROJECT-123 (e.g. DEV-1, ERP-567)');
+      return;
+    }
+
+    // Read Jira credentials — localStorage first, then Settings inputs
+    var creds = {};
+    try { creds = JSON.parse(localStorage.getItem('shuddhi-jira-config') || '{}'); } catch(e) {}
+    var baseUrl = creds.url   || (document.getElementById('settingsJiraUrl')   ? document.getElementById('settingsJiraUrl').value.trim()   : '') || '';
+    var email   = creds.email || (document.getElementById('settingsJiraEmail') ? document.getElementById('settingsJiraEmail').value.trim() : '') || '';
+    var token   = creds.token || (document.getElementById('settingsJiraToken') ? document.getElementById('settingsJiraToken').value.trim() : '') || '';
+
+    if (!baseUrl || !email || !token) {
+      _jiraFetchStatus('error', '\u274c Configure Jira credentials in Settings \u2192 Jira tab first');
+      return;
+    }
+
+    // Loading state
+    if (btn)     { btn.disabled = true; }
+    if (labelEl) { labelEl.textContent = '\u23f3'; }
+    _jiraFetchStatus('loading', '\u23f3 Fetching ' + ticketId + '\u2026');
+
+    try {
+      var resp = await fetch('/api/jira', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          action:   'fetch_ticket',
+          ticketId: ticketId,
+          baseUrl:  baseUrl,
+          email:    email,
+          token:    token,
+        }),
+      });
+
+      var data = {};
+      try { data = await resp.json(); } catch(e) { data = { error: 'Invalid server response' }; }
+
+      if (!resp.ok || data.error) {
+        _jiraFetchStatus('error', '\u274c ' + (data.error || 'Fetch failed — check ticket ID and Jira access'));
+        return;
+      }
+
+      // Build structured context for flowDesc
+      var lines = [];
+      lines.push('--- Jira Ticket: ' + data.id + ' ---');
+      if (data.summary)  lines.push('Summary: '  + data.summary);
+      if (data.type)     lines.push('Type: '     + data.type);
+      if (data.priority) lines.push('Priority: ' + data.priority);
+      if (data.sprint)   lines.push('Sprint: '   + data.sprint);
+      if (data.status)   lines.push('Status: '   + data.status);
+      if (data.labels && data.labels.length) lines.push('Labels: ' + data.labels.join(', '));
+      if (data.description) {
+        lines.push('');
+        lines.push('Description:');
+        lines.push(data.description);
+      }
+      if (data.acceptanceCriteria) {
+        lines.push('');
+        lines.push('Acceptance Criteria:');
+        lines.push(data.acceptanceCriteria);
+      }
+      var context = lines.join('\n').trim();
+
+      // Populate flowDesc — append if existing non-Jira content present
+      if (flowEl) {
+        var existing = flowEl.value.trim();
+        flowEl.value = (existing && !existing.includes('--- Jira Ticket:'))
+          ? existing + '\n\n' + context
+          : context;
+        flowEl.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+
+      // Hide "not configured" hint, show badge
+      var notCfg = document.getElementById('jiraNotConfigured');
+      if (notCfg) notCfg.style.display = 'none';
+      var badge = document.getElementById('jiraConfigBadge');
+      if (badge) badge.style.display = 'inline';
+
+      _jiraFetchStatus('success', '\u2705 ' + data.id + ' fetched \u2014 flow field auto-filled');
+
+      if (typeof showToast === 'function') {
+        showToast(data.id + ': ' + (data.summary || 'Ticket fetched').substring(0, 50), '\ud83c\udfab');
+      }
+
+      // Scroll flowDesc into view
+      if (flowEl) {
+        setTimeout(function() {
+          flowEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          flowEl.focus();
+        }, 200);
+      }
+
+    } catch(e) {
+      _jiraFetchStatus('error', '\u274c Network error: ' + e.message);
+    } finally {
+      if (btn)     { btn.disabled = false; }
+      if (labelEl) { labelEl.textContent = 'Fetch \u2192'; }
+    }
+  };
 
 })();
 </script>
