@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v7.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v8.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira instantly."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.0 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5942,7 +5942,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v7.9</span>
+      <span class="sb-badge">v8.0</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6914,7 +6914,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val">v7.9</div>
+          <div class="settings-about-val" id="aboutVersion">v8.0</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6935,6 +6935,35 @@ header::after { display: none !important; }
           <div class="settings-about-icon">🔒</div>
           <div class="settings-about-label">Data storage</div>
           <div class="settings-about-val">Browser only · No server logs</div>
+        </div>
+        <div class="settings-about-card" style="border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.04)">
+          <div class="settings-about-icon">💳</div>
+          <div class="settings-about-label">Billing Sync</div>
+          <div class="settings-about-val" style="color:#059669">Google Cloud · Live</div>
+        </div>
+        <div class="settings-about-card">
+          <div class="settings-about-icon">🔗</div>
+          <div class="settings-about-label">Integrations</div>
+          <div class="settings-about-val">ADO · Jira · Google</div>
+        </div>
+        <div class="settings-about-card">
+          <div class="settings-about-icon">🆕</div>
+          <div class="settings-about-label">What's New</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v8.0 — Billing Sync</div>
+        </div>
+      </div>
+
+      <!-- v8.0 Changelog -->
+      <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
+                  background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
+        <div style="font-size:11px;font-weight:700;color:var(--indigo);
+                    text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
+          🆕 What's New in v8.0
+        </div>
+        <div style="font-size:12.5px;color:var(--text2);line-height:1.8">
+          <div>💳 <strong>Google Cloud Billing Live Sync</strong> — Connect your Google account with one tap to see live billing account details (name, ID, status, linked project, budget caps) directly in Usage &amp; Cost.</div>
+          <div>🔧 <strong>Billing proxy</strong> — New <code>/api/billing</code> endpoint proxies Cloud Billing API and Budget API calls securely. OAuth token never stored or logged.</div>
+          <div>🐛 <strong>Status fix</strong> — <code>GOOGLE_CLIENT_ID</code> now correctly exposed from Cloudflare Pages env to the frontend via <code>functions/api/status.js</code>.</div>
         </div>
       </div>
 
@@ -13606,7 +13635,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v7.9';
+  if (ver)  ver.textContent  = 'v8.0';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14621,7 +14650,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v7.9';
+  if (version)  version.textContent  = 'v8.0';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15442,7 +15471,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v7.9</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.0</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -18031,7 +18060,10 @@ window.copyShareLink = function() {
 
   // ── Render billing data ────────────────────────────────────────
   function renderBillingData(accounts, projects, budgets) {
-    var acct = accounts && accounts.length > 0 ? accounts[0] : null;
+    // Show the selected account — fall back to first if not found
+    var acct = accounts && accounts.length > 0
+      ? (accounts.find(function(a) { return a.id === _selectedId; }) || accounts[0])
+      : null;
     if (!acct) {
       setHTML('gcpBillingData',
         '<div style="padding:12px;text-align:center;font-size:12px;color:var(--text3)">' +
@@ -18163,16 +18195,32 @@ window.copyShareLink = function() {
       }
 
       var accounts = acctRes.accounts || [];
+
+      // If no account selected yet, default to first
       if (accounts.length > 0 && !_selectedId) {
         _selectedId = accounts[0].id;
         localStorage.setItem(LS_ACCOUNT, _selectedId);
-        // Now fetch project + budget for selected account
+        // Fetch project + budget for the newly defaulted account
         var [pr2, br2] = await Promise.all([
           callBilling('list_projects', { billingAccountId: _selectedId }),
           callBilling('get_budgets',   { billingAccountId: _selectedId }),
         ]);
         projRes   = pr2;
         budgetRes = br2;
+      }
+
+      // Validate _selectedId still exists in returned accounts
+      // (handles edge case where saved account was removed)
+      var selectedExists = accounts.some(function(a) { return a.id === _selectedId; });
+      if (!selectedExists && accounts.length > 0) {
+        _selectedId = accounts[0].id;
+        localStorage.setItem(LS_ACCOUNT, _selectedId);
+        var [pr3, br3] = await Promise.all([
+          callBilling('list_projects', { billingAccountId: _selectedId }),
+          callBilling('get_budgets',   { billingAccountId: _selectedId }),
+        ]);
+        projRes   = pr3;
+        budgetRes = br3;
       }
 
       renderBillingData(accounts, projRes.projects || [], budgetRes.budgets || []);
