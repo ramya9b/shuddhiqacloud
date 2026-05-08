@@ -3,13 +3,12 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "functions": {
-    "api/claude.js": {
-      "maxDuration": 300
-    },
-    "api/ado.js":    { "maxDuration": 60 },
-    "api/jira.js":   { "maxDuration": 60 },
-    "api/status.js": { "maxDuration": 10 },
-    "api/debug.js":  { "maxDuration": 30 }
+    "api/claude.js":  { "maxDuration": 300 },
+    "api/ado.js":     { "maxDuration": 60 },
+    "api/jira.js":    { "maxDuration": 60 },
+    "api/billing.js": { "maxDuration": 30 },
+    "api/status.js":  { "maxDuration": 10 },
+    "api/debug.js":   { "maxDuration": 30 }
   },
   "headers": [
     {

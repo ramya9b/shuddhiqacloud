@@ -39,6 +39,7 @@ export default function handler(req) {
     adoKey:     !!(process.env.DEVOPS_PAT || process.env.ADO_PAT),
     adoOrg:     process.env.DEVOPS_ORG  || process.env.ADO_ORG  || '',
     adoProject: process.env.DEVOPS_PROJECT || process.env.ADO_PROJECT || '',
+    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   }), {
     status: 200,
     headers: {

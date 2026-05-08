@@ -5916,6 +5916,10 @@ header::after { display: none !important; }
   document.documentElement.setAttribute('data-theme', saved);
 })();
 </script>
+  <!-- Google Identity Services (One Tap + OAuth2 Authorization) -->
+  <!-- Loaded async — billing connect button checks gisReady before use -->
+  <script src="https://accounts.google.com/gsi/client" async defer
+          onload="window._gisReady=true;if(window._onGisReady)window._onGisReady()"></script>
 </head>
 <body>
 
@@ -6830,6 +6834,73 @@ header::after { display: none !important; }
               font-family:'JetBrains Mono',monospace">Fetching live rate…</span>
       </div>
       <div id="usageCostPanelSettings" style="padding:4px 0"></div>
+
+      <!-- ── Google Cloud Billing Live Sync (v4.1) ────────────── -->
+      <div id="gcpBillingSection" style="margin-top:4px">
+        <!-- Connect prompt (shown when not connected) -->
+        <div id="gcpConnectPrompt" style="
+          border:1.5px dashed var(--border2);border-radius:12px;
+          padding:16px 18px;text-align:center;background:var(--surface2)">
+          <div style="font-size:18px;margin-bottom:6px">💳</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">
+            Google Cloud Billing — Live Sync
+          </div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5">
+            Connect your Google account to see your live Gemini billing<br>
+            account details directly here.
+          </div>
+          <button id="gcpConnectBtn" onclick="window._gcpConnect()"
+            style="display:inline-flex;align-items:center;gap:8px;
+                   background:#fff;color:#3c4043;border:1.5px solid #dadce0;
+                   border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;
+                   cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:box-shadow .15s">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.84-1.57 2.4v2h2.53c1.48-1.36 2.33-3.37 2.33-5.77 0-.56-.05-1.1-.14-1.63z"/>
+              <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.54-1.97c-.72.48-1.63.76-2.76.76-2.12 0-3.91-1.43-4.55-3.36H1.8v2.04C3.12 15.27 5.87 17 8.98 17z"/>
+              <path fill="#FBBC05" d="M4.43 10.49A5.07 5.07 0 0 1 4.16 9c0-.52.09-1.02.27-1.49V5.47H1.8A8.97 8.97 0 0 0 0 9c0 1.45.35 2.82.96 4.03l3.47-2.54z"/>
+              <path fill="#EA4335" d="M8.98 3.58c1.19 0 2.26.41 3.1 1.21l2.32-2.32C12.95 1.19 11.13.4 8.98.4 5.87.4 3.12 2.13 1.8 4.72l3.43 2.66c.64-1.94 2.43-3.8 4.55-3.8z"/>
+            </svg>
+            Connect Google Account
+          </button>
+          <div id="gcpConnectStatus" style="margin-top:8px;font-size:11.5px;color:var(--text3);min-height:16px"></div>
+        </div>
+
+        <!-- Billing data panel (shown when connected) -->
+        <div id="gcpBillingPanel" style="display:none">
+          <!-- Connected header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;
+                      padding:8px 12px;border-radius:10px;
+                      background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);
+                      margin-bottom:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:13px">💳</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#059669">
+                  Google Cloud Billing — Connected
+                </div>
+                <div id="gcpAccountLabel" style="font-size:11px;color:var(--text3)">Loading…</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button onclick="window._gcpRefresh()"
+                style="font-size:11px;padding:3px 9px;border-radius:7px;
+                       border:1px solid var(--border2);background:var(--surface);
+                       color:var(--indigo);cursor:pointer;font-weight:600">
+                🔄 Refresh
+              </button>
+              <button onclick="window._gcpDisconnect()"
+                style="font-size:11px;padding:3px 9px;border-radius:7px;
+                       border:1px solid var(--border2);background:var(--surface);
+                       color:var(--text3);cursor:pointer">
+                Disconnect
+              </button>
+            </div>
+          </div>
+
+          <!-- Billing data rows -->
+          <div id="gcpBillingData" style="font-size:13px"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ── Panel: About ── -->
@@ -17868,6 +17939,403 @@ window.copyShareLink = function() {
 
   /* FIX B4: single init path only */
   _onReady(_loadSaved);
+
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Google Cloud Billing — Live Sync  (v4.1)
+     Isolated IIFE — zero interference with existing functionality.
+     Adds: _gcpConnect, _gcpDisconnect, _gcpRefresh to window.
+     Reads:  window._googleClientId  (set by status.js call)
+     Storage: sessionStorage only — token never persisted to localStorage
+═══════════════════════════════════════════════════════════════ -->
+<script>
+(function _initGcpBilling() {
+  'use strict';
+
+  // ── Constants ──────────────────────────────────────────────────
+  var LS_ACCOUNT  = 'shuddhi-gcp-account-id';   // last selected billing account
+  var SS_TOKEN    = 'shuddhi-gcp-token';         // sessionStorage — expires with tab
+  var SCOPE       = 'https://www.googleapis.com/auth/cloud-billing.readonly';
+
+  // Detect deploy base (works on Vercel + Cloudflare Pages + localhost)
+  var BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? '' : '';  // relative paths work everywhere
+
+  // ── State ──────────────────────────────────────────────────────
+  var _tokenClient  = null;   // GIS token client instance
+  var _accessToken  = null;   // in-memory only (never localStorage)
+  var _clientId     = '';     // GOOGLE_CLIENT_ID from env
+  var _accounts     = [];     // billing accounts returned by API
+  var _selectedId   = localStorage.getItem(LS_ACCOUNT) || '';
+  var _loading      = false;
+
+  // ── DOM helpers ────────────────────────────────────────────────
+  function $id(id)     { return document.getElementById(id); }
+  function show(id)    { var el = $id(id); if (el) el.style.display = ''; }
+  function hide(id)    { var el = $id(id); if (el) el.style.display = 'none'; }
+  function setText(id, t) { var el = $id(id); if (el) el.textContent = t; }
+  function setHTML(id, h) { var el = $id(id); if (el) el.innerHTML  = h; }
+
+  function setStatus(msg, isError) {
+    var el = $id('gcpConnectStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = isError ? '#EF4444' : 'var(--text3)';
+  }
+
+  // ── Proxy call ─────────────────────────────────────────────────
+  async function callBilling(action, extra) {
+    if (!_accessToken) return { error: 'Not connected' };
+    try {
+      var r = await fetch(BASE + '/api/billing', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(Object.assign({ action: action, accessToken: _accessToken }, extra || {})),
+      });
+      var data = await r.json().catch(function() { return {}; });
+      // Token expired — clear and prompt reconnect
+      if (r.status === 401) {
+        _accessToken = null;
+        try { sessionStorage.removeItem(SS_TOKEN); } catch(e) {}
+        showConnectPrompt('Session expired — please reconnect.');
+        return { error: data.error || 'Token expired' };
+      }
+      return data;
+    } catch(e) {
+      return { error: 'Network error: ' + e.message };
+    }
+  }
+
+  // ── Show / hide panels ─────────────────────────────────────────
+  function showConnectPrompt(statusMsg) {
+    show('gcpConnectPrompt');
+    hide('gcpBillingPanel');
+    if (statusMsg) setStatus(statusMsg, true);
+    else setStatus('');
+  }
+
+  function showBillingPanel() {
+    hide('gcpConnectPrompt');
+    show('gcpBillingPanel');
+  }
+
+  // ── Render billing data ────────────────────────────────────────
+  function renderBillingData(accounts, projects, budgets) {
+    var acct = accounts && accounts.length > 0 ? accounts[0] : null;
+    if (!acct) {
+      setHTML('gcpBillingData',
+        '<div style="padding:12px;text-align:center;font-size:12px;color:var(--text3)">' +
+        'No billing accounts found for this Google account.</div>');
+      return;
+    }
+
+    // Update header label
+    setText('gcpAccountLabel', acct.displayName + ' · ' + acct.id);
+
+    // Build budget rows
+    var budgetHTML = '';
+    if (budgets && budgets.length) {
+      budgets.forEach(function(b) {
+        if (b.amount) {
+          var sym = b.currency === 'INR' ? '₹' : (b.currency === 'USD' ? '$' : b.currency + ' ');
+          budgetHTML +=
+            '<tr style="border-top:1px solid var(--border)">' +
+            '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Budget Cap</td>' +
+            '<td style="padding:8px 12px;text-align:right;font-weight:700;font-size:13px;color:var(--text)">' +
+            sym + Number(b.amount).toLocaleString('en-IN') + '</td>' +
+            '</tr>';
+        }
+      });
+    }
+
+    // Build project rows
+    var projHTML = '';
+    if (projects && projects.length) {
+      projects.forEach(function(p) {
+        projHTML +=
+          '<tr style="border-top:1px solid var(--border)">' +
+          '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Project</td>' +
+          '<td style="padding:8px 12px;text-align:right;font-weight:600;font-size:12px;color:var(--indigo)">' +
+          (p.projectId || '—') + '</td>' +
+          '</tr>';
+      });
+    }
+
+    var statusBadge = acct.open
+      ? '<span style="background:#D1FAE5;color:#065F46;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700">● ACTIVE</span>'
+      : '<span style="background:#FEE2E2;color:#991B1B;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700">● CLOSED</span>';
+
+    var deepLink = 'https://console.cloud.google.com/billing/' + acct.id;
+
+    var html =
+      '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">' +
+      '<tr style="background:var(--surface2)">' +
+      '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Account</td>' +
+      '<td style="padding:8px 12px;text-align:right;font-weight:700;color:var(--text)">' + acct.displayName + '</td>' +
+      '</tr>' +
+      '<tr style="border-top:1px solid var(--border)">' +
+      '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Account ID</td>' +
+      '<td style="padding:8px 12px;text-align:right;font-family:monospace;font-size:11.5px;color:var(--text2)">' + acct.id + '</td>' +
+      '</tr>' +
+      '<tr style="border-top:1px solid var(--border)">' +
+      '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Status</td>' +
+      '<td style="padding:8px 12px;text-align:right">' + statusBadge + '</td>' +
+      '</tr>' +
+      budgetHTML +
+      projHTML +
+      '</table>' +
+      // Estimated spend from existing tracker (bridge to existing data)
+      '<div style="padding:10px 12px;background:var(--surface2);border-radius:10px;' +
+      'border:1px solid var(--border);margin-bottom:10px">' +
+      '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;' +
+      'letter-spacing:.5px;margin-bottom:6px">Estimated Spend This Month</div>' +
+      '<div style="font-size:12px;color:var(--text2)">See the <strong>Usage & Cost</strong> table above ' +
+      'for token-based cost estimates across all providers.</div>' +
+      '</div>' +
+      // Note about balance
+      '<div style="padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;' +
+      'margin-bottom:10px;font-size:11.5px;color:#78350F">' +
+      '⚠️ Live balance & transaction history are only available in the ' +
+      '<a href="' + deepLink + '" target="_blank" rel="noopener noreferrer" ' +
+      'style="color:#B45309;font-weight:700">Google Cloud Billing Console ↗</a>' +
+      '</div>' +
+      // Deep link CTA
+      '<a href="' + deepLink + '" target="_blank" rel="noopener noreferrer" ' +
+      'style="display:flex;align-items:center;justify-content:center;gap:8px;' +
+      'padding:9px 16px;border-radius:10px;background:var(--surface);' +
+      'border:1.5px solid var(--border2);color:var(--indigo);font-size:12.5px;font-weight:700;' +
+      'text-decoration:none;transition:background .15s">' +
+      '💳 View Full Billing in Google Cloud ↗' +
+      '</a>';
+
+    setHTML('gcpBillingData', html);
+
+    // Multiple accounts — add selector
+    if (accounts.length > 1) {
+      var sel = '<div style="margin-bottom:10px">' +
+        '<label style="font-size:12px;color:var(--text3);font-weight:600">Billing Account</label>' +
+        '<select onchange="window._gcpSelectAccount(this.value)" ' +
+        'style="width:100%;margin-top:4px;padding:6px 10px;border-radius:8px;' +
+        'border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-size:12px">';
+      accounts.forEach(function(a) {
+        sel += '<option value="' + a.id + '"' + (a.id === acct.id ? ' selected' : '') + '>' +
+               a.displayName + ' (' + a.id + ')</option>';
+      });
+      sel += '</select></div>';
+      setHTML('gcpBillingData', sel + html);
+    }
+  }
+
+  // ── Load billing data after token obtained ─────────────────────
+  async function loadBillingData() {
+    if (_loading) return;
+    _loading = true;
+    setHTML('gcpBillingData',
+      '<div style="padding:16px;text-align:center;color:var(--text3);font-size:12px">' +
+      '<svg width="20" height="20" viewBox="0 0 20 20" style="animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px">' +
+      '<circle cx="10" cy="10" r="8" stroke="var(--indigo)" stroke-width="2" fill="none" stroke-dasharray="16 32">' +
+      '</circle></svg>Loading billing data…</div>');
+    showBillingPanel();
+
+    try {
+      var [acctRes, projRes, budgetRes] = await Promise.all([
+        callBilling('list_accounts'),
+        _selectedId ? callBilling('list_projects', { billingAccountId: _selectedId }) : Promise.resolve({ projects: [] }),
+        _selectedId ? callBilling('get_budgets',   { billingAccountId: _selectedId }) : Promise.resolve({ budgets: [] }),
+      ]);
+
+      if (acctRes.error) {
+        setHTML('gcpBillingData',
+          '<div style="padding:12px;color:#EF4444;font-size:12px;border-radius:8px;' +
+          'background:#FEF2F2;border:1px solid #FECACA">⚠️ ' + acctRes.error + '</div>');
+        _loading = false;
+        return;
+      }
+
+      var accounts = acctRes.accounts || [];
+      if (accounts.length > 0 && !_selectedId) {
+        _selectedId = accounts[0].id;
+        localStorage.setItem(LS_ACCOUNT, _selectedId);
+        // Now fetch project + budget for selected account
+        var [pr2, br2] = await Promise.all([
+          callBilling('list_projects', { billingAccountId: _selectedId }),
+          callBilling('get_budgets',   { billingAccountId: _selectedId }),
+        ]);
+        projRes   = pr2;
+        budgetRes = br2;
+      }
+
+      renderBillingData(accounts, projRes.projects || [], budgetRes.budgets || []);
+    } catch(e) {
+      setHTML('gcpBillingData',
+        '<div style="padding:12px;color:#EF4444;font-size:12px">' +
+        'Unexpected error: ' + e.message + '</div>');
+    }
+    _loading = false;
+  }
+
+  // ── Initialise GIS token client ────────────────────────────────
+  function initTokenClient() {
+    if (!_clientId || !window.google || !window.google.accounts) {
+      setStatus('Google services not available. Check GOOGLE_CLIENT_ID in env vars.', true);
+      return false;
+    }
+    if (_tokenClient) return true; // already initialised
+
+    _tokenClient = window.google.accounts.oauth2.initTokenClient({
+      client_id: _clientId,
+      scope:     SCOPE,
+      callback:  function(response) {
+        if (response.error) {
+          setStatus(response.error === 'access_denied'
+            ? 'Access denied. Please allow billing access when prompted.'
+            : 'Sign-in error: ' + response.error, true);
+          showConnectPrompt();
+          return;
+        }
+        // Store token in memory + sessionStorage (expires with tab)
+        _accessToken = response.access_token;
+        try { sessionStorage.setItem(SS_TOKEN, _accessToken); } catch(e) {}
+        setStatus('');
+        loadBillingData();
+      },
+    });
+    return true;
+  }
+
+  // ── Public API ─────────────────────────────────────────────────
+  window._gcpConnect = function() {
+    if (!_clientId) {
+      setStatus('GOOGLE_CLIENT_ID not configured. Add it in Vercel/Cloudflare env vars.', true);
+      return;
+    }
+
+    // Restore token from sessionStorage if still valid in this tab
+    if (!_accessToken) {
+      try {
+        var saved = sessionStorage.getItem(SS_TOKEN);
+        if (saved && saved.length > 10) _accessToken = saved;
+      } catch(e) {}
+    }
+
+    if (_accessToken) {
+      // Already have a token — just load data
+      showBillingPanel();
+      loadBillingData();
+      return;
+    }
+
+    if (!window._gisReady || !window.google || !window.google.accounts) {
+      // GIS not loaded yet — wait for it
+      setStatus('Loading Google services…', false);
+      window._onGisReady = function() {
+        window._onGisReady = null;
+        window._gcpConnect();
+      };
+      return;
+    }
+
+    if (!initTokenClient()) return;
+
+    var btn = $id('gcpConnectBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Connecting…'; }
+    setStatus('');
+
+    // requestAccessToken opens the Google OAuth popup (no redirect)
+    _tokenClient.requestAccessToken({ prompt: 'consent' });
+
+    setTimeout(function() {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.84-1.57 2.4v2h2.53c1.48-1.36 2.33-3.37 2.33-5.77 0-.56-.05-1.1-.14-1.63z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.54-1.97c-.72.48-1.63.76-2.76.76-2.12 0-3.91-1.43-4.55-3.36H1.8v2.04C3.12 15.27 5.87 17 8.98 17z"/><path fill="#FBBC05" d="M4.43 10.49A5.07 5.07 0 0 1 4.16 9c0-.52.09-1.02.27-1.49V5.47H1.8A8.97 8.97 0 0 0 0 9c0 1.45.35 2.82.96 4.03l3.47-2.54z"/><path fill="#EA4335" d="M8.98 3.58c1.19 0 2.26.41 3.1 1.21l2.32-2.32C12.95 1.19 11.13.4 8.98.4 5.87.4 3.12 2.13 1.8 4.72l3.43 2.66c.64-1.94 2.43-3.8 4.55-3.8z"/></svg> Connect Google Account'; }
+    }, 30000);
+  };
+
+  window._gcpDisconnect = function() {
+    _accessToken = null;
+    _tokenClient = null;
+    _selectedId  = '';
+    try { sessionStorage.removeItem(SS_TOKEN); } catch(e) {}
+    localStorage.removeItem(LS_ACCOUNT);
+    if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+      window.google.accounts.oauth2.revoke(_accessToken || '', function() {});
+    }
+    showConnectPrompt('Disconnected from Google Cloud Billing.');
+  };
+
+  window._gcpRefresh = function() {
+    _loading = false;
+    loadBillingData();
+  };
+
+  window._gcpSelectAccount = function(id) {
+    _selectedId = id;
+    localStorage.setItem(LS_ACCOUNT, id);
+    _loading = false;
+    loadBillingData();
+  };
+
+  // ── Bootstrap ──────────────────────────────────────────────────
+  // Wait for the status endpoint to load the client ID,
+  // then restore any existing session token automatically.
+  function _tryRestoreSession() {
+    try {
+      var saved = sessionStorage.getItem(SS_TOKEN);
+      if (saved && saved.length > 10 && $id('gcpBillingPanel')) {
+        _accessToken = saved;
+        showBillingPanel();
+        loadBillingData();
+      }
+    } catch(e) {}
+  }
+
+  // Hook into existing applySettingsStatus which is called after status.js loads
+  var _origApply = window.applySettingsStatus;
+  window.applySettingsStatus = function(claudeKey, adoKey, geminiKey, groqKey, activeProvider, extra) {
+    if (typeof _origApply === 'function') {
+      _origApply(claudeKey, adoKey, geminiKey, groqKey, activeProvider, extra);
+    }
+    // extra contains googleClientId from updated status.js
+    if (extra && extra.googleClientId) {
+      _clientId = extra.googleClientId;
+      window._googleClientId = _clientId;
+    }
+  };
+
+  // Also intercept the raw status fetch response to capture googleClientId
+  var _origFetch = window.fetch;
+  window.fetch = function(url) {
+    var args = Array.prototype.slice.call(arguments);
+    var p = _origFetch.apply(window, args);
+    if (typeof url === 'string' && url.includes('/api/status')) {
+      p.then(function(r) {
+        return r.clone().json().then(function(data) {
+          if (data && data.googleClientId) {
+            _clientId = data.googleClientId;
+            window._googleClientId = _clientId;
+            // Restore session if we now have a client ID and a saved token
+            setTimeout(_tryRestoreSession, 100);
+          }
+        }).catch(function() {});
+      }).catch(function() {});
+    }
+    return p;
+  };
+
+  // CSS for spin animation (billing spinner reuses it)
+  if (!document.getElementById('gcpSpinStyle')) {
+    var s = document.createElement('style');
+    s.id  = 'gcpSpinStyle';
+    s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(s);
+  }
+
+  // Defer init to after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _tryRestoreSession);
+  } else {
+    setTimeout(_tryRestoreSession, 300);
+  }
 
 })();
 </script>
