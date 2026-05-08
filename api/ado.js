@@ -63,6 +63,147 @@ export async function onRequest(context) {
     }
   }
 
+
+  // ── Action: fetch_workitem ────────────────────────────────────
+  // Fetches an ADO Work Item by numeric ID and returns structured
+  // fields for auto-filling the Business Flow textarea.
+  if (action === 'fetch_workitem') {
+    const workItemId = body.workItemId;
+    if (!workItemId || !/^[0-9]+$/.test(String(workItemId))) {
+      return respond({ error: 'Invalid Work Item ID — must be a number (e.g. 1234)' }, 400);
+    }
+    const org  = body.org  || '';
+    const proj = body.proj || '';
+    if (!org) return respond({ error: 'ADO organisation URL required' }, 400);
+
+    // Normalise org URL — strip trailing slash
+    const orgUrl = org.replace(/\/$/, '');
+
+    // Fields to fetch — covers all standard + common custom fields
+    const fields = [
+      'System.Id',
+      'System.Title',
+      'System.Description',
+      'System.WorkItemType',
+      'System.State',
+      'System.IterationPath',
+      'System.Tags',
+      'Microsoft.VSTS.Common.Priority',
+      'Microsoft.VSTS.Common.AcceptanceCriteria',
+      'Microsoft.VSTS.Scheduling.StoryPoints',
+      'System.AssignedTo',
+    ].join(',');
+
+    const apiUrl = `${orgUrl}/_apis/wit/workitems/${workItemId}?fields=${encodeURIComponent(fields)}&api-version=7.1`;
+
+    try {
+      const r = await fetch(apiUrl, {
+        headers: { 'Authorization': authHeader, 'Accept': 'application/json' }
+      });
+
+      if (r.status === 401) return respond({ error: 'PAT invalid or expired. Renew in ADO → User Settings → Personal Access Tokens.' }, 401);
+      if (r.status === 404) return respond({ error: `Work Item #${workItemId} not found or no access` }, 404);
+      if (!r.ok)            return respond({ error: `ADO API error: HTTP ${r.status}` }, r.status);
+
+      const data   = await r.json();
+      const f      = data.fields || {};
+
+      // Strip HTML tags from description and acceptance criteria (ADO uses HTML)
+      const stripHtml = (html) => {
+        if (!html) return '';
+        return html
+          .replace(/<\/?(p|br|div|li|h[1-6])[^>]*>/gi, '\n')
+          .replace(/<[^>]+>/g, '')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
+      };
+
+      return respond({
+        id:                 workItemId,
+        title:              f['System.Title']            || '',
+        description:        stripHtml(f['System.Description']).substring(0, 2000),
+        acceptanceCriteria: stripHtml(f['Microsoft.VSTS.Common.AcceptanceCriteria']).substring(0, 1000),
+        type:               f['System.WorkItemType']     || '',
+        state:              f['System.State']            || '',
+        priority:           f['Microsoft.VSTS.Common.Priority'] ? 'P' + f['Microsoft.VSTS.Common.Priority'] : '',
+        iterationPath:      f['System.IterationPath']    || '',
+        tags:               f['System.Tags']             || '',
+        storyPoints:        f['Microsoft.VSTS.Scheduling.StoryPoints'] || null,
+        assignedTo:         f['System.AssignedTo']?.displayName || '',
+      });
+
+    } catch(e) {
+      return respond({ error: 'Proxy fetch failed: ' + e.message }, 500);
+    }
+  }
+
+
+  // ── Action: fetch_workitem ────────────────────────────────────
+  // Fetches an ADO Work Item by numeric ID.
+  // Returns structured fields for auto-filling the flowDesc textarea.
+  if (action === 'fetch_workitem') {
+    const workItemId = body.workItemId;
+    if (!workItemId || !/^[0-9]+$/.test(String(workItemId))) {
+      return respond({ error: 'Invalid Work Item ID \u2014 must be a number (e.g. 1234)' }, 400);
+    }
+    const org = (body.org || '').replace(/\/$/, '');
+    if (!org) return respond({ error: 'ADO organisation URL required' }, 400);
+
+    const fields = [
+      'System.Id','System.Title','System.Description',
+      'System.WorkItemType','System.State','System.IterationPath',
+      'System.Tags','Microsoft.VSTS.Common.Priority',
+      'Microsoft.VSTS.Common.AcceptanceCriteria',
+      'Microsoft.VSTS.Scheduling.StoryPoints','System.AssignedTo',
+    ].join(',');
+
+    const apiUrl = `${org}/_apis/wit/workitems/${workItemId}?fields=${encodeURIComponent(fields)}&api-version=7.1`;
+
+    try {
+      const r = await fetch(apiUrl, {
+        headers: { 'Authorization': authHeader, 'Accept': 'application/json' }
+      });
+      if (r.status === 401) return respond({ error: 'PAT invalid or expired. Renew in ADO \u2192 User Settings \u2192 Personal Access Tokens.' }, 401);
+      if (r.status === 404) return respond({ error: `Work Item #${workItemId} not found or no access` }, 404);
+      if (!r.ok)            return respond({ error: `ADO API error: HTTP ${r.status}` }, r.status);
+
+      const data = await r.json();
+      const f    = data.fields || {};
+
+      const stripHtml = (html) => {
+        if (!html) return '';
+        return html
+          .replace(/<\/(p|br|div|li|h[1-6])[^>]*>/gi, '\n')
+          .replace(/<[^>]+>/g, '')
+          .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"').replace(/\n{3,}/g, '\n\n')
+          .trim();
+      };
+
+      return respond({
+        id:                 workItemId,
+        title:              f['System.Title']                             || '',
+        description:        stripHtml(f['System.Description']).substring(0, 2000),
+        acceptanceCriteria: stripHtml(f['Microsoft.VSTS.Common.AcceptanceCriteria']).substring(0, 1000),
+        type:               f['System.WorkItemType']                      || '',
+        state:              f['System.State']                             || '',
+        priority:           f['Microsoft.VSTS.Common.Priority'] ? 'P' + f['Microsoft.VSTS.Common.Priority'] : '',
+        iterationPath:      f['System.IterationPath']                     || '',
+        tags:               f['System.Tags']                              || '',
+        storyPoints:        f['Microsoft.VSTS.Scheduling.StoryPoints']    || null,
+        assignedTo:         f['System.AssignedTo']?.displayName           || '',
+      });
+    } catch(e) {
+      return respond({ error: 'Proxy fetch failed: ' + e.message }, 500);
+    }
+  }
+
   // ── Standard proxy ────────────────────────────────────────────
   const method = rawMethod || (reqBody != null ? 'POST' : 'GET');
 

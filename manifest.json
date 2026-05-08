@@ -1,7 +1,7 @@
 {
   "name": "Shuddhi QA — AI Test Case Generator",
   "short_name": "Shuddhi QA",
-  "description": "Generate production-ready QA test cases for D365, Salesforce, Web Apps and more. Export to Azure DevOps, Jira, Excel and PDF. Live Google Cloud Billing sync. v8.5",
+  "description": "Generate production-ready QA test cases for D365, Salesforce, Web Apps and more. Export to Azure DevOps, Jira, Excel and PDF. Live Google Cloud Billing sync. v8.6",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",

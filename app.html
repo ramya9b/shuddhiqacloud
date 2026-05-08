@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v8.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v8.6 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.5 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.6 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5943,7 +5943,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v8.5</span>
+      <span class="sb-badge">v8.6</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6051,10 +6051,49 @@ header::after { display: none !important; }
         class="hdr-icon-btn">🌙</button>
 
       <!-- Notification bell -->
-      <button class="hdr-icon-btn" data-tip="Notifications and alerts" style="position:relative">
+      <button id="notifBellBtn" class="hdr-icon-btn"
+        data-tip="Notifications — ADO pushes, provider switches, alerts"
+        onclick="window._toggleNotifPanel()"
+        aria-label="Notifications" style="position:relative">
         🔔
-        <span style="position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--error);border:1.5px solid var(--surface)"></span>
+        <span id="notifDot" style="position:absolute;top:5px;right:5px;width:7px;height:7px;
+          border-radius:50%;background:var(--error);border:1.5px solid var(--surface);
+          display:none;transition:opacity .2s"></span>
       </button>
+      <!-- Notification panel -->
+      <div id="notifPanel" style="
+        display:none;position:fixed;top:56px;right:12px;
+        width:340px;max-height:480px;
+        background:var(--surface);border:1.5px solid var(--border2);
+        border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);
+        z-index:10050;overflow:hidden;
+        flex-direction:column;font-family:'DM Sans',sans-serif">
+        <!-- Panel header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;
+          padding:12px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🔔</span>
+            <span style="font-size:13px;font-weight:700;color:var(--text)">Notifications</span>
+            <span id="notifCount" style="display:none;font-size:10px;font-weight:700;
+              background:var(--error);color:#fff;border-radius:10px;
+              padding:1px 6px;line-height:1.6"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="window._clearAllNotifs()" style="font-size:11px;
+              color:var(--text3);background:none;border:1px solid var(--border2);
+              border-radius:6px;padding:2px 8px;cursor:pointer;transition:all .15s"
+              onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">
+              Clear all
+            </button>
+            <button onclick="window._toggleNotifPanel()" style="font-size:16px;
+              color:var(--text3);background:none;border:none;cursor:pointer;
+              line-height:1;padding:2px 4px;transition:color .15s"
+              onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">✕</button>
+          </div>
+        </div>
+        <!-- Notification list -->
+        <div id="notifList" style="overflow-y:auto;flex:1;max-height:390px;padding:6px 0"></div>
+      </div>
 
       <!-- Settings -->
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" aria-label="Settings" data-tip="Configure AI provider, ADO/Jira integration and usage tracking">⚙️</button>
@@ -6949,7 +6988,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v8.5</div>
+          <div class="settings-about-val" id="aboutVersion">v8.6</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -6984,16 +7023,16 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v8.5 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v8.6 — Billing Sync</div>
         </div>
       </div>
 
-      <!-- v8.5 Changelog -->
+      <!-- v8.6 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v8.5
+          🆕 What's New in v8.6
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -7149,6 +7188,37 @@ header::after { display: none !important; }
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_EMAIL</code> and
             <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">JIRA_API_TOKEN</code>
             in Settings → Jira tab to enable auto-fetch.
+          </div>
+        </div>
+
+          <!-- ADO Work Item ID Quick Fetch -->
+        <div class="field" id="adoFetchField" style="margin-top:4px">
+          <label style="display:flex;align-items:center;justify-content:space-between">
+            <span>ADO Work Item ID <span style="font-size:10px;color:var(--text3);font-weight:400">(optional — auto-fills flow below)</span></span>
+            <span id="adoFetchBadge" style="display:none;font-size:10px;padding:1px 7px;border-radius:10px;
+                  background:rgba(91,95,239,.1);color:var(--d365);font-family:'JetBrains Mono',monospace;border:1px solid rgba(91,95,239,.2)">ADO ✓ configured</span>
+          </label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="adoWorkItemId" placeholder="e.g. 1234 or 9876" autocomplete="off"
+              style="flex:1;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;
+                     padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s;
+                     font-family:'JetBrains Mono',monospace"
+              onfocus="this.style.borderColor='var(--d365)'" onblur="this.style.borderColor='var(--border2)'"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();window.fetchAdoWorkItem();}"/>
+            <button onclick="window.fetchAdoWorkItem()" id="adoWorkItemFetchBtn"
+              data-tip="Fetch ADO Work Item and auto-fill Business Flow"
+              style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--d365);
+                     background:var(--d365-dim);color:var(--d365);font-size:12.5px;font-weight:600;
+                     cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0">
+              <span id="adoFetchLabel">Fetch →</span>
+            </button>
+          </div>
+          <div id="adoFetchStatus" style="display:none;font-size:12px;margin-top:5px;padding:6px 10px;
+               border-radius:6px;font-family:'JetBrains Mono',monospace"></div>
+          <div id="adoNotConfigured" style="font-size:11px;color:var(--text3);margin-top:4px">
+            Configure <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">ADO PAT</code> and
+            <code style="background:var(--bg2);padding:1px 5px;border-radius:3px">Organisation URL</code>
+            in Settings → Azure DevOps to enable auto-fetch.
           </div>
         </div>
         </div>
@@ -8579,6 +8649,8 @@ function showToast(msg, emoji = '\u2705') {
   t.textContent = emoji + ' ' + msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
+  // Also log to notification panel
+  if (window._logNotif) window._logNotif(msg, emoji);
 }
 
 /* ─── ADO Push Banner — always above all modals (z-index 10100) ─────────────
@@ -13757,7 +13829,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v8.5';
+  if (ver)  ver.textContent  = 'v8.6';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14772,7 +14844,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v8.5';
+  if (version)  version.textContent  = 'v8.6';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15595,7 +15667,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.5</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.6</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -17408,144 +17480,6 @@ window.copyShareLink = function() {
      v6.7 GLOBAL TOOLTIP ENGINE
      Single tooltip, smart positioning, 150ms delay, theme-aware
 ════════════════════════════════════════════════════════════════ -->
-<style>
-  #sqaTip {
-    position: fixed;
-    z-index: 999999;
-    background: #1e293b;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    line-height: 1.5;
-    padding: 7px 12px;
-    border-radius: 8px;
-    box-shadow: 0 6px 24px rgba(0,0,0,.3);
-    pointer-events: none;
-    max-width: 260px;
-    white-space: normal;
-    text-align: left;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity .15s ease, transform .15s ease;
-    border: 1px solid rgba(255,255,255,.08);
-  }
-  #sqaTip.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  [data-theme="dark"] #sqaTip {
-    background: rgba(30,27,75,.97);
-    border-color: rgba(91,95,239,.3);
-    box-shadow: 0 6px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(91,95,239,.1);
-  }
-  /* Arrow pointer */
-  #sqaTip::before {
-    content: '';
-    position: absolute;
-    width: 8px; height: 8px;
-    background: inherit;
-    border: inherit;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    left: 50%; transform: translateX(-50%);
-  }
-  #sqaTip.tip-above::before { bottom: -5px; top: auto; clip-path: polygon(0 0, 100% 0, 50% 100%); }
-  #sqaTip.tip-below::before { top: -5px;   bottom: auto; clip-path: polygon(50% 0, 0 100%, 100% 100%); }
-  #sqaTip.tip-left::before  { right: -5px; left: auto; clip-path: polygon(0 0, 100% 50%, 0 100%); top: 50%; transform: translateY(-50%); }
-  #sqaTip.tip-right::before { left: -5px;  right: auto; clip-path: polygon(100% 0, 0 50%, 100% 100%); top: 50%; transform: translateY(-50%); }
-</style>
-
-<div id="sqaTip" role="tooltip" aria-hidden="true"></div>
-
-<script>
-(function _initTooltips() {
-
-  var tip    = document.getElementById('sqaTip');
-  var _timer = null;
-  var _cur   = null;
-  var DELAY  = 150;  // ms before showing
-  var GAP    = 10;   // px gap between element and tooltip
-
-  function _show(el) {
-    var text = el.getAttribute('data-tip');
-    if (!text || !tip) return;
-    tip.textContent = text;
-    tip.className   = '';
-
-    // Position
-    var r   = el.getBoundingClientRect();
-    var tw  = tip.offsetWidth  || 200;
-    var th  = tip.offsetHeight || 36;
-    var vw  = window.innerWidth;
-    var vh  = window.innerHeight;
-    var pos, left, top;
-
-    // Prefer above
-    if (r.top - th - GAP > 0) {
-      pos  = 'above';
-      top  = r.top - th - GAP;
-      left = r.left + r.width / 2 - tw / 2;
-    } else if (r.bottom + th + GAP < vh) {
-      pos  = 'below';
-      top  = r.bottom + GAP;
-      left = r.left + r.width / 2 - tw / 2;
-    } else if (r.left - tw - GAP > 0) {
-      pos  = 'left';
-      left = r.left - tw - GAP;
-      top  = r.top + r.height / 2 - th / 2;
-    } else {
-      pos  = 'right';
-      left = r.right + GAP;
-      top  = r.top + r.height / 2 - th / 2;
-    }
-
-    // Clamp to viewport
-    left = Math.max(8, Math.min(left, vw - tw - 8));
-    top  = Math.max(8, Math.min(top,  vh - th - 8));
-
-    tip.style.left = left + 'px';
-    tip.style.top  = top  + 'px';
-    tip.className  = 'tip-' + pos;
-
-    requestAnimationFrame(function() {
-      tip.classList.add('visible');
-    });
-  }
-
-  function _hide() {
-    if (!tip) return;
-    tip.classList.remove('visible');
-    _cur = null;
-  }
-
-  // Event delegation — works for dynamically added elements
-  document.addEventListener('mouseover', function(e) {
-    var el = e.target.closest('[data-tip]');
-    if (!el || el === _cur) return;
-    _cur = el;
-    clearTimeout(_timer);
-    _timer = setTimeout(function() { _show(el); }, DELAY);
-  });
-
-  document.addEventListener('mouseout', function(e) {
-    var el = e.target.closest('[data-tip]');
-    if (!el) return;
-    clearTimeout(_timer);
-    _hide();
-  });
-
-  // Hide on scroll and ESC
-  document.addEventListener('scroll', _hide, true);
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') _hide();
-  });
-
-  // Hide on click
-  document.addEventListener('click', _hide);
-
-})();
-</script>
-
 <!-- ════════════════════════════════════════════════════════════
      v6.7 GLOBAL TOOLTIP ENGINE
      Single tooltip at a time · 150ms delay · Smart positioning
@@ -18823,5 +18757,364 @@ window.copyShareLink = function() {
 })();
 </script>
 
+<!-- ══════════════════════════════════════════════════════════════
+     Notification System — Standalone IIFE (runs last)
+     Captures all showToast events into a persistent panel.
+     Zero interference with existing functionality.
+════════════════════════════════════════════════════════════════ -->
+<script>
+(function _initNotifications() {
+  'use strict';
+
+  var LS_KEY   = 'shuddhi-notifs-v1';
+  var MAX_NOTIFS = 50;   // keep last 50 notifications
+  var _isOpen  = false;
+
+  // ── Notification categories with icons + colours ──────────────
+  var CATEGORIES = {
+    // Success events
+    success: { dot: '#10B981', bg: 'rgba(16,185,129,.07)',  border: 'rgba(16,185,129,.18)' },
+    // ADO push, generation events
+    push:    { dot: '#0078D4', bg: 'rgba(0,120,212,.07)',   border: 'rgba(0,120,212,.18)'  },
+    // Errors, failures
+    error:   { dot: '#EF4444', bg: 'rgba(239,68,68,.07)',   border: 'rgba(239,68,68,.18)'  },
+    // Warnings, rate limits
+    warning: { dot: '#F59E0B', bg: 'rgba(245,158,11,.07)',  border: 'rgba(245,158,11,.18)' },
+    // Info, tips, general
+    info:    { dot: 'var(--indigo)', bg: 'rgba(99,102,241,.07)', border: 'rgba(99,102,241,.18)' },
+  };
+
+  // Map emoji → category
+  function _categorise(emoji, msg) {
+    if (!emoji) return 'info';
+    var e = emoji.trim();
+    if (['✅','✓','🎉','🔄','🎫','🔑','📋','📊'].includes(e)) return 'success';
+    if (['❌','⛔','🚫'].includes(e))                           return 'error';
+    if (['⚠️','⏱','🔄'].includes(e))                          return 'warning';
+    if (e === '🔵' || msg.toLowerCase().includes('ado') ||
+        msg.toLowerCase().includes('push') ||
+        msg.toLowerCase().includes('test plan'))               return 'push';
+    return 'info';
+  }
+
+  // ── Persistence ───────────────────────────────────────────────
+  function _load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e) { return []; }
+  }
+  function _save(items) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(items.slice(0, MAX_NOTIFS))); } catch(e) {}
+  }
+
+  // ── Unread count ──────────────────────────────────────────────
+  function _getUnread(items) {
+    return items.filter(function(n) { return !n.read; }).length;
+  }
+
+  // ── Update badge dot + count chip ────────────────────────────
+  function _updateBadge() {
+    var items   = _load();
+    var unread  = _getUnread(items);
+    var dot     = document.getElementById('notifDot');
+    var chip    = document.getElementById('notifCount');
+    if (dot)  dot.style.display  = unread > 0 ? 'block' : 'none';
+    if (chip) {
+      chip.style.display = unread > 0 ? 'inline' : 'none';
+      chip.textContent   = unread > 9 ? '9+' : String(unread);
+    }
+  }
+
+  // ── Render panel ──────────────────────────────────────────────
+  function _render() {
+    var list = document.getElementById('notifList');
+    if (!list) return;
+    var items = _load();
+
+    if (!items.length) {
+      list.innerHTML =
+        '<div style="padding:32px 16px;text-align:center">' +
+        '<div style="font-size:32px;margin-bottom:10px">🔕</div>' +
+        '<div style="font-size:13px;color:var(--text3);font-weight:600">No notifications yet</div>' +
+        '<div style="font-size:12px;color:var(--text3);margin-top:4px">Activity will appear here as you use Shuddhi QA</div>' +
+        '</div>';
+      return;
+    }
+
+    list.innerHTML = items.map(function(n, idx) {
+      var cat = CATEGORIES[n.cat] || CATEGORIES.info;
+      var time = _relTime(n.ts);
+      return (
+        '<div data-notif-idx="' + idx + '" style="' +
+        'display:flex;gap:10px;padding:10px 14px;' +
+        'border-bottom:1px solid var(--border);' +
+        'background:' + (n.read ? 'transparent' : cat.bg) + ';' +
+        'transition:background .2s;cursor:default"' +
+        'onmouseover="this.style.background='var(--surface2)'"' +
+        'onmouseout="this.style.background='' + (n.read ? 'transparent' : cat.bg) + ''">' +
+
+        // Colour dot
+        '<div style="flex-shrink:0;margin-top:4px">' +
+        '<div style="width:8px;height:8px;border-radius:50%;background:' + cat.dot + ';' +
+        (n.read ? 'opacity:.35' : '') + '"></div></div>' +
+
+        // Content
+        '<div style="flex:1;min-width:0">' +
+        '<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px">' +
+        '<span style="font-size:14px;line-height:1">' + (n.emoji || '•') + '</span>' +
+        '<span style="font-size:12.5px;color:var(--text);font-weight:' + (n.read ? '400' : '600') + ';' +
+        'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px" title="' + n.msg + '">' +
+        n.msg.substring(0, 55) + (n.msg.length > 55 ? '…' : '') + '</span>' +
+        '</div>' +
+        '<div style="font-size:10.5px;color:var(--text3);font-family:'JetBrains Mono',monospace">' +
+        time + '</div>' +
+        '</div>' +
+
+        // Dismiss button
+        '<button onclick="window._dismissNotif(' + idx + ')" style="' +
+        'flex-shrink:0;background:none;border:none;cursor:pointer;' +
+        'color:var(--text3);font-size:13px;padding:2px 4px;line-height:1;' +
+        'opacity:.5;transition:opacity .15s;align-self:flex-start"' +
+        'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">✕</button>' +
+
+        '</div>'
+      );
+    }).join('');
+  }
+
+  // ── Relative time ─────────────────────────────────────────────
+  function _relTime(ts) {
+    var diff = Math.round((Date.now() - ts) / 1000);
+    if (diff < 10)    return 'just now';
+    if (diff < 60)    return diff + 's ago';
+    if (diff < 3600)  return Math.round(diff/60) + 'm ago';
+    if (diff < 86400) return Math.round(diff/3600) + 'h ago';
+    var d = new Date(ts);
+    return d.toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+  }
+
+  // ── Public: log a notification ────────────────────────────────
+  window._logNotif = function(msg, emoji) {
+    // Skip trivial / noisy messages
+    var skip = ['Generating…', 'Generation cancelled', 'Generation stopped',
+                'Rate limited', 'Ctrl+Enter'];
+    if (skip.some(function(s) { return msg.indexOf(s) === 0; })) return;
+
+    var items = _load();
+    items.unshift({
+      id:    Date.now() + Math.random(),
+      msg:   msg,
+      emoji: emoji || '•',
+      cat:   _categorise(emoji, msg),
+      ts:    Date.now(),
+      read:  false,
+    });
+    _save(items);
+    _updateBadge();
+
+    // If panel is open, re-render live
+    if (_isOpen) _render();
+  };
+
+  // ── Public: toggle panel ──────────────────────────────────────
+  window._toggleNotifPanel = function() {
+    var panel = document.getElementById('notifPanel');
+    if (!panel) return;
+    _isOpen = !_isOpen;
+    panel.style.display = _isOpen ? 'flex' : 'none';
+
+    if (_isOpen) {
+      _render();
+      // Mark all as read when panel opens
+      var items = _load();
+      items.forEach(function(n) { n.read = true; });
+      _save(items);
+      setTimeout(_updateBadge, 150);
+    }
+  };
+
+  // ── Public: dismiss single ────────────────────────────────────
+  window._dismissNotif = function(idx) {
+    var items = _load();
+    if (idx >= 0 && idx < items.length) {
+      items.splice(idx, 1);
+      _save(items);
+    }
+    _updateBadge();
+    _render();
+  };
+
+  // ── Public: clear all ─────────────────────────────────────────
+  window._clearAllNotifs = function() {
+    _save([]);
+    _updateBadge();
+    _render();
+  };
+
+  // ── Close panel on outside click ─────────────────────────────
+  document.addEventListener('click', function(e) {
+    if (!_isOpen) return;
+    var panel = document.getElementById('notifPanel');
+    var bell  = document.getElementById('notifBellBtn');
+    if (panel && !panel.contains(e.target) && bell && !bell.contains(e.target)) {
+      _isOpen = false;
+      panel.style.display = 'none';
+    }
+  }, true);
+
+  // ── Close on Escape ───────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _isOpen) {
+      _isOpen = false;
+      var panel = document.getElementById('notifPanel');
+      if (panel) panel.style.display = 'none';
+    }
+  });
+
+  // ── Tick relative times every 60s while panel is open ─────────
+  setInterval(function() { if (_isOpen) _render(); }, 60000);
+
+  // ── Bootstrap: restore badge on page load ─────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _updateBadge);
+  } else {
+    _updateBadge();
+  }
+
+  // ── Log first-run welcome tip ─────────────────────────────────
+  var WELCOME_KEY = 'shuddhi-notif-welcomed';
+  if (!localStorage.getItem(WELCOME_KEY)) {
+    setTimeout(function() {
+      window._logNotif('Welcome to Shuddhi QA! Activity notifications will appear here.', '👋');
+      localStorage.setItem(WELCOME_KEY, '1');
+    }, 2000);
+  }
+
+})();
+</script>
+
+
+<script>
+/* fetchAdoWorkItem — Standalone IIFE (runs last, guaranteed global) */
+(function() {
+  'use strict';
+
+  function _adoStatus(type, msg) {
+    var el = document.getElementById('adoFetchStatus');
+    if (!el) return;
+    el.style.display = msg ? 'block' : 'none';
+    if (!msg) return;
+    var S = {
+      success:{ bg:'rgba(16,185,129,.08)', color:'#059669', border:'rgba(16,185,129,.2)' },
+      error:  { bg:'rgba(239,68,68,.07)', color:'#DC2626', border:'rgba(239,68,68,.2)' },
+      warn:   { bg:'rgba(245,158,11,.07)', color:'#B45309', border:'rgba(245,158,11,.2)' },
+      loading:{ bg:'rgba(99,102,241,.07)', color:'var(--indigo)', border:'rgba(99,102,241,.2)' }
+    };
+    var s = S[type] || S.loading;
+    el.style.background = s.bg; el.style.color = s.color;
+    el.style.border = '1px solid ' + s.border;
+    el.style.borderRadius = '6px'; el.style.padding = '6px 10px';
+    el.textContent = msg;
+    if (type === 'success' || type === 'error') {
+      clearTimeout(el._t);
+      el._t = setTimeout(function(){ el.style.display='none'; }, 8000);
+    }
+  }
+
+  window.fetchAdoWorkItem = async function() {
+    var input   = document.getElementById('adoWorkItemId');
+    var labelEl = document.getElementById('adoFetchLabel');
+    var btn     = document.getElementById('adoWorkItemFetchBtn');
+    var flowEl  = document.getElementById('flowDesc');
+
+    if (!input || !input.value.trim()) {
+      _adoStatus('warn', '⚠️ Enter a Work Item ID first (e.g. 1234)'); return;
+    }
+    var wid = input.value.trim();
+    if (!/^[0-9]+$/.test(wid)) {
+      _adoStatus('error', '❌ Invalid ID — ADO Work Item IDs are numbers (e.g. 1234)'); return;
+    }
+
+    // Resolve credentials
+    var orgUrl = window.__adoOrgUrl || '';
+    var pat    = window.__manualAdoPAT || window.__adoPAT || '';
+    if (!orgUrl || !pat) {
+      try {
+        orgUrl = orgUrl || localStorage.getItem('shuddhi-ado-org-url') || '';
+        pat    = pat    || localStorage.getItem('shuddhi-ado-pat') || '';
+      } catch(e){}
+    }
+    if (!orgUrl) { var u = document.getElementById('adoOrgUrlInput'); if(u) orgUrl = u.value.trim(); }
+    if (!pat)    { var p = document.getElementById('adoPATInput');    if(p) pat    = p.value.trim(); }
+
+    if (!orgUrl || !pat) {
+      _adoStatus('error', '❌ Configure ADO PAT and Org URL in Settings → Azure DevOps first'); return;
+    }
+
+    if (btn)     btn.disabled = true;
+    if (labelEl) labelEl.textContent = '⏳';
+    _adoStatus('loading', '⏳ Fetching Work Item #' + wid + '…');
+
+    try {
+      var resp = await fetch('/api/ado', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action:'fetch_workitem', workItemId:wid, org:orgUrl, pat:pat })
+      });
+      var data = {};
+      try { data = await resp.json(); } catch(e){ data = {error:'Invalid server response'}; }
+
+      if (!resp.ok || data.error) {
+        _adoStatus('error', '❌ ' + (data.error || 'Fetch failed')); return;
+      }
+
+      var lines = [];
+      lines.push('--- ADO Work Item #' + data.id + ' ---');
+      if (data.title)         lines.push('Title: '        + data.title);
+      if (data.type)          lines.push('Type: '         + data.type);
+      if (data.state)         lines.push('State: '        + data.state);
+      if (data.priority)      lines.push('Priority: '     + data.priority);
+      if (data.iterationPath) lines.push('Iteration: '    + data.iterationPath);
+      if (data.storyPoints)   lines.push('Story Points: ' + data.storyPoints);
+      if (data.assignedTo)    lines.push('Assigned To: '  + data.assignedTo);
+      if (data.tags)          lines.push('Tags: '         + data.tags);
+      if (data.description) { lines.push(''); lines.push('Description:'); lines.push(data.description); }
+      if (data.acceptanceCriteria) { lines.push(''); lines.push('Acceptance Criteria:'); lines.push(data.acceptanceCriteria); }
+
+      if (flowEl) {
+        flowEl.value = lines.join('\n').trim();
+        flowEl.dispatchEvent(new Event('input', { bubbles:true }));
+      }
+
+      var badge = document.getElementById('adoFetchBadge');
+      var nc    = document.getElementById('adoNotConfigured');
+      if (badge) badge.style.display = 'inline';
+      if (nc)    nc.style.display    = 'none';
+
+      _adoStatus('success', '✅ Work Item #' + data.id + ' fetched — flow field auto-filled');
+      if (typeof showToast === 'function')
+        showToast('#' + data.id + ': ' + (data.title||'Work Item fetched').substring(0,50), '📌');
+      if (flowEl) setTimeout(function(){ flowEl.scrollIntoView({behavior:'smooth',block:'center'}); flowEl.focus(); }, 200);
+
+    } catch(e) {
+      _adoStatus('error', '❌ Network error: ' + e.message);
+    } finally {
+      if (btn)     btn.disabled = false;
+      if (labelEl) labelEl.textContent = 'Fetch →';
+    }
+  };
+
+  // Badge visibility on load
+  setTimeout(function(){
+    var orgUrl='', pat='';
+    try{ orgUrl=localStorage.getItem('shuddhi-ado-org-url')||''; pat=localStorage.getItem('shuddhi-ado-pat')||''; }catch(e){}
+    orgUrl = orgUrl || window.__adoOrgUrl || '';
+    pat    = pat    || window.__manualAdoPAT || window.__adoPAT || '';
+    if (orgUrl && pat) {
+      var b=document.getElementById('adoFetchBadge'); if(b) b.style.display='inline';
+      var n=document.getElementById('adoNotConfigured'); if(n) n.style.display='none';
+    }
+  }, 1500);
+
+})();
+</script>
 </body>
 </html>
