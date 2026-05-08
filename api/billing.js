@@ -18,8 +18,9 @@
  * RUNTIME: Node.js Serverless — consistent with api/claude.js.
  */
 
-const BILLING_BASE = 'https://cloudbilling.googleapis.com/v1';
-const BUDGET_BASE  = 'https://billingbudgets.googleapis.com/v1';
+const BILLING_BASE  = 'https://cloudbilling.googleapis.com/v1';
+const BILLING_V1B   = 'https://cloudbilling.googleapis.com/v1beta';
+const BUDGET_BASE   = 'https://billingbudgets.googleapis.com/v1';
 
 export default async function handler(req) {
   const origin  = req.headers.get('origin') || '';
@@ -146,6 +147,59 @@ export default async function handler(req) {
         thresholds:   (b.thresholdRules || []).map(t => t.thresholdPercent),
         spendBasis:   b.budgetFilter?.spendBasis || 'CURRENT_SPEND',
       }))
+    });
+  }
+
+  // ── Action: get_spending ──────────────────────────────────────
+  // Calls the v1beta spending information endpoint.
+  // Returns all 4 cost fields shown in Google Cloud Console:
+  //   cost (gross), savings, totalCost (net), forecasted.
+  if (action === 'get_spending') {
+    if (!billingAccountId) return respond({ error: 'billingAccountId required' }, 400);
+    const safe = billingAccountId.replace(/[^A-Z0-9\-]/gi, '');
+    const data  = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
+    if (data._error) return respond({ spending: null, note: data.message });
+
+    // Helper: extract numeric INR/USD value from a Google Money object
+    // Handles multiple field naming conventions across v1beta versions
+    function extractMoney(obj) {
+      if (!obj) return null;
+      const money = obj.spendingAmount || obj.amount || obj.cost || obj.totalSpend || null;
+      if (!money) return null;
+      return parseFloat(money.units || '0') + (money.nanos || 0) / 1e9;
+    }
+
+    // Root of spend data — try all known wrapper names Google may use
+    const root = data.spendingInfo || data.currentMonthSpending || data;
+
+    const currency = (
+      root.spendingAmount?.currencyCode ||
+      root.amount?.currencyCode         ||
+      root.cost?.currencyCode           ||
+      'INR'
+    );
+    const symbol = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
+
+    // Extract all 4 values — null if field absent in this API version
+    const cost      = extractMoney(root);
+    const savings   = extractMoney(root.savings || root.discount || null);
+    const totalCost = extractMoney(
+      root.totalSpend || root.totalCost || root.netCost || root.netSpend || null
+    ) ?? (cost !== null && savings !== null ? cost - savings : cost);
+    const forecasted = extractMoney(
+      root.forecastedSpend || root.forecastedCost || root.forecastedTotal || null
+    );
+
+    return respond({
+      spending: {
+        cost,        // gross spend before savings/discounts
+        savings,     // discounts / credits applied (null if none)
+        totalCost,   // net amount actually charged  (cost - savings)
+        forecasted,  // predicted spend for rest of month (null if unavailable)
+        currency,
+        symbol,
+      },
+      raw: data,     // raw response for debugging unknown API structures
     });
   }
 

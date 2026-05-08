@@ -6,6 +6,7 @@
  */
 
 const BILLING_BASE = 'https://cloudbilling.googleapis.com/v1';
+const BILLING_V1B  = 'https://cloudbilling.googleapis.com/v1beta';
 const BUDGET_BASE  = 'https://billingbudgets.googleapis.com/v1';
 
 export async function onRequest(context) {
@@ -98,6 +99,37 @@ export async function onRequest(context) {
         amount:   b.amount?.specifiedAmount?.units ? parseFloat(b.amount.specifiedAmount.units) : null,
         currency: b.amount?.specifiedAmount?.currencyCode || 'USD',
       }))
+    });
+  }
+
+  if (action === 'get_spending') {
+    if (!billingAccountId) return respond({ error: 'billingAccountId required' }, 400);
+    const safe = billingAccountId.replace(/[^A-Z0-9\-]/gi, '');
+    const data = await gcpGet(`${BILLING_V1B}/billingAccounts/${safe}:getSpendingInformation`);
+    if (data._error) return respond({ spending: null, note: data.message });
+
+    function extractMoney(obj) {
+      if (!obj) return null;
+      const money = obj.spendingAmount || obj.amount || obj.cost || obj.totalSpend || null;
+      if (!money) return null;
+      return parseFloat(money.units || '0') + (money.nanos || 0) / 1e9;
+    }
+
+    const root = data.spendingInfo || data.currentMonthSpending || data;
+    const currency = root.spendingAmount?.currencyCode || root.amount?.currencyCode || 'INR';
+    const symbol   = currency === 'INR' ? '\u20b9' : (currency === 'USD' ? '$' : currency + ' ');
+
+    const cost      = extractMoney(root);
+    const savings   = extractMoney(root.savings || root.discount || null);
+    const totalCost = extractMoney(root.totalSpend || root.totalCost || root.netCost || null)
+                      ?? (cost !== null && savings !== null ? cost - savings : cost);
+    const forecasted = extractMoney(
+      root.forecastedSpend || root.forecastedCost || root.forecastedTotal || null
+    );
+
+    return respond({
+      spending: { cost, savings, totalCost, forecasted, currency, symbol },
+      raw: data,
     });
   }
 

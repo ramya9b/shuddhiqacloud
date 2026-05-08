@@ -6879,6 +6879,7 @@ header::after { display: none !important; }
                   Google Cloud Billing — Connected
                 </div>
                 <div id="gcpAccountLabel" style="font-size:11px;color:var(--text3)">Loading…</div>
+                <div id="gcpLastSync" style="font-size:10px;color:var(--text3);margin-top:2px"></div>
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:6px">
@@ -15920,13 +15921,20 @@ function checkAndTrimFlow(flow) {
       return '<option value="'+mo.key+'"'+(mo.key===m?' selected':'')+'>'+mo.label+(mo.hasData?' \u2014 \u20b9'+mo.cost.toFixed(2):'')+'</option>';
     }).join('');
 
+    // Console URLs for deep-link ↗ in provider rows
+    var CONSOLE_URLS = {
+      claude: 'https://console.anthropic.com/settings/usage',
+      gemini: 'https://console.cloud.google.com/billing',
+      groq:   'https://console.groq.com/usage',
+    };
+
     var provRows = ['claude','gemini','groq'].map(function(p) {
       var d=u[p], c=cost(p,d.input,d.output);
       var ic = p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
       var cs = p==='groq'?'\u20b90.00 (Free)':'\u20b9'+c.toFixed(4);
       var tk = (d.input||d.output)?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
       return '<tr style="border-top:1px solid var(--border)">'
-        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td>'
+        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'<a href="'+CONSOLE_URLS[p]+'" target="_blank" rel="noopener noreferrer" title="Open '+p+' console" style="margin-left:5px;font-size:10px;color:var(--indigo);opacity:.7;text-decoration:none" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">↗</a></td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td>'
         +'<td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td>'
@@ -16070,6 +16078,23 @@ function checkAndTrimFlow(flow) {
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Tokens</th>'
         +'<th style="padding:5px 10px;text-align:right;color:var(--text3);font-size:10px;text-transform:uppercase">Cost</th>'
         +'</tr></thead><tbody>'+logRows+'</tbody></table></div>'
+      +'<div style="margin:14px 0 10px;padding:12px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)">'
+        +'<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🔗 View in Console</div>'
+        +'<div style="display:flex;flex-direction:column;gap:8px">'
+          +'<a href="https://console.anthropic.com/settings/usage" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:var(--surface);border:1.5px solid var(--border2);text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--indigo)\'" onmouseout="this.style.borderColor=\'var(--border2)\'">'
+            +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">🤖</span><div><div style="font-size:12.5px;font-weight:700;color:var(--text)">Anthropic Console</div><div style="font-size:11px;color:var(--text3)">console.anthropic.com/settings/usage</div></div></div>'
+            +'<span style="font-size:11px;color:var(--indigo);font-weight:600">View ↗</span>'
+          +'</a>'
+          +'<a href="https://console.cloud.google.com/billing" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:var(--surface);border:1.5px solid var(--border2);text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--indigo)\'" onmouseout="this.style.borderColor=\'var(--border2)\'">'
+            +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✦</span><div><div style="font-size:12.5px;font-weight:700;color:var(--text)">Google Cloud Console</div><div style="font-size:11px;color:var(--text3)">console.cloud.google.com/billing</div></div></div>'
+            +'<span style="font-size:11px;color:var(--indigo);font-weight:600">View ↗</span>'
+          +'</a>'
+          +'<a href="https://console.groq.com/usage" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;background:var(--surface);border:1.5px solid var(--border2);text-decoration:none;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--indigo)\'" onmouseout="this.style.borderColor=\'var(--border2)\'">'
+            +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⚡</span><div><div style="font-size:12.5px;font-weight:700;color:var(--text)">Groq Console</div><div style="font-size:11px;color:var(--text3)">console.groq.com/usage</div></div></div>'
+            +'<span style="font-size:11px;color:var(--text3);font-weight:600">Free ✓</span>'
+          +'</a>'
+        +'</div>'
+      +'</div>'
       +'<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">'
         +'<div style="font-size:10.5px;color:var(--text3)">$1 = &#8377;'+_rate.toFixed(1)+' (live) &middot; Resets 1st of month</div>'
         +'<button onclick="if(window._resetAllUsageData)window._resetAllUsageData()" style="font-size:10.5px;color:var(--text3);background:none;border:1px solid var(--border2);border-radius:6px;padding:2px 8px;cursor:pointer">Reset all data</button>'
@@ -17971,6 +17996,10 @@ window.copyShareLink = function() {
     return function(tab) {
       if (typeof _prev === 'function') _prev(tab);
       if (tab === 'ado') setTimeout(_loadSaved, 50);
+      // Auto-refresh Google billing when Usage & Cost tab is opened
+      if (tab === 'usage') setTimeout(function() {
+        if (window._gcpOnUsageTabOpen) window._gcpOnUsageTabOpen();
+      }, 100);
     };
   }(window.switchSettingsTab));
 
@@ -18007,6 +18036,9 @@ window.copyShareLink = function() {
   var _accounts     = [];     // billing accounts returned by API
   var _selectedId   = localStorage.getItem(LS_ACCOUNT) || '';
   var _loading      = false;
+  var _lastSyncTs   = 0;      // timestamp of last successful data fetch
+  var _autoInterval = null;   // handle for background auto-refresh timer
+  var AUTO_REFRESH_MS = 5 * 60 * 1000;  // auto-refresh every 5 minutes
 
   // ── DOM helpers ────────────────────────────────────────────────
   function $id(id)     { return document.getElementById(id); }
@@ -18020,6 +18052,54 @@ window.copyShareLink = function() {
     if (!el) return;
     el.textContent = msg;
     el.style.color = isError ? '#EF4444' : 'var(--text3)';
+  }
+
+  // ── Last-sync timestamp display ─────────────────────────────
+  function _updateSyncLabel() {
+    var el = $id('gcpLastSync');
+    if (!el || !_lastSyncTs) return;
+    var diffSec = Math.round((Date.now() - _lastSyncTs) / 1000);
+    var label;
+    if (diffSec < 10)        label = 'Updated just now';
+    else if (diffSec < 60)   label = 'Updated ' + diffSec + 's ago';
+    else if (diffSec < 3600) label = 'Updated ' + Math.round(diffSec / 60) + 'm ago';
+    else                     label = 'Updated ' + Math.round(diffSec / 3600) + 'h ago';
+    el.textContent = '🕐 ' + label;
+  }
+
+  // Tick every 30s so "Updated Xm ago" stays accurate without re-fetching
+  setInterval(_updateSyncLabel, 30000);
+
+  // ── Auto-refresh when Usage & Cost tab is opened ────────────
+  // Hooks into the existing switchSettingsTab override chain.
+  // Only refreshes if already connected AND data is stale (> 5 min old).
+  window._gcpOnUsageTabOpen = function() {
+    if (!_accessToken) return;                         // not connected
+    var age = Date.now() - _lastSyncTs;
+    if (age > AUTO_REFRESH_MS || _lastSyncTs === 0) {  // stale or never loaded
+      _loading = false;
+      loadBillingData();
+    } else {
+      // Data is fresh — just update the "X mins ago" label
+      _updateSyncLabel();
+    }
+  };
+
+  // ── Background auto-refresh every 5 minutes while tab is open ──
+  function _startAutoRefresh() {
+    if (_autoInterval) return;  // already running
+    _autoInterval = setInterval(function() {
+      // Only refresh if Usage & Cost panel is currently visible
+      var panel = $id('spanel-usage');
+      if (panel && panel.style.display !== 'none' && _accessToken) {
+        _loading = false;
+        loadBillingData();
+      }
+    }, AUTO_REFRESH_MS);
+  }
+
+  function _stopAutoRefresh() {
+    if (_autoInterval) { clearInterval(_autoInterval); _autoInterval = null; }
   }
 
   // ── Proxy call ─────────────────────────────────────────────────
@@ -18059,7 +18139,7 @@ window.copyShareLink = function() {
   }
 
   // ── Render billing data ────────────────────────────────────────
-  function renderBillingData(accounts, projects, budgets) {
+  function renderBillingData(accounts, projects, budgets, spending) {
     // Show the selected account — fall back to first if not found
     var acct = accounts && accounts.length > 0
       ? (accounts.find(function(a) { return a.id === _selectedId; }) || accounts[0])
@@ -18090,7 +18170,7 @@ window.copyShareLink = function() {
       });
     }
 
-    // Build project rows
+    // Build project rows — with Cost column if spending data available
     var projHTML = '';
     if (projects && projects.length) {
       projects.forEach(function(p) {
@@ -18101,6 +18181,78 @@ window.copyShareLink = function() {
           (p.projectId || '—') + '</td>' +
           '</tr>';
       });
+    }
+
+    // ── Cost breakdown rows — mirrors Google Cloud Console layout ──
+    // Shows all 4 values: Cost (gross), Savings, Total Cost (net), Forecasted
+    var month = new Date().toLocaleString('en-IN', { month: 'long', year: 'numeric' });
+
+    function fmtMoney(val, sym) {
+      if (val === null || val === undefined) return null;
+      return sym + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    var sym = (spending && spending.symbol) || '\u20b9';
+
+    // Row builder helper
+    function costRow(label, val, opts) {
+      opts = opts || {};
+      var valStr = val !== null ? val : ('Not available');
+      var valColor = opts.green ? '#059669' :
+                     opts.muted ? 'var(--text3)' : 'var(--text)';
+      var bgStyle = opts.highlight ? 'background:rgba(16,185,129,.05);' : '';
+      var fontStyle = opts.bold ? 'font-weight:800;font-size:14px;font-family:monospace;' : 'font-weight:600;font-size:13px;';
+      return '<tr style="border-top:1px solid var(--border);' + bgStyle + '">' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--text3)">' + label + '</td>' +
+        '<td style="padding:8px 12px;text-align:right;' + fontStyle + 'color:' + valColor + '">' +
+        valStr + '</td></tr>';
+    }
+
+    var costHTML = '';
+    if (spending) {
+      var fCost      = fmtMoney(spending.cost,       sym);
+      var fSavings   = fmtMoney(spending.savings,    sym);
+      var fTotal     = fmtMoney(spending.totalCost,  sym);
+      var fForecasted= fmtMoney(spending.forecasted, sym);
+
+      // Cost (gross) row
+      costHTML += costRow('💰 Cost — ' + month, fCost || 'Fetching…', { muted: !fCost });
+
+      // Savings row — only show if savings data is available
+      if (fSavings !== null) {
+        var savingsZero = spending.savings === 0 || spending.savings === null;
+        costHTML += costRow(
+          '🏷️ Savings',
+          fSavings,
+          { muted: savingsZero }
+        );
+      }
+
+      // Divider row (dashed line to separate gross from net)
+      costHTML +=
+        '<tr style="border-top:1px dashed var(--border2)">' +
+        '<td colspan="2" style="padding:0"></td></tr>';
+
+      // Total Cost (net) — highlighted as this is what you actually pay
+      costHTML += costRow(
+        '✅ Total Cost',
+        fTotal || fCost || 'Fetching…',
+        { green: true, bold: true, highlight: true }
+      );
+
+      // Forecasted — only show if available
+      if (fForecasted !== null) {
+        costHTML += costRow('📈 Forecasted', fForecasted, {});
+      }
+    } else {
+      // Spending API not available — single placeholder row
+      costHTML =
+        '<tr style="border-top:1px solid var(--border)">' +
+        '<td style="padding:8px 12px;font-size:12px;color:var(--text3)">💰 Cost (This Month)</td>' +
+        '<td style="padding:8px 12px;text-align:right;font-size:11.5px;color:var(--text3)">' +
+        'Not available · <a href="https://console.cloud.google.com/billing/' + acct.id + '" ' +
+        'target="_blank" rel="noopener noreferrer" style="color:var(--indigo)">View ↗</a>' +
+        '</td></tr>';
     }
 
     var statusBadge = acct.open
@@ -18125,15 +18277,18 @@ window.copyShareLink = function() {
       '</tr>' +
       budgetHTML +
       projHTML +
+      costHTML +
       '</table>' +
-      // Estimated spend from existing tracker (bridge to existing data)
-      '<div style="padding:10px 12px;background:var(--surface2);border-radius:10px;' +
-      'border:1px solid var(--border);margin-bottom:10px">' +
-      '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;' +
-      'letter-spacing:.5px;margin-bottom:6px">Estimated Spend This Month</div>' +
-      '<div style="font-size:12px;color:var(--text2)">See the <strong>Usage & Cost</strong> table above ' +
-      'for token-based cost estimates across all providers.</div>' +
-      '</div>' +
+      // Remove the "Estimated Spend This Month" note since we now show real cost
+      // Only show it if spending data wasn't available
+      (!spending ?
+        '<div style="padding:10px 12px;background:var(--surface2);border-radius:10px;' +
+        'border:1px solid var(--border);margin-bottom:10px">' +
+        '<div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;' +
+        'letter-spacing:.5px;margin-bottom:6px">Estimated Spend This Month</div>' +
+        '<div style="font-size:12px;color:var(--text2)">See the <strong>Usage & Cost</strong> table above ' +
+        'for token-based cost estimates across all providers.</div>' +
+        '</div>' : '') +
       // Note about balance
       '<div style="padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;' +
       'margin-bottom:10px;font-size:11.5px;color:#78350F">' +
@@ -18176,14 +18331,15 @@ window.copyShareLink = function() {
       '<div style="padding:16px;text-align:center;color:var(--text3);font-size:12px">' +
       '<svg width="20" height="20" viewBox="0 0 20 20" style="animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px">' +
       '<circle cx="10" cy="10" r="8" stroke="var(--indigo)" stroke-width="2" fill="none" stroke-dasharray="16 32">' +
-      '</circle></svg>Loading billing data…</div>');
+      '</circle></svg>Fetching live data from Google Cloud…</div>');
     showBillingPanel();
 
     try {
-      var [acctRes, projRes, budgetRes] = await Promise.all([
+      var [acctRes, projRes, budgetRes, spendRes] = await Promise.all([
         callBilling('list_accounts'),
         _selectedId ? callBilling('list_projects', { billingAccountId: _selectedId }) : Promise.resolve({ projects: [] }),
         _selectedId ? callBilling('get_budgets',   { billingAccountId: _selectedId }) : Promise.resolve({ budgets: [] }),
+        _selectedId ? callBilling('get_spending',  { billingAccountId: _selectedId }) : Promise.resolve({ spending: null }),
       ]);
 
       if (acctRes.error) {
@@ -18200,30 +18356,37 @@ window.copyShareLink = function() {
       if (accounts.length > 0 && !_selectedId) {
         _selectedId = accounts[0].id;
         localStorage.setItem(LS_ACCOUNT, _selectedId);
-        // Fetch project + budget for the newly defaulted account
-        var [pr2, br2] = await Promise.all([
+        // Fetch project + budget + spending for the newly defaulted account
+        var [pr2, br2, sr2] = await Promise.all([
           callBilling('list_projects', { billingAccountId: _selectedId }),
           callBilling('get_budgets',   { billingAccountId: _selectedId }),
+          callBilling('get_spending',  { billingAccountId: _selectedId }),
         ]);
         projRes   = pr2;
         budgetRes = br2;
+        spendRes  = sr2;
       }
 
       // Validate _selectedId still exists in returned accounts
-      // (handles edge case where saved account was removed)
       var selectedExists = accounts.some(function(a) { return a.id === _selectedId; });
       if (!selectedExists && accounts.length > 0) {
         _selectedId = accounts[0].id;
         localStorage.setItem(LS_ACCOUNT, _selectedId);
-        var [pr3, br3] = await Promise.all([
+        var [pr3, br3, sr3] = await Promise.all([
           callBilling('list_projects', { billingAccountId: _selectedId }),
           callBilling('get_budgets',   { billingAccountId: _selectedId }),
+          callBilling('get_spending',  { billingAccountId: _selectedId }),
         ]);
         projRes   = pr3;
         budgetRes = br3;
+        spendRes  = sr3;
       }
 
-      renderBillingData(accounts, projRes.projects || [], budgetRes.budgets || []);
+      renderBillingData(accounts, projRes.projects || [], budgetRes.budgets || [], spendRes.spending || null);
+
+      // Record last sync time and update the timestamp display
+      _lastSyncTs = Date.now();
+      _updateSyncLabel();
     } catch(e) {
       setHTML('gcpBillingData',
         '<div style="padding:12px;color:#EF4444;font-size:12px">' +
@@ -18256,6 +18419,7 @@ window.copyShareLink = function() {
         try { sessionStorage.setItem(SS_TOKEN, _accessToken); } catch(e) {}
         setStatus('');
         loadBillingData();
+        _startAutoRefresh();   // begin background refresh every 5 min
       },
     });
     return true;
@@ -18308,13 +18472,16 @@ window.copyShareLink = function() {
   };
 
   window._gcpDisconnect = function() {
+    _stopAutoRefresh();        // stop background refresh
+    _lastSyncTs  = 0;
     _accessToken = null;
     _tokenClient = null;
     _selectedId  = '';
     try { sessionStorage.removeItem(SS_TOKEN); } catch(e) {}
     localStorage.removeItem(LS_ACCOUNT);
+    var tok = _accessToken;    // capture before null
     if (window.google && window.google.accounts && window.google.accounts.oauth2) {
-      window.google.accounts.oauth2.revoke(_accessToken || '', function() {});
+      window.google.accounts.oauth2.revoke(tok || '', function() {});
     }
     showConnectPrompt('Disconnected from Google Cloud Billing.');
   };
@@ -18341,6 +18508,7 @@ window.copyShareLink = function() {
         _accessToken = saved;
         showBillingPanel();
         loadBillingData();
+        _startAutoRefresh();   // resume background refresh on session restore
       }
     } catch(e) {}
   }
