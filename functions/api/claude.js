@@ -39,22 +39,36 @@ const GEMINI_MODEL_CHAIN = [
 // ── Resolve which provider + key to use ────────────────────────
 // env = Cloudflare Pages env object (context.env) — replaces process.env
 function resolveProvider(requestedProvider, env, userKeys) {
-  const e = env || {};
+  const e  = env || {};
   const uk = userKeys || {};
-  const preferred = (requestedProvider || e.AI_PROVIDER || '').toLowerCase();
-  const candidates = preferred
-    // Option A: cost-optimised default — Groq (free) → Gemini (cheap) → Claude (paid last)
-    ? [preferred, ...['groq', 'gemini', 'claude'].filter(p => p !== preferred)]
-    : ['groq', 'gemini', 'claude'];
 
-  for (const p of candidates) {
-    const key = uk[p] || {
-      claude: e.CLAUDE_API_KEY,
-      gemini: e.GEMINI_API_KEY,
-      groq:   e.GROQ_API_KEY,
-    }[p];
-    if (key) return { provider: p, key, userSupplied: !!uk[p] };
+  // ── Option 2: Groq-only server keys ──────────────────────────
+  // Server-side CLAUDE_API_KEY and GEMINI_API_KEY are NOT used for
+  // free-tier users to prevent unlimited cost exposure at scale.
+  // Only GROQ_API_KEY (free tier) is available as a server fallback.
+  // Users who want Claude or Gemini must supply their own API key.
+  // This caps server cost at $0 regardless of user count.
+  const SERVER_KEYS = {
+    groq: e.GROQ_API_KEY,      // free — always available as fallback
+    // claude: intentionally omitted — user must supply own key
+    // gemini: intentionally omitted — user must supply own key
+  };
+
+  const preferred = (requestedProvider || e.AI_PROVIDER || '').toLowerCase();
+
+  // If user supplied their own key for the requested provider — use it (any provider)
+  if (preferred && uk[preferred]) {
+    return { provider: preferred, key: uk[preferred], userSupplied: true };
   }
+
+  // If user supplied any key — try it (any provider)
+  for (const p of ['claude', 'gemini', 'groq']) {
+    if (uk[p]) return { provider: p, key: uk[p], userSupplied: true };
+  }
+
+  // No user key — fall back to server Groq only (free, safe)
+  if (SERVER_KEYS.groq) return { provider: 'groq', key: SERVER_KEYS.groq, userSupplied: false };
+
   return null;
 }
 
@@ -367,7 +381,7 @@ export async function onRequest(context) {
 
   if (!resolved) {
     return new Response(JSON.stringify({
-      error: 'No AI provider configured. Add GEMINI_API_KEY or GROQ_API_KEY in Cloudflare Pages → Settings → Environment Variables.'
+      error: 'No API key found. The free tier uses Groq (free). For Claude or Gemini, add your own key in Settings → AI Provider → Use Your Own Key.'
     }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 

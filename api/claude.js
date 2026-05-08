@@ -55,21 +55,32 @@ const GEMINI_MODEL_CHAIN = [
 // giving users unlimited generations against their own account limits.
 function resolveProvider(requestedProvider, userKeys) {
   const uk = userKeys || {};
-  const preferred = (requestedProvider || process.env.AI_PROVIDER || '').toLowerCase();
-  const candidates = preferred
-    // Option A: cost-optimised default — Groq (free) → Gemini (cheap) → Claude (paid last)
-    ? [preferred, ...['groq', 'gemini', 'claude'].filter(p => p !== preferred)]
-    : ['groq', 'gemini', 'claude'];
 
-  for (const p of candidates) {
-    // User-supplied key takes priority over the server env var for this provider
-    const key = uk[p] || {
-      claude: process.env.CLAUDE_API_KEY,
-      gemini: process.env.GEMINI_API_KEY,
-      groq:   process.env.GROQ_API_KEY,
-    }[p];
-    if (key) return { provider: p, key, userSupplied: !!uk[p] };
+  // ── Option 2: Groq-only server keys ──────────────────────────
+  // Server-side CLAUDE_API_KEY and GEMINI_API_KEY are NOT used for
+  // free-tier users. Only GROQ_API_KEY (free) is the server fallback.
+  // Users who want Claude or Gemini must supply their own API key.
+  const SERVER_KEYS = {
+    groq: process.env.GROQ_API_KEY,
+    // claude: intentionally omitted
+    // gemini: intentionally omitted
+  };
+
+  const preferred = (requestedProvider || process.env.AI_PROVIDER || '').toLowerCase();
+
+  // User supplied their own key for the requested provider — use it
+  if (preferred && uk[preferred]) {
+    return { provider: preferred, key: uk[preferred], userSupplied: true };
   }
+
+  // User supplied any key — use it
+  for (const p of ['claude', 'gemini', 'groq']) {
+    if (uk[p]) return { provider: p, key: uk[p], userSupplied: true };
+  }
+
+  // No user key — Groq server fallback only (free, safe)
+  if (SERVER_KEYS.groq) return { provider: 'groq', key: SERVER_KEYS.groq, userSupplied: false };
+
   return null;
 }
 
@@ -410,162 +421,7 @@ export default async function handler(req) {
 
   if (!resolved) {
     return new Response(JSON.stringify({
-      error: 'No AI provider configured. Add CLAUDE_API_KEY, GEMINI_API_KEY, or GROQ_API_KEY to Vercel Environment Variables.'
-    }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-  }
-
-  const { provider, key } = resolved;
-  const upstream = buildUpstreamRequest(provider, key, forwardBody);
-
-  try {
-    const response = await fetch(upstream.url, {
-      method: 'POST',
-      headers: upstream.headers,
-      body: upstream.body,
-    });
-
-    if (!response.ok) {
-      const errText = await response.text().catch(() => '');
-      let errJson = {};
-      try { errJson = JSON.parse(errText); } catch(e) {}
-      const detail = errJson?.error?.message || errJson?.message || errText.substring(0, 200);
-
-      // Gemini model chain fallback — try each model in order on 404/quota errors
-      // ── GEMINI ERROR HANDLER with full diagnostics ─────────────────
-      // Logs actual status + error body so we can diagnose the real cause
-      // Tries every model in GEMINI_MODEL_CHAIN before switching to Groq
-
-      if (provider === 'gemini') {
-        console.error('[Gemini Debug] Status:', response.status,
-          '| Model:', upstream.url.match(/models\/([^:]+)/)?.[1] || MODELS.gemini,
-          '| Error:', detail.substring(0, 200),
-          '| URL:', upstream.url.replace(/key=[^&?]+/, 'key=REDACTED')
-        );
-
-        // BUG FIX 1: API_NOT_ENABLED — detect BEFORE model chain.
-        // Previously this check was outside the Gemini block so a 403 wasted
-        // 2 chain attempts then returned vague "all models unavailable".
-        if (response.status === 403) {
-          const isApiNotEnabled = detail && (
-            detail.includes('API_NOT_ENABLED') ||
-            detail.includes('not been used') ||
-            detail.includes('disabled') ||
-            detail.includes('SERVICE_DISABLED')
-          );
-          if (isApiNotEnabled) {
-            return new Response(JSON.stringify({
-              error: 'Gemini API not enabled on this key\'s Google Cloud project. '
-                + 'Fix: go to console.cloud.google.com → APIs → Enable "Generative Language API". '
-                + 'OR get a fresh key from aistudio.google.com (API enabled by default).',
-              switchProvider: true,
-              provider: 'gemini',
-            }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-          }
-          return new Response(JSON.stringify({
-            error: 'Gemini API key does not have permission (403). Check the key is valid and not restricted.',
-            switchProvider: true,
-            provider: 'gemini',
-          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        // BUG FIX 3: 401 — distinguish user-supplied vs server key for clarity.
-        if (response.status === 401) {
-          const isUserKey = !!(body.geminiApiKey);
-          return new Response(JSON.stringify({
-            error: isUserKey
-              ? 'Your Gemini API key is invalid. Remove it in Settings → Use Your Own Key and get a fresh key from aistudio.google.com.'
-              : 'Gemini API key invalid or expired — check GEMINI_API_KEY in Cloudflare Pages → Settings → Environment Variables.',
-            switchProvider: true,
-            provider: 'gemini',
-          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        // True rate limit or quota — do NOT try the model chain (waste quota).
-        const isTrueRateLimit = response.status === 429
-          || (response.status === 400 && (detail.includes('quota') || detail.includes('RESOURCE_EXHAUSTED') || detail.includes('rate')));
-        if (isTrueRateLimit) {
-          const retryAfter = response.headers.get('retry-after') || '60';
-          const waitSecs   = parseInt(retryAfter) || 60;
-          console.warn('[Gemini] Rate limit / quota hit — switching to next provider. Retry in ~' + waitSecs + 's');
-          return new Response(JSON.stringify({
-            error: 'Gemini free-tier rate limit reached (resets in ~' + waitSecs + 's) — switching to next provider',
-            waitSecs,
-            switchProvider: true,
-            provider: 'gemini',
-          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        // Model-not-found / server errors — try the model chain
-        const shouldTryChain = response.status === 404
-          || (response.status === 400 && !detail.includes('quota'))
-          || response.status === 500;
-
-        if (shouldTryChain) {
-          for (const fallbackModel of GEMINI_MODEL_CHAIN.slice(1)) {
-            const apiVer = GEMINI_API_VERSION[fallbackModel] || 'v1beta';
-            const ep     = forwardBody.stream ? 'streamGenerateContent?alt=sse' : 'generateContent';
-            const sep    = forwardBody.stream ? '&' : '?';
-            const altUrl = `https://generativelanguage.googleapis.com/${apiVer}/models/${fallbackModel}:${ep}${sep}key=${key}`;
-
-            // Always strip thinkingConfig for non-2.5 models (causes 400 on 2.0/1.5)
-            let chainBody = upstream.body;
-            if (!fallbackModel.includes('2.5')) {
-              try {
-                const parsed = JSON.parse(upstream.body);
-                if (parsed.generationConfig?.thinkingConfig) {
-                  delete parsed.generationConfig.thinkingConfig;
-                }
-                chainBody = JSON.stringify(parsed);
-              } catch(e) { /* use original body if parse fails */ }
-            }
-
-            console.log('[Gemini] Chain trying:', fallbackModel, '(' + apiVer + ')');
-            const altResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
-            const altText = await altResp.text().catch(() => '');
-            console.log('[Gemini] Chain result:', fallbackModel, '\u2192 HTTP', altResp.status, altText.substring(0, 150));
-            if (altResp.ok) {
-              if (forwardBody.stream !== true) {
-                let altJson = {};
-                try { altJson = JSON.parse(altText); } catch(e) {}
-                const text = getGeminiText(altJson);
-                return new Response(JSON.stringify({
-                  content: [{ type: 'text', text }],
-                  stop_reason: 'end_turn',
-                  model: fallbackModel,
-                  _provider: fallbackModel
-                }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-              }
-              // BUG FIX 2: Streaming re-fetch MUST use chainBody (thinkingConfig stripped),
-              // NOT upstream.body — upstream.body causes 400 on gemini-2.0/1.5-flash.
-              const streamResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
-              return new Response(normalizeStream(provider, streamResp.body), {
-                status: 200, headers: { ...corsHeaders, 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' },
-              });
-            }
-          }
-          // BUG FIX 4: All models exhausted — actionable error message
-          console.warn('[Gemini] All models exhausted. Switching to next provider.');
-          const _geminiKeyType = body.geminiApiKey ? 'your personal key' : 'the deployment key';
-          return new Response(JSON.stringify({
-            error: 'Gemini: all available models failed using ' + _geminiKeyType + '. '
-              + 'Causes: (1) GEMINI_API_KEY not set in Cloudflare Pages env vars. '
-              + '(2) Generative Language API not enabled — console.cloud.google.com → APIs → Enable it. '
-              + '(3) All free-tier quotas exhausted — get a fresh key from aistudio.google.com.',
-            detail: detail.substring(0, 200),
-            switchProvider: true,
-            provider: 'gemini',
-          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        // Other non-retryable Gemini error
-        return new Response(JSON.stringify({
-          error: `Gemini error ${response.status}: ${detail.substring(0, 150)}`,
-          switchProvider: true,
-          provider: 'gemini',
-        }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-
-      let msg = `${provider} API error ${response.status}: ${detail || 'Unknown error'}`;
+      error: 'No API key found. The free tier uses Groq (free). For Claude or Gemini, add your own key in Settings → AI Provider.'}`;
       if (response.status === 400) {
         // Detect Anthropic account usage cap — treat as switchable rate limit
         const isUsageCap = detail && (
