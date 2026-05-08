@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Privacy Policy — Shuddhi QA</title>
+<meta name="description" content="Privacy Policy for Shuddhi QA — AI-powered test case generator. Learn how we handle your data, API keys, and Google OAuth tokens."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://shuddhiqacloud.pages.dev/privacy"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23E8A020'/><text y='.9em' font-size='68' x='10' fill='white'>श</text></svg>" type="image/svg+xml"/>
+<link rel="manifest" href="/manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── Variables — Dark (default) ── */
+:root {
+  --bg:       #0b0d13;
+  --bg2:      #10131c;
+  --surface:  #151923;
+  --surface2: #1c2230;
+  --border:   rgba(232,162,32,.12);
+  --border2:  rgba(232,162,32,.22);
+  --saffron:  #E8A020;
+  --saffronl: #F5B840;
+  --indigo:   #5B5FEF;
+  --indigol:  #818CF8;
+  --text:     #F1F5F9;
+  --text2:    #94A3B8;
+  --text3:    #64748B;
+  --gradS:    linear-gradient(135deg,#E8A020,#F5B840);
+  --nav-bg:   rgba(11,13,19,.85);
+  --orb1:     rgba(232,162,32,.06);
+  --orb2:     rgba(91,95,239,.06);
+}
+html.light {
+  --bg:       #FAFAF8;
+  --bg2:      #F4F3EF;
+  --surface:  #FFFFFF;
+  --surface2: #F4F3EF;
+  --border:   rgba(0,0,0,.08);
+  --border2:  rgba(0,0,0,.14);
+  --text:     #1A1A2E;
+  --text2:    #4A4A6A;
+  --text3:    #7A7A9A;
+  --nav-bg:   rgba(250,250,248,.9);
+  --orb1:     rgba(232,162,32,.04);
+  --orb2:     rgba(91,95,239,.04);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 999; opacity: .4;
+}
+html.light body::after { opacity: .08; }
+
+/* ── Orbs ── */
+.orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+.orb-1 { width: 600px; height: 600px; top: -200px; left: -150px; background: radial-gradient(circle, var(--orb1) 0%, transparent 70%); }
+.orb-2 { width: 500px; height: 500px; bottom: -100px; right: -100px; background: radial-gradient(circle, var(--orb2) 0%, transparent 70%); }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo-mark {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--gradS);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 700; color: #fff;
+  box-shadow: 0 4px 16px rgba(232,162,32,.3);
+}
+.nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: .3px; }
+.nav-brand span { color: var(--saffron); }
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--text2); text-decoration: none;
+  padding: 7px 16px; border-radius: 8px;
+  border: 1.5px solid var(--border2);
+  transition: all .15s;
+}
+.nav-back:hover { color: var(--text); border-color: var(--saffron); }
+
+/* ── Hero ── */
+.hero {
+  padding: 120px 0 60px;
+  position: relative; z-index: 1;
+  text-align: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: rgba(232,162,32,.06);
+  font-size: 12px; color: var(--saffronl);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 16px;
+}
+.hero-title span { color: var(--saffron); }
+.hero-sub {
+  font-size: 16px; color: var(--text2);
+  max-width: 480px; margin: 0 auto 12px;
+}
+.hero-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--text3);
+}
+
+/* ── Layout ── */
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 32px; }
+
+/* ── Content ── */
+.content { position: relative; z-index: 1; padding: 0 0 80px; }
+
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 36px;
+  margin-bottom: 20px;
+  transition: border-color .2s;
+}
+.section:hover { border-color: var(--border2); }
+
+.section-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: rgba(232,162,32,.12);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  color: var(--saffron);
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+}
+.section-icon { font-size: 22px; }
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--text); letter-spacing: -.3px;
+}
+
+.section p {
+  font-size: 14px; color: var(--text2); line-height: 1.75;
+  margin-bottom: 12px;
+}
+.section p:last-child { margin-bottom: 0; }
+
+/* Data table */
+.data-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px; margin: 16px 0;
+  border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.data-table th {
+  background: var(--surface2);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--text3); font-weight: 600;
+}
+.data-table td {
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  color: var(--text2); vertical-align: top;
+}
+.data-table td:first-child { color: var(--text); font-weight: 500; }
+.data-table tr:hover td { background: var(--surface2); }
+
+/* Highlight boxes */
+.box-green {
+  background: rgba(16,185,129,.06);
+  border: 1px solid rgba(16,185,129,.2);
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 13.5px; color: var(--text2);
+  margin: 14px 0; display: flex; gap: 10px; align-items: flex-start;
+}
+.box-green .icon { color: #10B981; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.box-yellow {
+  background: rgba(245,158,11,.06);
+  border: 1px solid rgba(245,158,11,.2);
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 13.5px; color: var(--text2);
+  margin: 14px 0; display: flex; gap: 10px; align-items: flex-start;
+}
+.box-yellow .icon { color: #F59E0B; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* Bullet list */
+.privacy-list {
+  list-style: none; padding: 0; margin: 10px 0;
+}
+.privacy-list li {
+  font-size: 14px; color: var(--text2);
+  padding: 6px 0 6px 22px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.privacy-list li:last-child { border-bottom: none; }
+.privacy-list li::before {
+  content: '→';
+  position: absolute; left: 0;
+  color: var(--saffron); font-weight: 600;
+}
+
+/* Contact card */
+.contact-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 12px; margin-top: 14px;
+}
+.contact-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--indigo), #8B5CF6);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.contact-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.contact-role { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.contact-link {
+  margin-top: 6px;
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--indigo);
+  text-decoration: none; transition: color .15s;
+}
+.contact-link:hover { color: var(--indigol); }
+
+/* Google OAuth section — highlighted */
+.oauth-section {
+  background: linear-gradient(135deg, rgba(91,95,239,.06) 0%, rgba(232,162,32,.04) 100%);
+  border: 1.5px solid rgba(91,95,239,.25);
+}
+.oauth-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: 20px;
+  background: rgba(91,95,239,.15);
+  border: 1px solid rgba(91,95,239,.3);
+  font-size: 11px; color: var(--indigol);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 14px;
+}
+
+/* Footer */
+footer {
+  position: relative; z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-weight: 700; color: var(--text);
+}
+.footer-brand span { color: var(--saffron); }
+.footer-links { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 12px; color: var(--text3);
+  text-decoration: none; transition: color .15s;
+}
+.footer-links a:hover { color: var(--saffron); }
+
+/* Theme toggle */
+#themeBtn {
+  width: 44px; height: 24px; border-radius: 12px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface2);
+  cursor: pointer; position: relative;
+  transition: background .3s;
+}
+#themeThumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--gradS);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+}
+
+@media (max-width: 640px) {
+  nav { padding: 14px 20px; }
+  .hero { padding: 100px 0 40px; }
+  .section { padding: 22px 20px; }
+  .wrap { padding: 0 16px; }
+  footer { padding: 20px 16px; flex-direction: column; }
+}
+
+/* Fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp .5s ease both; }
+.fade-up-2 { animation: fadeUp .5s .1s ease both; }
+.fade-up-3 { animation: fadeUp .5s .2s ease both; }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">श</div>
+    <div class="nav-brand"><span>Shuddhi</span> QA</div>
+  </a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span id="themeThumb">🌙</span>
+    </button>
+    <a href="/app" class="nav-back">← Back to App</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow fade-up">
+      <span>🔒</span> Privacy &amp; Data Policy
+    </div>
+    <h1 class="hero-title fade-up-2">
+      Your data stays<br/><span>yours</span>
+    </h1>
+    <p class="hero-sub fade-up-3">
+      Shuddhi QA is built with a privacy-first architecture. No accounts, no tracking, no data retention on our servers.
+    </p>
+    <div class="hero-date fade-up-3">Last updated: May 2026 · Effective immediately</div>
+  </div>
+</section>
+
+<!-- ── Content ── -->
+<div class="content">
+<div class="wrap">
+
+  <!-- 1. Overview -->
+  <div class="section fade-up">
+    <div class="section-header">
+      <span class="section-icon">📋</span>
+      <h2 class="section-title">Overview</h2>
+    </div>
+    <p>
+      Shuddhi QA (<strong>shuddhiqacloud.pages.dev</strong>) is an AI-powered QA test case generator built and maintained by Ramya, Senior QA Engineer, Bengaluru, India. This privacy policy explains what data is collected, how it is used, and your rights regarding that data.
+    </p>
+    <div class="box-green">
+      <span class="icon">✅</span>
+      <span><strong>Short version:</strong> We do not collect, store, or sell any personal data. Your documents, test cases, and API keys never touch our servers except as pass-through API calls to AI providers.</span>
+    </div>
+  </div>
+
+  <!-- 2. Data We Collect -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🗂️</span>
+      <h2 class="section-title">Data We Collect</h2>
+    </div>
+    <p>Shuddhi QA collects the minimum data required to function:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Where stored</th>
+          <th>Purpose</th>
+          <th>Sent to server?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI provider preference</td>
+          <td>Browser localStorage</td>
+          <td>Remember your selected provider</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Personal API keys (Claude, Gemini, Groq)</td>
+          <td>Browser localStorage</td>
+          <td>Passed directly to AI provider APIs</td>
+          <td>Only to respective AI provider</td>
+        </tr>
+        <tr>
+          <td>ADO/Jira credentials</td>
+          <td>Browser localStorage</td>
+          <td>Connect to your Azure DevOps or Jira</td>
+          <td>Only to ADO/Jira via proxy</td>
+        </tr>
+        <tr>
+          <td>Usage statistics (token counts, cost estimates)</td>
+          <td>Browser localStorage</td>
+          <td>Usage &amp; Cost panel display</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Session history (last 20 generations)</td>
+          <td>Browser localStorage</td>
+          <td>Reload recent test cases</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Google OAuth access token</td>
+          <td>Browser sessionStorage only</td>
+          <td>Read Google Cloud billing info</td>
+          <td>Proxied to Google Cloud API</td>
+        </tr>
+        <tr>
+          <td>Google billing account ID</td>
+          <td>Browser localStorage</td>
+          <td>Remember selected billing account</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box-green">
+      <span class="icon">✅</span>
+      <span><strong>No cookies.</strong> Shuddhi QA uses only <code>localStorage</code> and <code>sessionStorage</code> — standard browser storage that is never shared across sites and is fully under your control.</span>
+    </div>
+  </div>
+
+  <!-- 3. Google OAuth & Billing -->
+  <div class="section oauth-section">
+    <div class="oauth-badge">
+      <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.84-1.57 2.4v2h2.53c1.48-1.36 2.33-3.37 2.33-5.77 0-.56-.05-1.1-.14-1.63z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.54-1.97c-.72.48-1.63.76-2.76.76-2.12 0-3.91-1.43-4.55-3.36H1.8v2.04C3.12 15.27 5.87 17 8.98 17z"/><path fill="#FBBC05" d="M4.43 10.49A5.07 5.07 0 0 1 4.16 9c0-.52.09-1.02.27-1.49V5.47H1.8A8.97 8.97 0 0 0 0 9c0 1.45.35 2.82.96 4.03l3.47-2.54z"/><path fill="#EA4335" d="M8.98 3.58c1.19 0 2.26.41 3.1 1.21l2.32-2.32C12.95 1.19 11.13.4 8.98.4 5.87.4 3.12 2.13 1.8 4.72l3.43 2.66c.64-1.94 2.43-3.8 4.55-3.8z"/></svg>
+      Google OAuth Integration
+    </div>
+    <div class="section-header">
+      <span class="section-icon">💳</span>
+      <h2 class="section-title">Google OAuth &amp; Billing Data</h2>
+    </div>
+    <p>
+      Shuddhi QA offers an optional Google Cloud Billing sync feature that uses Google OAuth 2.0 to display your billing account details directly inside the app.
+    </p>
+
+    <ul class="privacy-list">
+      <li><strong>Scope requested:</strong> <code>cloud-billing.readonly</code> — read-only access to your own Google Cloud billing account information only.</li>
+      <li><strong>What we read:</strong> Billing account name, account ID, status, linked project, budget caps, and spending information (if available via the API).</li>
+      <li><strong>What we do NOT read:</strong> Gmail, Google Drive, Google Calendar, contacts, or any other Google service data.</li>
+      <li><strong>Token storage:</strong> The OAuth access token is stored only in <code>sessionStorage</code> — it is automatically deleted when you close the browser tab. It is never written to <code>localStorage</code>, cookies, or any server.</li>
+      <li><strong>Server handling:</strong> The access token is passed to our Cloudflare Pages proxy solely to forward requests to the Google Cloud Billing API. It is never logged, stored, or retained by our proxy.</li>
+      <li><strong>Data retention:</strong> Billing account ID is stored in <code>localStorage</code> for convenience (to remember your last-selected account). No billing financial data is ever stored locally or on servers.</li>
+    </ul>
+
+    <div class="box-yellow">
+      <span class="icon">⚠️</span>
+      <span>Google processes OAuth authorisation through their own systems. Google's <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--indigo)">Privacy Policy</a> governs the authorisation process itself.</span>
+    </div>
+
+    <p style="margin-top:14px">
+      <strong>How to revoke access:</strong> Click the <strong>Disconnect</strong> button inside Settings → Usage &amp; Cost at any time. You can also revoke access from your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener" style="color:var(--indigo)">Google Account permissions page</a>.
+    </p>
+  </div>
+
+  <!-- 4. AI Providers -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🤖</span>
+      <h2 class="section-title">AI Provider Data Processing</h2>
+    </div>
+    <p>
+      When you generate test cases, your requirement text and uploaded documents are sent to the selected AI provider. Each provider processes this data under their own privacy policy:
+    </p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Provider</th><th>Privacy Policy</th><th>Data region</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🤖 Anthropic (Claude)</td>
+          <td><a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener" style="color:var(--indigo)">anthropic.com/privacy</a></td>
+          <td>United States</td>
+        </tr>
+        <tr>
+          <td>✦ Google (Gemini)</td>
+          <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--indigo)">policies.google.com/privacy</a></td>
+          <td>United States</td>
+        </tr>
+        <tr>
+          <td>⚡ Groq (Llama)</td>
+          <td><a href="https://groq.com/privacy-policy/" target="_blank" rel="noopener" style="color:var(--indigo)">groq.com/privacy-policy</a></td>
+          <td>United States</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box-green">
+      <span class="icon">✅</span>
+      <span>API keys you supply in Settings are sent directly to the respective AI provider with each request. They are stored only in your browser's <code>localStorage</code> and are never logged or stored on Shuddhi QA's servers.</span>
+    </div>
+  </div>
+
+  <!-- 5. Third-party services -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🔗</span>
+      <h2 class="section-title">Third-Party Services</h2>
+    </div>
+    <p>Shuddhi QA integrates with the following external services when configured by you:</p>
+    <ul class="privacy-list">
+      <li><strong>Azure DevOps</strong> — Test plan push uses your Personal Access Token, stored in browser localStorage and forwarded via our proxy to <code>dev.azure.com</code>.</li>
+      <li><strong>Jira</strong> — Ticket fetch uses your API token, stored in browser localStorage and forwarded via our proxy to your Jira instance URL.</li>
+      <li><strong>Google Fonts</strong> — Fonts (Cormorant Garamond, DM Sans, JetBrains Mono) are loaded from <code>fonts.googleapis.com</code>. Google may log the font request IP address.</li>
+      <li><strong>Exchange Rate APIs</strong> — USD→INR rate is fetched from <code>exchangerate-api.com</code> and <code>open.er-api.com</code> for cost display. No personal data is sent.</li>
+    </ul>
+    <p>No analytics services, advertising networks, or social media trackers are used on Shuddhi QA.</p>
+  </div>
+
+  <!-- 6. Data Retention -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">⏱️</span>
+      <h2 class="section-title">Data Retention &amp; Deletion</h2>
+    </div>
+    <ul class="privacy-list">
+      <li><strong>localStorage data</strong> — Persists until you clear your browser data, or click <em>Reset all data</em> inside Settings → Usage &amp; Cost.</li>
+      <li><strong>sessionStorage data</strong> — Deleted automatically when you close the browser tab.</li>
+      <li><strong>Server logs</strong> — Cloudflare Pages may retain standard server logs (IP address, request path, timestamp) for up to 30 days as per <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" style="color:var(--indigo)">Cloudflare's Privacy Policy</a>. No request body content is logged.</li>
+      <li><strong>Generated test cases</strong> — Stored only in your browser's localStorage (last 20 sessions). Never on our servers.</li>
+    </ul>
+  </div>
+
+  <!-- 7. Your Rights -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">⚖️</span>
+      <h2 class="section-title">Your Rights</h2>
+    </div>
+    <p>Since all data is stored locally in your browser, you have full control at all times:</p>
+    <ul class="privacy-list">
+      <li><strong>Access:</strong> Open your browser's DevTools → Application → Local Storage to see all stored data.</li>
+      <li><strong>Delete:</strong> Click <em>Reset all data</em> in Settings → Usage &amp; Cost, or clear browser data for this site.</li>
+      <li><strong>Revoke Google access:</strong> Click <em>Disconnect</em> in Settings → Usage &amp; Cost, or visit <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener" style="color:var(--indigo)">myaccount.google.com/permissions</a>.</li>
+      <li><strong>Data portability:</strong> Export your usage data as CSV from Settings → Usage &amp; Cost → Download CSV.</li>
+    </ul>
+    <div class="box-green">
+      <span class="icon">✅</span>
+      <span>Shuddhi QA does not require an account, does not use cookies for tracking, and does not collect any personally identifiable information beyond what you explicitly configure in Settings.</span>
+    </div>
+  </div>
+
+  <!-- 8. Security -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🛡️</span>
+      <h2 class="section-title">Security</h2>
+    </div>
+    <ul class="privacy-list">
+      <li>All network traffic uses HTTPS/TLS encryption.</li>
+      <li>API proxy endpoints validate request origins and reject cross-origin requests from non-whitelisted domains.</li>
+      <li>OAuth tokens are never written to persistent storage or server-side logs.</li>
+      <li>The application is deployed on Cloudflare Pages with DDoS protection and WAF.</li>
+      <li>No user accounts or passwords — nothing to breach.</li>
+    </ul>
+  </div>
+
+  <!-- 9. Changes -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">📝</span>
+      <h2 class="section-title">Changes to This Policy</h2>
+    </div>
+    <p>
+      If this privacy policy changes materially, the updated date at the top of this page will be updated. Since Shuddhi QA does not collect email addresses, we cannot notify users directly — please check this page periodically if you have concerns.
+    </p>
+    <p>
+      Continued use of Shuddhi QA after policy changes constitutes acceptance of the updated policy.
+    </p>
+  </div>
+
+  <!-- 10. Contact -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">📧</span>
+      <h2 class="section-title">Contact</h2>
+    </div>
+    <p>For privacy questions, data requests, or concerns:</p>
+    <div class="contact-card">
+      <div class="contact-avatar">R</div>
+      <div>
+        <div class="contact-name">Ramya</div>
+        <div class="contact-role">Developer · Senior QA Engineer · Alpha Variance Solutions · Bengaluru, India</div>
+        <a href="https://github.com/ramya9b" target="_blank" rel="noopener" class="contact-link">
+          🐙 github.com/ramya9b
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /content -->
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-brand"><span>Shuddhi</span> QA · शुद्धि</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/app">App</a>
+    <a href="https://github.com/ramya9b" target="_blank" rel="noopener">GitHub</a>
+    <span style="color:var(--text3);font-size:12px">© 2026 Shuddhi QA · Made in Bengaluru 🇮🇳</span>
+  </div>
+</footer>
+
+<script>
+// ── Theme ──────────────────────────────────────────────────────
+const THEME_KEY = 'shuddhi-theme';
+const btn   = document.getElementById('themeBtn');
+const thumb = document.getElementById('themeThumb');
+const html  = document.documentElement;
+
+function applyTheme(theme, animate) {
+  if (theme === 'light') {
+    html.classList.add('light');
+    if (animate) thumb.style.transform = 'translateX(20px)';
+    thumb.textContent = '☀️';
+    localStorage.setItem(THEME_KEY, 'light');
+  } else {
+    html.classList.remove('light');
+    if (animate) thumb.style.transform = 'translateX(0)';
+    thumb.textContent = '🌙';
+    localStorage.setItem(THEME_KEY, 'dark');
+  }
+}
+function toggleTheme() {
+  applyTheme(html.classList.contains('light') ? 'dark' : 'light', true);
+}
+applyTheme(localStorage.getItem(THEME_KEY) || 'dark', false);
+
+// ── Scroll fade-in ─────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.section').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = `opacity .45s ${i * 0.05}s ease, transform .45s ${i * 0.05}s ease`;
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

@@ -12,6 +12,14 @@
 /app.html
   Cache-Control: public, max-age=300, must-revalidate
 
+# ── Privacy policy: short cache
+/privacy
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Content-Type-Options: nosniff
+
+/privacy.html
+  Cache-Control: public, max-age=3600, must-revalidate
+
 # ── Service worker: never cache (must always be fresh)
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
