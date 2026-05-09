@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.14 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.8 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.14 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5946,7 +5946,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.8</span>
+      <span class="sb-badge">v9.14</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6413,7 +6413,7 @@ header::after { display: none !important; }
         <div class="settings-section-title">AI Provider</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
           <div class="settings-section-desc">Choose which AI generates test cases. Add your own API key below to generate test cases.</div>
-          <a href="/help#groq" target="_blank" rel="noopener"
+          <a href="/help#groq" id="providerHelpLink" target="_blank" rel="noopener"
              style="font-size:11px;color:var(--indigo);text-decoration:none;font-weight:600;padding:2px 8px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap"
              data-tip="Step-by-step guide to get your free API key">❓ Get API key</a>
         </div>
@@ -6579,7 +6579,7 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Action row — Test Connection removed (v9.8); use 🔌 Test next to personal key ↑ -->
+          <!-- Action row — Test Connection removed (v9.14); use 🔌 Test next to personal key ↑ -->
           <div style="display:flex;gap:8px">
             <button id="saveProviderBtn" data-tip="Set this as your active AI provider for all generations"
               style="width:100%;padding:10px;border-radius:9px;border:none;
@@ -6592,7 +6592,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- claudeTestResult kept in DOM for JS safety but unused since v9.8 -->
+      <!-- claudeTestResult kept in DOM for JS safety but unused since v9.14 -->
       <div id="claudeTestResult" style="display:none"></div>
 
       <!-- API key setup guide -->
@@ -6994,7 +6994,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.8</div>
+          <div class="settings-about-val" id="aboutVersion">v9.14</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7029,16 +7029,16 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.8 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.14 — Billing Sync</div>
         </div>
       </div>
 
-      <!-- v9.8 Changelog -->
+      <!-- v9.14 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.8
+          🆕 What's New in v9.14
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -8193,15 +8193,22 @@ function _updateProviderUI(provider) {
     if (el) el.textContent = fields[id];
   });
   var statusIcon  = document.getElementById('activeKeyStatusIcon');
-  var statusLabel = null; // element removed in v9.8
+  var statusLabel = null; // element removed in v9.14
   var card        = document.getElementById('activeProviderCard');
   var dot         = document.getElementById('claudeKeyDot');
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
-  // Key status row removed (v9.8) — users configure own keys in Personal API Keys section above
+  // Key status row removed (v9.14) — users configure own keys in Personal API Keys section above
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
+  // v9.14 — sync provider-specific help link
+  var helpLink = document.getElementById('providerHelpLink');
+  if (helpLink) {
+    var anchor = (provider === 'claude' || provider === 'gemini' || provider === 'groq') ? provider : 'groq';
+    helpLink.setAttribute('href', '/help#' + anchor);
+    helpLink.setAttribute('data-tip', 'Step-by-step guide to get your free ' + (meta.name || provider) + ' API key');
+  }
 }
 window._updateProviderUI = _updateProviderUI;
 
@@ -11415,7 +11422,7 @@ function buildOutputStats() {
 
 function buildOutputToolbar() {
   const hasOutput = !!(rawMarkdown && rawMarkdown.trim().length > 50);
-  const btnIds = ['copyBtn','copyXlsBtn','pdfBtn','xlsBtn','adoBtn','editBtn','jiraBtn'];
+  const btnIds = ['copyBtn','copyXlsBtn','pdfBtn','xlsBtn','adoBtn','editBtn','jiraBtn','testRailBtn','gherkinBtn','playwrightBtn','postmanBtn','coverageBtn','exportAllBtn','moreExportBtn'];
   btnIds.forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.disabled = !hasOutput;
@@ -12735,6 +12742,306 @@ function syncEditedContent() {
   if (rebuilt.trim()) rawMarkdown = rebuilt;
 }
 
+
+// ═══════════════════════════════════════════════════════════════════
+// EXPORT FUNCTIONS — v9.14 (TestRail, Gherkin, Playwright, Postman,
+//                           Coverage Matrix, Export All)
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Helper: trigger file download ──────────────────────────────────
+function _triggerDownload(content, filename, mimeType) {
+  var blob = new Blob([content], { type: mimeType });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Helper: safe CSV cell ──────────────────────────────────────────
+function _csvCell(v) {
+  return '"' + String(v || '').replace(/"/g, '""').replace(/\n/g, ' | ') + '"';
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 1. TestRail CSV
+// ─────────────────────────────────────────────────────────────────
+function downloadTestRailCSV() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  var platform = (document.getElementById('platform') || {}).value || 'QA';
+  var module   = (document.getElementById('module')   || {}).value || 'General';
+
+  // TestRail CSV format: ID,Title,Section,Type,Priority,Steps,Expected
+  var headers = [
+    'ID','Title','Section','Type','Priority',
+    'Steps (Step)','Steps (Expected Result)'
+  ];
+
+  var rows = [];
+  testCases.forEach(function(tc, idx) {
+    var prioLabel = tc.priority === 2 ? '1 - High' : tc.priority === 3 ? '2 - Medium' : '3 - Low';
+    var stepsText    = tc.steps.map(function(s, i) { return (i+1) + '. ' + s.action; }).join('\n');
+    var expectedText = tc.steps.map(function(s, i) { return (i+1) + '. ' + (s.expected || ''); }).join('\n');
+    rows.push([
+      'C' + (idx + 1),
+      tc.title,
+      platform + ' - ' + module,
+      'Functional',
+      prioLabel,
+      stepsText,
+      expectedText
+    ].map(_csvCell).join(','));
+  });
+
+  var csv = [headers.map(_csvCell).join(',')].concat(rows).join('\n');
+  _triggerDownload('\uFEFF' + csv,
+    'TestRail-' + platform.replace(/\s+/g,'-') + '-' + Date.now() + '.csv',
+    'text/csv;charset=utf-8;');
+  showToast('TestRail CSV downloaded — ' + testCases.length + ' test cases', '🧪');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 2. Gherkin (.feature file)
+// ─────────────────────────────────────────────────────────────────
+function downloadGherkin() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  var platform = (document.getElementById('platform') || {}).value || 'Application';
+  var module   = (document.getElementById('module')   || {}).value || 'General';
+  var flow     = ((document.getElementById('flowDesc') || {}).value || '').substring(0, 80);
+
+  var lines = [];
+  lines.push('Feature: ' + platform + ' — ' + module);
+  if (flow) lines.push('  # ' + flow.replace(/\n/g, ' '));
+  lines.push('');
+
+  testCases.forEach(function(tc) {
+    var prioTag = tc.priority === 2 ? '@high' : tc.priority === 3 ? '@medium' : '@low';
+    lines.push('  @generated ' + prioTag);
+    lines.push('  Scenario: ' + tc.title);
+
+    if (tc.steps.length > 0) {
+      lines.push('    Given the user is on the ' + platform + ' ' + module + ' screen');
+      tc.steps.forEach(function(step, i) {
+        var keyword = i === 0 ? 'When' : i === tc.steps.length - 1 ? 'Then' : 'And';
+        var action   = step.action   ? step.action.replace(/^\d+\.\s*/, '')   : 'Perform step ' + (i+1);
+        var expected = step.expected ? step.expected.replace(/^\d+\.\s*/, '') : '';
+        lines.push('    ' + keyword + ' ' + action);
+        if (expected && i === tc.steps.length - 1) {
+          lines.push('    Then ' + expected);
+        }
+      });
+    }
+    lines.push('');
+  });
+
+  _triggerDownload(lines.join('\n'),
+    'Gherkin-' + platform.replace(/\s+/g,'-') + '-' + Date.now() + '.feature',
+    'text/plain;charset=utf-8;');
+  showToast('Gherkin .feature file downloaded — ' + testCases.length + ' scenarios', '🥒');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 3. Playwright TypeScript
+// ─────────────────────────────────────────────────────────────────
+function downloadPlaywright() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  var platform = (document.getElementById('platform') || {}).value || 'Application';
+  var module   = (document.getElementById('module')   || {}).value || 'General';
+
+  var lines = [];
+  lines.push('import { test, expect } from \'@playwright/test\';');
+  lines.push('');
+  lines.push('// Generated by Shuddhi QA — ' + new Date().toISOString().slice(0,10));
+  lines.push('// Platform: ' + platform + '  Module: ' + module);
+  lines.push('');
+  lines.push("test.describe('" + platform + " — " + module + "', () => {");
+  lines.push('');
+
+  testCases.forEach(function(tc) {
+    var safeTitle = tc.title.replace(/'/g, "\'");
+    lines.push("  test('" + safeTitle + "', async ({ page }) => {");
+
+    tc.steps.forEach(function(step, i) {
+      var action   = (step.action   || '').replace(/'/g, "\'").replace(/\n/g, ' ');
+      var expected = (step.expected || '').replace(/'/g, "\'").replace(/\n/g, ' ');
+      lines.push('    // Step ' + (i+1) + ': ' + action);
+      if (expected) {
+        lines.push("    // Expected: " + expected);
+      }
+      lines.push("    // TODO: implement step " + (i+1));
+      lines.push('');
+    });
+    lines.push('  });');
+    lines.push('');
+  });
+
+  lines.push('});');
+
+  _triggerDownload(lines.join('\n'),
+    'playwright-' + platform.replace(/\s+/g,'-').toLowerCase() + '-' + Date.now() + '.spec.ts',
+    'text/plain;charset=utf-8;');
+  showToast('Playwright .spec.ts downloaded — ' + testCases.length + ' tests', '🎭');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 4. Postman Collection
+// ─────────────────────────────────────────────────────────────────
+function downloadPostman() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  var platform = (document.getElementById('platform') || {}).value || 'Application';
+  var module   = (document.getElementById('module')   || {}).value || 'General';
+
+  var items = testCases.map(function(tc, idx) {
+    var events = tc.steps.map(function(step, i) {
+      return {
+        listen: 'test',
+        script: {
+          type: 'text/javascript',
+          exec: [
+            '// Step ' + (i+1) + ': ' + (step.action || ''),
+            '// Expected: ' + (step.expected || ''),
+            "pm.test('Step " + (i+1) + " — " + (step.action || '').replace(/'/g, "\'").substring(0,60) + "', function() {",
+            '    // TODO: add assertion',
+            '    pm.response.to.have.status(200);',
+            '});'
+          ]
+        }
+      };
+    });
+
+    return {
+      name: 'TC' + String(idx+1).padStart(3,'0') + ' — ' + tc.title,
+      request: {
+        method: 'GET',
+        header: [],
+        url: {
+          raw: '{{baseUrl}}/' + module.toLowerCase().replace(/\s+/g,'-'),
+          host: ['{{baseUrl}}'],
+          path: [module.toLowerCase().replace(/\s+/g,'-')]
+        },
+        description: tc.title
+      },
+      event: events,
+      response: []
+    };
+  });
+
+  var collection = {
+    info: {
+      name: 'Shuddhi QA — ' + platform + ' ' + module,
+      description: 'Generated by Shuddhi QA on ' + new Date().toISOString().slice(0,10),
+      schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
+    },
+    variable: [{ key: 'baseUrl', value: 'https://your-api-base-url.com', type: 'string' }],
+    item: items
+  };
+
+  _triggerDownload(JSON.stringify(collection, null, 2),
+    'Postman-' + platform.replace(/\s+/g,'-') + '-' + Date.now() + '.json',
+    'application/json;charset=utf-8;');
+  showToast('Postman collection downloaded — ' + testCases.length + ' requests', '📮');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 5. Coverage Matrix (.csv)
+// ─────────────────────────────────────────────────────────────────
+function downloadCoverageMatrix() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  var platform = (document.getElementById('platform') || {}).value || 'QA';
+  var module   = (document.getElementById('module')   || {}).value || 'General';
+  var flow     = ((document.getElementById('flowDesc') || {}).value || 'Business Flow');
+
+  // Derive requirements from TC titles — group by section type
+  var reqMap = {};
+  testCases.forEach(function(tc) {
+    var section = 'Functional';
+    var t = tc.title.toLowerCase();
+    if (t.includes('e2e') || t.includes('end-to-end') || t.includes('end to end')) section = 'End-to-End';
+    else if (t.includes('negative') || t.includes('invalid') || t.includes('error')) section = 'Negative';
+    else if (t.includes('field') || t.includes('validation') || t.includes('validate')) section = 'Field Validation';
+    else if (t.includes('integration') || t.includes('sync') || t.includes('interface')) section = 'Integration';
+    if (!reqMap[section]) reqMap[section] = [];
+    reqMap[section].push(tc);
+  });
+
+  var headers = ['Requirement Area', 'Test Case ID', 'Test Case Title', 'Priority',
+                 'Steps Count', 'Coverage Status', 'Platform', 'Module'];
+
+  var rows = [];
+  Object.keys(reqMap).forEach(function(section) {
+    reqMap[section].forEach(function(tc, i) {
+      var prioLabel = tc.priority === 2 ? 'High' : tc.priority === 3 ? 'Medium' : 'Low';
+      rows.push([
+        section,
+        'TC' + String(rows.length + 1).padStart(3,'0'),
+        tc.title,
+        prioLabel,
+        tc.steps.length,
+        'Covered',
+        platform,
+        module
+      ].map(_csvCell).join(','));
+    });
+  });
+
+  // Summary row
+  rows.push('');
+  rows.push([
+    'TOTAL', testCases.length + ' TCs', flow.substring(0,60),
+    '', testCases.reduce(function(s,t){return s+t.steps.length;},0) + ' steps',
+    '100% Generated', platform, module
+  ].map(_csvCell).join(','));
+
+  var csv = [headers.map(_csvCell).join(',')].concat(rows).join('\n');
+  _triggerDownload('\uFEFF' + csv,
+    'Coverage-Matrix-' + platform.replace(/\s+/g,'-') + '-' + Date.now() + '.csv',
+    'text/csv;charset=utf-8;');
+  showToast('Coverage Matrix downloaded — ' + testCases.length + ' TCs mapped', '📋');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 6. Export All Formats
+// ─────────────────────────────────────────────────────────────────
+function exportAllFormats() {
+  var testCases = parseTestCasesFromMarkdown();
+  if (!testCases.length) { showToast('No test cases to export', '⚠️'); return; }
+
+  showToast('Exporting all formats…', '📦');
+
+  // Stagger downloads to avoid browser blocking
+  var delay = 0;
+  var fns = [
+    function() { exportExcel(); },
+    function() { copyMarkdown(); },
+    function() { downloadJiraCSV(); },
+    function() { downloadTestRailCSV(); },
+    function() { downloadGherkin(); },
+    function() { downloadPlaywright(); },
+    function() { downloadPostman(); },
+    function() { downloadCoverageMatrix(); },
+  ];
+
+  fns.forEach(function(fn) {
+    setTimeout(fn, delay);
+    delay += 600;
+  });
+
+  setTimeout(function() {
+    showToast('All 8 export formats downloaded! ✅', '🎉');
+  }, delay + 200);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+
 function downloadJiraCSV() {
   const testCases = parseTestCasesFromMarkdown();
   if (testCases.length === 0) { showToast('No test cases to export', '⚠️'); return; }
@@ -13862,7 +14169,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.8';
+  if (ver)  ver.textContent  = 'v9.14';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14877,7 +15184,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.8';
+  if (version)  version.textContent  = 'v9.14';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15700,7 +16007,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.8</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.14</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
