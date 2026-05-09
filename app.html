@@ -6576,17 +6576,10 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Action row -->
+          <!-- Action row — Test Connection removed (v8.9); use 🔌 Test next to personal key ↑ -->
           <div style="display:flex;gap:8px">
-            <button id="claudeTestBtn" data-tip="Verify your API key works before generating test cases"
-              style="flex:1;padding:10px;border-radius:9px;background:var(--surface2);
-                     border:1.5px solid var(--border2);color:var(--text2);font-size:13px;
-                     font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;
-                     transition:all .14s">
-              🔌 Test Connection
-            </button>
             <button id="saveProviderBtn" data-tip="Set this as your active AI provider for all generations"
-              style="flex:1;padding:10px;border-radius:9px;border:none;
+              style="width:100%;padding:10px;border-radius:9px;border:none;
                      background:linear-gradient(135deg,var(--indigo),var(--violet));
                      color:#fff;font-size:13px;font-weight:700;cursor:pointer;
                      font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .15s">
@@ -6596,8 +6589,8 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Test result -->
-      <div class="settings-test-result" id="claudeTestResult" style="display:none"></div>
+      <!-- claudeTestResult kept in DOM for JS safety but unused since v8.9 -->
+      <div id="claudeTestResult" style="display:none"></div>
 
       <!-- API key setup guide -->
       <details class="settings-guide">
