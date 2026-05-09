@@ -46,3 +46,8 @@
 /*
   X-Content-Type-Options: nosniff
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# ── Sitemap ──
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+  Content-Type: application/xml
