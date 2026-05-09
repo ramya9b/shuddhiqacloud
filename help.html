@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Help & Setup Guide — Shuddhi QA</title>
+<meta name="description" content="Step-by-step setup guide for Shuddhi QA. Get your free Groq, Gemini or Claude API key, set up Azure DevOps PAT, and configure Jira in minutes."/>
+<link rel="canonical" href="https://shuddhiqacloud.pages.dev/help"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23E8A020'/><text y='.9em' font-size='68' x='10' fill='white'>श</text></svg>" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #0b0d13;
+  --bg2:      #10131c;
+  --surface:  #151923;
+  --surface2: #1c2230;
+  --border:   rgba(232,162,32,.12);
+  --border2:  rgba(232,162,32,.22);
+  --saffron:  #E8A020;
+  --saffronl: #F5B840;
+  --indigo:   #5B5FEF;
+  --indigol:  #818CF8;
+  --teal:     #0D9488;
+  --tealL:    #14B8A6;
+  --green:    #059669;
+  --greenL:   #D1FAE5;
+  --text:     #F1F5F9;
+  --text2:    #94A3B8;
+  --text3:    #64748B;
+  --nav-bg:   rgba(11,13,19,.92);
+}
+html.light {
+  --bg: #FAFAF8; --bg2: #F4F3EF; --surface: #FFFFFF; --surface2: #F4F3EF;
+  --border: rgba(0,0,0,.08); --border2: rgba(0,0,0,.14);
+  --text: #1A1A2E; --text2: #4A4A6A; --text3: #7A7A9A;
+  --nav-bg: rgba(250,250,248,.92);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; overflow-x:hidden; }
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; opacity:.4; }
+.orb { position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
+.orb-1 { width:600px; height:600px; top:-200px; left:-150px; background:radial-gradient(circle,rgba(232,162,32,.06) 0%,transparent 70%); }
+.orb-2 { width:500px; height:500px; bottom:-100px; right:-100px; background:radial-gradient(circle,rgba(91,95,239,.06) 0%,transparent 70%); }
+
+/* Nav */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 48px; display:flex; align-items:center; justify-content:space-between; background:var(--nav-bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+.nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+.nav-logo-mark { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#E8A020,#F5B840); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:#fff; box-shadow:0 4px 16px rgba(232,162,32,.3); }
+.nav-brand { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--text); }
+.nav-brand span { color:var(--saffron); }
+.nav-links { display:flex; align-items:center; gap:8px; }
+.nav-link { font-size:13px; color:var(--text2); text-decoration:none; padding:7px 14px; border-radius:8px; border:1px solid transparent; transition:all .15s; }
+.nav-link:hover { color:var(--text); border-color:var(--border2); }
+.nav-link.active { color:var(--saffron); border-color:var(--border2); }
+#themeBtn { width:44px; height:24px; border-radius:12px; border:1.5px solid var(--border2); background:var(--surface2); cursor:pointer; position:relative; transition:background .3s; }
+#themeThumb { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg,#E8A020,#F5B840); transition:transform .3s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; justify-content:center; font-size:10px; }
+
+/* Layout */
+.wrap { max-width:860px; margin:0 auto; padding:0 32px; }
+.page { position:relative; z-index:1; padding-top:80px; }
+
+/* Hero */
+.hero { padding:60px 0 48px; text-align:center; }
+.hero-pill { display:inline-flex; align-items:center; gap:8px; padding:5px 14px; border-radius:20px; border:1px solid var(--border2); background:rgba(232,162,32,.06); font-size:12px; color:var(--saffronl); font-family:'JetBrains Mono',monospace; margin-bottom:20px; }
+.hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,6vw,60px); font-weight:700; line-height:1.1; letter-spacing:-1.5px; margin-bottom:14px; }
+.hero h1 span { color:var(--saffron); }
+.hero p { font-size:16px; color:var(--text2); max-width:520px; margin:0 auto 32px; }
+
+/* TOC */
+.toc { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:48px; }
+.toc-btn { padding:8px 16px; border-radius:9px; border:1.5px solid var(--border2); background:var(--surface); color:var(--text2); font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:none; transition:all .15s; font-family:'DM Sans',sans-serif; }
+.toc-btn:hover { border-color:var(--saffron); color:var(--saffron); }
+
+/* Guide card */
+.guide-card { background:var(--surface); border:1.5px solid var(--border2); border-radius:16px; overflow:hidden; margin-bottom:24px; transition:border-color .2s; }
+.guide-card:hover { border-color:rgba(232,162,32,.3); }
+.guide-header { padding:18px 22px; background:var(--surface2); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; cursor:pointer; user-select:none; }
+.guide-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.guide-title { flex:1; }
+.guide-title h2 { font-size:16px; font-weight:700; color:var(--text); margin-bottom:2px; }
+.guide-title p { font-size:12px; color:var(--text3); }
+.guide-badge { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+.badge-free { background:rgba(16,185,129,.12); color:#059669; border:1px solid rgba(16,185,129,.25); }
+.badge-paid { background:rgba(239,68,68,.08); color:#DC2626; border:1px solid rgba(239,68,68,.2); }
+.badge-rec  { background:rgba(232,162,32,.12); color:var(--saffron); border:1px solid rgba(232,162,32,.25); }
+.guide-toggle { font-size:20px; color:var(--text3); transition:transform .25s; }
+.guide-body { padding:22px; display:none; }
+.guide-card.open .guide-body { display:block; }
+.guide-card.open .guide-toggle { transform:rotate(180deg); }
+
+/* Steps */
+.steps { counter-reset:step; display:flex; flex-direction:column; gap:0; }
+.step { display:flex; gap:16px; padding:14px 0; border-bottom:1px solid var(--border); position:relative; }
+.step:last-child { border-bottom:none; }
+.step-num { counter-increment:step; width:32px; height:32px; border-radius:50%; background:var(--surface2); border:2px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--indigo); flex-shrink:0; margin-top:2px; }
+.step-num::before { content:counter(step); }
+.step-content { flex:1; }
+.step-content h3 { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.step-content p { font-size:13px; color:var(--text2); line-height:1.65; margin-bottom:6px; }
+.step-content p:last-child { margin-bottom:0; }
+.step-link { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; border:1.5px solid var(--border2); background:var(--surface2); font-size:12.5px; font-weight:600; color:var(--indigo); text-decoration:none; margin-top:6px; transition:all .15s; }
+.step-link:hover { border-color:var(--indigo); background:rgba(91,95,239,.08); }
+.code-block { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 14px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--tealL); margin:8px 0; white-space:pre-wrap; word-break:break-all; }
+.tip-box { background:rgba(232,162,32,.06); border:1px solid rgba(232,162,32,.2); border-radius:8px; padding:10px 14px; font-size:12.5px; color:var(--text2); margin:10px 0; display:flex; gap:8px; }
+.tip-box .tip-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.info-box { background:rgba(99,102,241,.06); border:1px solid rgba(99,102,241,.2); border-radius:8px; padding:10px 14px; font-size:12.5px; color:var(--text2); margin:10px 0; }
+.scope-table { width:100%; border-collapse:collapse; font-size:12.5px; margin:10px 0; }
+.scope-table th { background:var(--surface2); padding:8px 12px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--text3); border-bottom:1px solid var(--border); }
+.scope-table td { padding:8px 12px; border-bottom:1px solid var(--border); color:var(--text2); }
+.scope-table td:first-child { font-family:'JetBrains Mono',monospace; color:var(--tealL); }
+.scope-table tr:hover td { background:var(--surface2); }
+.check { color:#059669; font-weight:700; }
+
+/* Section label */
+.section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text3); margin:40px 0 16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+/* Footer */
+footer { position:relative; z-index:1; border-top:1px solid var(--border); padding:24px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:64px; }
+.footer-brand { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:var(--text); }
+.footer-brand span { color:var(--saffron); }
+.footer-links { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+.footer-links a { font-size:12px; color:var(--text3); text-decoration:none; transition:color .15s; }
+.footer-links a:hover { color:var(--saffron); }
+
+@media(max-width:640px) {
+  nav { padding:14px 20px; }
+  .wrap { padding:0 16px; }
+  .hero h1 { font-size:32px; }
+  footer { padding:20px 16px; flex-direction:column; }
+}
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.fade-up { animation:fadeUp .4s ease both; }
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">श</div>
+    <div class="nav-brand"><span>Shuddhi</span> QA</div>
+  </a>
+  <div class="nav-links">
+    <a href="/app" class="nav-link">← Back to App</a>
+    <a href="/privacy" class="nav-link">Privacy</a>
+    <button id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeThumb">🌙</span></button>
+  </div>
+</nav>
+
+<div class="page">
+<div class="wrap">
+
+<!-- Hero -->
+<div class="hero fade-up">
+  <div class="hero-pill">📖 Setup Guide · v8.8</div>
+  <h1>Get started in <span>5 minutes</span></h1>
+  <p>Step-by-step guides to set up your API keys and integrations. Everything is free to start — no credit card required.</p>
+  <div class="toc">
+    <a href="#groq"   class="toc-btn">⚡ Groq API Key</a>
+    <a href="#gemini" class="toc-btn">✦ Gemini API Key</a>
+    <a href="#claude" class="toc-btn">🤖 Claude API Key</a>
+    <a href="#ado"    class="toc-btn">🔷 Azure DevOps PAT</a>
+    <a href="#jira"   class="toc-btn">🟦 Jira API Token</a>
+    <a href="#usage"  class="toc-btn">🚀 Using Shuddhi QA</a>
+  </div>
+</div>
+
+<!-- ══ AI Provider Keys ══ -->
+<div class="section-label">🤖 AI Provider API Keys</div>
+
+<!-- GROQ -->
+<div class="guide-card open" id="groq">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(20,184,166,.1)">⚡</div>
+    <div class="guide-title">
+      <h2>Groq API Key</h2>
+      <p>Llama 3.3 70B · Fastest response · Recommended for new users</p>
+    </div>
+    <span class="guide-badge badge-free">Free Forever</span>
+    <span class="guide-badge badge-rec" style="margin-left:6px">★ Recommended</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span><strong>Why Groq?</strong> Groq is the fastest AI in the world — 30 requests/minute, 14,400 requests/day, completely free. No credit card ever. Perfect for generating test cases all day.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open Groq Console</h3>
+          <p>Go to the Groq API key management page in your browser.</p>
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener" class="step-link">🔗 console.groq.com/keys</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Sign in with Google</h3>
+          <p>Click <strong>"Sign in"</strong> → choose <strong>"Continue with Google"</strong> → select your Google account. No form filling needed — just one click.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create a new API key</h3>
+          <p>Once logged in, click the <strong>"Create API Key"</strong> button (blue button, top right of the page).</p>
+          <p>Give it a name like <strong>"Shuddhi QA"</strong> → click <strong>"Submit"</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the key</h3>
+          <p>Your key appears once — it starts with <code style="background:var(--surface2);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px">gsk_</code>. Click the copy icon next to it.</p>
+          <div class="code-block">gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div class="tip-box"><span class="tip-icon">⚠️</span><span>Save this key somewhere safe — Groq only shows it once. If you lose it, just create a new one (it's free).</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste it in Shuddhi QA</h3>
+          <p>Open <strong>Shuddhi QA → Settings (⚙️) → AI Provider</strong>. Under <strong>"Your Personal API Keys"</strong>, find the <strong>Groq</strong> row and paste your key. Click <strong>🔌 Test</strong> to verify it works. Done!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GEMINI -->
+<div class="guide-card" id="gemini">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(99,102,241,.1)">✦</div>
+    <div class="guide-title">
+      <h2>Google Gemini API Key</h2>
+      <p>Gemini 2.5 Flash · Best quality output · 15 req/min free</p>
+    </div>
+    <span class="guide-badge badge-free">Free Tier</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span><strong>Why Gemini?</strong> Gemini 2.5 Flash produces the highest quality test cases of the three free options. Best for large, complex D365 or Salesforce requirement documents.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open Google AI Studio</h3>
+          <p>Go to Google AI Studio — the official portal to create Gemini API keys.</p>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="step-link">🔗 aistudio.google.com/app/apikey</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Sign in with Google</h3>
+          <p>Sign in with any Google account — the same one you use for Gmail or Google Drive is fine.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create API key</h3>
+          <p>Click <strong>"Create API key"</strong> → Select <strong>"Create API key in new project"</strong> (easiest option). Google creates a project automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the key</h3>
+          <p>Your key appears — it starts with <code style="background:var(--surface2);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px">AIzaSy</code>. Click the copy icon.</p>
+          <div class="code-block">AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste it in Shuddhi QA</h3>
+          <p>Open <strong>Settings → AI Provider → Your Personal API Keys → Gemini</strong> row. Paste the key and click <strong>🔌 Test</strong>.</p>
+          <div class="info-box">Free tier limits: 15 requests/minute · 1,500 requests/day · 1 million tokens/minute. More than enough for daily QA work.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLAUDE -->
+<div class="guide-card" id="claude">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(232,162,32,.1)">🤖</div>
+    <div class="guide-title">
+      <h2>Anthropic Claude API Key</h2>
+      <p>Claude Sonnet 4.6 · Highest QA reasoning quality · Paid</p>
+    </div>
+    <span class="guide-badge badge-paid">Paid — ~$0.10/run</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box">
+      <span class="tip-icon">💡</span>
+      <span><strong>Why Claude?</strong> Claude produces the most accurate, detailed test cases for complex enterprise workflows (D365, Salesforce, SAP). Recommended if you need the highest quality output. Cost: ~₹9 per generation.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open Anthropic Console</h3>
+          <a href="https://console.anthropic.com" target="_blank" rel="noopener" class="step-link">🔗 console.anthropic.com</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create an account</h3>
+          <p>Click <strong>"Sign up"</strong> → enter your email → verify → set a password.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Add a payment method</h3>
+          <p>Claude requires a credit/debit card to activate the API (even for pay-as-you-go at very low rates). Go to <strong>Settings → Billing → Add payment method</strong>.</p>
+          <div class="tip-box"><span class="tip-icon">💰</span><span>Recommended: add $5 credits to start. At ~$0.10/generation, that's 50 generations — more than enough to evaluate quality before committing.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create API key</h3>
+          <p>Go to <strong>Settings → API Keys → Create Key</strong>. Name it <strong>"Shuddhi QA"</strong> → click <strong>Create</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the key</h3>
+          <div class="code-block">sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div class="tip-box"><span class="tip-icon">⚠️</span><span>Claude keys are shown only once. Copy it immediately and save it.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste it in Shuddhi QA</h3>
+          <p>Open <strong>Settings → AI Provider → Your Personal API Keys → Claude</strong> row. Paste the key and click <strong>🔌 Test</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Integrations ══ -->
+<div class="section-label" style="margin-top:48px">🔗 Integration Setup</div>
+
+<!-- AZURE DEVOPS -->
+<div class="guide-card" id="ado">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(0,120,212,.1)">🔷</div>
+    <div class="guide-title">
+      <h2>Azure DevOps — Personal Access Token (PAT)</h2>
+      <p>Required to push test cases to ADO Test Plans and fetch Work Items</p>
+    </div>
+    <span class="guide-badge" style="background:rgba(0,120,212,.1);color:#0078D4;border:1px solid rgba(0,120,212,.25)">Free with ADO account</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="info-box">
+      A <strong>Personal Access Token (PAT)</strong> is like a password that lets Shuddhi QA talk to Azure DevOps on your behalf. It is stored only in your browser — never on Shuddhi QA servers.
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open Azure DevOps</h3>
+          <p>Go to your Azure DevOps organisation. The URL looks like:</p>
+          <div class="code-block">https://dev.azure.com/YOUR-ORGANISATION</div>
+          <p>If you don't have one, create a free account at:</p>
+          <a href="https://dev.azure.com" target="_blank" rel="noopener" class="step-link">🔗 dev.azure.com</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open User Settings</h3>
+          <p>Click your <strong>profile picture</strong> (top right corner) → select <strong>"Personal access tokens"</strong> from the dropdown menu.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create a new token</h3>
+          <p>Click <strong>"+ New Token"</strong> (blue button, top right). Fill in the details:</p>
+          <table class="scope-table">
+            <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+            <tbody>
+              <tr><td>Name</td><td>Shuddhi QA</td></tr>
+              <tr><td>Organisation</td><td>All accessible organisations</td></tr>
+              <tr><td>Expiration</td><td>90 days (or custom — longer is more convenient)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Set the required scopes</h3>
+          <p>Under <strong>"Scopes"</strong>, click <strong>"Custom defined"</strong> and enable these specific permissions:</p>
+          <table class="scope-table">
+            <thead><tr><th>Scope</th><th>Permission</th><th>Required for</th></tr></thead>
+            <tbody>
+              <tr><td>Test Management</td><td><span class="check">✓</span> Read &amp; Write</td><td>Push test cases to Test Plans</td></tr>
+              <tr><td>Work Items</td><td><span class="check">✓</span> Read &amp; Write</td><td>Fetch Work Items for auto-fill</td></tr>
+              <tr><td>Project and Team</td><td><span class="check">✓</span> Read</td><td>List projects in your org</td></tr>
+            </tbody>
+          </table>
+          <div class="tip-box"><span class="tip-icon">💡</span><span>If you only need to fetch Work Items (not push test cases), enabling <strong>Work Items Read</strong> is sufficient. You can always recreate the token with more permissions later.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the token</h3>
+          <p>Click <strong>"Create"</strong>. Copy the token immediately — ADO shows it only once.</p>
+          <div class="code-block">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div class="tip-box"><span class="tip-icon">⚠️</span><span>Save the token in a password manager or secure note. If you lose it, you'll need to create a new one (the old one cannot be recovered).</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Configure in Shuddhi QA</h3>
+          <p>Open <strong>Settings → Azure DevOps</strong> tab. Fill in:</p>
+          <table class="scope-table">
+            <thead><tr><th>Field</th><th>Example value</th></tr></thead>
+            <tbody>
+              <tr><td>Organisation URL</td><td>https://dev.azure.com/mycompany</td></tr>
+              <tr><td>Personal Access Token</td><td>Paste your token here</td></tr>
+              <tr><td>Default Project</td><td>MyProject (optional)</td></tr>
+            </tbody>
+          </table>
+          <p>Click <strong>"Test Connection"</strong> → should show ✅ Connected.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JIRA -->
+<div class="guide-card" id="jira">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(37,99,235,.1)">🟦</div>
+    <div class="guide-title">
+      <h2>Jira — API Token</h2>
+      <p>Required to fetch Jira tickets and auto-fill requirement flow</p>
+    </div>
+    <span class="guide-badge" style="background:rgba(37,99,235,.1);color:#1D4ED8;border:1px solid rgba(37,99,235,.25)">Free with Jira account</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="info-box">
+      A Jira API token lets Shuddhi QA read your Jira tickets. When you enter a ticket ID like <code style="font-family:monospace;font-size:12px">PROJ-1234</code>, Shuddhi QA fetches the summary, description, and acceptance criteria to automatically fill your requirement flow.
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open Atlassian Account Settings</h3>
+          <p>Go directly to the API token management page:</p>
+          <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" rel="noopener" class="step-link">🔗 id.atlassian.com → Security → API tokens</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Sign in to Atlassian</h3>
+          <p>Sign in with the same account you use for Jira at work. This is typically your work email address.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create API token</h3>
+          <p>Click <strong>"Create API token"</strong> → Enter a label like <strong>"Shuddhi QA"</strong> → click <strong>"Create"</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the token</h3>
+          <p>The token is displayed once. Click <strong>"Copy"</strong> immediately.</p>
+          <div class="code-block">ATATT3xFfGF0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div class="tip-box"><span class="tip-icon">⚠️</span><span>You will not be able to view the token again. If you lose it, create a new one (the old one will be revoked).</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Find your Jira Base URL</h3>
+          <p>Your Jira Base URL is the address you use to access Jira in your browser:</p>
+          <div class="code-block">https://yourcompany.atlassian.net</div>
+          <p>Do NOT include the project path — just the base domain.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Configure in Shuddhi QA</h3>
+          <p>Open <strong>Settings → Jira</strong> tab. Fill in:</p>
+          <table class="scope-table">
+            <thead><tr><th>Field</th><th>Example value</th></tr></thead>
+            <tbody>
+              <tr><td>Jira Base URL</td><td>https://yourcompany.atlassian.net</td></tr>
+              <tr><td>Email</td><td>ramya@yourcompany.com (your Atlassian login email)</td></tr>
+              <tr><td>API Token</td><td>Paste the token you just copied</td></tr>
+            </tbody>
+          </table>
+          <p>Click <strong>"Test Connection"</strong> → should show ✅ Connected as [your name].</p>
+          <div class="tip-box"><span class="tip-icon">💡</span><span>Now you can enter any Jira ticket ID (e.g. <code style="font-family:monospace">ERP-567</code>) in the main screen and click <strong>Fetch →</strong> to auto-fill the requirement flow in seconds.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Using Shuddhi QA ══ -->
+<div class="section-label" style="margin-top:48px" id="usage">🚀 Using Shuddhi QA</div>
+
+<div class="guide-card open">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(232,162,32,.1)">🚀</div>
+    <div class="guide-title">
+      <h2>Generate Your First Test Cases</h2>
+      <p>From zero to 40+ test cases in under 60 seconds</p>
+    </div>
+    <span class="guide-badge badge-rec">Quick Start</span>
+    <span class="guide-toggle">▾</span>
+  </div>
+  <div class="guide-body">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Add your API key (one-time setup)</h3>
+          <p>Click <strong>⚙️ Settings → AI Provider → Your Personal API Keys</strong>. Paste your Groq key in the Groq row. Click <strong>🔌 Test</strong> to verify. Done — this is saved in your browser permanently.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Choose your platform</h3>
+          <p>In the left panel, click your platform: <strong>D365 F&amp;O</strong>, <strong>Salesforce</strong>, <strong>Web App</strong>, <strong>Mobile</strong>, etc. Shuddhi QA tailors the test cases to the platform you choose.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Describe the business flow</h3>
+          <p>In the right panel under <strong>"Describe the Business Flow"</strong>, type a plain-English description of the process you want to test. Example:</p>
+          <div class="code-block">Vendor submits invoice via portal. AP Clerk performs 3-way match
+(Invoice, PO, Goods Receipt). If amount > ₹50,000, Finance Manager
+approves via workflow. Payment is scheduled and GL journal is posted.</div>
+          <p>You can also upload a PDF/DOCX requirement document — Shuddhi QA reads it automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Or fetch from Jira / ADO</h3>
+          <p>If you have Jira or ADO configured, enter the ticket ID in the <strong>Jira Ticket ID</strong> or <strong>ADO Work Item ID</strong> field and click <strong>Fetch →</strong>. The description auto-fills instantly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Set output options</h3>
+          <table class="scope-table">
+            <thead><tr><th>Option</th><th>Choices</th></tr></thead>
+            <tbody>
+              <tr><td>Test Priority</td><td>High (focus on critical paths) · Medium · Low (comprehensive)</td></tr>
+              <tr><td>Output Format</td><td>End to End · Smoke · Integration · Full Suite</td></tr>
+              <tr><td>Language</td><td>English, Telugu, Hindi, Tamil, and 5 more</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Click Generate</h3>
+          <p>Click the <strong>⚡ Generate Test Cases</strong> button (or press <strong>Ctrl+Enter</strong>). Shuddhi QA generates 30–70 test cases with test steps, expected results, and priority in about 15–30 seconds.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Export or push</h3>
+          <p>Once generated, use the export buttons:</p>
+          <table class="scope-table">
+            <thead><tr><th>Button</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Excel</td><td>Downloads .xlsx with separate sheets per TC type</td></tr>
+              <tr><td>PDF</td><td>Formatted PDF document ready to share</td></tr>
+              <tr><td>Markdown</td><td>Copies to clipboard for Confluence/Notion</td></tr>
+              <tr><td>ADO button</td><td>Pushes directly to Azure DevOps Test Plan</td></tr>
+              <tr><td>More ▾</td><td>Jira Zephyr CSV, TestRail, Gherkin, Playwright, Postman</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+</div><!-- /page -->
+
+<footer>
+  <div class="footer-brand"><span>Shuddhi</span> QA · शुद्धि</div>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/app">App</a>
+    <a href="/privacy">Privacy</a>
+    <span style="font-size:12px;color:var(--text3)">© 2026 Shuddhi QA · Made in Bengaluru 🇮🇳 · v8.8</span>
+  </div>
+</footer>
+
+<script>
+// Theme
+const THEME_KEY = 'shuddhi-theme';
+function applyTheme(t, anim) {
+  document.documentElement.classList.toggle('light', t === 'light');
+  const thumb = document.getElementById('themeThumb');
+  if (thumb) { if (anim) thumb.style.transform = t === 'light' ? 'translateX(20px)' : 'translateX(0)'; thumb.textContent = t === 'light' ? '☀️' : '🌙'; }
+  localStorage.setItem(THEME_KEY, t);
+}
+function toggleTheme() { applyTheme(document.documentElement.classList.contains('light') ? 'dark' : 'light', true); }
+applyTheme(localStorage.getItem(THEME_KEY) || 'dark', false);
+
+// Card accordion
+function toggleCard(header) {
+  const card = header.closest('.guide-card');
+  card.classList.toggle('open');
+}
+
+// Scroll-in animation
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; obs.unobserve(e.target); }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.guide-card').forEach((el, i) => {
+  if (!el.classList.contains('open')) {
+    el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+    el.style.transition = `opacity .4s ${i * 0.06}s ease, transform .4s ${i * 0.06}s ease`;
+    obs.observe(el);
+  }
+});
+</script>
+</body>
+</html>

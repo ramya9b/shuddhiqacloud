@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v8.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v8.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.7 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.9 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5943,7 +5943,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v8.7</span>
+      <span class="sb-badge">v8.9</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6094,6 +6094,13 @@ header::after { display: none !important; }
         <!-- Notification list -->
         <div id="notifList" style="overflow-y:auto;flex:1;max-height:390px;padding:6px 0"></div>
       </div>
+
+      <!-- Help -->
+      <a href="/help" target="_blank" rel="noopener"
+         id="helpBtn" class="hdr-icon-btn"
+         aria-label="Setup guide and help"
+         data-tip="Setup guide — API keys, ADO PAT, Jira token, getting started"
+         style="text-decoration:none;font-size:16px">❓</a>
 
       <!-- Settings -->
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" aria-label="Settings" data-tip="Configure AI provider, ADO/Jira integration and usage tracking">⚙️</button>
@@ -6401,7 +6408,12 @@ header::after { display: none !important; }
     <div class="settings-panel" id="spanel-claude">
       <div class="settings-section">
         <div class="settings-section-title">AI Provider</div>
-        <div class="settings-section-desc">Choose which AI generates test cases. Add your own API key below or use the shared free tier.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div class="settings-section-desc">Choose which AI generates test cases. Add your own API key below to generate test cases.</div>
+          <a href="/help#groq" target="_blank" rel="noopener"
+             style="font-size:11px;color:var(--indigo);text-decoration:none;font-weight:600;padding:2px 8px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap"
+             data-tip="Step-by-step guide to get your free API key">❓ Get API key</a>
+        </div>
       </div>
 
       <!-- Provider selector pills -->
@@ -6564,17 +6576,6 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Key status row -->
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;
-               background:var(--surface2);border-radius:9px;border:1px solid var(--border)">
-            <span style="font-size:14px" id="activeKeyStatusIcon">✅</span>
-            <div style="flex:1">
-              <div style="font-size:12px;font-weight:700;color:var(--text)"
-                   id="activeKeyStatusLabel">API key configured</div>
-              <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace"
-                   id="activeEnvKey">Checking…</div>
-            </div>
-          </div>
           <!-- Action row -->
           <div style="display:flex;gap:8px">
             <button id="claudeTestBtn" data-tip="Verify your API key works before generating test cases"
@@ -6602,12 +6603,11 @@ header::after { display: none !important; }
       <details class="settings-guide">
         <summary>How to get a free API key →</summary>
         <ol class="settings-steps">
-          <li>Get your free API key from the provider link above</li>
-          <li>Add key once: Cloudflare Pages → Settings → Environment Variables</li>
-          <li>Name: <code id="guideEnvKey">GEMINI_API_KEY</code> or <code>GROQ_API_KEY</code> → paste value → Save</li>
-          <li>Redeploy on Cloudflare Pages to apply</li>
-          <li>Switch provider anytime from this Settings panel — no redeployment needed!</li>
-          <li><strong>Privacy:</strong> Only your preference choices are stored in browser localStorage (provider selection, ADO org name, assigned-to email). No API keys or secrets ever leave Cloudflare's server.</li>
+          <li><strong>Groq (free, fastest):</strong> Visit <a href="https://console.groq.com/keys" target="_blank" rel="noopener" style="color:var(--indigo)">console.groq.com/keys</a> → sign in with Google → Create API key → copy it</li>
+          <li><strong>Gemini (free):</strong> Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="color:var(--indigo)">aistudio.google.com/app/apikey</a> → Create API key → copy it</li>
+          <li><strong>Claude (paid):</strong> Visit <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener" style="color:var(--indigo)">console.anthropic.com/settings/keys</a> → Create key → copy it</li>
+          <li>Paste the key in the <strong>Your Personal API Keys</strong> section above → it saves automatically in your browser</li>
+          <li><strong>Privacy:</strong> Keys are stored only in your browser (localStorage). They are sent only to the AI provider's API — never stored on Shuddhi QA servers.</li>
         </ol>
       </details>
 
@@ -6645,7 +6645,12 @@ header::after { display: none !important; }
 
       <!-- Header -->
       <div class="settings-section">
-        <div class="settings-section-title">Azure DevOps Integration</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div class="settings-section-title">Azure DevOps Integration</div>
+          <a href="/help#ado" target="_blank" rel="noopener"
+             style="font-size:11px;color:var(--indigo);text-decoration:none;font-weight:600;padding:2px 8px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap"
+             data-tip="How to create a Personal Access Token in Azure DevOps">❓ How to create PAT</a>
+        </div>
         <div class="settings-section-desc">Enter your ADO Organisation URL and PAT to push test cases directly to ADO Test Plans. Saved in your browser — never sent to our servers.</div>
       </div>
 
@@ -6806,7 +6811,12 @@ header::after { display: none !important; }
     <!-- ── Panel: Jira ── -->
     <div class="settings-panel" id="spanel-jira" style="display:none">
       <div class="settings-section">
-        <div class="settings-section-title">Jira Integration</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div class="settings-section-title">Jira Integration</div>
+          <a href="/help#jira" target="_blank" rel="noopener"
+             style="font-size:11px;color:var(--indigo);text-decoration:none;font-weight:600;padding:2px 8px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap"
+             data-tip="How to create a Jira API token">❓ How to create token</a>
+        </div>
         <div class="settings-section-desc">Connect to Jira to auto-fetch ticket requirements (summary, description, acceptance criteria) directly into the business flow field.</div>
       </div>
 
@@ -6988,7 +6998,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v8.7</div>
+          <div class="settings-about-val" id="aboutVersion">v8.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7023,16 +7033,16 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v8.7 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v8.9 — Billing Sync</div>
         </div>
       </div>
 
-      <!-- v8.7 Changelog -->
+      <!-- v8.9 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v8.7
+          🆕 What's New in v8.9
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -8180,7 +8190,6 @@ function _updateProviderUI(provider) {
     activeProviderIcon:  meta.icon  || '',
     activeProviderName:  meta.name  || provider,
     activeProviderModel: meta.model || '',
-    activeEnvKey:        (meta.envKey || '') + (ProviderManager.hasKey(provider) ? ' · Vercel Env ✓' : ' · Not set'),
     guideEnvKey:         meta.envKey || ''
   };
   Object.keys(fields).forEach(function(id) {
@@ -8188,13 +8197,12 @@ function _updateProviderUI(provider) {
     if (el) el.textContent = fields[id];
   });
   var statusIcon  = document.getElementById('activeKeyStatusIcon');
-  var statusLabel = document.getElementById('activeKeyStatusLabel');
+  var statusLabel = null; // element removed in v8.9
   var card        = document.getElementById('activeProviderCard');
   var dot         = document.getElementById('claudeKeyDot');
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
-  if (statusIcon)  statusIcon.textContent  = hasK ? '✅' : '⚠️';
-  if (statusLabel) statusLabel.textContent = hasK ? 'API key configured' : 'Key not found — add ' + (meta.envKey||'') + ' to Vercel env vars';
+  // Key status row removed (v8.9) — users configure own keys in Personal API Keys section above
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
@@ -13829,7 +13837,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v8.7';
+  if (ver)  ver.textContent  = 'v8.9';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14844,7 +14852,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v8.7';
+  if (version)  version.textContent  = 'v8.9';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15667,7 +15675,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.7</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.9</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
