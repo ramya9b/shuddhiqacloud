@@ -96,9 +96,13 @@ export async function onRequest(context) {
     if (data._error) return respond({ budgets: [], note: data.message });
     return respond({
       budgets: (data.budgets || []).map(b => ({
-        name:     b.displayName || 'Budget',
-        amount:   b.amount?.specifiedAmount?.units ? parseFloat(b.amount.specifiedAmount.units) : null,
-        currency: b.amount?.specifiedAmount?.currencyCode || 'USD',
+        name:       b.displayName || 'Budget',
+        amount:     b.amount?.specifiedAmount?.units
+                    ? parseFloat(b.amount.specifiedAmount.units) + (b.amount.specifiedAmount.nanos || 0) / 1e9
+                    : null,
+        currency:   b.amount?.specifiedAmount?.currencyCode || 'INR',
+        thresholds: (b.thresholdRules || []).map(t => t.thresholdPercent || 0),
+        spendBasis: b.budgetFilter?.spendBasis || 'CURRENT_SPEND',
       }))
     });
   }

@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v8.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v8.9 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.1 — now with Google Cloud Billing Sync."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -5943,7 +5943,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v8.9</span>
+      <span class="sb-badge">v9.1</span>
     </div>
 
 <div class="sb-group-label">Platform &amp; Module</div>
@@ -6576,7 +6576,7 @@ header::after { display: none !important; }
         </div>
         <!-- Body -->
         <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
-          <!-- Action row — Test Connection removed (v8.9); use 🔌 Test next to personal key ↑ -->
+          <!-- Action row — Test Connection removed (v9.1); use 🔌 Test next to personal key ↑ -->
           <div style="display:flex;gap:8px">
             <button id="saveProviderBtn" data-tip="Set this as your active AI provider for all generations"
               style="width:100%;padding:10px;border-radius:9px;border:none;
@@ -6589,7 +6589,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- claudeTestResult kept in DOM for JS safety but unused since v8.9 -->
+      <!-- claudeTestResult kept in DOM for JS safety but unused since v9.1 -->
       <div id="claudeTestResult" style="display:none"></div>
 
       <!-- API key setup guide -->
@@ -6991,7 +6991,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v8.9</div>
+          <div class="settings-about-val" id="aboutVersion">v9.1</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7026,16 +7026,16 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v8.9 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.1 — Billing Sync</div>
         </div>
       </div>
 
-      <!-- v8.9 Changelog -->
+      <!-- v9.1 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v8.9
+          🆕 What's New in v9.1
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -8190,12 +8190,12 @@ function _updateProviderUI(provider) {
     if (el) el.textContent = fields[id];
   });
   var statusIcon  = document.getElementById('activeKeyStatusIcon');
-  var statusLabel = null; // element removed in v8.9
+  var statusLabel = null; // element removed in v9.1
   var card        = document.getElementById('activeProviderCard');
   var dot         = document.getElementById('claudeKeyDot');
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
-  // Key status row removed (v8.9) — users configure own keys in Personal API Keys section above
+  // Key status row removed (v9.1) — users configure own keys in Personal API Keys section above
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
@@ -13830,7 +13830,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v8.9';
+  if (ver)  ver.textContent  = 'v9.1';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -14845,7 +14845,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v8.9';
+  if (version)  version.textContent  = 'v9.1';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -15668,7 +15668,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v8.9</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.1</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -16147,7 +16147,7 @@ function checkAndTrimFlow(flow) {
       var cs = p==='groq'?'\u20b90.00 (Free)':'\u20b9'+c.toFixed(4);
       var tk = (d.input||d.output)?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
       return '<tr style="border-top:1px solid var(--border)">'
-        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'<a href="'+CONSOLE_URLS[p]+'" target="_blank" rel="noopener noreferrer" title="Open '+p+' console" style="margin-left:5px;font-size:10px;color:var(--indigo);opacity:.7;text-decoration:none" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">↗</a></td>'
+        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td>'
         +'<td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td>'
@@ -16268,8 +16268,8 @@ function checkAndTrimFlow(flow) {
           +'<td style="padding:7px 10px;font-weight:800;text-align:right;color:'+(pct>=80?bar:'var(--indigo)')+'">&#8377;'+tot.toFixed(2)+' / &#8377;'+BUDGET+'</td>'
         +'</tr></tfoot></table>'
       +'<div style="margin:8px 0 14px">'
-        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+pct+'%</span></div>'
-        +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px"><span>Budget used</span><span>'+(pct===0&&tot>0?'<1%':pct+'%')+'</span></div>'
+        +'<div style="height:6px;background:var(--border2);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+(pct===0&&tot>0?'0.5':pct)+'%;background:'+bar+';border-radius:3px;transition:width .4s"></div></div>'
         +(pct>=80?'<div style="margin-top:6px;font-size:11px;color:'+bar+';font-weight:600">&#9888;&#65039; Approaching budget. Use Groq (free) for smaller docs.</div>':'')
       +'</div>'
       +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px">📅 Daily Breakdown</div>'
@@ -18238,147 +18238,228 @@ window.copyShareLink = function() {
     // Update header label
     setText('gcpAccountLabel', acct.displayName + ' · ' + acct.id);
 
-    // Build budget rows
-    var budgetHTML = '';
-    if (budgets && budgets.length) {
-      budgets.forEach(function(b) {
-        if (b.amount) {
-          var sym = b.currency === 'INR' ? '₹' : (b.currency === 'USD' ? '$' : b.currency + ' ');
-          budgetHTML +=
-            '<tr style="border-top:1px solid var(--border)">' +
-            '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Budget Cap</td>' +
-            '<td style="padding:8px 12px;text-align:right;font-weight:700;font-size:13px;color:var(--text)">' +
-            sym + Number(b.amount).toLocaleString('en-IN') + '</td>' +
-            '</tr>';
-        }
-      });
-    }
-
-    // Build project rows — with Cost column if spending data available
-    var projHTML = '';
-    if (projects && projects.length) {
-      projects.forEach(function(p) {
-        projHTML +=
-          '<tr style="border-top:1px solid var(--border)">' +
-          '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Project</td>' +
-          '<td style="padding:8px 12px;text-align:right;font-weight:600;font-size:12px;color:var(--indigo)">' +
-          (p.projectId || '—') + '</td>' +
-          '</tr>';
-      });
-    }
-
-    // ── Cost breakdown rows — mirrors Google Cloud Console layout ──
-    // Shows all 4 values: Cost (gross), Savings, Total Cost (net), Forecasted
+    var deepLink = 'https://console.cloud.google.com/billing/' + acct.id;
+    var sym = (spending && spending.symbol) || '\u20b9';
     var month = new Date().toLocaleString('en-IN', { month: 'long', year: 'numeric' });
 
-    function fmtMoney(val, sym) {
-      if (val === null || val === undefined) return null;
-      return sym + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    var sym = (spending && spending.symbol) || '\u20b9';
-
-    // Row builder helper
-    function costRow(label, val, opts) {
+    // ── Helpers ────────────────────────────────────────────────
+    function tableRow(label, valueHTML, opts) {
       opts = opts || {};
-      var valStr = val !== null ? val : ('Not available');
-      var valColor = opts.green ? '#059669' :
-                     opts.muted ? 'var(--text3)' : 'var(--text)';
-      var bgStyle = opts.highlight ? 'background:rgba(16,185,129,.05);' : '';
-      var fontStyle = opts.bold ? 'font-weight:800;font-size:14px;font-family:monospace;' : 'font-weight:600;font-size:13px;';
-      return '<tr style="border-top:1px solid var(--border);' + bgStyle + '">' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--text3)">' + label + '</td>' +
-        '<td style="padding:8px 12px;text-align:right;' + fontStyle + 'color:' + valColor + '">' +
-        valStr + '</td></tr>';
+      var bg = opts.highlight ? 'background:rgba(16,185,129,.05);' : '';
+      return '<tr style="border-top:1px solid var(--border);' + bg + '">' +
+        '<td style="padding:8px 12px;color:var(--text3);font-size:12px">' + label + '</td>' +
+        '<td style="padding:8px 12px;text-align:right">' + valueHTML + '</td>' +
+        '</tr>';
+    }
+    function valSpan(text, color, bold, mono) {
+      return '<span style="font-weight:' + (bold ? '700' : '500') + ';' +
+             (mono ? 'font-family:monospace;' : '') +
+             'font-size:' + (bold ? '13px' : '12px') + ';color:' + color + '">' +
+             text + '</span>';
+    }
+    function fmtMoney(val) {
+      if (val === null || val === undefined) return null;
+      return sym + Number(val).toLocaleString('en-IN',
+        { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    var costHTML = '';
-    if (spending) {
-      var fCost      = fmtMoney(spending.cost,       sym);
-      var fSavings   = fmtMoney(spending.savings,    sym);
-      var fTotal     = fmtMoney(spending.totalCost,  sym);
-      var fForecasted= fmtMoney(spending.forecasted, sym);
-
-      // Cost (gross) row
-      costHTML += costRow('💰 Cost — ' + month, fCost || 'Fetching…', { muted: !fCost });
-
-      // Savings row — only show if savings data is available
-      if (fSavings !== null) {
-        var savingsZero = spending.savings === 0 || spending.savings === null;
-        costHTML += costRow(
-          '🏷️ Savings',
-          fSavings,
-          { muted: savingsZero }
-        );
-      }
-
-      // Divider row (dashed line to separate gross from net)
-      costHTML +=
-        '<tr style="border-top:1px dashed var(--border2)">' +
-        '<td colspan="2" style="padding:0"></td></tr>';
-
-      // Total Cost (net) — highlighted as this is what you actually pay
-      costHTML += costRow(
-        '✅ Total Cost',
-        fTotal || fCost || 'Fetching…',
-        { green: true, bold: true, highlight: true }
-      );
-
-      // Forecasted — only show if available
-      if (fForecasted !== null) {
-        costHTML += costRow('📈 Forecasted', fForecasted, {});
-      }
-    } else {
-      // Spending API not available — single placeholder row
-      costHTML =
-        '<tr style="border-top:1px solid var(--border)">' +
-        '<td style="padding:8px 12px;font-size:12px;color:var(--text3)">💰 Cost (This Month)</td>' +
-        '<td style="padding:8px 12px;text-align:right;font-size:11.5px;color:var(--text3)">' +
-        'Not available · <a href="https://console.cloud.google.com/billing/' + acct.id + '" ' +
-        'target="_blank" rel="noopener noreferrer" style="color:var(--indigo)">View ↗</a>' +
-        '</td></tr>';
-    }
-
+    // ── Status badge ───────────────────────────────────────────
     var statusBadge = acct.open
       ? '<span style="background:#D1FAE5;color:#065F46;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700">● ACTIVE</span>'
       : '<span style="background:#FEE2E2;color:#991B1B;border-radius:20px;padding:2px 8px;font-size:10px;font-weight:700">● CLOSED</span>';
 
-    var deepLink = 'https://console.cloud.google.com/billing/' + acct.id;
+    // ── Budget analysis ─────────────────────────────────────────
+    // Separate: tier cap (Google limit) vs user-set budget (alert)
+    var tierCap    = null;   // Google's hard tier cap
+    var userBudget = null;   // Budget the user set in Billing → Budgets & alerts
+    var userBudgetName = '';
+    var userBudgetCurrency = 'INR';
+    var userBudgetThresholds = [];
 
+    if (budgets && budgets.length) {
+      budgets.forEach(function(b) {
+        if (!b.amount) return;
+        var amt = Number(b.amount);
+        // Google tier caps are very large round numbers (e.g. ₹23,637.50 for $280)
+        // User budgets are typically smaller, rounder numbers they set themselves
+        if (amt >= 20000) {
+          // Likely a tier cap
+          tierCap = { amount: amt, currency: b.currency || 'INR', name: b.name || 'Tier Cap' };
+        } else {
+          // User-set budget alert
+          userBudget = { amount: amt, currency: b.currency || 'INR', name: b.name || 'My Budget' };
+          userBudgetName = b.name || 'My Budget';
+          userBudgetCurrency = b.currency || 'INR';
+          userBudgetThresholds = b.thresholds || [];
+        }
+      });
+
+      // If only one budget and it's large, treat as tier cap only
+      if (budgets.length === 1 && tierCap && !userBudget) {
+        // Keep as tier cap, no user budget to show
+      }
+    }
+
+    // ── Project rows ───────────────────────────────────────────
+    var projHTML = '';
+    if (projects && projects.length) {
+      projects.forEach(function(p) {
+        projHTML += tableRow('Project',
+          valSpan(p.projectId || '—', 'var(--indigo)', false, false));
+      });
+    }
+
+    // ── Tier cap row ───────────────────────────────────────────
+    var tierCapHTML = '';
+    if (tierCap) {
+      var tcSym = tierCap.currency === 'INR' ? '\u20b9' : '$';
+      tierCapHTML = tableRow('Google Tier Cap',
+        valSpan(tcSym + Number(tierCap.amount).toLocaleString('en-IN'),
+                'var(--text3)', false, false));
+    }
+
+    // ── Cost row ───────────────────────────────────────────────
+    var costHTML = '';
+    if (spending && spending.cost !== null) {
+      var fCost = fmtMoney(spending.cost);
+      var fTotal = fmtMoney(spending.totalCost);
+      costHTML += tableRow('💰 Cost — ' + month,
+        valSpan(fCost || '…', '#059669', true, true));
+      if (spending.savings !== null) {
+        costHTML += tableRow('🏷️ Savings',
+          valSpan(fmtMoney(spending.savings) || '₹0.00', 'var(--text3)', false, false));
+      }
+      costHTML += '<tr style="border-top:1px dashed var(--border2)"><td colspan="2" style="padding:0"></td></tr>';
+      costHTML += tableRow('✅ Total Cost',
+        valSpan(fTotal || fCost || '…', '#059669', true, true),
+        { highlight: true });
+      if (spending.forecasted !== null) {
+        costHTML += tableRow('📈 Forecasted',
+          valSpan(fmtMoney(spending.forecasted) || '—', 'var(--text2)', false, false));
+      }
+    } else {
+      // Spending not available — show link to Google Cloud
+      costHTML = tableRow('💰 Cost — ' + month,
+        '<span style="font-size:11.5px;color:var(--text3)">Not available · ' +
+        '<a href="' + deepLink + '" target="_blank" rel="noopener noreferrer" ' +
+        'style="color:var(--indigo);font-weight:600">View ↗</a></span>');
+    }
+
+    // ── User Budget row + progress bar ─────────────────────────
+    var userBudgetHTML = '';
+    if (userBudget) {
+      var ubSym   = userBudget.currency === 'INR' ? '\u20b9' : '$';
+      var ubAmt   = userBudget.amount;
+      var ubFmt   = ubSym + Number(ubAmt).toLocaleString('en-IN');
+      var spendVal = spending && spending.totalCost !== null ? spending.totalCost
+                   : spending && spending.cost !== null ? spending.cost
+                   : null;
+
+      // Row: Your Budget
+      userBudgetHTML +=
+        '<tr style="border-top:2px solid var(--border2);background:var(--surface2)">' +
+        '<td style="padding:8px 12px;color:var(--text3);font-size:12px;font-weight:600">📊 Your Budget</td>' +
+        '<td style="padding:8px 12px;text-align:right;font-weight:700;font-size:13px;color:var(--indigo)">' +
+        ubFmt + ' / month</td>' +
+        '</tr>';
+
+      // Progress bar
+      if (spendVal !== null) {
+        // Real data available — show accurate bar
+        var pct     = Math.min(100, Math.round((spendVal / ubAmt) * 100));
+        var barColor = pct >= 90 ? '#EF4444' : pct >= 50 ? '#F59E0B' : '#059669';
+        var pctLabel = pct === 0 && spendVal > 0 ? '<1%' : pct + '%';
+        var spentFmt = ubSym + Number(spendVal).toLocaleString('en-IN',
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        userBudgetHTML +=
+          '<tr><td colspan="2" style="padding:8px 12px 12px">' +
+          // Labels
+          '<div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:6px">' +
+          '<span style="color:var(--text3)">' + spentFmt + ' spent</span>' +
+          '<span style="color:' + barColor + ';font-weight:700">' + pctLabel + ' used</span>' +
+          '</div>' +
+          // Bar
+          '<div style="height:8px;background:var(--border2);border-radius:4px;overflow:hidden">' +
+          '<div style="height:100%;width:' + (pct === 0 && spendVal > 0 ? '0.5' : pct) + '%;' +
+          'background:' + barColor + ';border-radius:4px;transition:width .4s ease"></div>' +
+          '</div>' +
+          // Threshold markers
+          (userBudgetThresholds.length ?
+            '<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">' +
+            userBudgetThresholds.map(function(t) {
+              var tPct = Math.round(t * 100);
+              var tColor = pct >= tPct ? barColor : 'var(--text3)';
+              return '<span style="font-size:10px;color:' + tColor + ';font-weight:600">' +
+                     '\u25cf Alert at ' + tPct + '%</span>';
+            }).join('') +
+            '</div>' : '') +
+          '</td></tr>';
+      } else {
+        // No spend data — placeholder bar with link
+        userBudgetHTML +=
+          '<tr><td colspan="2" style="padding:8px 12px 12px">' +
+          '<div style="height:8px;background:var(--border2);border-radius:4px;overflow:hidden;margin-bottom:6px">' +
+          '<div style="height:100%;width:0%;background:var(--border2);border-radius:4px"></div>' +
+          '</div>' +
+          '<div style="font-size:11.5px;color:var(--text3);display:flex;align-items:center;justify-content:space-between">' +
+          '<span>\u2591\u2591\u2591\u2591\u2591 actual % in Google Cloud</span>' +
+          '<a href="' + deepLink + '" target="_blank" rel="noopener noreferrer" ' +
+          'style="color:var(--indigo);font-weight:700;font-size:11.5px;text-decoration:none">' +
+          'Check actual % \u2197</a>' +
+          '</div>' +
+          (userBudgetThresholds.length ?
+            '<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">' +
+            userBudgetThresholds.map(function(t) {
+              return '<span style="font-size:10px;color:var(--text3);font-weight:600">' +
+                     '\u25cb Alert set at ' + Math.round(t * 100) + '%</span>';
+            }).join('') +
+            '</div>' : '') +
+          '</td></tr>';
+      }
+    } else {
+      // No user budget set — subtle nudge to set one
+      userBudgetHTML =
+        '<tr style="border-top:2px solid var(--border2)">' +
+        '<td colspan="2" style="padding:8px 12px">' +
+        '<div style="font-size:11.5px;color:var(--text3);display:flex;align-items:center;justify-content:space-between">' +
+        '<span>\ud83d\udca1 No budget alert set</span>' +
+        '<a href="https://console.cloud.google.com/billing/' + acct.id + '/budgets" ' +
+        'target="_blank" rel="noopener noreferrer" ' +
+        'style="color:var(--indigo);font-weight:600;font-size:11.5px;text-decoration:none">' +
+        'Set budget \u2197</a>' +
+        '</div>' +
+        '</td></tr>';
+    }
+
+    // ── Assemble full table ─────────────────────────────────────
     var html =
       '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">' +
+      // Account
       '<tr style="background:var(--surface2)">' +
       '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Account</td>' +
       '<td style="padding:8px 12px;text-align:right;font-weight:700;color:var(--text)">' + acct.displayName + '</td>' +
       '</tr>' +
-      '<tr style="border-top:1px solid var(--border)">' +
-      '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Account ID</td>' +
-      '<td style="padding:8px 12px;text-align:right;font-family:monospace;font-size:11.5px;color:var(--text2)">' + acct.id + '</td>' +
-      '</tr>' +
-      '<tr style="border-top:1px solid var(--border)">' +
-      '<td style="padding:8px 12px;color:var(--text3);font-size:12px">Status</td>' +
-      '<td style="padding:8px 12px;text-align:right">' + statusBadge + '</td>' +
-      '</tr>' +
-      budgetHTML +
+      // Account ID
+      tableRow('Account ID', valSpan(acct.id, 'var(--text2)', false, true)) +
+      // Status
+      tableRow('Status', statusBadge) +
+      // Project
       projHTML +
+      // Google tier cap
+      tierCapHTML +
+      // Cost rows
       costHTML +
+      // User budget + bar
+      userBudgetHTML +
       '</table>' +
-      // Subtle note about balance/transactions — only if spending is unavailable
-      (!spending ?
-        '<div style="padding:7px 12px;border-radius:8px;margin-bottom:10px;font-size:11px;color:var(--text3);' +
-        'background:var(--surface2);border:1px solid var(--border)">'
-        + '⚠️ Spending data unavailable via billing API for this account. '
-        + '<a href="https://console.cloud.google.com/billing" target="_blank" rel="noopener noreferrer" '
-        + 'style="color:var(--indigo);font-weight:600">View in Google Cloud ↗</a>' +
-        '</div>'
-      : '') +
       // Deep link CTA
       '<a href="' + deepLink + '" target="_blank" rel="noopener noreferrer" ' +
       'style="display:flex;align-items:center;justify-content:center;gap:8px;' +
       'padding:9px 16px;border-radius:10px;background:var(--surface);' +
       'border:1.5px solid var(--border2);color:var(--indigo);font-size:12.5px;font-weight:700;' +
       'text-decoration:none;transition:background .15s">' +
-      '💳 View Full Billing in Google Cloud ↗' +
+      '\ud83d\udcb3 View Full Billing in Google Cloud \u2197' +
       '</a>';
 
     setHTML('gcpBillingData', html);
@@ -18398,6 +18479,7 @@ window.copyShareLink = function() {
       setHTML('gcpBillingData', sel + html);
     }
   }
+
 
   // ── Load billing data after token obtained ─────────────────────
   async function loadBillingData() {
