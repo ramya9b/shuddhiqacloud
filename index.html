@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Shuddhi QA v9.7 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="Generate production-ready QA test cases for Microsoft Dynamics 365, Salesforce, Web Apps and Mobile in seconds. Export to Excel, PDF, Azure DevOps or Jira Zephyr. Now with live Google Cloud Billing sync. Built in Bengaluru 🇮🇳"/>
 <meta name="keywords" content="QA test cases, D365 testing, Salesforce QA, Azure DevOps, Jira Zephyr, test automation, Shuddhi QA, ERP testing, Claude AI, Google Cloud Billing"/>
 <meta name="author" content="Shuddhi QA — Made in Bengaluru"/>
@@ -643,6 +643,50 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   /* Light mode btn-primary fix */
   html.light .btn-primary { color: #FFFFFF !important; }
   html.light .nav-cta     { color: #FFFFFF !important; }
+
+/* ── FAQ Section ──────────────────────────────────────────── */
+.faq { padding: 100px 0; background: var(--bg); }
+.faq-grid { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+.faq-item {
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-q {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; gap: 16px; text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+.faq-q-text {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  line-height: 1.5; flex: 1;
+}
+.faq-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface2); border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--saffron); flex-shrink: 0;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .2s;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(232,162,32,.1); }
+.faq-a {
+  font-size: 14px; color: var(--text2); line-height: 1.75;
+  padding: 0 0 20px; display: none;
+  max-width: 680px;
+}
+.faq-item.open .faq-a { display: block; }
+.faq-a a { color: var(--indigo); text-decoration: none; font-weight: 600; }
+.faq-a a:hover { text-decoration: underline; }
+.faq-a code {
+  background: var(--surface2); padding: 1px 6px;
+  border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; color: var(--teal);
+}
+@media(max-width:640px) {
+  .faq { padding: 60px 0; }
+  .faq-q-text { font-size: 14px; }
+}
 </style>
 
 <script type="application/ld+json">
@@ -689,6 +733,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="#platforms">Platforms</a>
     <a href="#how">How it works</a>
     <a href="#security">Security</a>
+    <a href="#faq">FAQ</a>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button id="themeToggle" onclick="toggleTheme()"
@@ -725,7 +770,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by Claude Sonnet 4.6 · v9.7 · Google Cloud Billing · Zero Warning
+      Powered by Claude Sonnet 4.6 · v9.8 · Google Cloud Billing · Zero Warning
     </div>
 
     <h1 class="hero-title">
@@ -886,7 +931,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div class="feat-icon">💳</div>
         <div class="feat-title">Google Cloud Billing Sync</div>
         <div class="feat-desc">Connect your Google account with one tap to see live Gemini billing account details — account name, status, linked project, and budget caps — directly inside Shuddhi QA.</div>
-        <div class="feat-tags"><span class="feat-tag">Google OAuth</span><span class="feat-tag">Live Sync</span><span class="feat-tag">New in v9.7</span></div>
+        <div class="feat-tags"><span class="feat-tag">Google OAuth</span><span class="feat-tag">Live Sync</span><span class="feat-tag">New in v9.8</span></div>
       </div>
 
     </div>
@@ -1158,6 +1203,152 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   </div>
 </section>
 
+
+<!-- ── FAQ ──────────────────────────────────────────────────── -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-eye">FAQ</div>
+    <h2 class="section-title" style="text-align:center;margin-bottom:12px">Frequently asked questions</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto 56px">Everything you need to know before getting started.</p>
+
+    <div class="faq-grid">
+
+      <!-- Q1 -->
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="true">
+          <span class="faq-q-text">Is Shuddhi QA completely free to use?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. Shuddhi QA is free forever. It uses your own AI provider API key — <strong>Groq is 100% free</strong> (no credit card, no limits for normal use). Gemini has a generous free tier. Claude is paid (~₹9/generation) but optional. The app itself charges nothing.
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Which API key should I get first?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Start with <strong>Groq</strong> — it takes 30 seconds, requires no credit card, and is completely free. Go to <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> → sign in with Google → Create API Key → copy it → paste in Settings → AI Provider. Done. See the full <a href="/help#groq" target="_blank">setup guide</a>.
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Is my API key safe? Does Shuddhi QA store it?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Your API key is stored <strong>only in your browser's localStorage</strong> — never on our servers. It is sent directly to the AI provider (Groq, Gemini, or Claude) with each request and never logged, stored, or visible to anyone else. You can clear it anytime from Settings → AI Provider → Clear all saved keys.
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Why does Google show an "unverified app" warning when connecting billing?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Google shows this warning for apps requesting billing access that are awaiting their verification review. Shuddhi QA has submitted for verification — the review takes 4–6 weeks. The warning is cosmetic only — the app safely reads <strong>only your billing account name, status, and budget</strong> using <code>cloud-billing.readonly</code> scope. No data is modified. You can safely click "Continue" or skip billing sync entirely — it is optional.
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">How many test cases does it generate?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Typically <strong>40–70 test cases per generation</strong> depending on the complexity of your flow, the platform selected, and the output format chosen. End-to-End format generates 10–20 focused E2E scenarios. Full Suite generates all 8 sections — E2E, Field Validation, Integration, Negative, and more — totalling 50–70 test cases.
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Can it push test cases directly to Azure DevOps?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. Configure your ADO PAT (Personal Access Token) in Settings → Azure DevOps. After generating, click the ADO button → select your project, test plan, and suite → Push. Test cases are created in ADO with full step XML — Title, Step Action, Expected Result, Assigned To, and State. See <a href="/help#ado" target="_blank">how to create a PAT</a>.
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Which platforms and ERP systems are supported?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Shuddhi QA supports <strong>D365 Finance &amp; Ops, D365 CRM/CE, D365 Business Central, Salesforce Sales Cloud, Salesforce Service Cloud, Salesforce CPQ, General Web App, and Mobile Application</strong>. Each platform has a tailored AI prompt — D365 tests use ERP-specific language and module context, Salesforce tests use CRM-specific field names and flows.
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Can I fetch requirements from Jira or ADO automatically?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Yes. Enter your Jira ticket ID (e.g. <code>PROJ-1234</code>) in the Jira field and click Fetch → — the summary, description, and acceptance criteria auto-fill the Business Flow field instantly. Same for Azure DevOps — enter a Work Item ID (e.g. <code>1234</code>) and click Fetch →. Configure credentials in Settings → Jira or Azure DevOps tabs. See the <a href="/help" target="_blank">setup guide</a>.
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Is my requirement document or business flow stored anywhere?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          No. Your uploaded documents and flow descriptions are sent directly to your AI provider (Groq, Gemini, or Claude) and are subject to their privacy policies. Shuddhi QA does not store, log, or retain your requirement documents on any server. Generated test cases are saved only in your browser's localStorage (last 20 sessions).
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">What is Groq and why is it recommended?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Groq is an AI inference platform that runs Llama 3.3 70B — one of the fastest AI models in the world. For Shuddhi QA, Groq is recommended because it is <strong>completely free</strong> (30 requests/minute, 14,400/day), requires no credit card, and delivers test cases in 10–20 seconds. Sign up at <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com</a> in 30 seconds using your Google account.
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">What languages are supported for output?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Test cases can be generated in <strong>9 languages</strong>: English (default), Telugu, Hindi, Tamil, Kannada, Bengali, Arabic, German, and French. Upload your FRD in any language — Shuddhi QA auto-detects the input language and generates output in your selected language. Tier 1 languages (Telugu, Hindi, Tamil) have full translation support.
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">What export formats are available?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Shuddhi QA supports <strong>9 export formats</strong>: Excel (.xlsx with separate sheets per TC type), PDF (formatted A4 landscape), Markdown (copy to clipboard), ADO Test Plan push, Jira Zephyr CSV, TestRail CSV, Gherkin (.feature file), Playwright TypeScript, and Postman collection. Access all formats via the export buttons and the More ▾ dropdown after generation.
+        </div>
+      </div>
+
+    </div><!-- /faq-grid -->
+  </div>
+</section>
+
 <!-- ── FOOTER ────────────────────────────────────────────── -->
 </main>
 <footer>
@@ -1167,7 +1358,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="https://github.com/ramya-sv/shuddhi-qa" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">⭐ GitHub</a>
     <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
     <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
-    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v9.7</span>
+    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v9.8</span>
   </div>
 </footer>
 
@@ -1235,6 +1426,16 @@ function openMobileDrawer() {
   document.getElementById('navHamburger').setAttribute('aria-expanded','true');
   document.body.style.overflow = 'hidden';
 }
+function toggleFaq(btn) {
+    var item = btn.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(el) {
+      el.classList.remove('open');
+      el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+  }
+
 function closeMobileDrawer() {
   document.getElementById('mobileOverlay').classList.remove('open');
   document.getElementById('mobileDrawer').classList.remove('open');
@@ -1258,6 +1459,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeMobileDraw
       <a href="#platforms" class="mobile-drawer-link" onclick="closeMobileDrawer()">🧩 Platforms</a>
       <a href="#how"       class="mobile-drawer-link" onclick="closeMobileDrawer()">⚡ How it Works</a>
       <a href="#security"  class="mobile-drawer-link" onclick="closeMobileDrawer()">🔒 Security</a>
+          <a href="#faq" class="mobile-drawer-link" onclick="closeMobileDrawer()">❓ FAQ</a>
     </div>
     <a href="/app" class="mobile-drawer-cta" onclick="closeMobileDrawer()">Get Started →</a>
   </div>
