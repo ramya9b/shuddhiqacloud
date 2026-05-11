@@ -443,7 +443,7 @@ export async function onRequest(context) {
           return new Response(JSON.stringify({
             error: isUserKey
               ? 'Your Gemini API key is invalid. Remove it in Settings → Use Your Own Key and get a fresh key from aistudio.google.com.'
-              : 'Gemini API key invalid or expired — check GEMINI_API_KEY in Cloudflare Pages → Settings → Environment Variables.',
+              : 'Gemini API key invalid or expired — please verify your key at aistudio.google.com/apikey and try again.',
             switchProvider: true,
             provider: 'gemini',
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -581,7 +581,7 @@ export async function onRequest(context) {
           provider
         }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 401) msg = `${provider} API key invalid or expired — check ${provider.toUpperCase()}_API_KEY in Vercel.`;
+      if (response.status === 401) msg = `${provider} API key invalid or expired — please verify your key at the provider's console and try again.`;
       if (response.status === 404) {
         // Non-Gemini 404 (Gemini handled above in model chain)
         msg = `${provider} endpoint not found (404). Check model name and API version.`;

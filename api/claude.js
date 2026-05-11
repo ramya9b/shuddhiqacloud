@@ -471,7 +471,7 @@ export default async function handler(req) {
           provider
         }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 401) msg = `${provider} API key invalid or expired — check ${provider.toUpperCase()}_API_KEY in Vercel.`;
+      if (response.status === 401) msg = `${provider} API key invalid or expired — please verify your key at the provider's console and try again.`;
       if (response.status === 404) {
         // Non-Gemini 404 (Gemini handled above in model chain)
         msg = `${provider} endpoint not found (404). Check model name and API version.`;
