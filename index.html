@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Shuddhi QA v9.18 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.19 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="Generate production-ready QA test cases for Microsoft Dynamics 365, Salesforce, Web Apps and Mobile in seconds. Export to Excel, PDF, Azure DevOps or Jira Zephyr. Now with live Google Cloud Billing sync. Built in Bengaluru 🇮🇳"/>
 <meta name="keywords" content="QA test cases, D365 testing, Salesforce QA, Azure DevOps, Jira Zephyr, test automation, Shuddhi QA, ERP testing, Claude AI, Google Cloud Billing"/>
 <meta name="author" content="Shuddhi QA — Made in Bengaluru"/>
@@ -748,6 +748,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="#how">How it works</a>
     <a href="#security">Security</a>
     <a href="#faq">FAQ</a>
+    <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button id="themeToggle" onclick="toggleTheme()"
@@ -784,7 +785,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by Claude · Gemini · Groq · v9.18 · Free to Start
+      Powered by Claude · Gemini · Groq · v9.19 · Free to Start
     </div>
 
     <h1 class="hero-title">
@@ -1381,7 +1382,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">⭐ GitHub</a>
     <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
     <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
-    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v9.18</span>
+    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v9.19</span>
   </div>
 </footer>
 
@@ -1411,18 +1412,35 @@ const thumb     = document.getElementById('themeThumb');
 const html_el   = document.documentElement;
 
 function applyTheme(theme, animate = false) {
+  // v9.19 Bug #2 fix: always set thumb position, regardless of animate flag
+  // On page load (animate=false), we want the thumb to snap to the correct
+  // position immediately without a transition. On click (animate=true), the
+  // CSS transition handles the smooth slide.
+  if (!animate) {
+    thumb.style.transition = 'none';
+  } else {
+    thumb.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), background .3s';
+  }
   if (theme === 'light') {
     html_el.classList.add('light');
-    if (animate) thumb.style.transform = 'translateX(20px)';
+    thumb.style.transform = 'translateX(20px)';
     thumb.textContent = '☀️';
     toggle.style.background = 'var(--surface2)';
     localStorage.setItem(THEME_KEY, 'light');
   } else {
     html_el.classList.remove('light');
-    if (animate) thumb.style.transform = 'translateX(0)';
+    thumb.style.transform = 'translateX(0)';
     thumb.textContent = '🌙';
     toggle.style.background = 'var(--surface2)';
     localStorage.setItem(THEME_KEY, 'dark');
+  }
+  // Restore transition after the snap (so next click animates)
+  if (!animate) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        thumb.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), background .3s';
+      });
+    });
   }
 }
 
