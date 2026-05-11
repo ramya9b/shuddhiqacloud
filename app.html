@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.21 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.23 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.21 — now with Google Cloud Billing Sync."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.23 — Domain Intelligence + Multi-language Fix."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -1898,6 +1898,116 @@ if (typeof marked !== 'undefined') {
   .module-chip:hover { border-color: var(--d365); color: var(--text); }
   .module-chip.selected { border-color: var(--d365); background: rgba(0,120,212,.08); color: var(--d365); font-weight: 600; }
   .module-chip.hidden { display: none; }
+
+  /* ── Domain Intelligence — v9.22 ─────────────────────────── */
+  .sb-domain-section {
+    margin-top: 4px;
+    padding: 0 2px;
+  }
+  .sb-domain-hint {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 2px 8px;
+    letter-spacing: 0.3px;
+  }
+  .domain-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text2);
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    white-space: nowrap;
+  }
+  .domain-chip:hover {
+    border-color: var(--warning);
+    color: var(--text);
+    background: rgba(245,158,11,0.07);
+  }
+  .domain-chip.selected {
+    border-color: var(--warning);
+    background: rgba(245,158,11,0.1);
+    color: #92400E;
+    font-weight: 600;
+  }
+  [data-theme="dark"] .domain-chip.selected {
+    color: #FCD34D;
+    background: rgba(245,158,11,0.15);
+    border-color: rgba(245,158,11,0.5);
+  }
+  .domain-context-card {
+    display: none;
+    background: var(--surface);
+    border: 1.5px solid rgba(245,158,11,0.3);
+    border-left: 3px solid var(--warning);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    margin-top: 8px;
+    animation: fadeSlideIn 0.2s ease;
+  }
+  .domain-context-card.visible { display: block; }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .dcc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .dcc-title {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #B45309;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  [data-theme="dark"] .dcc-title { color: #FCD34D; }
+  .dcc-clear {
+    font-size: 11px;
+    color: var(--text3);
+    cursor: pointer;
+    padding: 1px 6px;
+    border-radius: 5px;
+    transition: color 0.15s;
+  }
+  .dcc-clear:hover { color: var(--error); }
+  .dcc-items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .dcc-item {
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.55;
+  }
+  .dcc-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--warning);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .meta-item-domain {
+    display: none;
+  }
+  /* ── End Domain Intelligence styles ───────────────────────── */
 
   /* Module scroll area */
   #moduleGrid::-webkit-scrollbar { width: 4px; }
@@ -5946,9 +6056,14 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.21</span>
+      <span class="sb-badge">v9.23</span>
     </div>
 
+<div class="sb-group-label">Industry Domain</div>
+    <div class="sb-domain-section" id="sbDomainSection">
+      <div class="sb-domain-hint" id="sbDomainHint">Choose your industry for domain-aware test cases</div>
+      <div id="domainGrid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;padding:2px"></div>
+    </div>
 <div class="sb-group-label">Platform &amp; Module</div>
     <!-- Platform cards + Module chips live inside sidebar -->
     <div class="sb-platform-section" id="sbPlatformSection">
@@ -6994,7 +7109,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.21</div>
+          <div class="settings-about-val" id="aboutVersion">v9.23</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7029,7 +7144,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.21 — Billing Sync</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.23 — Domain Intelligence + Language Fix</div>
         </div>
       </div>
 
@@ -7038,7 +7153,16 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.21
+          🆕 What's New in v9.23
+        </div>
+        <!-- v9.23 changelog -->
+        <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.23 — Domain Intelligence + Language Fix</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8">
+            <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
+            <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
+            <div>🔔 <strong>Notification renderer fix</strong> — resolved pre-existing JS syntax error in notification panel hover styles</div>
+          </div>
         </div>
         <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
           <div style="margin-bottom:4px">💳 <strong>Google Billing Live Sync</strong> — No verification warning. Uses safe <code>cloud-billing.readonly</code> scope only.</div>
@@ -7238,6 +7362,17 @@ header::after { display: none !important; }
           <label>Business Flow Description</label>
           <textarea id="flowDesc" oninput="updateFlowCharCount(this)" placeholder="Describe the business process in plain English...&#10;&#10;e.g. Vendor submits invoice via portal. AP Clerk reviews and matches to PO. Finance Manager approves if amount > ₹50,000. Payment is processed and vendor is notified."></textarea>
         </div>
+
+        <!-- ── Domain Context Card — v9.22 ─────────────────── -->
+        <div class="domain-context-card" id="domainContextCard">
+          <div class="dcc-head">
+            <div class="dcc-title">🧠 Shuddhi knows about this domain</div>
+            <span class="dcc-clear" onclick="clearDomain()" title="Clear domain selection">✕ Clear</span>
+          </div>
+          <div class="dcc-items" id="dccItems"></div>
+        </div>
+        <!-- ── End Domain Context Card ──────────────────────── -->
+
           <!-- Advanced toggle -->
         <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
           <span class="adv-icon">▼</span>
@@ -7631,6 +7766,9 @@ header::after { display: none !important; }
         <div class="meta-item">📁 <strong id="metaModule">-</strong></div>
         <div class="meta-item">🧪 <strong id="tcCount" style="color:var(--d365)">-</strong> TCs</div>
         <div class="meta-item">🌐 <strong id="metaLang">-</strong></div>
+        <div class="meta-item meta-item-domain" id="metaDomainWrap" style="display:none">
+          🏢 <strong id="metaDomain" style="color:var(--warning)">-</strong>
+        </div>
         <div class="meta-item" id="metaProviderWrap" style="display:none">
           🤖 <strong id="metaProvider" style="color:var(--indigo)">-</strong>
           <span id="metaKeyBadge" style="display:none;font-size:10px;padding:1px 6px;
@@ -9986,7 +10124,9 @@ async function generate() {
   const isWebOrMobile = ['Web App','Mobile App'].includes(platform);
 
   const outputLang = document.getElementById('outputLanguage')?.value || 'English';
-  const systemPrompt = isWebOrMobile
+  // ── v9.22 Domain Intelligence injection ─────────────────────
+  const _domainBlock = getDomainContextBlock();
+  const systemPrompt_base = isWebOrMobile
     ? `▶ OUTPUT FORMAT CONTRACT — READ FIRST, FOLLOW EXACTLY:
 Every test case MUST be a 5-column Markdown pipe table with this EXACT header:
 | Title | Step Action | Step Expected Result | Assigned To | State |
@@ -9998,8 +10138,9 @@ Minimum 10 step rows per test case. Do not deviate from this schema for any reas
 You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
 
 CRITICAL LANGUAGE RULE:
-- If outputLang is 'English': generate everything in English (default behaviour).
-- If outputLang is 'Deutsch', 'Español', 'Français', or 'Português (BR)': translate ALL output fully into that language — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
+- SELECTED OUTPUT LANGUAGE: ${outputLang}
+- If SELECTED OUTPUT LANGUAGE is 'English': generate everything in English (default behaviour).
+- If SELECTED OUTPUT LANGUAGE is not 'English' (e.g. 'Deutsch', 'Español', 'Français', 'Português (BR)'): translate ALL output fully into the SELECTED OUTPUT LANGUAGE — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -10291,8 +10432,9 @@ PLATFORM-SPECIFIC EXPERTISE:
 - Power BI: Map every report column to its D365/ERP source table and field name. Include cross-system verification steps.
 
 CRITICAL LANGUAGE RULE:
-- If outputLang is 'English': generate everything in English (default behaviour).
-- If outputLang is 'Deutsch', 'Español', 'Français', or 'Português (BR)': translate ALL output fully into that language — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
+- SELECTED OUTPUT LANGUAGE: ${outputLang}
+- If SELECTED OUTPUT LANGUAGE is 'English': generate everything in English (default behaviour).
+- If SELECTED OUTPUT LANGUAGE is not 'English' (e.g. 'Deutsch', 'Español', 'Français', 'Português (BR)'): translate ALL output fully into the SELECTED OUTPUT LANGUAGE — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ═══════════════════════════════════════
 STEP WRITING RULES — MODELLED ON REAL PRODUCTION TEST CASES
@@ -10858,7 +11000,8 @@ Generate a QA test artifact for the following business process:
 **Priority:** ${priority}
 **User Roles:** ${roles || 'Not specified'}
 **Integrations/Systems:** ${integrations || 'Not specified'}
-**Document Language:** ${detectedLanguage} &#8212; IMPORTANT: Generate ALL test cases in English only, even though the source document may be in ${detectedLanguage}.
+**Document Language (source):** ${detectedLanguage}
+**Output Language:** ${outputLang}${outputLang !== 'English' ? ' — MANDATORY: Generate ALL output fully in ' + outputLang + '. Every section heading, test case title, step action, expected result, and table MUST be in ' + outputLang + '.' : ''}
 
 ${window.__uploadedImageBase64
   ? `**Source:** Screenshot / UI mockup (vision image attached — analyse the UI depicted to identify all test scenarios)\n${flow ? '**Additional context:** ' + flow : ''}`
@@ -10872,7 +11015,7 @@ ${extractedDocText.substring(0, 6000)}${extractedDocText.length > 6000 ? '\n\n[D
 
 ${formatInstructions[outputFormat]}
 
-Make the output production-ready and specific to ${platform}. Use real field names and navigation paths where applicable. ALL output must be in English regardless of the source language.`;
+Make the output production-ready and specific to ${platform}. Use real field names and navigation paths where applicable. ${outputLang === 'English' ? 'ALL output must be in English.' : 'ALL output MUST be fully in ' + outputLang + '. Do NOT output anything in English.'}`;
 
   try {
     activeAbortController = new AbortController();
@@ -10932,6 +11075,11 @@ Make the output production-ready and specific to ${platform}. Use real field nam
 
     const _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
 
+    // ── v9.22 Domain Intelligence: append domain context to systemPrompt ──
+    const finalSystemPrompt = _domainBlock
+      ? systemPrompt_base + '\n\n' + _domainBlock
+      : systemPrompt_base;
+
     const requestBody = {
       ...(apiKey       ? { apiKey }                          : {}),  // legacy Claude-only key
       ...(_uk.claude   ? { apiKey: _uk.claude }              : {}),  // user Claude key
@@ -10940,7 +11088,7 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       model:    'claude-sonnet-4-6',   // proxy maps to correct model per provider
       max_tokens: _maxTokens,
       stream:   true,
-      system:   systemPrompt,
+      system:   finalSystemPrompt,
       messages: _messages,
     };
 
@@ -11567,7 +11715,18 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  document.getElementById('metaLang').textContent = `${detectedLanguage} \u2192 EN`;
+  document.getElementById('metaLang').textContent = outputLang === 'English' ? `${detectedLanguage} \u2192 EN` : `\u2192 ${outputLang}`;
+  // v9.22 domain badge in meta-bar
+  (function() {
+    var _mDw = document.getElementById('metaDomainWrap');
+    var _mD  = document.getElementById('metaDomain');
+    if (window.selectedDomain && typeof DOMAIN_DATA !== 'undefined' && DOMAIN_DATA[window.selectedDomain]) {
+      if (_mD)  _mD.textContent = DOMAIN_DATA[window.selectedDomain].label;
+      if (_mDw) _mDw.style.display = '';
+    } else {
+      if (_mDw) _mDw.style.display = 'none';
+    }
+  })();
   document.getElementById('tokenBadge').textContent = '✓ Complete';
 
   try {
@@ -19330,8 +19489,8 @@ window.copyShareLink = function() {
         'border-bottom:1px solid var(--border);' +
         'background:' + (n.read ? 'transparent' : cat.bg) + ';' +
         'transition:background .2s;cursor:default"' +
-        'onmouseover="this.style.background='var(--surface2)'"' +
-        'onmouseout="this.style.background='' + (n.read ? 'transparent' : cat.bg) + ''">' +
+        `onmouseover="this.style.background='var(--surface2)'"` +
+        `onmouseout="this.style.background='${n.read ? 'transparent' : cat.bg}'"` + `>` +
 
         // Colour dot
         '<div style="flex-shrink:0;margin-top:4px">' +
@@ -19346,7 +19505,7 @@ window.copyShareLink = function() {
         'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px" title="' + n.msg + '">' +
         n.msg.substring(0, 55) + (n.msg.length > 55 ? '…' : '') + '</span>' +
         '</div>' +
-        '<div style="font-size:10.5px;color:var(--text3);font-family:'JetBrains Mono',monospace">' +
+        '<div style="font-size:10.5px;color:var(--text3);font-family:JetBrains Mono,monospace">' +
         time + '</div>' +
         '</div>' +
 
@@ -19598,5 +19757,329 @@ window.copyShareLink = function() {
 
 })();
 </script>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// DOMAIN INTELLIGENCE — v9.22
+// Safe additive feature — does not modify any existing function.
+// Injects domain context into systemPrompt as an appendix block.
+// ══════════════════════════════════════════════════════════════
+
+window.selectedDomain = '';
+
+const DOMAIN_DATA = {
+  insurance: {
+    label: '🛡️ Insurance',
+    sub: 'Claims · Policy · UW',
+    points: [
+      '<strong>Business flow:</strong> FNOL → Investigation → Adjudication → Settlement → Closure',
+      '<strong>Regulation:</strong> IRDAI — health claims settled within 15 days, life claims within 30 days',
+      '<strong>Risk areas:</strong> duplicate claims, post-lapse submissions, fraud indicators, SLA breach',
+      '<strong>Edge cases:</strong> coverage exclusion, third-party liability, policy endorsement conflicts, reinsurance threshold breach'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: INSURANCE
+══════════════════════════════════════════════════
+Apply deep insurance domain knowledge to every test case generated:
+
+BUSINESS RULES TO TEST:
+- Claims lifecycle: FNOL → Investigation → Adjudication → Settlement → Closure
+- Policy validation: coverage dates, exclusions, endorsements, waiting periods
+- Fraud indicators: duplicate claims, late reporting patterns, inflated amounts, inconsistent details
+- Regulatory compliance: IRDAI (India) — health claims ≤15 days, life claims ≤30 days settlement
+- Premium calculation: base premium + riders + discounts + tax (GST 18%)
+- Policy lapse: validate claims use incident date NOT submission date for policy active check
+
+MANDATORY RISK TAGS — add to every test case title:
+- Financial Loss Risk | Fraud Detection | IRDAI Compliance | SLA Breach | Data Integrity
+
+INSURANCE-SPECIFIC EDGE CASES TO ALWAYS INCLUDE:
+- Duplicate claim for same incident date and policy number
+- Claim submitted after policy lapse date
+- Claim amount exceeds policy sum insured
+- Claim with excluded condition (e.g. pre-existing disease within waiting period)
+- SLA warning trigger at Day 14 for health claims (1 day before IRDAI limit)
+- Renewal lapse — policy expires during active claim
+
+DOMAIN TERMINOLOGY TO USE IN TEST STEPS:
+- Sum Insured, Policy Number, Insured Member, Incident Date, Intimation Date
+- Claim Status: Submitted / Under Investigation / Approved / Repudiated / Settled
+- TPA (Third Party Administrator), Cashless vs Reimbursement, Co-payment`
+  },
+
+  banking: {
+    label: '🏦 Banking & Finance',
+    sub: 'Payments · KYC · Lending',
+    points: [
+      '<strong>Business flow:</strong> Account Opening → KYC → Transaction → Reconciliation → Reporting',
+      '<strong>Regulation:</strong> RBI guidelines — KYC/AML mandatory, transaction limits enforced',
+      '<strong>Risk areas:</strong> transaction limits, duplicate payments, KYC expiry, AML flags',
+      '<strong>Edge cases:</strong> dormant account, IMPS/NEFT cut-off times, CIBIL score impact, forex conversion'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: BANKING & FINANCE
+══════════════════════════════════════════════════
+Apply deep banking and financial services domain knowledge:
+
+BUSINESS RULES TO TEST:
+- KYC validation: PAN, Aadhaar, address proof mandatory before account activation
+- Transaction limits: IMPS ₹5L/day, NEFT no limit, UPI ₹1L/transaction
+- AML flags: cash transactions >₹10L trigger CTR (Currency Transaction Report)
+- Dormant account: no transaction for 2 years — restricted operations
+- CIBIL score: must be ≥700 for loan approval; <600 = auto-reject
+- Loan EMI: EMI/Income ratio ≤50% — validation required
+
+MANDATORY RISK TAGS — add to every test case title:
+- Regulatory Compliance | AML/KYC | Transaction Limit | Data Integrity | Financial Loss
+
+BANKING-SPECIFIC EDGE CASES TO ALWAYS INCLUDE:
+- Transaction exactly at daily limit (boundary: ₹5,00,000 for IMPS)
+- KYC expired customer attempts transaction
+- Duplicate payment for same beneficiary, amount, and date
+- Cash deposit >₹10L — verify CTR generation
+- Loan application with CIBIL score at boundary (700, 699)
+- Dormant account reactivation with KYC re-verification
+
+DOMAIN TERMINOLOGY:
+- IFSC Code, MICR, CRN, Account Number, CIBIL Score, LTV, EMI, NPA
+- Transaction Types: NEFT, RTGS, IMPS, UPI, SWIFT
+- KYC Status: Pending / Verified / Expired / Rejected`
+  },
+
+  hr: {
+    label: '👥 HR & Payroll',
+    sub: 'Leave · Payroll · Performance',
+    points: [
+      '<strong>Business flow:</strong> Onboarding → Attendance → Leave → Payroll Processing → Disbursement',
+      '<strong>Regulation:</strong> Labour laws — PF (12%), ESI (0.75%), Gratuity (4.81%) mandatory',
+      '<strong>Risk areas:</strong> payroll miscalculation, leave encashment errors, statutory non-compliance',
+      '<strong>Edge cases:</strong> month-end payroll run, negative salary, probation period leave limits, arrears'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: HR & PAYROLL
+══════════════════════════════════════════════════
+Apply deep HR and payroll domain knowledge:
+
+BUSINESS RULES TO TEST:
+- PF contribution: Employee 12% of basic, Employer 12% (split: 8.33% EPS + 3.67% EPF)
+- ESI applicability: salary ≤₹21,000/month — employee 0.75%, employer 3.25%
+- Gratuity: 4.81% of basic salary, payable after 5 years continuous service
+- Leave types: CL (Casual Leave), PL (Privilege Leave), SL (Sick Leave), ML (Maternity Leave 26 weeks)
+- Payroll cut-off: attendance data locked by 25th, payroll processed by 28th
+- Tax deduction: TDS per income slab + surcharge, Form 16 by June 15
+
+MANDATORY RISK TAGS — add to every test case title:
+- Statutory Compliance | Payroll Accuracy | Data Integrity | Leave Policy | Audit Trail
+
+HR-SPECIFIC EDGE CASES TO ALWAYS INCLUDE:
+- Payroll run when employee on Loss of Pay (LOP) — verify salary deduction
+- Leave application exceeding balance — verify rejection with exact balance display
+- Employee joining mid-month — pro-rated salary calculation
+- Statutory bonus eligibility at 8.33% of salary for employees <₹21,000
+- F&F settlement calculation on last working day
+- PF calculation when basic salary changes mid-month
+
+DOMAIN TERMINOLOGY:
+- CTC, Basic, HRA, LOP, PF, ESI, TDS, Gratuity, F&F, Arrears, Incentive, Increment
+- Leave Status: Applied / Approved / Rejected / Cancelled / Lapsed
+- Payroll Status: Draft / Locked / Processed / Disbursed / Reversed`
+  },
+
+  erp: {
+    label: '📦 ERP / Supply Chain',
+    sub: 'D365 · SAP · Procurement',
+    points: [
+      '<strong>Business flow:</strong> PR → PO → GRN → Invoice → Payment → Reconciliation',
+      '<strong>Platforms:</strong> D365 F&O, SAP S/4HANA, Oracle ERP — use platform-specific field names',
+      '<strong>Risk areas:</strong> 3-way match failure, budget overrun, duplicate invoices, inventory mismatch',
+      '<strong>Edge cases:</strong> partial GRN, tolerance limits, intercompany transactions, period close'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: ERP / SUPPLY CHAIN
+══════════════════════════════════════════════════
+Apply deep ERP and supply chain domain knowledge:
+
+BUSINESS RULES TO TEST:
+- Purchase-to-Pay: PR approval → PO creation → GRN → Invoice matching → Payment
+- 3-way match: PO quantity = GRN quantity = Invoice quantity (tolerance: ±2%)
+- Budget check: PO cannot be confirmed if budget balance < PO value
+- Duplicate invoice: same vendor + invoice number + amount = rejection
+- Payment terms: Net 30, Net 60, early payment discount 2/10
+- Period close: no new transactions after financial period lock date
+
+MANDATORY RISK TAGS — add to every test case title:
+- 3-Way Match | Budget Control | Duplicate Invoice | Inventory Accuracy | Period Close
+
+ERP-SPECIFIC EDGE CASES:
+- Partial GRN (received 80 of 100 ordered) — verify PO line status and invoice matching
+- Invoice amount exceeds PO by 3% (above 2% tolerance) — verify hold
+- PO creation when budget balance = exact PO value (boundary condition)
+- Intercompany PO between two legal entities
+- Backdated invoice in closed period — verify rejection
+- Vendor account on payment hold — verify PO blocked
+
+D365 F&O FIELD NAMES: PurchTable.PurchId, PurchLine.PurchQty, PurchLine.ReceiveNow,
+VendInvoiceJour.InvoiceId, BudgetReservation.ReservationAmount, VendTrans.AmountCur`
+  },
+
+  retail: {
+    label: '🛒 Retail / eCommerce',
+    sub: 'Orders · Inventory · Returns',
+    points: [
+      '<strong>Business flow:</strong> Browse → Cart → Checkout → Payment → Fulfillment → Delivery → Returns',
+      '<strong>Risk areas:</strong> overselling, payment gateway failures, return fraud, price discrepancy',
+      '<strong>Edge cases:</strong> flash sale concurrency, coupon stacking, COD limits, cross-border tax'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: RETAIL / eCOMMERCE
+══════════════════════════════════════════════════
+Apply deep retail and eCommerce domain knowledge:
+
+BUSINESS RULES TO TEST:
+- Inventory: oversell prevention — stock = 0 triggers out-of-stock, blocks checkout
+- Pricing: MRP always ≥ selling price; discount % = (MRP - SP) / MRP × 100
+- Payment: COD limit ₹10,000; prepaid orders above ₹50,000 require OTP
+- Returns: 7-day return window; 30-day for defective; no return for perishables
+- GST: IGST for interstate, CGST+SGST for intrastate; HSN code mandatory
+- Coupon: single-use per customer; cannot stack with other discounts (unless configured)
+
+MANDATORY RISK TAGS — add to every test case title:
+- Inventory Control | Payment Security | Returns Policy | GST Compliance | Pricing Integrity
+
+RETAIL-SPECIFIC EDGE CASES:
+- Add to cart when stock = 1, two users checkout simultaneously (race condition)
+- Apply coupon on already-discounted item (stacking rule enforcement)
+- Return initiated on Day 8 (outside 7-day window) — verify rejection
+- Order with items from multiple sellers — verify split fulfillment
+- COD order value at boundary ₹10,000 (allowed) vs ₹10,001 (blocked)
+- Refund to original payment method — verify timeline (UPI: instant, card: 5-7 days)`
+  },
+
+  healthcare: {
+    label: '🏥 Healthcare',
+    sub: 'Patient · Billing · Claims',
+    points: [
+      '<strong>Business flow:</strong> Registration → Consultation → Diagnosis → Treatment → Billing → Discharge',
+      '<strong>Regulation:</strong> NABH, HIPAA data privacy, Ayushman Bharat empanelment rules',
+      '<strong>Risk areas:</strong> duplicate patient records, billing errors, insurance pre-auth failure',
+      '<strong>Edge cases:</strong> emergency admission without insurance, package vs unbundled billing'
+    ],
+    promptBlock: `
+══════════════════════════════════════════════════
+🏢 INDUSTRY DOMAIN: HEALTHCARE
+══════════════════════════════════════════════════
+Apply deep healthcare domain knowledge:
+
+BUSINESS RULES TO TEST:
+- Patient registration: UHID (Unique Health ID) must be unique; Aadhaar-based linkage
+- Insurance pre-authorisation: required before elective procedure; valid 30 days
+- Billing: package rate vs itemised billing — cannot mix for same admission
+- Discharge summary: mandatory before final bill generation
+- Emergency admission: bypass pre-auth, post-authorisation within 24 hours
+- Data privacy: PHI (Protected Health Information) masked in non-clinical views
+
+MANDATORY RISK TAGS — add to every test case title:
+- Patient Safety | Billing Accuracy | Insurance Compliance | Data Privacy | Audit Trail
+
+HEALTHCARE-SPECIFIC EDGE CASES:
+- Duplicate UHID creation for same Aadhaar number
+- Pre-auth expiry during extended hospitalisation
+- Discharge billing when outstanding investigations pending
+- Package billing: additional service outside package — verify surcharge
+- Insurance claim rejection: procedure not covered under policy
+- Minor patient — verify guardian consent requirement`
+  }
+};
+
+function renderDomainGrid() {
+  const grid = document.getElementById('domainGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  Object.keys(DOMAIN_DATA).forEach(key => {
+    const d = DOMAIN_DATA[key];
+    const chip = document.createElement('div');
+    chip.className = 'domain-chip' + (window.selectedDomain === key ? ' selected' : '');
+    chip.setAttribute('data-domain', key);
+    chip.setAttribute('data-tip', d.sub);
+    chip.textContent = d.label;
+    chip.onclick = () => selectDomain(key);
+    grid.appendChild(chip);
+  });
+}
+
+function selectDomain(key) {
+  if (window.selectedDomain === key) {
+    clearDomain();
+    return;
+  }
+  window.selectedDomain = key;
+  // Update chips
+  document.querySelectorAll('.domain-chip').forEach(c => {
+    c.classList.toggle('selected', c.getAttribute('data-domain') === key);
+  });
+  // Update context card
+  updateDomainContextCard(key);
+  // Update hint
+  const hint = document.getElementById('sbDomainHint');
+  if (hint) hint.textContent = '✅ ' + DOMAIN_DATA[key].label + ' selected';
+  // Show toast
+  if (typeof showToast === 'function') {
+    showToast('Domain set: ' + DOMAIN_DATA[key].label + ' — test cases will include domain intelligence', '🏢');
+  }
+}
+
+function clearDomain() {
+  window.selectedDomain = '';
+  document.querySelectorAll('.domain-chip').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById('domainContextCard');
+  if (card) card.classList.remove('visible');
+  const hint = document.getElementById('sbDomainHint');
+  if (hint) hint.textContent = 'Choose your industry for domain-aware test cases';
+  const wrap = document.getElementById('metaDomainWrap');
+  if (wrap) wrap.style.display = 'none';
+}
+
+function updateDomainContextCard(key) {
+  const card = document.getElementById('domainContextCard');
+  const items = document.getElementById('dccItems');
+  if (!card || !items) return;
+  const d = DOMAIN_DATA[key];
+  items.innerHTML = d.points.map(p =>
+    '<div class="dcc-item"><div class="dcc-dot"></div><div>' + p + '</div></div>'
+  ).join('');
+  card.classList.add('visible');
+}
+
+function getDomainContextBlock() {
+  if (!window.selectedDomain || !DOMAIN_DATA[window.selectedDomain]) return '';
+  return DOMAIN_DATA[window.selectedDomain].promptBlock;
+}
+
+// ── Reset domain context card when form is reset ──────────────
+const _origResetForm = window.resetForm;
+window.resetForm = function() {
+  if (typeof _origResetForm === 'function') _origResetForm();
+  clearDomain();
+};
+
+// ── Initialise domain grid on DOM ready ──────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  renderDomainGrid();
+});
+// Also init immediately in case DOM is already ready
+if (document.readyState !== 'loading') {
+  renderDomainGrid();
+}
+
+// ══════════════════════════════════════════════════════════════
+// END DOMAIN INTELLIGENCE
+// ══════════════════════════════════════════════════════════════
+</script>
+
 </body>
 </html>

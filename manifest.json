@@ -1,7 +1,7 @@
 {
-  "name": "Shuddhi QA — AI Test Case Generator",
+  "name": "Shuddhi QA v9.23",
   "short_name": "Shuddhi QA",
-  "description": "Generate production-ready QA test cases for D365, Salesforce, Web Apps and more. Export to Azure DevOps, Jira, Excel and PDF. Live Google Cloud Billing sync. v9.21",
+  "description": "AI-powered QA test case generator v9.23 \u2014 Domain Intelligence + Language Fix",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
@@ -9,7 +9,11 @@
   "theme_color": "#E8A020",
   "background_color": "#0b0d13",
   "lang": "en-IN",
-  "categories": ["productivity", "developer", "utilities"],
+  "categories": [
+    "productivity",
+    "developer",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
@@ -78,7 +82,7 @@
       "sizes": "1200x630",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Shuddhi QA — AI-Powered Test Case Generator"
+      "label": "Shuddhi QA \u2014 AI-Powered Test Case Generator"
     }
   ],
   "shortcuts": [
@@ -87,7 +91,12 @@
       "short_name": "Generate",
       "description": "Open the test case generator directly",
       "url": "/app",
-      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }

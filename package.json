@@ -1,9 +1,9 @@
 {
   "name": "shuddhi-qa",
-  "version": "9.21.0",
-  "description": "AI-powered QA test case generator with Google Cloud Billing sync",
+  "version": "9.23.0",
+  "description": "Shuddhi QA v9.23 \u2014 Domain Intelligence + Language Fix",
   "scripts": {
-    "build": "echo 'Static site — no build step required'",
+    "build": "echo 'Static site \u2014 no build step required'",
     "start": "npx serve ."
   },
   "license": "MIT"
