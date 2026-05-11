@@ -1,25 +1,12 @@
 /**
- * api/claude.js — Multi-Provider AI Proxy (Serverless Function)
+ * functions/api/claude.js — Multi-Provider AI Proxy (Cloudflare Pages Function)
  *
- * Supported providers (in order of priority):
- *   1. Claude   (Anthropic)  — CLAUDE_API_KEY
- *   2. Gemini   (Google)     — GEMINI_API_KEY
- *   3. Groq     (Meta/Llama) — GROQ_API_KEY
+ * Cloudflare Pages Functions use the onRequest export format.
+ * The handler receives a Cloudflare context object { request, env }.
+ * env contains the environment variables set in Cloudflare Pages dashboard.
  *
- * Active provider is selected by AI_PROVIDER env var
- * (claude | gemini | groq). Falls back to whichever key exists.
- *
- * Frontend sends standard Anthropic message format.
- * This proxy translates to the target provider's format.
- *
- * RUNTIME: Node.js Serverless (NOT Edge).
- * Edge runtime has a hard 15s/30s wall-clock limit that cuts AI streams
- * after the Test Summary but before TC tables are generated.
- * Node.js runtime supports maxDuration:300 (set in vercel.json).
- * All Web APIs used (fetch, Response, TransformStream) work in Node.js 18+.
+ * Supported providers: Claude, Gemini, Groq
  */
-
-// export const config = { runtime: 'edge' };  ← REMOVED: hard 15-30s timeout killed TC streams
 
 // ── Model mapping per provider ──────────────────────────────────
 // ── Gemini 2.5 Flash model chain (current stable GA model) ──
@@ -50,43 +37,42 @@ const GEMINI_MODEL_CHAIN = [
 ];
 
 // ── Resolve which provider + key to use ────────────────────────
-// userKeys = { claude, gemini, groq } — keys supplied by the user from their browser.
-// User keys take priority over server env vars for their respective provider,
-// giving users unlimited generations against their own account limits.
-function resolveProvider(requestedProvider, userKeys) {
+// env = Cloudflare Pages env object (context.env) — replaces process.env
+function resolveProvider(requestedProvider, env, userKeys) {
+  const e  = env || {};
   const uk = userKeys || {};
 
   // ── Option 2: Groq-only server keys ──────────────────────────
   // Server-side CLAUDE_API_KEY and GEMINI_API_KEY are NOT used for
-  // free-tier users. Only GROQ_API_KEY (free) is the server fallback.
+  // free-tier users to prevent unlimited cost exposure at scale.
+  // Only GROQ_API_KEY (free tier) is available as a server fallback.
   // Users who want Claude or Gemini must supply their own API key.
+  // This caps server cost at $0 regardless of user count.
   const SERVER_KEYS = {
-    groq: process.env.GROQ_API_KEY,
-    // claude: intentionally omitted
-    // gemini: intentionally omitted
+    groq: e.GROQ_API_KEY,      // free — always available as fallback
+    // claude: intentionally omitted — user must supply own key
+    // gemini: intentionally omitted — user must supply own key
   };
 
-  const preferred = (requestedProvider || process.env.AI_PROVIDER || '').toLowerCase();
+  const preferred = (requestedProvider || e.AI_PROVIDER || '').toLowerCase();
 
-  // User supplied their own key for the requested provider — use it
+  // If user supplied their own key for the requested provider — use it (any provider)
   if (preferred && uk[preferred]) {
     return { provider: preferred, key: uk[preferred], userSupplied: true };
   }
 
-  // User supplied any key — use it
+  // If user supplied any key — try it (any provider)
   for (const p of ['claude', 'gemini', 'groq']) {
     if (uk[p]) return { provider: p, key: uk[p], userSupplied: true };
   }
 
-  // No user key — Groq server fallback only (free, safe)
+  // No user key — fall back to server Groq only (free, safe)
   if (SERVER_KEYS.groq) return { provider: 'groq', key: SERVER_KEYS.groq, userSupplied: false };
 
   return null;
 }
 
 // ── P3 Vision helpers ───────────────────────────────────────────
-// Convert an Anthropic-format content value (string OR array with image/text
-// blocks) into the parts array that Gemini expects.
 function _toGeminiParts(content) {
   if (typeof content === 'string') return [{ text: content }];
   if (Array.isArray(content)) {
@@ -100,9 +86,6 @@ function _toGeminiParts(content) {
   return [{ text: String(content || '') }];
 }
 
-// Convert an Anthropic-format content value to a plain string for Groq.
-// llama-3.3-70b-versatile does not support vision — strip image blocks and
-// add a note so the user knows to switch provider for image analysis.
 function _toGroqText(content) {
   if (typeof content === 'string') return content;
   if (Array.isArray(content)) {
@@ -116,40 +99,21 @@ function _toGroqText(content) {
 }
 
 // ── Option B — Output normaliser ────────────────────────────────
-// Groq (llama-3.3-70b) and Gemini sometimes drift from the 5-column
-// schema despite explicit prompt instructions. This normaliser fixes
-// the most common drift patterns on non-streaming responses.
-// Safe: returns text unchanged if it already looks correct.
 function _normaliseProviderOutput(text) {
   if (!text) return text;
-
-  // Already correct if canonical header is present — fast exit
   if (/\|\s*Title\s*\|\s*Step Action\s*\|\s*Step Expected Result\s*\|\s*Assigned To\s*\|\s*State\s*\|/i.test(text)) {
-    // Still apply TC numbering fix (TC1 → TC001) even on otherwise-correct output
-    return text.replace(/\bTC(\d{1,2})(?=\s|[–\-–]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
+    return text.replace(/\bTC(\d{1,2})(?=\s|[–\-]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
   }
-
-  // Fix 1: TC number padding
   text = text.replace(/\bTC(\d{1,2})(?=\s|[–\-]|$)/gm, (_, n) => 'TC' + n.padStart(3, '0'));
-
-  // Fix 2: Normalise wrong column header names → canonical 5-column
   text = text.replace(
     /\|\s*(?:Test Case(?:\s+(?:Title|ID))?|TC Title|TC ID)\s*\|\s*(?:Test )?Steps?\s*\|\s*Expected(?:\s+(?:Outcomes?|Results?))?\s*\|\s*(?:Owner|Tester|Assigned(?:\s+To)?)\s*\|\s*(?:Status|Phase|State)\s*\|/gi,
     '| Title | Step Action | Step Expected Result | Assigned To | State |'
   );
-
-  // Fix 3: 3-column shorthand (Title|Steps|Expected) → 5-column
   text = text.replace(
     /\|\s*(?:Title|Test Case)\s*\|\s*(?:Step )?Actions?\s*\|\s*(?:Step )?Expected(?:\s+Results?)?\s*\|(?!\s*Assigned)/gi,
     '| Title | Step Action | Step Expected Result | Assigned To | State |'
   );
-
-  // Fix 4: Separator rows with wrong cell count → 5-cell separator
-  text = text.replace(
-    /^\|(\s*[-:]+\s*\|){2,4}\s*$/gm,
-    '| --- | --- | --- | --- | --- |'
-  );
-
+  text = text.replace(/^\|(\s*[-:]+\s*\|){2,4}\s*$/gm, '| --- | --- | --- | --- | --- |');
   return text;
 }
 
@@ -215,10 +179,6 @@ function buildUpstreamRequest(provider, key, body) {
   }
 
   if (provider === 'groq') {
-    // ── Option B: prepend a compact, imperative format schema ─────────────
-    // llama-3.3-70b drifts on complex table format despite system prompt instructions.
-    // Prepending a SHORT, direct schema block (imperative language, concrete example)
-    // at the very start of the system message significantly improves adherence.
     const _GROQ_FORMAT_PREPEND =
 `CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
 Use this 5-column Markdown table for EVERY test case:
@@ -283,12 +243,10 @@ async function normalizeResponse(provider, response) {
 
   if (provider === 'gemini') {
     const text = getGeminiText(data); // REGRESSION FIX: use helper to skip thought parts
-    // Option B: apply normaliser to fix common Gemini column-header drift
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'end_turn', model: MODELS.gemini };
   }
   if (provider === 'groq') {
     const text = data.choices?.[0]?.message?.content || '';
-    // Option B: apply normaliser to fix common Groq table-structure drift
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS.groq };
   }
   return data; // Claude already in correct format
@@ -375,7 +333,10 @@ function normalizeStream(provider, upstreamBody) {
 }
 
 // ── Main handler ────────────────────────────────────────────────
-export default async function handler(req) {
+export async function onRequest(context) {
+  const { request: req, env } = context;
+  // env = Cloudflare Pages environment variables (set in Pages dashboard)
+  // process.env does NOT work reliably in Cloudflare Workers — use env directly
   const origin = req.headers.get('origin') || '';
   const allowed = origin.includes('localhost') || origin.includes('vercel.app') || origin.includes('pages.dev') || origin.includes('workers.dev') || origin === '';
   const corsHeaders = {
@@ -390,8 +351,8 @@ export default async function handler(req) {
   // F-04 FIX (raised 5MB→10MB after 413 misdiagnosis bug): enforce 10MB body size cap before parsing.
   // Body size 10MB — protects against abuse while accommodating large enterprise FRDs
   // (100+ page PDFs typically extract to 2-4MB of text).
-  // Cloudflare allows up to 100MB by default; Vercel caps at 4.5MB on serverless functions,
-  // so this 10MB ceiling is a soft warning for Cloudflare and a hard limit on Vercel.
+  // Cloudflare allows up to 100MB by default — this 10MB ceiling is a soft warning and a deliberate
+  // safety margin against runaway/malicious payloads.
   // Was: 5_000_000 (too aggressive — rejected legitimate enterprise FRDs).
   const rawBody = await req.text().catch(() => '');
   if (rawBody.length > 10_000_000) {
@@ -406,7 +367,6 @@ export default async function handler(req) {
   const { apiKey: userClaudeKey, geminiApiKey: userGeminiKey, groqApiKey: userGroqKey,
           provider: requestedProvider, ...forwardBody } = body;
 
-  // Build user-supplied key map — non-empty strings only
   const _userKeys = {
     ...(userClaudeKey ? { claude: userClaudeKey } : {}),
     ...(userGeminiKey ? { gemini: userGeminiKey } : {}),
@@ -414,14 +374,165 @@ export default async function handler(req) {
   };
 
   // Resolve provider + key (user keys override server env vars per-provider)
-  let resolved = resolveProvider(requestedProvider, _userKeys);
+  let resolved = resolveProvider(requestedProvider, env, _userKeys);
 
-  // Legacy fallback: user-supplied Claude key from older clients (apiKey only)
+  // Legacy fallback: user-supplied Claude key from older clients
   if (!resolved && userClaudeKey) resolved = { provider: 'claude', key: userClaudeKey, userSupplied: true };
 
   if (!resolved) {
     return new Response(JSON.stringify({
-      error: 'No API key found. The free tier uses Groq (free). For Claude or Gemini, add your own key in Settings → AI Provider.'}`;
+      error: 'No API key found. The free tier uses Groq (free). For Claude or Gemini, add your own key in Settings → AI Provider → Use Your Own Key.'
+    }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
+  const { provider, key } = resolved;
+  const upstream = buildUpstreamRequest(provider, key, forwardBody);
+
+  try {
+    const response = await fetch(upstream.url, {
+      method: 'POST',
+      headers: upstream.headers,
+      body: upstream.body,
+    });
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => '');
+      let errJson = {};
+      try { errJson = JSON.parse(errText); } catch(e) {}
+      const detail = errJson?.error?.message || errJson?.message || errText.substring(0, 200);
+
+      // Gemini model chain fallback — try each model in order on 404/quota errors
+      // ── GEMINI ERROR HANDLER with full diagnostics ─────────────────
+      // Logs actual status + error body so we can diagnose the real cause
+      // Tries every model in GEMINI_MODEL_CHAIN before switching to Groq
+
+      if (provider === 'gemini') {
+        console.error('[Gemini Debug] Status:', response.status,
+          '| Model:', upstream.url.match(/models\/([^:]+)/)?.[1] || MODELS.gemini,
+          '| Error:', detail.substring(0, 200),
+          '| URL:', upstream.url.replace(/key=[^&?]+/, 'key=REDACTED')
+        );
+
+        // BUG FIX 1: 403 / API_NOT_ENABLED — detect BEFORE model chain.
+        if (response.status === 403) {
+          const isApiNotEnabled = detail && (
+            detail.includes('API_NOT_ENABLED') ||
+            detail.includes('not been used') ||
+            detail.includes('disabled') ||
+            detail.includes('SERVICE_DISABLED')
+          );
+          if (isApiNotEnabled) {
+            return new Response(JSON.stringify({
+              error: 'Gemini API not enabled on this key\'s Google Cloud project. '
+                + 'Fix: go to console.cloud.google.com → APIs → Enable "Generative Language API". '
+                + 'OR get a fresh key from aistudio.google.com.',
+              switchProvider: true,
+              provider: 'gemini',
+            }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          }
+          return new Response(JSON.stringify({
+            error: 'Gemini API key does not have permission (403). Check the key is valid and not restricted.',
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // BUG FIX 3: 401 — distinguish user-supplied vs server key.
+        if (response.status === 401) {
+          const isUserKey = !!(body.geminiApiKey);
+          return new Response(JSON.stringify({
+            error: isUserKey
+              ? 'Your Gemini API key is invalid. Remove it in Settings → Use Your Own Key and get a fresh key from aistudio.google.com.'
+              : 'Gemini API key invalid or expired — please verify your key at aistudio.google.com/apikey and try again.',
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // True rate limit — do NOT try model chain.
+        const isTrueRateLimit = response.status === 429
+          || (response.status === 400 && (detail.includes('quota') || detail.includes('RESOURCE_EXHAUSTED') || detail.includes('rate')));
+        if (isTrueRateLimit) {
+          const retryAfter = response.headers.get('retry-after') || '60';
+          const waitSecs   = parseInt(retryAfter) || 60;
+          console.warn('[Gemini] Rate limit / quota hit. Retry in ~' + waitSecs + 's');
+          return new Response(JSON.stringify({
+            error: 'Gemini free-tier rate limit reached (resets in ~' + waitSecs + 's) — switching to next provider',
+            waitSecs,
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // Model-not-found / server errors — try model chain.
+        const shouldTryChain = response.status === 404
+          || (response.status === 400 && !detail.includes('quota'))
+          || response.status === 500;
+
+        if (shouldTryChain) {
+          for (const fallbackModel of GEMINI_MODEL_CHAIN.slice(1)) {
+            const apiVer = GEMINI_API_VERSION[fallbackModel] || 'v1beta';
+            const ep     = forwardBody.stream ? 'streamGenerateContent?alt=sse' : 'generateContent';
+            const sep    = forwardBody.stream ? '&' : '?';
+            const altUrl = `https://generativelanguage.googleapis.com/${apiVer}/models/${fallbackModel}:${ep}${sep}key=${key}`;
+
+            let chainBody = upstream.body;
+            if (!fallbackModel.includes('2.5')) {
+              try {
+                const parsed = JSON.parse(upstream.body);
+                if (parsed.generationConfig?.thinkingConfig) {
+                  delete parsed.generationConfig.thinkingConfig;
+                }
+                chainBody = JSON.stringify(parsed);
+              } catch(e) {}
+            }
+
+            console.log('[Gemini] Chain trying:', fallbackModel, '(' + apiVer + ')');
+            const altResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
+            const altText = await altResp.text().catch(() => '');
+            console.log('[Gemini] Chain result:', fallbackModel, '\u2192 HTTP', altResp.status, altText.substring(0, 150));
+            if (altResp.ok) {
+              if (forwardBody.stream !== true) {
+                let altJson = {};
+                try { altJson = JSON.parse(altText); } catch(e) {}
+                const text = getGeminiText(altJson);
+                return new Response(JSON.stringify({
+                  content: [{ type: 'text', text }],
+                  stop_reason: 'end_turn',
+                  model: fallbackModel,
+                  _provider: fallbackModel
+                }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+              }
+              // BUG FIX 2: Use chainBody (not upstream.body) for streaming re-fetch.
+              const streamResp = await fetch(altUrl, { method: 'POST', headers: upstream.headers, body: chainBody });
+              return new Response(normalizeStream(provider, streamResp.body), {
+                status: 200, headers: { ...corsHeaders, 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' },
+              });
+            }
+          }
+          // BUG FIX 4: Actionable error when all models fail.
+          console.warn('[Gemini] All models exhausted. Switching to next provider.');
+          const _geminiKeyType = body.geminiApiKey ? 'your personal key' : 'the deployment key';
+          return new Response(JSON.stringify({
+            error: 'Gemini: all available models failed using ' + _geminiKeyType + '. '
+              + 'Causes: (1) GEMINI_API_KEY not set in Cloudflare Pages env vars. '
+              + '(2) Generative Language API not enabled — console.cloud.google.com → APIs. '
+              + '(3) All free-tier quotas exhausted — get a fresh key from aistudio.google.com.',
+            detail: detail.substring(0, 200),
+            switchProvider: true,
+            provider: 'gemini',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+
+        // Other non-retryable Gemini error
+        return new Response(JSON.stringify({
+          error: `Gemini error ${response.status}: ${detail.substring(0, 150)}`,
+          switchProvider: true,
+          provider: 'gemini',
+        }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      let msg = `${provider} API error ${response.status}: ${detail || 'Unknown error'}`;
       if (response.status === 400) {
         // Detect Anthropic account usage cap — treat as switchable rate limit
         const isUsageCap = detail && (
@@ -432,7 +543,7 @@ export default async function handler(req) {
         if (isUsageCap) {
           // Return 429 so the frontend auto-switches provider
           return new Response(JSON.stringify({
-            error: `claude limit reached until May 1 — auto-switching to Groq/Gemini`,
+            error: 'claude limit reached until May 1 - auto-switching to Groq/Gemini',
             detail,
             switchProvider: true
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -442,7 +553,6 @@ export default async function handler(req) {
       if (response.status === 429) {
         const retryAfter = response.headers.get('retry-after') || response.headers.get('x-ratelimit-reset-requests');
         const waitSecs   = retryAfter ? parseInt(retryAfter) : 60;
-        // Detect daily quota exhaustion (no retry-after + error mentions daily/quota/tokens)
         const isDailyLimit = !retryAfter && (
           detail.includes('exceeded') || detail.includes('daily') ||
           detail.includes('tokens per day') || detail.includes('quota')
@@ -451,7 +561,7 @@ export default async function handler(req) {
           return new Response(JSON.stringify({
             error: provider + ' daily quota exhausted. The free-tier daily limit resets at midnight UTC. '
               + 'To continue now: add a GEMINI_API_KEY (free, aistudio.google.com) in Cloudflare Pages → Settings → Environment Variables.',
-            waitSecs: 3600, // 1 hour placeholder — actual reset is midnight UTC
+            waitSecs: 3600,
             dailyLimit: true,
             switchProvider: true
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -463,15 +573,22 @@ export default async function handler(req) {
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (response.status === 413) {
-        // Request too large — Groq 12k TPM limit hit. Switch to Gemini or Claude.
-        console.warn('[' + provider + '] 413 Request too large — switching to next provider');
+        // Request too large - document exceeds the provider's context window.
+        // If client requested a different provider but no key existed, resolveProvider()
+        // fell back to Groq. Surfaces the mismatch in requestedProvider field.
+        const _reqProv = requestedProvider || '';
+        const _provMismatch = _reqProv && _reqProv !== provider
+          ? ' (Note: requested ' + _reqProv + ' but no ' + _reqProv + ' key configured - server routed to ' + provider + ')'
+          : '';
+        console.warn('[' + provider + '] 413 Request too large' + _provMismatch);
         return new Response(JSON.stringify({
-          error: provider + ' token limit exceeded (document too large). Switching to next provider.',
+          error: provider + ' token limit exceeded (document too large).' + _provMismatch,
           switchProvider: true,
-          provider
+          provider,
+          requestedProvider: _reqProv || provider
         }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 401) msg = `${provider} API key invalid or expired — check ${provider.toUpperCase()}_API_KEY in Vercel.`;
+      if (response.status === 401) msg = provider + ' API key invalid or expired - please verify your key at the provider\'s console and try again.';
       if (response.status === 404) {
         // Non-Gemini 404 (Gemini handled above in model chain)
         msg = `${provider} endpoint not found (404). Check model name and API version.`;
@@ -508,7 +625,7 @@ export default async function handler(req) {
     }
 
   } catch(err) {
-    return new Response(JSON.stringify({ error: `Proxy error: ${err.message}` }),
+    return new Response(JSON.stringify({ error: 'Proxy error: ' + err.message + ' - Check Cloudflare Pages logs (Workers & Pages > shuddhiqacloud > Observability)' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 }
