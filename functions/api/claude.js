@@ -443,7 +443,7 @@ export async function onRequest(context) {
           return new Response(JSON.stringify({
             error: isUserKey
               ? 'Your Gemini API key is invalid. Remove it in Settings → Use Your Own Key and get a fresh key from aistudio.google.com.'
-              : 'Gemini API key invalid or expired — please verify your key at aistudio.google.com/apikey and try again.',
+              : 'Gemini API key invalid or expired — check GEMINI_API_KEY in Cloudflare Pages → Settings → Environment Variables.',
             switchProvider: true,
             provider: 'gemini',
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -543,7 +543,7 @@ export async function onRequest(context) {
         if (isUsageCap) {
           // Return 429 so the frontend auto-switches provider
           return new Response(JSON.stringify({
-            error: 'claude limit reached until May 1 - auto-switching to Groq/Gemini',
+            error: `claude limit reached until May 1 — auto-switching to Groq/Gemini`,
             detail,
             switchProvider: true
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -573,22 +573,15 @@ export async function onRequest(context) {
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (response.status === 413) {
-        // Request too large - document exceeds the provider's context window.
-        // If client requested a different provider but no key existed, resolveProvider()
-        // fell back to Groq. Surfaces the mismatch in requestedProvider field.
-        const _reqProv = requestedProvider || '';
-        const _provMismatch = _reqProv && _reqProv !== provider
-          ? ' (Note: requested ' + _reqProv + ' but no ' + _reqProv + ' key configured - server routed to ' + provider + ')'
-          : '';
-        console.warn('[' + provider + '] 413 Request too large' + _provMismatch);
+        // Request too large — Groq 12k TPM limit hit. Switch to Gemini or Claude.
+        console.warn('[' + provider + '] 413 Request too large — switching to next provider');
         return new Response(JSON.stringify({
-          error: provider + ' token limit exceeded (document too large).' + _provMismatch,
+          error: provider + ' token limit exceeded (document too large). Switching to next provider.',
           switchProvider: true,
-          provider,
-          requestedProvider: _reqProv || provider
+          provider
         }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 401) msg = provider + ' API key invalid or expired - please verify your key at the provider\'s console and try again.';
+      if (response.status === 401) msg = `${provider} API key invalid or expired — check ${provider.toUpperCase()}_API_KEY in Vercel.`;
       if (response.status === 404) {
         // Non-Gemini 404 (Gemini handled above in model chain)
         msg = `${provider} endpoint not found (404). Check model name and API version.`;
@@ -625,7 +618,7 @@ export async function onRequest(context) {
     }
 
   } catch(err) {
-    return new Response(JSON.stringify({ error: 'Proxy error: ' + err.message + ' - Check Cloudflare Pages logs (Workers & Pages > shuddhiqacloud > Observability)' }),
+    return new Response(JSON.stringify({ error: `Proxy error: ${err.message} — Check Cloudflare Pages logs (Workers & Pages → shuddhiqacloud → Observability)` }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 }
