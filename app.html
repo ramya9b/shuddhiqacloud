@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.24 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.25 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.24 — Domain Intelligence + Multi-language Fix."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.25 — Domain Intelligence + Multi-language Fix."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -63,6 +63,9 @@ if (typeof marked !== 'undefined') {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<!-- ── Firebase Auth SDK (v9 compat — loads after page content) ── -->
+<script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <style>
   :root {
     /* ── Mockup-aligned design tokens ── */
@@ -6056,7 +6059,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.24</span>
+      <span class="sb-badge">v9.25</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -6219,6 +6222,39 @@ header::after { display: none !important; }
          aria-label="Setup guide and help"
          data-tip="Setup guide — API keys, ADO PAT, Jira token, getting started"
          style="text-decoration:none;font-size:16px">❓</a>
+
+      <!-- ── Firebase Auth: Sign In (shown when not signed in) ── -->
+      <button id="fbSignInBtn"
+        onclick="_showFirebaseSignIn()"
+        data-tip="Sign in with Google or Microsoft — get 10 free generations"
+        aria-label="Sign in"
+        style="display:none;align-items:center;gap:6px;padding:0 14px;height:38px;
+               border-radius:10px;border:1.5px solid rgba(91,95,239,.25);
+               background:rgba(91,95,239,.06);color:var(--indigo);
+               font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+               flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s"
+        onmouseover="this.style.background='rgba(91,95,239,.12)';this.style.borderColor='var(--indigo)'"
+        onmouseout="this.style.background='rgba(91,95,239,.06)';this.style.borderColor='rgba(91,95,239,.25)'">
+        👤 Sign In
+      </button>
+      <!-- ── Firebase Auth: User avatar (shown when signed in) ── -->
+      <div id="fbUserBtn"
+        onclick="_toggleUserMenu(event)"
+        data-tip="Account — click to sign out"
+        role="button" tabindex="0"
+        aria-label="User account menu"
+        style="display:none;align-items:center;gap:7px;cursor:pointer;
+               padding:4px 10px 4px 5px;border-radius:10px;
+               border:1.5px solid var(--border2);background:var(--surface2);
+               transition:all .15s;flex-shrink:0"
+        onmouseover="this.style.borderColor='var(--border)'"
+        onmouseout="this.style.borderColor='var(--border2)'">
+        <div id="fbAvatar" style="width:28px;height:28px;border-radius:50%;
+          background:var(--d365);display:flex;align-items:center;justify-content:center;
+          font-size:11px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden"></div>
+        <span id="fbDisplayName" style="font-size:12px;font-weight:600;color:var(--text);
+          max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      </div>
 
       <!-- Settings -->
       <button id="settingsIconBtn" onclick="openSettings()" class="hdr-icon-btn" aria-label="Settings" data-tip="Configure AI provider, ADO/Jira integration and usage tracking">⚙️</button>
@@ -7109,7 +7145,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.24</div>
+          <div class="settings-about-val" id="aboutVersion">v9.25</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7144,7 +7180,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.24 — Domain Intelligence + Language Fix</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.25 — Domain Intelligence + Language Fix</div>
         </div>
       </div>
 
@@ -7153,11 +7189,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.24
+          🆕 What's New in v9.25
         </div>
-        <!-- v9.24 changelog -->
+        <!-- v9.25 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.24 — Domain Intelligence + Language Fix</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.25 — Domain Intelligence + Language Fix</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -9837,7 +9873,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.24 FIX: server may have resolved to a different provider than what the client
+      // v9.25 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -9881,7 +9917,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.24: also mark the actual server-used provider if it differs
+        // v9.25: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -9889,7 +9925,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.24: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.25: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -9904,7 +9940,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.24: use the actual server provider name for user-facing messages
+        // v9.25: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -10006,7 +10042,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.24 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.25 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     // In that scenario tried = ['gemini'] but the actual provider was Groq (12K limit).
     // Detection: server error text contains 'groq' (from the server-side error message).
@@ -10104,17 +10140,28 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v7.4 FREE TRIAL GATE ──────────────────────────────────
+  // ── v9.25 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
+  // v9.25: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
+  var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
+  var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
   var _freeCount = 0;
-  try { _freeCount = parseInt(localStorage.getItem('shuddhi-free-uses') || '0', 10); } catch(e) {}
-  var FREE_LIMIT = 3;
+  try { _freeCount = parseInt(localStorage.getItem(_freeKey) || '0', 10); } catch(e) {}
+  // Signed-in users get 10 free generations; anonymous users get 3
+  var FREE_LIMIT = _fbUid ? 10 : 3;
   if (!_hasAnyOwnKey && _freeCount >= FREE_LIMIT) {
     ProviderManager.endGenerate();
-    if (typeof showFreeTrialModal === 'function') showFreeTrialModal();
+    if (!_fbUid && window._fbAuthConfigured) {
+      // Not signed in and Firebase is configured — offer sign-in first
+      if (typeof _showFirebaseSignIn === 'function') _showFirebaseSignIn('limit');
+    } else {
+      // Already signed in (10 uses exhausted) or Firebase not configured — show API key modal
+      if (typeof showFreeTrialModal === 'function') showFreeTrialModal();
+    }
     return;
   }
   // ──────────────────────────────────────────────────────────
@@ -11726,15 +11773,17 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v7.4: increment free trial counter ──
+  // ── v9.25: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
                     (_ukF.claude && _ukF.claude.length > 8);
   if (!_hasOwnKeyF) {
     try {
-      var _cnt = parseInt(localStorage.getItem('shuddhi-free-uses') || '0', 10);
-      localStorage.setItem('shuddhi-free-uses', String(_cnt + 1));
+      var _fbUidF = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
+      var _freeKeyF = _fbUidF ? ('shuddhi-free-uses-' + _fbUidF) : 'shuddhi-free-uses';
+      var _cnt = parseInt(localStorage.getItem(_freeKeyF) || '0', 10);
+      localStorage.setItem(_freeKeyF, String(_cnt + 1));
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
@@ -18193,6 +18242,114 @@ window.copyShareLink = function() {
 
 
 <!-- ════════════════════════════════════════════════════════════
+     FIREBASE AUTH — User dropdown menu
+════════════════════════════════════════════════════════════ -->
+<div id="fbUserMenu" style="display:none;position:fixed;z-index:200010;
+  background:var(--surface);border:1.5px solid var(--border2);
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.18);
+  width:220px;padding:6px;font-family:'Plus Jakarta Sans',sans-serif">
+  <div style="padding:10px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:4px">
+    <div id="fbMenuName" style="font-size:13px;font-weight:600;color:var(--text)"></div>
+    <div id="fbMenuEmail" style="font-size:11px;color:var(--text3);margin-top:2px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+    <div id="fbMenuPlan" style="margin-top:6px;display:inline-flex;align-items:center;gap:4px;
+      font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:6px;
+      background:rgba(91,95,239,.08);color:var(--indigo);border:1px solid rgba(91,95,239,.18)">
+      ✦ Free plan — <span id="fbMenuUsage"></span>
+    </div>
+  </div>
+  <button onclick="window._fbSignOut()"
+    style="width:100%;padding:9px 12px;text-align:left;background:none;border:none;
+           cursor:pointer;font-size:13px;color:var(--text2);border-radius:8px;
+           transition:background .12s;font-family:'Plus Jakarta Sans',sans-serif;
+           display:flex;align-items:center;gap:8px"
+    onmouseover="this.style.background='var(--surface2)'"
+    onmouseout="this.style.background='none'">
+    🚪 Sign out
+  </button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     FIREBASE AUTH — Sign In modal
+════════════════════════════════════════════════════════════ -->
+<div id="firebaseSignInModal" style="display:none;position:fixed;inset:0;z-index:300003;
+  align-items:center;justify-content:center;">
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px)"
+    onclick="document.getElementById('firebaseSignInModal').style.display='none'"></div>
+  <div style="position:relative;z-index:1;background:var(--surface);
+    border:1.5px solid rgba(91,95,239,.2);border-radius:20px;
+    padding:28px 26px;width:min(420px,94vw);
+    box-shadow:0 24px 80px rgba(0,0,0,.5)">
+
+    <button onclick="document.getElementById('firebaseSignInModal').style.display='none'"
+      aria-label="Close"
+      style="position:absolute;top:14px;right:16px;background:none;border:none;
+             font-size:18px;cursor:pointer;color:var(--text3);padding:4px">✕</button>
+
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:38px;margin-bottom:10px">🧪</div>
+      <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px"
+           id="fbModalTitle">Sign in to continue free</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6" id="fbModalSubtitle">
+        You've used your 3 free generations.<br>
+        Sign in for <strong style="color:var(--indigo)">10 more free generations</strong> — no credit card needed.
+      </div>
+    </div>
+
+    <!-- Google -->
+    <button id="fbGoogleBtn" onclick="_signInWithGoogle()"
+      style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+             padding:12px;border-radius:10px;border:1.5px solid var(--border2);
+             background:var(--surface);color:var(--text);font-size:14px;font-weight:600;
+             cursor:pointer;margin-bottom:10px;transition:all .18s;
+             font-family:'Plus Jakarta Sans',sans-serif"
+      onmouseover="this.style.background='var(--surface2)'"
+      onmouseout="this.style.background='var(--surface)'">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.84-1.57 2.4v2h2.53c1.48-1.36 2.33-3.37 2.33-5.77 0-.56-.05-1.1-.14-1.63z"/>
+        <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.54-1.97c-.72.48-1.63.76-2.76.76-2.12 0-3.91-1.43-4.55-3.36H1.8v2.04C3.12 15.27 5.87 17 8.98 17z"/>
+        <path fill="#FBBC05" d="M4.43 10.49A5.07 5.07 0 0 1 4.16 9c0-.52.09-1.02.27-1.49V5.47H1.8A8.97 8.97 0 0 0 0 9c0 1.45.35 2.82.96 4.03l3.47-2.54z"/>
+        <path fill="#EA4335" d="M8.98 3.58c1.19 0 2.26.41 3.1 1.21l2.32-2.32C12.95 1.19 11.13.4 8.98.4 5.87.4 3.12 2.13 1.8 4.72l3.43 2.66c.64-1.94 2.43-3.8 4.55-3.8z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <!-- Microsoft -->
+    <button id="fbMsBtn" onclick="_signInWithMicrosoft()"
+      style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+             padding:12px;border-radius:10px;border:1.5px solid var(--border2);
+             background:var(--surface);color:var(--text);font-size:14px;font-weight:600;
+             cursor:pointer;margin-bottom:16px;transition:all .18s;
+             font-family:'Plus Jakarta Sans',sans-serif"
+      onmouseover="this.style.background='var(--surface2)'"
+      onmouseout="this.style.background='var(--surface)'">
+      <svg width="18" height="18" viewBox="0 0 21 21" aria-hidden="true">
+        <rect x="1"  y="1"  width="9" height="9" fill="#f25022"/>
+        <rect x="11" y="1"  width="9" height="9" fill="#7fba00"/>
+        <rect x="1"  y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+      </svg>
+      Continue with Microsoft (work account)
+    </button>
+
+    <!-- Status line -->
+    <div id="fbSignInStatus" style="display:none;font-size:12.5px;text-align:center;
+      padding:8px 12px;border-radius:8px;margin-bottom:12px"></div>
+
+    <!-- Dismiss -->
+    <div style="text-align:center">
+      <a onclick="document.getElementById('firebaseSignInModal').style.display='none';if(typeof showFreeTrialModal==='function')showFreeTrialModal()"
+        style="font-size:11.5px;color:var(--text3);cursor:pointer;text-decoration:underline;
+               transition:color .15s"
+        onmouseover="this.style.color='var(--text)'"
+        onmouseout="this.style.color='var(--text3)'">
+        I'll add an API key instead →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
      v7.4 FREE TRIAL MODAL
      Shown after 3 free generations — get own key to continue
 ════════════════════════════════════════════════════════════════ -->
@@ -20102,6 +20259,262 @@ if (document.readyState !== 'loading') {
 // ══════════════════════════════════════════════════════════════
 // END DOMAIN INTELLIGENCE
 // ══════════════════════════════════════════════════════════════
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// FIREBASE AUTH — v9.25
+// Soft gate: anonymous → 3 free uses → sign in prompt
+//            signed in  → 10 free uses → API key prompt
+// Zero interference with existing functionality.
+// App works identically when Firebase is not configured.
+// ══════════════════════════════════════════════════════════════
+(function _initFirebaseAuth() {
+  'use strict';
+
+  // ── CONFIG — replace with your Firebase project values ──────
+  // Get from: console.firebase.google.com → Project Settings → Web app
+  // Then: Authentication → Sign-in method → Enable Google + Microsoft
+  // Then: Authentication → Settings → Authorized domains → add your domain
+  var _FIREBASE_CONFIG = {
+    apiKey:            'YOUR_API_KEY',
+    authDomain:        'YOUR_PROJECT_ID.firebaseapp.com',
+    projectId:         'YOUR_PROJECT_ID',
+    storageBucket:     'YOUR_PROJECT_ID.appspot.com',
+    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    appId:             'YOUR_APP_ID'
+  };
+
+  // Guard: don't initialise if config is still placeholder
+  var _configured = _FIREBASE_CONFIG.apiKey &&
+                    !_FIREBASE_CONFIG.apiKey.startsWith('YOUR_');
+  window._fbAuthConfigured = _configured;
+
+  if (!_configured) {
+    // Firebase not configured — hide all auth UI and exit cleanly
+    console.info('[FirebaseAuth] Not configured — auth UI hidden. Replace placeholders in _FIREBASE_CONFIG to enable.');
+    return;
+  }
+
+  // ── Wait for Firebase SDK to load (it is deferred) ──────────
+  function _waitForFirebase(cb, attempts) {
+    attempts = attempts || 0;
+    if (typeof firebase !== 'undefined' && firebase.app) {
+      cb();
+    } else if (attempts < 40) {
+      setTimeout(function() { _waitForFirebase(cb, attempts + 1); }, 250);
+    } else {
+      console.warn('[FirebaseAuth] SDK failed to load after 10s — auth disabled.');
+    }
+  }
+
+  _waitForFirebase(function() {
+    // Initialise Firebase app (safe to call multiple times — checks for existing)
+    var _app;
+    try {
+      _app = firebase.app();  // returns existing if already initialised
+    } catch(e) {
+      _app = firebase.initializeApp(_FIREBASE_CONFIG);
+    }
+    var _auth = firebase.auth();
+
+    // ── Show/hide auth UI ──────────────────────────────────────
+    function _updateUI(user) {
+      var signInBtn  = document.getElementById('fbSignInBtn');
+      var userBtn    = document.getElementById('fbUserBtn');
+      var avatar     = document.getElementById('fbAvatar');
+      var nameEl     = document.getElementById('fbDisplayName');
+      var menuName   = document.getElementById('fbMenuName');
+      var menuEmail  = document.getElementById('fbMenuEmail');
+      var menuUsage  = document.getElementById('fbMenuUsage');
+
+      if (user) {
+        // ── Signed in ──
+        window._fbUser = user;
+
+        var initials = (user.displayName || user.email || '?')
+          .split(' ').slice(0,2).map(function(w){ return w[0]; }).join('').toUpperCase();
+        var shortName = (user.displayName || user.email || '').split(' ')[0];
+
+        if (avatar) {
+          if (user.photoURL) {
+            avatar.innerHTML = '<img src="' + user.photoURL + '" width="28" height="28" '
+              + 'style="border-radius:50%;display:block" alt="' + (user.displayName||'') + '" '
+              + 'onerror="this.style.display=\'none\';this.parentNode.textContent=\'' + initials + '\'">';
+          } else {
+            avatar.textContent = initials;
+          }
+        }
+        if (nameEl)    nameEl.textContent  = shortName;
+        if (menuName)  menuName.textContent  = user.displayName || 'Signed in';
+        if (menuEmail) menuEmail.textContent = user.email || '';
+
+        // Show usage in dropdown
+        if (menuUsage) {
+          try {
+            var _key = 'shuddhi-free-uses-' + user.uid;
+            var _used = parseInt(localStorage.getItem(_key) || '0', 10);
+            menuUsage.textContent = _used + ' / 10 used';
+          } catch(e) {}
+        }
+
+        if (signInBtn) signInBtn.style.display = 'none';
+        if (userBtn)   userBtn.style.display   = 'flex';
+
+        // Close sign-in modal if open
+        var modal = document.getElementById('firebaseSignInModal');
+        if (modal && modal.style.display !== 'none') modal.style.display = 'none';
+
+        if (typeof showToast === 'function') {
+          showToast('Signed in as ' + shortName + ' — 10 free generations available', '✅');
+        }
+        if (typeof window._logNotif === 'function') {
+          window._logNotif('Signed in as ' + shortName, '👤');
+        }
+
+      } else {
+        // ── Signed out ──
+        window._fbUser = null;
+
+        if (signInBtn) signInBtn.style.display = 'flex';
+        if (userBtn)   userBtn.style.display   = 'none';
+      }
+    }
+
+    // ── Auth state observer ────────────────────────────────────
+    _auth.onAuthStateChanged(function(user) {
+      _updateUI(user);
+    });
+
+    // ── Google Sign-In ─────────────────────────────────────────
+    window._signInWithGoogle = function() {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      _setSignInStatus('loading', '⏳ Opening Google sign-in…');
+      _auth.signInWithPopup(provider)
+        .then(function(result) {
+          _setSignInStatus('success', '✅ Signed in as ' + (result.user.displayName || result.user.email));
+        })
+        .catch(function(err) {
+          if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+            _setSignInStatus('', '');
+          } else {
+            _setSignInStatus('error', '❌ ' + (err.message || 'Sign-in failed. Try again.'));
+          }
+        });
+    };
+
+    // ── Microsoft Sign-In ──────────────────────────────────────
+    window._signInWithMicrosoft = function() {
+      var provider = new firebase.auth.OAuthProvider('microsoft.com');
+      provider.setCustomParameters({ prompt: 'select_account' });
+      _setSignInStatus('loading', '⏳ Opening Microsoft sign-in…');
+      _auth.signInWithPopup(provider)
+        .then(function(result) {
+          _setSignInStatus('success', '✅ Signed in as ' + (result.user.displayName || result.user.email));
+        })
+        .catch(function(err) {
+          if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+            _setSignInStatus('', '');
+          } else {
+            _setSignInStatus('error', '❌ ' + (err.message || 'Sign-in failed. Try again.'));
+          }
+        });
+    };
+
+    // ── Sign Out ───────────────────────────────────────────────
+    window._fbSignOut = function() {
+      _auth.signOut().then(function() {
+        _hideUserMenu();
+        if (typeof showToast === 'function') showToast('Signed out', '👋');
+        if (typeof window._logNotif === 'function') window._logNotif('Signed out', '👋');
+      }).catch(function(err) {
+        console.warn('[FirebaseAuth] Sign-out error:', err.message);
+      });
+    };
+
+    // ── Status message helper ──────────────────────────────────
+    function _setSignInStatus(type, msg) {
+      var el = document.getElementById('fbSignInStatus');
+      if (!el) return;
+      if (!msg) { el.style.display = 'none'; return; }
+      var styles = {
+        loading: 'rgba(91,95,239,.07);color:var(--indigo);border:1px solid rgba(91,95,239,.2)',
+        success: 'rgba(16,185,129,.07);color:#059669;border:1px solid rgba(16,185,129,.2)',
+        error:   'rgba(239,68,68,.07);color:#DC2626;border:1px solid rgba(239,68,68,.2)'
+      };
+      el.style.cssText = 'display:block;padding:8px 12px;border-radius:8px;font-size:12.5px;'
+        + 'margin-bottom:12px;background:' + (styles[type] || styles.loading);
+      el.textContent = msg;
+    }
+
+    // ── Show sign-in modal ─────────────────────────────────────
+    window._showFirebaseSignIn = function(reason) {
+      var modal  = document.getElementById('firebaseSignInModal');
+      var title  = document.getElementById('fbModalTitle');
+      var sub    = document.getElementById('fbModalSubtitle');
+      if (!modal) return;
+
+      if (reason === 'limit') {
+        if (title) title.textContent = 'Sign in to continue free';
+        if (sub)   sub.innerHTML = 'You\'ve used your 3 free generations.<br>'
+          + 'Sign in for <strong style="color:var(--indigo)">10 more free generations</strong> — no credit card needed.';
+      } else {
+        if (title) title.textContent = 'Sign in to Shuddhi QA';
+        if (sub)   sub.innerHTML = 'Sync your API keys across devices and get '
+          + '<strong style="color:var(--indigo)">10 free generations</strong>.';
+      }
+
+      _setSignInStatus('', '');
+      modal.style.display = 'flex';
+    };
+
+    // ── User menu toggle ───────────────────────────────────────
+    window._toggleUserMenu = function(e) {
+      var menu = document.getElementById('fbUserMenu');
+      var btn  = document.getElementById('fbUserBtn');
+      if (!menu) return;
+      var isOpen = menu.style.display === 'block';
+      if (isOpen) {
+        _hideUserMenu();
+      } else {
+        if (btn) {
+          var r = btn.getBoundingClientRect();
+          menu.style.top  = (r.bottom + 6) + 'px';
+          menu.style.right = (window.innerWidth - r.right) + 'px';
+          menu.style.left = 'auto';
+        }
+        menu.style.display = 'block';
+      }
+    };
+
+    function _hideUserMenu() {
+      var menu = document.getElementById('fbUserMenu');
+      if (menu) menu.style.display = 'none';
+    }
+
+    // Close user menu when clicking outside
+    document.addEventListener('click', function(e) {
+      var menu = document.getElementById('fbUserMenu');
+      var btn  = document.getElementById('fbUserBtn');
+      if (!menu || menu.style.display === 'none') return;
+      if (!menu.contains(e.target) && btn && !btn.contains(e.target)) {
+        _hideUserMenu();
+      }
+    }, true);
+
+    // Close modals on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      var modal = document.getElementById('firebaseSignInModal');
+      if (modal && modal.style.display !== 'none') modal.style.display = 'none';
+      _hideUserMenu();
+    });
+
+    console.info('[FirebaseAuth] Initialised — Google + Microsoft providers ready.');
+  }); // end _waitForFirebase
+
+})();
 </script>
 
 </body>
