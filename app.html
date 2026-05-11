@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.23 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.24 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.23 — Domain Intelligence + Multi-language Fix."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.24 — Domain Intelligence + Multi-language Fix."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -6056,7 +6056,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.23</span>
+      <span class="sb-badge">v9.24</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -7109,7 +7109,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.23</div>
+          <div class="settings-about-val" id="aboutVersion">v9.24</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7144,7 +7144,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.23 — Domain Intelligence + Language Fix</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.24 — Domain Intelligence + Language Fix</div>
         </div>
       </div>
 
@@ -7153,11 +7153,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.23
+          🆕 What's New in v9.24
         </div>
-        <!-- v9.23 changelog -->
+        <!-- v9.24 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.23 — Domain Intelligence + Language Fix</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.24 — Domain Intelligence + Language Fix</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -9837,7 +9837,15 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      console.error('[Fallback] Provider:', provider, '| Status:', status, '| Error:', errText.substring(0, 120));
+      // v9.24 FIX: server may have resolved to a different provider than what the client
+      // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
+      // fell back to Groq). Use err.provider (actual server provider) where available.
+      const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
+      const _provMismatchLog = err.provider && err.provider !== provider
+        ? ` (server used: ${err.provider})`
+        : '';
+
+      console.error('[Fallback] Provider:', provider + _provMismatchLog, '| Status:', status, '| Error:', errText.substring(0, 120));
 
       if (status === 413 && !err.switchProvider) {
         const detail = (err.detail || err.error || errText || 'request body exceeds proxy size limit').toString();
@@ -9873,12 +9881,19 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
+        // v9.24: also mark the actual server-used provider if it differs
+        if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
         const apiWaitMs   = (waitS || 60) * 1000 + 5000;
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
+        // v9.24: also cool down the actual server provider (e.g. Groq when server fell back)
+        if (_serverProv !== provider) {
+          const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
+          ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
+        }
 
         const remaining = toTry.slice(i + 1);
         const nextProv  = remaining.find(p => !ProviderManager._state.triedProviders.has(p) && !ProviderManager.isCoolingDown(p));
@@ -9889,7 +9904,8 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        const provName      = ProviderManager.getConfig(provider).name;
+        // v9.24: use the actual server provider name for user-facing messages
+        const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
         if (isTooLarge) {
@@ -9990,7 +10006,14 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    const _onlyGroq = tried.length === 1 && tried[0] === 'groq';
+    // v9.24 FIX: _onlyGroq now also catches the case where the client requested
+    // Gemini but the server silently fell back to Groq (no Gemini key configured).
+    // In that scenario tried = ['gemini'] but the actual provider was Groq (12K limit).
+    // Detection: server error text contains 'groq' (from the server-side error message).
+    const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
+      (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
+    const _onlyGroq = (tried.length === 1 && tried[0] === 'groq')
+      || (tried.length === 1 && _serverUsedGroq);
     if (_onlyGroq) {
       throw new Error(
         'Your document exceeds Groq\u2019s token limit (Groq free tier: ~12k tokens). '

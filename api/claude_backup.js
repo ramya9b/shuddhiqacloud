@@ -463,20 +463,12 @@ export default async function handler(req) {
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (response.status === 413) {
-        // Request too large — document exceeds the provider's context window.
-        // Note: if client requested a different provider but no key existed for it,
-        // resolveProvider() fell back to Groq (free server key). In that case
-        // requestedProvider !== provider and the mismatch is surfaced to the client.
-        const _reqProv = requestedProvider || '';
-        const _provMismatch = _reqProv && _reqProv !== provider
-          ? ` (Note: requested ${_reqProv} but no ${_reqProv} key configured — server routed to ${provider})`
-          : '';
-        console.warn('[' + provider + '] 413 Request too large' + _provMismatch);
+        // Request too large — Groq 12k TPM limit hit. Switch to Gemini or Claude.
+        console.warn('[' + provider + '] 413 Request too large — switching to next provider');
         return new Response(JSON.stringify({
-          error: provider + ' token limit exceeded (document too large).' + _provMismatch,
+          error: provider + ' token limit exceeded (document too large). Switching to next provider.',
           switchProvider: true,
-          provider,                                  // actual provider the server used
-          requestedProvider: _reqProv || provider    // what the client originally asked for
+          provider
         }), { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (response.status === 401) msg = `${provider} API key invalid or expired — please verify your key at the provider's console and try again.`;
