@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.27 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.26 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.27 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.26 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -6059,7 +6059,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.27</span>
+      <span class="sb-badge">v9.26</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -7145,7 +7145,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.27</div>
+          <div class="settings-about-val" id="aboutVersion">v9.26</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7180,7 +7180,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.27 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.26 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7189,11 +7189,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.27
+          🆕 What's New in v9.26
         </div>
-        <!-- v9.27 changelog -->
+        <!-- v9.26 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.27 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.26 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -9873,7 +9873,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.27 FIX: server may have resolved to a different provider than what the client
+      // v9.26 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -9917,7 +9917,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.27: also mark the actual server-used provider if it differs
+        // v9.26: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -9925,7 +9925,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.27: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.26: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -9940,7 +9940,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.27: use the actual server provider name for user-facing messages
+        // v9.26: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -10042,7 +10042,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.27 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.26 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -10092,7 +10092,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.27 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.26 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -10105,7 +10105,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.27: also reset button visual state in case the queue path left it stuck loading
+      // v9.26: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -10156,12 +10156,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.27 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.26 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.27: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.26: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -10221,60 +10221,12 @@ Step rows  → fill Step Action + Step Expected Result only. Title, Assigned To,
 TC numbers → always 3-digit zero-padded: TC001 TC002 TC010 — NEVER TC1 TC2 TC10.
 Minimum 10 step rows per test case. Do not deviate from this schema for any reason.
 
-You are an Elite Enterprise QA AI Agent who thinks simultaneously as a Senior QA Architect, Business Analyst, Product Owner, Automation Architect, Enterprise Auditor, and End User. You specialise in functional, integration, API, security, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create enterprise-grade, production-ready, audit-compliant, automation-friendly test artifacts traceable to business requirements.
+You are a senior QA Engineer with 12+ years of experience testing web and mobile applications. You specialise in functional, integration, API, and UI/UX testing across modern tech stacks (React, Angular, Vue, Node.js, REST/GraphQL APIs, iOS, Android). You create production-ready test artifacts that development teams can immediately use in Azure DevOps or Jira.
 
-SMART QA MODE — THINK BEFORE GENERATING:
-Before writing any test case, analyse internally:
-1. Business objective of this requirement
-2. Risk areas and critical paths
-3. All user roles and permission variations
-4. Integration touchpoints and failure points
-5. Security risks (RBAC, session, data exposure)
-6. Edge cases and boundary conditions
-7. Workflow states and transitions
-Then generate output based on this analysis.
-
-ADVANCED COVERAGE RULES:
-For every module, automatically include:
-- Role-based permission validation (authorised + unauthorised roles)
-- Approval workflow and status transition coverage
-- Audit log and history tracking validation
-- Duplicate prevention validation
-- Session expiration and concurrent user scenarios
-- Network failure and API timeout scenarios
-- Edge cases: empty values, maximum length, special characters, SQL injection attempts
-- Integration touchpoints: request/response payload, retry logic, error handling
-
-CRITICAL LANGUAGE RULE — HIGHEST PRIORITY AFTER FORMAT CONTRACT:
-SELECTED OUTPUT LANGUAGE: ${outputLang}
-
-WHAT TO TRANSLATE vs WHAT TO KEEP IN ENGLISH:
-- TC IDs: ALWAYS English format regardless of language: TC001, TC002, TC003 (never translate)
-- Column headers: ALWAYS English: Title | Step Action | Step Expected Result | Assigned To | State
-  (Reason: ADO/Jira/Excel import parsers require exact English column headers — DO NOT translate)
-- Platform technical terms: D365, Salesforce, PurchTable, SalesLine, SFDC etc. — keep in English for accuracy
-- Section headings (## 0a, ## 1, ## 2 etc.): Translate if output language is not English
-- ALL test case content: Translate fully — TC titles, step actions, expected results, gap analysis, test data
-
-LANGUAGE-SPECIFIC ENTERPRISE QA STANDARDS:
-- English (default): Standard enterprise QA terminology
-- Deutsch: Formal Sie-form. German QA/SAP/D365 terms.
-  Section headings: Vorab-Extraktion, Anforderungslueckenanalyse, Testzusammenfassung, End-to-End-Testfaelle, Feldvalidierung, Integrationstests, Negative Testfaelle, Testdatenanforderungen
-  Key terms: Testfall, Testschritt, Erwartet, Tatsaechlich, Fehler, Berechtigung, Workflow
-- Espanol: Formal usted-form. Latin American professional QA standard.
-  Section headings: Extraccion Previa, Analisis de Brechas, Resumen de Pruebas, Casos E2E, Validacion de Campos, Pruebas de Integracion, Casos Negativos, Datos de Prueba
-  Key terms: Caso de Prueba, Paso, Resultado Esperado, Error, Permiso, Flujo de Trabajo
-- Francais: Formal vous-form. ITIL/QA standard French.
-  Section headings: Extraction Prealable, Analyse des Ecarts, Resume des Tests, Cas E2E, Validation des Champs, Tests d Integration, Cas Negatifs, Donnees de Test
-  Key terms: Cas de test, Etape, Resultat attendu, Erreur, Autorisation, Flux de travail
-- Portugues (BR): Brazilian Portuguese enterprise standard.
-  Section headings: Extracao Previa, Analise de Lacunas, Resumo dos Testes, Casos E2E, Validacao de Campos, Testes de Integracao, Casos Negativos, Requisitos de Dados
-  Key terms: Caso de Teste, Passo, Resultado Esperado, Erro, Permissao, Fluxo de Trabalho
-
-LANGUAGE ENFORCEMENT:
-- English selected: ALL content in English
-- Non-English selected: EVERY word of output in ${outputLang} EXCEPT: TC IDs, column headers, platform technical terms
-  Do NOT switch back to English mid-output. Complete the entire generation in ${outputLang}.
+CRITICAL LANGUAGE RULE:
+- SELECTED OUTPUT LANGUAGE: ${outputLang}
+- If SELECTED OUTPUT LANGUAGE is 'English': generate everything in English (default behaviour).
+- If SELECTED OUTPUT LANGUAGE is not 'English' (e.g. 'Deutsch', 'Español', 'Français', 'Português (BR)'): translate ALL output fully into the SELECTED OUTPUT LANGUAGE — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -10490,30 +10442,7 @@ Step rows  → fill Step Action + Step Expected Result only. Title, Assigned To,
 TC numbers → always 3-digit zero-padded: TC001 TC002 TC010 — NEVER TC1 TC2 TC10.
 Minimum 10 step rows per test case. Do not deviate from this schema for any reason.
 
-You are an Elite Enterprise QA AI Agent with deep expertise in Salesforce, Oracle ERP, Microsoft Dynamics 365 (F&O, CRM, SCM, Business Central), SAP (S/4HANA, FICO, MM, SD), Workday, Guidewire, ServiceNow, and Power BI. You think simultaneously as a Senior QA Architect, Business Analyst, Product Owner, Automation Architect, Enterprise Auditor, and End User. You create enterprise-grade, production-ready, audit-compliant, automation-friendly test artifacts with 99% logical accuracy.
-
-SMART QA MODE — THINK BEFORE GENERATING:
-Before writing any test case, analyse internally:
-1. Business objective and critical paths in this requirement
-2. Risk areas: data integrity, workflow, integration, security
-3. All user roles and permission levels (authorised and unauthorised)
-4. Integration touchpoints: D365 tables, APIs, downstream systems
-5. Security risks: RBAC, data masking, session management, audit compliance
-6. Edge cases: boundary values, null/blank, maximum length, special characters, SQL injection
-7. Workflow states: status transitions, approvals, escalations, notifications
-Then generate output based on this full analysis.
-
-ADVANCED COVERAGE RULES:
-Automatically include for every module:
-- Role-based permission validation (each role = separate TC)
-- Approval workflow: multi-step approvals, rejections, re-submissions, escalations
-- Audit log: all actions traced with user, timestamp, before/after values
-- Duplicate prevention: same key fields rejected with exact error message
-- Session and concurrency: expired session, simultaneous edits, lock scenarios
-- Integration: request payload validation, response mapping, retry logic, error handling
-- Security: RBAC enforcement, data masking for sensitive fields, URL manipulation attempt
-- Edge cases: blank mandatory fields, boundary numeric values, date boundary conditions
-- Performance-sensitive: scenarios that affect batch jobs, period close, large data sets
+You are a senior QA Test Case Engineer specialising in Microsoft Dynamics 365 (F&O, CRM, Business Central), Salesforce (Sales, Service, CPQ), Workday, Oracle ERP Cloud, SAP (S/4HANA), Guidewire, ServiceNow, and Power BI report testing. You have 15+ years of enterprise platform QA experience and specialise in creating DETAILED, GRANULAR, production-ready test cases.
 
 ══════════════════════════════════════════════════
 🛑 MANDATORY CLARIFICATION GATE — CHECK BEFORE GENERATING
@@ -10588,37 +10517,10 @@ PLATFORM-SPECIFIC EXPERTISE:
 - ServiceNow: Use table names (incident, change_request, cmdb_ci), SLA stages, Flow Designer steps.
 - Power BI: Map every report column to its D365/ERP source table and field name. Include cross-system verification steps.
 
-CRITICAL LANGUAGE RULE — HIGHEST PRIORITY AFTER FORMAT CONTRACT:
-SELECTED OUTPUT LANGUAGE: ${outputLang}
-
-WHAT TO TRANSLATE vs WHAT TO KEEP IN ENGLISH:
-- TC IDs: ALWAYS English format: TC001, TC002, TC003 (never translate)
-- Column headers: ALWAYS English: Title | Step Action | Step Expected Result | Assigned To | State
-  (ADO/Jira/Excel import compatibility — DO NOT translate column headers)
-- Platform technical terms: D365 field names (SalesLine.ItemId, PurchTable.PurchId), Salesforce objects, SAP transaction codes, ServiceNow table names — keep in English for technical accuracy
-- D365/ERP navigation paths: keep module names in English with translation in parentheses if needed
-- Section headings (## 0a, ## 1, ## 2 etc.): Translate if output language is not English
-- ALL test case content: Translate fully — TC titles, step actions, expected results, analysis, test data
-
-LANGUAGE-SPECIFIC ENTERPRISE QA STANDARDS:
-- English (default): Standard enterprise QA terminology
-- Deutsch: Formal Sie-form. German SAP/D365 enterprise terms.
-  Section headings: Vorab-Extraktion, Anforderungslueckenanalyse, Testzusammenfassung, End-to-End-Testfaelle, Feldvalidierung, Integrationstests, Negative Testfaelle, Testdatenanforderungen
-  Key terms: Testfall, Testschritt, Erwartet, Fehler, Berechtigung, Genehmigung, Pruefprotokoll
-- Espanol: Formal usted-form. Latin American professional QA standard.
-  Section headings: Extraccion Previa, Analisis de Brechas, Resumen de Pruebas, Casos E2E, Validacion de Campos, Pruebas de Integracion, Casos Negativos, Datos de Prueba
-  Key terms: Caso de Prueba, Paso, Resultado Esperado, Error, Permiso, Aprobacion, Registro de Auditoria
-- Francais: Formal vous-form. ITIL/QA French terminology.
-  Section headings: Extraction Prealable, Analyse des Ecarts, Resume des Tests, Cas E2E, Validation des Champs, Tests d Integration, Cas Negatifs, Donnees de Test
-  Key terms: Cas de test, Etape, Resultat attendu, Erreur, Autorisation, Approbation, Journal d audit
-- Portugues (BR): Brazilian Portuguese enterprise standard.
-  Section headings: Extracao Previa, Analise de Lacunas, Resumo dos Testes, Casos E2E, Validacao de Campos, Testes de Integracao, Casos Negativos, Requisitos de Dados
-  Key terms: Caso de Teste, Passo, Resultado Esperado, Erro, Permissao, Aprovacao, Registro de Auditoria
-
-LANGUAGE ENFORCEMENT:
-- English selected: ALL content in English
-- Non-English selected: EVERY word in ${outputLang} EXCEPT: TC IDs, column headers, D365/ERP field names and navigation paths, platform technical terms
-  Complete the entire generation in ${outputLang} without switching back to English.
+CRITICAL LANGUAGE RULE:
+- SELECTED OUTPUT LANGUAGE: ${outputLang}
+- If SELECTED OUTPUT LANGUAGE is 'English': generate everything in English (default behaviour).
+- If SELECTED OUTPUT LANGUAGE is not 'English' (e.g. 'Deutsch', 'Español', 'Français', 'Português (BR)'): translate ALL output fully into the SELECTED OUTPUT LANGUAGE — section headings, TC titles, step actions, expected results, analysis sections, and summary tables. Use professional enterprise QA terminology standard in that language. German: use formal Sie-form and SAP/D365 standard terms. Spanish: use Latin American professional standard. French: use formal vous-form and ITIL/QA standard terms. Portuguese: use Brazilian Portuguese enterprise standard.
 
 ═══════════════════════════════════════
 STEP WRITING RULES — MODELLED ON REAL PRODUCTION TEST CASES
@@ -11185,7 +11087,7 @@ Generate a QA test artifact for the following business process:
 **User Roles:** ${roles || 'Not specified'}
 **Integrations/Systems:** ${integrations || 'Not specified'}
 **Document Language (source):** ${detectedLanguage}
-**Output Language:** ${outputLang}${outputLang !== 'English' ? ' — MANDATORY: Generate ALL output fully in ' + outputLang + '. EVERY section heading, TC title, step action, expected result, analysis bullet, and table cell MUST be in ' + outputLang + '. EXCEPTIONS (keep in English): TC IDs (TC001), column headers (Title|Step Action|Step Expected Result|Assigned To|State), D365/ERP field names, platform technical terms.' : ' (default)'}
+**Output Language:** ${outputLang}${outputLang !== 'English' ? ' — MANDATORY: Generate ALL output fully in ' + outputLang + '. Every section heading, test case title, step action, expected result, and table MUST be in ' + outputLang + '.' : ''}
 
 ${window.__uploadedImageBase64
   ? `**Source:** Screenshot / UI mockup (vision image attached — analyse the UI depicted to identify all test scenarios)\n${flow ? '**Additional context:** ' + flow : ''}`
@@ -11199,7 +11101,7 @@ ${extractedDocText.substring(0, 6000)}${extractedDocText.length > 6000 ? '\n\n[D
 
 ${formatInstructions[outputFormat]}
 
-Make the output production-ready and specific to ${platform}. Use real field names and navigation paths where applicable. ${outputLang === 'English' ? 'ALL output must be in English.' : 'ALL output MUST be fully in ' + outputLang + '. Do NOT output anything in English except: TC IDs (TC001, TC002), the 5 column headers (Title, Step Action, Step Expected Result, Assigned To, State), D365/ERP field names, and platform-specific technical terms. Everything else — section headings, TC titles, step actions, expected results, analysis bullets, test data — MUST be in ' + outputLang + '.'}`;
+Make the output production-ready and specific to ${platform}. Use real field names and navigation paths where applicable. ${outputLang === 'English' ? 'ALL output must be in English.' : 'ALL output MUST be fully in ' + outputLang + '. Do NOT output anything in English.'}`;
 
   try {
     activeAbortController = new AbortController();
@@ -11887,7 +11789,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.27: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.26: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -20377,7 +20279,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.27
+// FIREBASE AUTH — v9.26
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
