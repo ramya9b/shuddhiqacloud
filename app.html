@@ -19270,6 +19270,15 @@ window.copyShareLink = function() {
     onmouseout="this.style.background='none'">
     🚪 Sign out
   </button>
+  <button onclick="window._fbDeleteMyData()"
+    style="width:100%;padding:9px 12px;text-align:left;background:none;border:none;
+           cursor:pointer;font-size:13px;color:#EF4444;border-radius:8px;
+           transition:background .12s;font-family:'Plus Jakarta Sans',sans-serif;
+           display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);margin-top:4px"
+    onmouseover="this.style.background='rgba(239,68,68,.06)'"
+    onmouseout="this.style.background='none'">
+    🗑 Delete my data &amp; account
+  </button>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
@@ -21499,6 +21508,46 @@ if (document.readyState !== 'loading') {
       }).catch(function(err) {
         console.warn('[FirebaseAuth] Sign-out error:', err.message);
       });
+    };
+
+    // ── Delete my data & account (GDPR / privacy right to erasure) ──
+    window._fbDeleteMyData = async function() {
+      var user = _auth.currentUser;
+      if (!user) return;
+      var confirmed = confirm(
+        'Delete all your Shuddhi QA data?\n\n' +
+        'This will permanently delete:\n' +
+        '• Your synced preferences (platform, session history, stats)\n' +
+        '• Your Firebase account for this app\n\n' +
+        'Your API keys (Claude/Gemini/Groq) and ADO/Jira settings are stored only in this browser — use Settings > Clear to remove those.\n\n' +
+        'This cannot be undone.'
+      );
+      if (!confirmed) return;
+
+      if (typeof showToast === 'function') showToast('Deleting your data…', '🗑');
+      try {
+        // 1. Delete Firestore document
+        if (typeof firebase !== 'undefined' && firebase.firestore) {
+          var db = firebase.firestore();
+          await db.collection('users').doc(user.uid).delete();
+        }
+        // 2. Clear all shuddhi localStorage keys
+        Object.keys(localStorage).filter(function(k){ return k.startsWith('shuddhi-'); })
+          .forEach(function(k){ localStorage.removeItem(k); });
+        // 3. Delete the Firebase Auth account itself
+        await user.delete();
+        _hideUserMenu();
+        if (typeof showToast === 'function') showToast('All your data has been deleted. Goodbye! 👋', '✅');
+        setTimeout(function(){ window.location.reload(); }, 2000);
+      } catch(err) {
+        // Firebase may require re-authentication for account deletion if session is old
+        if (err.code === 'auth/requires-recent-login') {
+          alert('For security, please sign out and sign back in, then try deleting your account again.');
+        } else {
+          console.warn('[FirebaseAuth] Delete error:', err.message);
+          if (typeof showToast === 'function') showToast('Delete failed: ' + err.message, '❌');
+        }
+      }
     };
 
     // ── Status message helper ──────────────────────────────────
