@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.27 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.34 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.27 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.34 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -2987,6 +2987,11 @@ header::after { display: none !important; }
   .tg-table tbody tr.tg-selected { background:rgba(0,120,212,.05); }
 
   /* Column widths */
+  .tg-col-drag { width:24px; cursor:grab; color:var(--text3); text-align:center; user-select:none; }
+  .tg-col-drag:active { cursor:grabbing; }
+  .drag-handle { font-size:14px; opacity:.4; transition:opacity .15s; pointer-events:none; }
+  .tg-row-main:hover .drag-handle { opacity:.8; }
+  .tg-row-main.drag-over { outline:2px solid var(--indigo); outline-offset:-1px; background:rgba(91,95,239,.06) !important; }
   .tg-col-cb   { width:38px; }
   .tg-col-id   { width:80px; }
   .tg-col-sc   { width:22%; }
@@ -5360,6 +5365,155 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
+  /* ── v9.34: Split View ─────────────────────────────────────────────── */
+  #_splitViewWrap {
+    display: none; gap: 0; height: 100%; min-height: 500px;
+    border-radius: var(--radius); overflow: hidden;
+    border: 1.5px solid var(--border2);
+  }
+  #_splitViewWrap.active { display: flex; }
+  #_splitReqPane {
+    width: 42%; min-width: 280px; max-width: 60%;
+    border-right: 1.5px solid var(--border2); display: flex;
+    flex-direction: column; background: var(--surface);
+    overflow: hidden; flex-shrink: 0;
+  }
+  #_splitTCPane { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--surface); overflow: auto; }
+  #_splitResizer {
+    width: 6px; background: var(--border2); cursor: col-resize;
+    flex-shrink: 0; transition: background .15s;
+  }
+  #_splitResizer:hover, #_splitResizer.dragging { background: var(--indigo); }
+  ._split-pane-header {
+    padding: 10px 14px; border-bottom: 1px solid var(--border2);
+    font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+    color: var(--text3); text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0; background: var(--surface2);
+  }
+  ._split-req-content {
+    flex: 1; overflow-y: auto; padding: 16px; font-size: 12.5px;
+    line-height: 1.75; color: var(--text2); white-space: pre-wrap;
+    word-break: break-word; font-family: 'JetBrains Mono', monospace;
+  }
+  ._split-req-empty { padding: 32px 20px; text-align: center; color: var(--text3); font-size: 13px; line-height: 1.7; }
+  .req-term-highlight { background: rgba(91,95,239,.12); border-radius: 3px; padding: 0 2px; }
+  #_splitViewBtn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 10px; border-radius: 8px; border: 1.5px solid var(--border2);
+    background: var(--surface2); color: var(--text2);
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s;
+    font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap;
+  }
+  #_splitViewBtn:hover { border-color: var(--indigo); color: var(--indigo); }
+  #_splitViewBtn.active { background: rgba(91,95,239,.1); border-color: var(--indigo); color: var(--indigo); }
+  @media (max-width: 768px) {
+    #_splitViewWrap.active { flex-direction: column; }
+    #_splitReqPane { width: 100%; max-width: 100%; border-right: none; border-bottom: 1.5px solid var(--border2); max-height: 220px; }
+    #_splitResizer { display: none; }
+  }
+
+  /* ── v9.34: Command Palette ──────────────────────────────────────── */
+  #_cmdPalette {
+    position: fixed; inset: 0; z-index: 300040;
+    display: none; align-items: flex-start;
+    justify-content: center; padding-top: 14vh;
+  }
+  #_cmdPalette.open { display: flex; }
+  #_cmdPaletteBackdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+  }
+  #_cmdBox {
+    position: relative; z-index: 1; width: min(580px, 94vw);
+    background: var(--surface); border: 1.5px solid rgba(91,95,239,.22);
+    border-radius: 16px; box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  #_cmdInput {
+    width: 100%; padding: 16px 18px; font-size: 15px; font-weight: 500;
+    border: none; background: transparent; color: var(--text);
+    outline: none; font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  #_cmdInput::placeholder { color: var(--text3); }
+  #_cmdDivider { height: 1px; background: var(--border2); }
+  #_cmdResults { max-height: 340px; overflow-y: auto; padding: 6px; }
+  .cmd-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 9px 12px; border-radius: 10px; cursor: pointer; transition: background .1s;
+  }
+  .cmd-item:hover, .cmd-item.active { background: rgba(91,95,239,.08); }
+  .cmd-item.active { background: rgba(91,95,239,.13); }
+  .cmd-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .cmd-text { flex: 1; min-width: 0; }
+  .cmd-label { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cmd-desc  { font-size: 11px; color: var(--text3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cmd-kbd   { font-size: 10.5px; padding: 2px 7px; border-radius: 5px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; white-space: nowrap; flex-shrink: 0; }
+  .cmd-section { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); padding: 8px 12px 4px; }
+  #_cmdFooter { border-top: 1px solid var(--border2); padding: 8px 14px; display: flex; align-items: center; gap: 14px; }
+  .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+  .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
+
+  /* ── v9.34: TC Quality Score bar ──────────────────────────────── */
+  .tc-quality-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+    cursor: pointer;
+  }
+  .tc-quality-bar {
+    width: 48px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border2);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .tc-quality-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+  .tc-quality-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .03em;
+  }
+  .tc-quality-grade-A { color: #10B981; }
+  .tc-quality-grade-A .tc-quality-fill { background: #10B981; }
+  .tc-quality-grade-B { color: #F59E0B; }
+  .tc-quality-grade-B .tc-quality-fill { background: #F59E0B; }
+  .tc-quality-grade-C { color: #EF4444; }
+  .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
+
+  /* ── v9.34: Celebration panel ──────────────────────────────────── */
+  #_celebrationPanel {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200030;
+    width: min(340px, calc(100vw - 32px));
+    background: var(--surface);
+    border: 1.5px solid rgba(91,95,239,.25);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,.28);
+    padding: 18px 20px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transform: translateY(120%);
+    opacity: 0;
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+  }
+  #_celebrationPanel.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
   .output-empty-state {
     display: flex; flex-direction: column; align-items: center;
     justify-content: center; padding: 60px 24px; text-align: center; gap: 16px;
@@ -6059,7 +6213,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.27</span>
+      <span class="sb-badge">v9.34</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -7145,7 +7299,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.27</div>
+          <div class="settings-about-val" id="aboutVersion">v9.34</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7180,7 +7334,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.27 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.34 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7189,11 +7343,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.27
+          🆕 What's New in v9.34
         </div>
-        <!-- v9.27 changelog -->
+        <!-- v9.34 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.27 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.34 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -7410,10 +7564,10 @@ header::after { display: none !important; }
         <!-- ── End Domain Context Card ──────────────────────── -->
 
           <!-- Advanced toggle -->
-        <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()">
-          <span class="adv-icon">▼</span>
-          <span>Advanced options</span>
-          <span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:4px">(Roles · Integrations)</span>
+        <div class="advanced-toggle" id="advancedToggle" onclick="toggleAdvanced()" style="cursor:pointer;user-select:none">
+          <span class="adv-icon" id="advIcon">&#9660;</span>
+          <span>&#9881;&#65039; Customize</span>
+          <span style="font-size:10.5px;font-weight:400;color:var(--text3);margin-left:6px">Roles &middot; Integrations &middot; Priority &middot; Format &middot; Language</span>
         </div>
         <div class="advanced-fields" id="advancedFields">
           <div class="field">
@@ -7505,6 +7659,13 @@ header::after { display: none !important; }
           <div class="output-header-left">
             <div class="panel-icon">📄</div>
             <span>Generated Test Artifact</span>
+          </div>
+          <div style="margin-left:auto;padding-right:4px">
+            <button id="_splitViewBtn" onclick="_toggleSplitView()"
+              data-tip="Split view: requirement doc left, test cases right — for traceability"
+              title="Split View">
+              &#9707; Split
+            </button>
           </div>
         </div>
         <div class="export-row" style="position:relative;flex-wrap:nowrap;gap:6px">
@@ -7649,40 +7810,97 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <div class="output-placeholder" id="placeholder">
-        <div class="placeholder-logos">
-          <div class="ph-logo d365">⚙️</div>
-          <div class="ph-plus">+</div>
-          <div class="ph-logo sf">☁️</div>
-        </div>
-        <div class="placeholder-title">Generate Test Cases in 15 Seconds</div>
-        <div class="placeholder-sub">Upload your FRD or describe your flow → pick a platform → get production-ready test cases ready to push to ADO or Jira.</div>
-        <div class="ph-stats-row" id="phStatsRow">
-          <div class="ph-stat">
-            <div class="ph-stat-num" id="phTotalTCs">0</div>
-            <div class="ph-stat-label">TCs Generated</div>
+      <!-- v9.34: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
+      <!-- When split is ON,  #_splitViewWrap shows as flex row -->
+      <div id="_splitViewWrap">
+        <div id="_splitReqPane">
+          <div class="_split-pane-header">
+            &#128196; Requirement Document
+            <span id="_splitDocLabel" style="font-size:10.5px;color:var(--text3);font-weight:400;margin-left:auto"></span>
           </div>
-          <div class="ph-stat-sep"></div>
-          <div class="ph-stat">
-            <div class="ph-stat-num">13</div>
-            <div class="ph-stat-label">Platforms</div>
-          </div>
-          <div class="ph-stat-sep"></div>
-          <div class="ph-stat">
-            <div class="ph-stat-num">3</div>
-            <div class="ph-stat-label">AI Providers</div>
+          <div class="_split-req-content" id="_splitReqContent">
+            <div class="_split-req-empty">
+              No requirement loaded.<br>
+              Upload a doc or describe your flow<br>
+              in the left panel, then generate.
+            </div>
           </div>
         </div>
-        <div class="sample-chips">
-          <div class="chip" onclick="fillSample('fo')">Invoice Approval D365 F&O</div>
-          <div class="chip" onclick="fillSample('crm')">Lead to Opportunity CRM</div>
-          <div class="chip" onclick="fillSample('sf')">CPQ Quote to Order SF</div>
-          <div class="chip" onclick="fillSample('int')">D365 ↔ Salesforce Sync</div>
-          <div class="chip" onclick="fillSample('wd')">Payroll Run Workday</div>
-          <div class="chip" onclick="fillSample('oe')">AP Invoice Oracle ERP</div>
-          <div class="chip" onclick="fillSample('gw')">FNOL Claims Guidewire</div>
-          <div class="chip" onclick="fillSample('web')">🌐 Web App User Flow</div>
+        <div id="_splitResizer"></div>
+        <div id="_splitTCPane">
+      <!-- v9.34: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
+
+        <!-- Hero row -->
+        <div style="text-align:center;padding:32px 24px 20px">
+          <div style="font-size:36px;margin-bottom:10px">🧪</div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px;font-family:'Plus Jakarta Sans',sans-serif">
+            What do you want to test today?
+          </div>
+          <div style="font-size:13.5px;color:var(--text3);max-width:460px;margin:0 auto;line-height:1.65">
+            Upload a requirement doc, paste a user story, or pick a template below.<br>
+            Platform and module are auto-detected — just hit Generate.
+          </div>
         </div>
+
+        <!-- Stats row -->
+        <div style="display:flex;justify-content:center;gap:0;margin:0 24px 24px;border-radius:14px;
+                    background:var(--surface2);border:1px solid var(--border2);overflow:hidden">
+          <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border2)">
+            <div style="font-size:20px;font-weight:800;color:var(--indigo)" id="phTotalTCs">0</div>
+            <div style="font-size:10.5px;color:var(--text3);margin-top:2px">TCs Generated</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border2)">
+            <div style="font-size:20px;font-weight:800;color:var(--indigo)">13</div>
+            <div style="font-size:10.5px;color:var(--text3);margin-top:2px">Platforms</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:14px 8px;border-right:1px solid var(--border2)">
+            <div style="font-size:20px;font-weight:800;color:var(--indigo)">3</div>
+            <div style="font-size:10.5px;color:var(--text3);margin-top:2px">AI Providers</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:14px 8px">
+            <div style="font-size:20px;font-weight:800;color:#10B981" id="phSavedHours">0h</div>
+            <div style="font-size:10.5px;color:var(--text3);margin-top:2px">QA Hours Saved</div>
+          </div>
+        </div>
+
+        <!-- Template library section -->
+        <div style="padding:0 20px 8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">
+              &#127775; Quick Start Templates
+            </div>
+            <button onclick="openTemplateLibrary()"
+              style="font-size:11.5px;color:var(--indigo);background:none;border:none;cursor:pointer;
+                     font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;padding:0">
+              View all &#8594;
+            </button>
+          </div>
+
+          <!-- 5 template cards -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:20px" id="welcomeTemplateGrid"></div>
+        </div>
+
+        <!-- Or divider + sample chips -->
+        <div style="padding:0 20px 20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+            <div style="flex:1;height:1px;background:var(--border2)"></div>
+            <span style="font-size:11px;color:var(--text3);white-space:nowrap">or try a quick example</span>
+            <div style="flex:1;height:1px;background:var(--border2)"></div>
+          </div>
+          <div class="sample-chips" style="justify-content:flex-start;flex-wrap:wrap">
+            <div class="chip" onclick="fillSample('fo')">Invoice Approval D365 F&O</div>
+            <div class="chip" onclick="fillSample('crm')">Lead to Opportunity CRM</div>
+            <div class="chip" onclick="fillSample('sf')">CPQ Quote to Order SF</div>
+            <div class="chip" onclick="fillSample('int')">D365 &#8596; Salesforce Sync</div>
+            <div class="chip" onclick="fillSample('wd')">Payroll Run Workday</div>
+            <div class="chip" onclick="fillSample('oe')">AP Invoice Oracle ERP</div>
+            <div class="chip" onclick="fillSample('gw')">FNOL Claims Guidewire</div>
+            <div class="chip" onclick="fillSample('web')">&#127760; Web App User Flow</div>
+          </div>
+        </div>
+
       </div>
 
       <!-- v3.6 Loading skeleton — shown during generation -->
@@ -7762,13 +7980,13 @@ header::after { display: none !important; }
       <!-- Output -->
       <div class="output-content" id="outputContent">
         <div class="output-empty-state" id="outputEmptyState">
-          <div class="output-empty-icon">🧪</div>
-          <div class="output-empty-title">Ready to Generate Test Cases</div>
-          <div class="output-empty-desc">Paste your business requirement or user story above, select your platform and module, then click Generate.</div>
+          <div class="output-empty-icon">⚡</div>
+          <div class="output-empty-title">Ready to Generate</div>
+          <div class="output-empty-desc">Select a platform, describe your requirement or upload a doc — then hit Generate to get 40-50 production-ready test cases in seconds.</div>
           <div class="output-empty-steps">
-            <div class="output-empty-step">1️⃣ Select Platform</div>
-            <div class="output-empty-step">2️⃣ Describe Requirement</div>
-            <div class="output-empty-step">3️⃣ Click Generate ⚡</div>
+            <div class="output-empty-step">1️⃣ Upload doc or pick a template</div>
+            <div class="output-empty-step">2️⃣ Platform auto-detects ✨</div>
+            <div class="output-empty-step">3️⃣ Hit Generate ⚡</div>
           </div>
           <button onclick="startTour()"
             style="margin-top:18px;padding:10px 24px;border-radius:10px;border:none;
@@ -7792,6 +8010,7 @@ header::after { display: none !important; }
         <button class="bulk-btn" onclick="bulkExportSelected()">📊 Export Selected</button>
         <button class="bulk-btn" onclick="bulkCopySelected()">📋 Copy Selected</button>
         <button class="bulk-btn bulk-btn-primary" onclick="bulkPushToADO()">🔷 Push Selected to ADO</button>
+        <button class="bulk-btn" onclick="bulkDeleteSelected()" style="color:#EF4444;border-color:rgba(239,68,68,.3)" onmouseover="this.style.background='rgba(239,68,68,.08)'" onmouseout="this.style.background=''">🗑 Delete Selected</button>
         <span class="bulk-clear" onclick="clearBulkSelection()">✕ Clear selection</span>
       </div>
 
@@ -7816,6 +8035,8 @@ header::after { display: none !important; }
         </div>
         <div class="token-badge" id="tokenBadge">✓ Complete</div>
       </div>
+        </div><!-- /#_splitTCPane -->
+      </div><!-- /#_splitViewWrap -->
     </div>
 
   </div>
@@ -8558,6 +8779,212 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
+// ── v9.34: Template Library ──────────────────────────────────────────
+const TEMPLATE_LIBRARY = [
+  {
+    id: 'tmpl-ap',
+    icon: '💳',
+    title: 'Accounts Payable',
+    subtitle: 'Invoice Processing & 3-Way Match',
+    platform: 'D365 F&O',
+    module: 'Accounts Payable',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: 'AP Clerk, Finance Manager, Vendor, GL Accountant',
+    integrations: 'Purchase Order module, General Ledger, Tax Engine, Email Service',
+    badge: '#0078D4',
+    flow: `Vendor submits invoice via the AP portal in D365 F&O. AP Clerk navigates to Accounts Payable > Invoices > Vendor Invoices and creates a new invoice. System performs three-way match between the Purchase Order, Product Receipt, and Vendor Invoice. If invoice amount exceeds INR 50,000, approval workflow routes to Finance Manager. Tax (GST 18% for services, 12% for goods) auto-calculates on save. Duplicate invoice check runs against vendor account and invoice number. Approved invoice posts to General Ledger with debit to Expense and credit to Accounts Payable. Payment journal is auto-generated. Partial payment is supported. Error cases: blocked vendor, closed posting period, PO tolerance exceeded, duplicate invoice number.`
+  },
+  {
+    id: 'tmpl-lead',
+    icon: '☁️',
+    title: 'Lead to Opportunity',
+    subtitle: 'Salesforce Sales Cloud',
+    platform: 'Salesforce Sales',
+    module: 'Lead Management',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: 'Sales Rep, Sales Manager, Lead, Customer',
+    integrations: 'Web-to-Lead form, Email Studio, DocuSign, Salesforce Reports',
+    badge: '#00A1E0',
+    flow: `Sales Rep creates a Lead in Salesforce Sales Cloud via web-to-lead form or manual entry. Required fields: First Name, Last Name, Company, Work Email, Phone, Lead Source. Assignment rules route lead to correct territory Sales Rep via round-robin. System checks for duplicate email — blocks if existing Lead or Contact found. Automated follow-up email sent within 1 hour via Email Studio. Sales Rep qualifies lead using BANT criteria and sets Rating to Hot/Warm/Cold. Qualified lead is converted to Account, Contact, and Opportunity. Opportunity follows stage progression: Prospecting > Qualification > Needs Analysis > Value Proposition > Proposal > Negotiation > Closed Won/Lost. Discount above 10% requires Sales Manager approval. Contract attachment mandatory for Closed Won. CSAT survey sent on case closure.`
+  },
+  {
+    id: 'tmpl-auth',
+    icon: '🔐',
+    title: 'User Authentication',
+    subtitle: 'Web App Registration & Login',
+    platform: 'Web App',
+    module: 'User Authentication',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: 'Guest User, Registered User, Admin, SSO User',
+    integrations: 'Google OAuth 2.0, Microsoft OAuth, SMTP Email, SMS Gateway, Firebase Auth',
+    badge: '#1D9E75',
+    flow: `New user visits the web application registration page. Mandatory fields: First Name, Last Name, Work Email (personal domains blocked), Password (min 8 chars, uppercase + lowercase + number + special char), Confirm Password, Company Name, T&C checkbox. On submit, system sends 6-digit OTP to email (valid 10 minutes, max 3 wrong attempts). Account activates only after OTP verification. Login supports: email/password with Remember Me (7-day cookie), Google SSO (OAuth 2.0 popup), Microsoft SSO (work accounts). Account locks after 5 consecutive failed attempts — 30-minute auto-unlock. Forgot Password sends single-use reset link valid 60 minutes. MFA optional for standard users, mandatory for Admin role. Session timeout after 30 minutes inactivity with 2-minute warning. Concurrent sessions: max 3 devices. Profile photo: max 2MB JPG/PNG, auto-resized to 200x200px.`
+  },
+  {
+    id: 'tmpl-po',
+    icon: '📦',
+    title: 'Purchase Order',
+    subtitle: 'Procurement & Goods Receipt',
+    platform: 'D365 F&O',
+    module: 'Purchase Order',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: 'Procurement Manager, Finance Head, Vendor, Warehouse Staff',
+    integrations: 'Vendor Master, Item Master, Inventory Management, Accounts Payable, Budget Control',
+    badge: '#0078D4',
+    flow: `Procurement user navigates to Procurement and Sourcing > Purchase Orders > All Purchase Orders > New. PO header: Vendor Account (must be active, not on hold), Delivery Address, Currency, Payment Terms. PO lines: Item Number, Quantity (>0), Unit Price (>0), Delivery Date (cannot be past), Warehouse. PO number auto-generates as PO-YYYY-XXXXXX. Budget check runs on save — blocks if cost center budget exceeded. Approval workflow: PO <= INR 1,00,000 to Procurement Manager; > INR 10,00,000 to CEO. Confirmed PO dispatched to vendor as PDF via email. Partial goods receipt supported — received quantity cannot exceed ordered quantity. Over-delivery tolerance: 0% default. Amendment after confirmation requires re-approval. Cancellation only if no lines received. Change log maintained for all amendments.`
+  },
+  {
+    id: 'tmpl-payroll',
+    icon: '💼',
+    title: 'HR Payroll Processing',
+    subtitle: 'Monthly Payroll & Statutory Compliance',
+    platform: 'Enterprise ERP',
+    module: 'Payroll',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: 'HR Manager, Payroll Specialist, Finance Controller, Employee',
+    integrations: 'Leave & Attendance, Employee Master, General Ledger, Bank (NEFT), EPFO Portal, ESIC Portal, Email Service',
+    badge: '#7B5EA7',
+    flow: `HR locks attendance and leave data by the 20th. Payroll Specialist imports attendance for Loss of Pay calculation. LOP = Absent days not covered by approved leave. LOP deduction = (Monthly Gross / Working days) x LOP days. Salary structure: Basic (40-50% CTC), HRA (50% metro / 40% non-metro), Special Allowance, Transport (INR 1,600 tax-free), Medical (INR 1,250 tax-free). Statutory deductions: Employee PF 12% of Basic (capped INR 1,800 if Basic > INR 15,000), ESI 0.75% of Gross if Gross <= INR 21,000, Professional Tax per state slab, TDS monthly installment of annual liability. System runs exception report flagging: negative net pay, missing PAN (TDS at 20%), missing bank IFSC, employees without salary structure. Finance approves payroll. Payslip generated as password-protected PDF (password = PAN uppercase) and emailed. Bank transfer file generated in NEFT format. Payroll once finalised is locked — no edits.`
+  }
+];
+
+function loadTemplate(id) {
+  const t = TEMPLATE_LIBRARY.find(x => x.id === id);
+  if (!t) return;
+
+  // 1. Platform
+  if (typeof selectPlatform === 'function') selectPlatform(t.platform);
+  document.getElementById('platform').value = t.platform;
+
+  // 2. Module — retry pattern (same as fillSample)
+  const _setMod = () => {
+    const moduleEl = document.getElementById('module');
+    if (moduleEl) moduleEl.value = t.module;
+    const nameEl = document.getElementById('selectedModuleName');
+    if (nameEl) { nameEl.textContent = '\u2713 ' + t.module; nameEl.style.display = 'inline-block'; }
+    const chip = [...document.querySelectorAll('.module-chip')]
+      .find(c => c.dataset.module === t.module || c.textContent.trim() === t.module);
+    if (chip) {
+      document.querySelectorAll('.module-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    }
+    if (typeof setCustomModule === 'function') setCustomModule(t.module);
+    if (typeof updateModules === 'function') updateModules();
+  };
+  _setMod(); setTimeout(_setMod, 200); setTimeout(_setMod, 500);
+
+  // 3. Domain
+  if (t.domain && typeof selectDomain === 'function') selectDomain(t.domain);
+  else if (!t.domain && typeof clearDomain === 'function') clearDomain();
+
+  // 4. Priority
+  if (t.priority) {
+    document.querySelectorAll('.priority-btn').forEach(b => {
+      b.classList.toggle('selected', b.dataset.priority === t.priority || b.textContent.trim() === t.priority);
+    });
+    window.priority = t.priority;
+  }
+
+  // 5. Output format
+  const fmtEl = document.getElementById('outputFormat');
+  if (fmtEl && t.format) fmtEl.value = t.format;
+
+  // 6. Flow description
+  const flowEl = document.getElementById('flowDesc');
+  if (flowEl) {
+    flowEl.value = t.flow;
+    if (typeof updateFlowCharCount === 'function') updateFlowCharCount(flowEl);
+  }
+
+  // 7. Roles & integrations
+  const rolesEl = document.getElementById('roles');
+  if (rolesEl) rolesEl.value = t.roles || '';
+  const intEl = document.getElementById('integrations');
+  if (intEl) intEl.value = t.integrations || '';
+
+  // 8. Hide welcome overlay if present
+  const _welcome = document.getElementById('_welcomeOverlay');
+  if (_welcome) _welcome.style.display = 'none';
+
+  // 9. Clear extracted doc text (template uses flowDesc, not a doc)
+  if (typeof extractedDocText !== 'undefined') window.extractedDocText = '';
+
+  // 10. Toast + scroll to generate button
+  if (typeof showToast === 'function') showToast('\u2728 Template loaded: ' + t.title + ' \u2014 ready to generate!');
+  const genBtn = document.getElementById('genBtn');
+  if (genBtn) setTimeout(() => genBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 300);
+}
+
+// Open / close template library panel
+function openTemplateLibrary() {
+  let panel = document.getElementById('_tmplPanel');
+  if (!panel) { _renderTemplatePanel(); panel = document.getElementById('_tmplPanel'); }
+  if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function _renderTemplatePanel() {
+  const existing = document.getElementById('_tmplPanel');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = '_tmplPanel';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:200020;display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML = `
+    <div style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)"
+         onclick="document.getElementById('_tmplPanel').style.display='none'"></div>
+    <div style="position:relative;z-index:1;background:var(--surface);border-radius:20px;
+                border:1.5px solid var(--border2);box-shadow:0 24px 80px rgba(0,0,0,.45);
+                width:min(780px,96vw);max-height:88vh;overflow-y:auto;padding:28px 24px;
+                font-family:'Plus Jakarta Sans',sans-serif">
+      <button onclick="document.getElementById('_tmplPanel').style.display='none'"
+        style="position:absolute;top:14px;right:16px;background:none;border:none;
+               font-size:18px;cursor:pointer;color:var(--text3);padding:4px">&#10005;</button>
+      <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px">&#127775; Template Library</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px">Click any template to pre-fill all settings &#8212; then hit Generate</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
+        ${TEMPLATE_LIBRARY.map(t => `
+          <div onclick="loadTemplate('${t.id}');document.getElementById('_tmplPanel').style.display='none'"
+            style="background:var(--surface2);border:1.5px solid var(--border2);border-radius:14px;
+                   padding:16px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:8px"
+            onmouseover="this.style.borderColor='var(--indigo)';this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.borderColor='var(--border2)';this.style.transform=''">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:36px;height:36px;border-radius:10px;background:${t.badge};
+                          display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">
+                ${t.icon}
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);line-height:1.3">${t.title}</div>
+                <div style="font-size:11px;color:var(--text3)">${t.platform}</div>
+              </div>
+            </div>
+            <div style="font-size:11.5px;color:var(--text2);line-height:1.55">${t.subtitle}</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
+              <span style="font-size:10px;padding:2px 7px;border-radius:6px;
+                           background:rgba(91,95,239,.08);color:var(--indigo);
+                           border:1px solid rgba(91,95,239,.2)">${t.module}</span>
+              ${t.domain ? `<span style="font-size:10px;padding:2px 7px;border-radius:6px;background:rgba(16,185,129,.08);color:#059669;border:1px solid rgba(16,185,129,.2)">${t.domain.toUpperCase()}</span>` : ''}
+            </div>
+            <div style="margin-top:4px;font-size:12px;font-weight:600;color:var(--indigo);display:flex;align-items:center;gap:4px">
+              Use template &#8594;
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
 const PLATFORMS = [
   { value: 'D365 F&O',          label: 'D365 F&O',        sub: 'Finance & Operations',      badge: '#0078D4', logoUrl: 'https://cdn.simpleicons.org/microsoftazure/white',   group: 'Microsoft' },
   { value: 'D365 CRM',          label: 'D365 CRM',         sub: 'CRM / Customer Engagement', badge: '#0078D4', logoUrl: 'https://cdn.simpleicons.org/dynamics365/white',       group: 'Microsoft' },
@@ -8583,6 +9010,199 @@ const GROUP_GRADIENTS = {
 };
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
+
+// ── v9.34: Celebration Panel ─────────────────────────────────────────
+function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
+  const panel = document.getElementById('_celebrationPanel');
+  if (!panel) return;
+
+  // Is this their first generation ever?
+  const _cumTotal = parseInt(localStorage.getItem('shuddhi-total-tcs') || '0', 10);
+  const isFirst   = _cumTotal <= tcCount;
+
+  // Headline
+  const _hl = document.getElementById('_celebHeadline');
+  const _sl = document.getElementById('_celebSubline');
+  const _em = document.getElementById('_celebEmoji');
+  if (_hl) _hl.textContent = isFirst
+    ? tcCount + ' test cases — welcome to Shuddhi QA!'
+    : tcCount + ' test cases generated!';
+  if (_em) _em.textContent = isFirst ? '🎉' : '⚡';
+  if (_sl) _sl.textContent = '~' + savedStr + ' of manual QA work saved this run.'
+    + (cumStr ? ' Total with Shuddhi QA: ' + cumStr + '.' : '');
+
+  // Stats
+  const _tc  = document.getElementById('_celebTCCount');
+  const _ts  = document.getElementById('_celebTimeSaved');
+  const _gt  = document.getElementById('_celebGenTime');
+  if (_tc) _tc.textContent = tcCount;
+  if (_ts) _ts.textContent = savedStr;
+  if (_gt) _gt.textContent = (elapsed || '—') + 's';
+
+  // Quality breakdown from tgAllTCs
+  try {
+    const _qBar  = document.getElementById('_celebQualityBar');
+    if (_qBar && typeof tgAllTCs !== 'undefined' && tgAllTCs.length > 0
+        && typeof _scoreTC === 'function') {
+      const scores = tgAllTCs.map(tc => _scoreTC(tc));
+      const gradeA = scores.filter(s => s.grade === 'A').length;
+      const gradeB = scores.filter(s => s.grade === 'B').length;
+      const gradeC = scores.filter(s => s.grade === 'C').length;
+      const total  = scores.length;
+
+      const pA = Math.round(gradeA / total * 100);
+      const pB = Math.round(gradeB / total * 100);
+      const pC = 100 - pA - pB;
+
+      const _gA = document.getElementById('_celebGreenBar');
+      const _gB = document.getElementById('_celebAmberBar');
+      const _gC = document.getElementById('_celebRedBar');
+      if (_gA) _gA.style.width = pA + '%';
+      if (_gB) _gB.style.width = pB + '%';
+      if (_gC) _gC.style.width = pC + '%';
+
+      const _lA = document.getElementById('_celebGradeA');
+      const _lB = document.getElementById('_celebGradeB');
+      const _lC = document.getElementById('_celebGradeC');
+      if (_lA) _lA.textContent = gradeA + ' Good';
+      if (_lB) _lB.textContent = gradeB + ' Fair';
+      if (_lC) _lC.textContent = gradeC + ' Need review';
+
+      const avgScore = Math.round(scores.reduce((s, q) => s + q.total, 0) / total);
+      const _qd = document.getElementById('_celebQualityDetail');
+      if (_qd) _qd.textContent = 'Avg score: ' + avgScore + '%';
+
+      _qBar.style.display = 'block';
+    }
+  } catch(e) { /* quality breakdown is non-critical */ }
+
+  // Show panel with spring animation
+  panel.classList.remove('show');
+  void panel.offsetWidth; // force reflow
+  panel.classList.add('show');
+
+  // Auto-dismiss after 8 seconds
+  clearTimeout(window._celebTimer);
+  window._celebTimer = setTimeout(function() {
+    panel.classList.remove('show');
+  }, 8000);
+}
+
+// ── v9.34: TC Quality Scoring Engine ────────────────────────────────
+const _VAGUE_PATTERNS = [
+  /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
+  /^(the )?page loads?( successfully| correctly)?$/i,
+  /^(the )?(data|result|value)s? (is |are )?(displayed?|shown|correct|visible)\.?$/i,
+  /^(correct|expected) (value|result)s?( displayed?)?\.?$/i,
+  /^(as expected|done|completed?)\.?$/i,
+  /^not specified$/i, /^n\/a$/i
+];
+
+function _scoreTC(tc) {
+  const steps = (tc.stepsRaw || '').split('\n').filter(s => s.trim().length > 3);
+  const stepCount = steps.length;
+  const expected  = (tc.expected || '').trim();
+
+  // Metric 1: Step count (0–40 pts)
+  const stepScore = stepCount >= 12 ? 40
+    : stepCount >= 10 ? 35
+    : stepCount >= 8  ? 25
+    : stepCount >= 6  ? 15
+    : stepCount >= 4  ? 8
+    : 0;
+
+  // Metric 2: Expected result specificity (0–40 pts)
+  let expScore = 0;
+  if (expected.length > 120) expScore = 40;
+  else if (expected.length > 60) expScore = 30;
+  else if (expected.length > 30) expScore = 20;
+  else if (expected.length > 10) expScore = 10;
+  // Penalise vague expected results
+  const isVague = _VAGUE_PATTERNS.some(p => p.test(expected));
+  if (isVague) expScore = Math.min(expScore, 5);
+
+  // Metric 3: Title quality (0–20 pts)
+  const titleLen = (tc.title || '').length;
+  const titleScore = titleLen > 40 ? 20 : titleLen > 20 ? 14 : titleLen > 10 ? 8 : 4;
+
+  const total = Math.min(100, stepScore + expScore + titleScore);
+  const grade = total >= 80 ? 'A' : total >= 55 ? 'B' : 'C';
+  const label = total >= 80 ? 'Good' : total >= 55 ? 'Fair' : 'Weak';
+
+  // Build tooltip
+  const issues = [];
+  if (stepCount < 10) issues.push('Only ' + stepCount + ' steps (min 10)');
+  if (isVague)        issues.push('Expected result too vague');
+  if (expected.length < 30) issues.push('Expected result too short');
+  if (titleLen < 15)  issues.push('Title too brief');
+  const tip = issues.length
+    ? 'Issues: ' + issues.join(' · ') + '. Click ↺ to improve.'
+    : 'Good quality TC — all checks pass.';
+
+  return { total, grade, label, tip };
+}
+
+function _qualityBadgeHTML(tc) {
+  const q = _scoreTC(tc);
+  const cls = 'tc-quality-grade-' + q.grade;
+  const tipSafe = q.tip.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+  const canImprove = q.total < 80 ? 1 : 0;
+  return '<div class="tc-quality-wrap ' + cls + '" title="' + tipSafe + '"'
+    + ' onclick="_onQualityClick(\'' + tc.id + '\',' + canImprove + ');event.stopPropagation();">'
+    + '<div class="tc-quality-bar"><div class="tc-quality-fill" style="width:' + q.total + '%"></div></div>'
+    + '<span class="tc-quality-label">' + q.label + '&nbsp;' + q.total + '%</span>'
+    + '</div>';
+}
+
+function _onQualityClick(tcId, canImprove) {
+  const tc = (typeof tgAllTCs !== 'undefined') && tgAllTCs.find(t => t.id === tcId);
+  if (!tc) return;
+  const q = _scoreTC(tc);
+  if (canImprove && confirm(q.tip + '\n\nRegenerate this TC to improve quality?')) {
+    tgRegenTC(tcId);
+  } else if (!canImprove) {
+    alert(q.tip);
+  }
+}
+
+// ── v9.34: Render welcome screen template cards + init stats ─────────
+function _initWelcomeScreen() {
+  // Populate template grid
+  const grid = document.getElementById('welcomeTemplateGrid');
+  if (grid && typeof TEMPLATE_LIBRARY !== 'undefined') {
+    grid.innerHTML = TEMPLATE_LIBRARY.map(t => `
+      <div onclick="loadTemplate('${t.id}')"
+        style="background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;
+               padding:13px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px"
+        onmouseover="this.style.borderColor='var(--indigo)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(91,95,239,.15)'"
+        onmouseout="this.style.borderColor='var(--border2)';this.style.transform='';this.style.boxShadow=''">
+        <div style="width:32px;height:32px;border-radius:8px;background:${t.badge};
+                    display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">
+          ${t.icon}
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.title}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.subtitle}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Populate saved hours stat
+  try {
+    const _cumTCs  = parseInt(localStorage.getItem('shuddhi-total-tcs') || '0', 10);
+    const _savedH  = Math.round(_cumTCs * 8 / 60);
+    const _savedEl = document.getElementById('phSavedHours');
+    if (_savedEl) _savedEl.textContent = _savedH > 0 ? _savedH + 'h' : '0h';
+  } catch(e) {}
+
+  // Populate total TCs stat
+  try {
+    const _cumTCs2 = parseInt(localStorage.getItem('shuddhi-total-tcs') || '0', 10);
+    const _tcEl    = document.getElementById('phTotalTCs');
+    if (_tcEl && _cumTCs2 > 0) _tcEl.textContent = _cumTCs2.toLocaleString();
+  } catch(e) {}
+}
 
 function renderPlatformCards() {
   const grid = document.getElementById('platformGrid');
@@ -9298,7 +9918,6 @@ function detectPlatformFromText(text) {
 
   D365_KEYWORDS.forEach(({ w, weight }) => {
     const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
     const re = new RegExp(`(?<![a-z0-9])${escaped}(?![a-z0-9])`, 'gi');
     const hits = (lower.match(re) || []).length;
     d365Score += hits * weight;
@@ -9311,30 +9930,119 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  return { d365Score, sfScore };
+  // v9.34: extended scoring for Web/Mobile/Enterprise ERP
+  const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
+
+  const webScore    = _hit(['react','angular','vue','node.js','rest api','graphql','http','browser','frontend','backend','web application','spa','pwa','oauth','jwt','cookie','session token','registration','login page','password reset']);
+  const mobileScore = _hit(['ios','android','react native','flutter','mobile app','push notification','fcm','apns','app store','play store','swipe','tap','biometric','mobile device']);
+  const sapScore    = _hit(['sap s/4','sap r/3','transaction code','me21n','miro','fb50','idoc','bapi','sap hana','abap','sap mm','sap sd','sap fico']);
+  const wdScore     = _hit(['workday','worker profile','supervisory org','pay group','compensation grade','hcm payroll','workday studio']);
+  const snScore     = _hit(['servicenow','service-now','incident management','change_request','cmdb_ci','snow platform','flow designer']);
+
+  return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-function applyDetectedPlatform(d365Score, sfScore) {
-  const badge = document.getElementById('detectBadge');
+// v9.34: auto-detect module from document text
+function detectModuleFromText(text, platform) {
+  const lower = text.toLowerCase();
+  const _hit = (kws) => kws.some(k => lower.includes(k));
 
-  if (d365Score === 0 && sfScore === 0) {
-    badge.className = 'detect-badge';
+  const MODULE_MAP = {
+    'D365 F&O': [
+      { module: 'Accounts Payable',     kws: ['accounts payable','vendor invoice','ap invoice','three-way match','3-way match','payment journal','vendor payment'] },
+      { module: 'Accounts Receivable',  kws: ['accounts receivable','customer invoice','ar invoice','customer payment','collection','dunning'] },
+      { module: 'Purchase Order',       kws: ['purchase order','po approval','procurement','goods receipt','product receipt','purchtable','purchline'] },
+      { module: 'General Ledger',       kws: ['general ledger','journal entry','trial balance','chart of accounts','period close','fiscal year','gl posting'] },
+      { module: 'Inventory Management', kws: ['inventory','warehouse','stock','on-hand','cycle count','transfer order','batch number','serial number','invent'] },
+      { module: 'Sales Order',          kws: ['sales order','salesline','shipment','delivery','sales quotation','customer order'] },
+      { module: 'Fixed Assets',         kws: ['fixed asset','depreciation','asset acquisition','disposal','asset book'] },
+      { module: 'Payroll',              kws: ['payroll','pay run','salary','payslip','tax deduction','pension','pf contribution','esi','tds'] },
+    ],
+    'Salesforce Sales': [
+      { module: 'Lead Management',      kws: ['lead','lead conversion','web-to-lead','lead assignment','lead score','lead qualification'] },
+      { module: 'Opportunity',          kws: ['opportunity','pipeline','deal','close date','stage','forecast','quote'] },
+      { module: 'Account & Contact',    kws: ['account','contact','account hierarchy','merge accounts'] },
+      { module: 'CPQ',                  kws: ['cpq','configure price quote','product bundle','pricing rule','discount schedule'] },
+    ],
+    'Web App': [
+      { module: 'User Authentication',  kws: ['login','register','sign in','sign up','password reset','otp','mfa','sso','oauth'] },
+      { module: 'User Profile',         kws: ['profile','account settings','update profile','change password','photo upload'] },
+      { module: 'Checkout & Payment',   kws: ['checkout','payment','cart','order','upi','credit card','razorpay','stripe','cod'] },
+      { module: 'Dashboard',            kws: ['dashboard','analytics','report','chart','widget','kpi'] },
+    ],
+    'Mobile App': [
+      { module: 'User Authentication',  kws: ['login','register','biometric','face id','fingerprint','otp'] },
+      { module: 'Checkout & Payment',   kws: ['checkout','payment','cart','upi','wallet','emi'] },
+      { module: 'Push Notifications',   kws: ['push notification','fcm','apns','alert','badge'] },
+    ],
+  };
+
+  const platformModules = MODULE_MAP[platform] || MODULE_MAP['D365 F&O'];
+  for (const { module, kws } of platformModules) {
+    if (_hit(kws)) return module;
+  }
+  return null;
+}
+
+function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
+  // v9.34: default scores to 0 if called from old code path
+  webScore    = webScore    || 0;
+  mobileScore = mobileScore || 0;
+  sapScore    = sapScore    || 0;
+  wdScore     = wdScore     || 0;
+  snScore     = snScore     || 0;
+
+  const badge = document.getElementById('detectBadge');
+  const allZero = d365Score === 0 && sfScore === 0 && webScore === 0
+    && mobileScore === 0 && sapScore === 0 && wdScore === 0 && snScore === 0;
+
+  if (allZero) {
+    if (badge) badge.className = 'detect-badge';
     return;
   }
 
-  let platform = '';
+  let platform   = '';
   let badgeClass = '';
-  let badgeText = '';
+  let badgeText  = '';
 
-  if (d365Score > sfScore * 3 || (d365Score > 0 && sfScore === 0)) {
-    platform  = 'D365 F&O';
-    badgeClass = 'd365';
-    badgeText  = `&#128309; Detected: Microsoft D365 (score: ${d365Score} vs SF: ${sfScore})`;
-  } else if (sfScore > d365Score * 3 || (sfScore > 0 && d365Score === 0)) {
-    platform  = 'Salesforce Sales';
-    badgeClass = 'sf';
-    badgeText  = `&#9729;&#65039; Detected: Salesforce (score: ${sfScore} vs D365: ${d365Score})`;
-  } else if (d365Score > 0 && sfScore > 0) {
+  // Rank all platforms by score
+  const scores = {
+    'D365 F&O':         d365Score,
+    'Salesforce Sales': sfScore,
+    'Web App':          webScore,
+    'Mobile App':       mobileScore,
+    'SAP':              sapScore,
+    'Workday':          wdScore,
+    'ServiceNow':       snScore,
+  };
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const topScore  = sorted[0][1];
+  const topPlatform = sorted[0][0];
+  const secondScore = sorted[1][1];
+
+  // Only auto-select if top score is meaningfully higher than second
+  if (topScore === 0) { if (badge) badge.className = 'detect-badge'; return; }
+
+  const ICONS = {
+    'D365 F&O':         '🔵',
+    'Salesforce Sales': '☁️',
+    'Web App':          '🌐',
+    'Mobile App':       '📱',
+    'SAP':              '⚙️',
+    'Workday':          '💼',
+    'ServiceNow':       '🛎️',
+  };
+  const BADGE_CLASS = {
+    'D365 F&O': 'd365', 'SAP': 'd365', 'Workday': 'd365', 'ServiceNow': 'd365',
+    'Salesforce Sales': 'sf', 'Web App': 'sf', 'Mobile App': 'sf',
+  };
+
+  platform  = topPlatform;
+  badgeClass = BADGE_CLASS[platform] || 'd365';
+  badgeText  = `${ICONS[platform] || '🔍'} Detected: ${platform}`;
+
+  // Legacy: handle D365+Salesforce mixed case
+  if (d365Score > 0 && sfScore > 0 && Math.abs(d365Score - sfScore) < d365Score * 0.5) {
     platform  = 'D365+Salesforce';
 function detectSpecialPlatform(lower) {
   const WD  = ['workday','worker profile','supervisory org','pay group','compensation grade','hcm payroll','workday studio'];
@@ -9363,14 +10071,51 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
+  // v9.34: don't auto-select for mixed/ambiguous case
+  if (platform === 'D365+Salesforce') {
+    detectedPlatform = 'D365 F&O';
+    selectPlatform('D365 F&O');
+    if (badge) { badge.className = 'detect-badge visible d365'; badge.textContent = '🔵 D365 + ☁️ Salesforce detected — using D365 F&O'; }
+    document.getElementById('platform').value = 'D365 F&O';
+    updateModules();
+    if (typeof showToast === 'function') showToast('D365 F&O selected (D365+Salesforce doc detected)');
+    return;
+  }
+
   detectedPlatform = platform;
   if (platform) { selectPlatform(platform); }
-  badge.className  = `detect-badge visible ${badgeClass}`;
-  badge.textContent = badgeText;
-
   document.getElementById('platform').value = platform;
   updateModules();
-  showToast(`Platform auto-detected: ${platform}`);
+
+  // v9.34: auto-detect module from document text
+  try {
+    const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
+    if (_docText.length > 50) {
+      const _detectedModule = detectModuleFromText(_docText, platform);
+      if (_detectedModule) {
+        // Set the module in the module search field / selector
+        const _moduleInput = document.getElementById('moduleSearch') || document.getElementById('moduleField');
+        if (_moduleInput && _moduleInput.tagName === 'INPUT') {
+          _moduleInput.value = _detectedModule;
+          if (typeof filterModules === 'function') filterModules(_detectedModule);
+        }
+        // Also set via setCustomModule if available
+        if (typeof setCustomModule === 'function') setCustomModule(_detectedModule);
+        window._autoDetectedModule = _detectedModule;
+      }
+    }
+  } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
+
+  // v9.34: User-friendly badge with Change link
+  if (badge) {
+    badge.className = `detect-badge visible ${badgeClass}`;
+    const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
+    badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
+  }
+
+  // v9.34: Toast with platform + module
+  const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
+  if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
 
 async function parseSwagger(file) {
@@ -9542,8 +10287,8 @@ async function processFile(file) {
     showLanguageBadge(langResult);
     setParseProgress('', false);
 
-    const { d365Score, sfScore } = detectPlatformFromText(extractedDocText);
-    applyDetectedPlatform(d365Score, sfScore);
+    const { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore } = detectPlatformFromText(extractedDocText);
+    applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore);
 
   } catch (err) {
     setParseProgress('', false);
@@ -9873,7 +10618,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.27 FIX: server may have resolved to a different provider than what the client
+      // v9.34 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -9917,7 +10662,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.27: also mark the actual server-used provider if it differs
+        // v9.34: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -9925,7 +10670,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.27: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.34: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -9940,7 +10685,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.27: use the actual server provider name for user-facing messages
+        // v9.34: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -10042,7 +10787,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.27 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.34 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -10092,7 +10837,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.27 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.34 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -10105,7 +10850,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.27: also reset button visual state in case the queue path left it stuck loading
+      // v9.34: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -10156,12 +10901,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.27 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.34 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.27: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.34: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -10190,10 +10935,79 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  document.getElementById('outputContent').innerHTML =
-    '<div style="display:flex;align-items:center;gap:10px;padding:24px;color:var(--text3);font-size:13.5px">' +
-    '<span style="animation:spin 1s linear infinite;display:inline-block;font-size:20px">⟳</span>' +
-    'Generating test cases…</div>';
+  // v9.34 — Progress storytelling: live narrative loader
+  window._progressSteps = [
+    { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
+    { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
+    { icon: '✍️',  msg: 'Writing End-to-End test cases…',     minChars: 300   },
+    { icon: '🔗', msg: 'Adding integration validations…',     minChars: 2000  },
+    { icon: '🔐', msg: 'Generating security test cases…',     minChars: 5000  },
+    { icon: '⚡', msg: 'Writing negative scenarios…',         minChars: 9000  },
+    { icon: '📊', msg: 'Building test data requirements…',    minChars: 14000 },
+    { icon: '✅', msg: 'Finalising and formatting output…',   minChars: 18000 },
+  ];
+  window._progressRendered = -1;
+
+  function _buildProgressHTML(activeIdx) {
+    const steps = window._progressSteps;
+    const rows = steps.map((s, i) => {
+      const done    = i < activeIdx;
+      const active  = i === activeIdx;
+      const pending = i > activeIdx;
+      const opacity = pending ? '.35' : '1';
+      const weight  = active  ? '600' : '400';
+      const check   = done    ? '<span style="color:#10B981;font-size:13px">✓</span>'
+                    : active  ? '<span style="display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle"></span>'
+                    : '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid currentColor;opacity:.25;vertical-align:middle"></span>';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:5px 0;opacity:${opacity};font-weight:${weight}">
+        <span style="font-size:15px;width:22px;text-align:center">${s.icon}</span>
+        <span style="flex:1;font-size:13px;color:var(--text)">${s.msg}</span>
+        ${check}
+      </div>`;
+    }).join('');
+
+    const platform = document.getElementById('platform')?.value || '';
+    const format   = document.getElementById('outputFormat')?.value || 'full';
+    const _formatLabels = { full:'Full Suite', e2e:'End-to-End', field:'Field Validation', integration:'Integration', negative:'Negative', smoke:'Smoke', testdata:'Test Data' };
+    const _formatStr = _formatLabels[format] || format;
+
+    return `<div id="_progressBox" style="padding:20px 24px;max-width:420px;margin:0 auto">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:14px">
+        ${platform ? platform + ' · ' : ''}${_formatStr}
+      </div>
+      ${rows}
+    </div>`;
+  }
+
+  window._updateProgressStory = function() {
+    if (!_streamRenderActive) return;
+    const chars = (rawMarkdown || '').length;
+    const steps = window._progressSteps;
+    let activeIdx = 0;
+    for (let i = steps.length - 1; i >= 0; i--) {
+      if (chars >= steps[i].minChars) { activeIdx = i; break; }
+    }
+    if (activeIdx === window._progressRendered) return; // no change
+    window._progressRendered = activeIdx;
+    const el = document.getElementById('outputContent');
+    if (!el) return;
+    // Only show progress panel if no real TC content yet
+    const hasContent = rawMarkdown.includes('| TC') || rawMarkdown.includes('TC001') || rawMarkdown.includes('Step Action');
+    if (!hasContent) {
+      el.innerHTML = _buildProgressHTML(activeIdx);
+    }
+  };
+
+  // Inject spin keyframe if not present
+  if (!document.getElementById('_progressSpinStyle')) {
+    const _ss = document.createElement('style');
+    _ss.id = '_progressSpinStyle';
+    _ss.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(_ss);
+  }
+
+  const _outEl = document.getElementById('outputContent');
+  if (_outEl) _outEl.innerHTML = _buildProgressHTML(0);
   document.getElementById('metaBar').className = 'meta-bar';
   document.getElementById('copyBtn').disabled = true;
   document.getElementById('copyXlsBtn').disabled = true;
@@ -11583,6 +12397,10 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
+  // v9.34: update progress story on each chunk (before TC content appears)
+  if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
+  // v9.34: update real-time step counter
+  if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
 
@@ -11882,12 +12700,34 @@ function finalizeOutput(elapsed, platform, module) {
 
   const _tcs = parseTestCasesFromMarkdown();
   const _tcCountEl = document.getElementById('tcCount');
-  if (_tcCountEl) _tcCountEl.textContent = _tcs.length || '?';
+  const _tcCount = _tcs.length || 0;
+  if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
+
+  // v9.34: Time-saved celebration toast
+  try {
+    const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
+    const _savedStr  = _savedMins >= 60
+      ? Math.round(_savedMins / 60) + ' hour' + (Math.round(_savedMins/60) === 1 ? '' : 's')
+      : _savedMins + ' minutes';
+    const _cumKey    = 'shuddhi-total-tcs';
+    const _cumTotal  = parseInt(localStorage.getItem(_cumKey) || '0', 10) + _tcCount;
+    localStorage.setItem(_cumKey, String(_cumTotal));
+    const _cumMins   = _cumTotal * 8;
+    const _cumStr    = _cumMins >= 60
+      ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
+      : _cumMins + ' min';
+    if (_tcCount > 0) {
+      // v9.34: trigger celebration panel (replaces plain toast)
+      setTimeout(function() {
+        try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
+      }, 400);
+    }
+  } catch(e) {}
   document.getElementById('metaBar').className = 'meta-bar visible';
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.27: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.34: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -11901,7 +12741,9 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  document.getElementById('metaLang').textContent = outputLang === 'English' ? `${detectedLanguage} \u2192 EN` : `\u2192 ${outputLang}`;
+  // v9.34 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
+  document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
   // v9.22 domain badge in meta-bar
   (function() {
     var _mDw = document.getElementById('metaDomainWrap');
@@ -11966,6 +12808,32 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
+  // v9.34: Remember last session preferences (keyed by Firebase UID if available)
+  try {
+    var _sessKey = 'shuddhi-last-session';
+    if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
+    var _sessData = {
+      platform: platform,
+      module: module || '',
+      domain: window.selectedDomain || '',
+      format: (document.getElementById('outputFormat') || {}).value || 'full',
+      ts: Date.now()
+    };
+    localStorage.setItem(_sessKey, JSON.stringify(_sessData));
+    // v9.34: record generation for smart suggestions pattern detection
+    try {
+      var _histKey = 'shuddhi-gen-history';
+      var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
+      _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
+      if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
+      localStorage.setItem(_histKey, JSON.stringify(_hist));
+      // Check patterns after 3+ gens
+      if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
+        setTimeout(function(){ _checkSmartSuggestions(_hist); }, 2000);
+      }
+    } catch(e) {}
+  } catch(e) {}
+
   saveToHistory(platform, module, rawMarkdown);
 
   try {
@@ -11998,6 +12866,8 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
+  // v9.34: refresh split view left pane with requirement text after generation
+  if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
 
   setTimeout(() => renderTestGenView(), 200);
 
@@ -12683,6 +13553,8 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
+  // v9.34: init welcome screen template grid + stats
+  if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
   if (errEl) { errEl.className = 'error-msg'; errEl.textContent = ''; }
@@ -14460,6 +15332,9 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
+    // v9.34: close command palette
+    if (document.getElementById('_cmdPalette')?.classList.contains('open')
+        && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
 
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -14977,14 +15852,18 @@ function buildTGRow(tc) {
     '</div>'
   ).join('');
 
-  const mainRow = `<tr class="tg-row-main ${sel?'tg-selected':''}" data-tc-id="${tc.id}" data-type="${tc.type}">
+  const mainRow = `<tr class="tg-row-main ${sel?'tg-selected':''}" data-tc-id="${tc.id}" data-type="${tc.type}" draggable="true" ondragstart="_tcDragStart(event,'${tc.id}')" ondragover="_tcDragOver(event)" ondragleave="_tcDragLeave(event)" ondrop="_tcDrop(event,'${tc.id}')">
+    <td class="tg-col-drag" title="Drag to reorder"><span class="drag-handle">&#8942;</span></td>
     <td class="tg-col-cb" style="text-align:center">
       <input type="checkbox" class="tc-row-cb" aria-label="Select test case" ${sel?'checked':''}
         style="accent-color:var(--d365);cursor:pointer;width:13px;height:13px"
         onchange="tgToggleSelect('${tc.id}',this.checked,this.closest('tr'));event.stopPropagation();"/>
     </td>
     <td class="tg-col-id" onclick="tgRowClick(event,'${tc.id}')"><span class="tg-tc-id">${tc.id}</span></td>
-    <td class="tg-col-sc" onclick="tgRowClick(event,'${tc.id}')"><span class="tg-scenario">${tc.title}</span></td>
+    <td class="tg-col-sc" onclick="tgRowClick(event,'${tc.id}')">
+      <span class="tg-scenario">${tc.title}</span>
+      ${typeof _qualityBadgeHTML === 'function' ? _qualityBadgeHTML(tc) : ''}
+    </td>
     <td class="tg-col-st steps-td">
       <span class="tg-steps-chip" onclick="tgToggleRow('${tc.id}', this)">
         ${cnt} Step${cnt!==1?'s':''} <span class="chip-arr">&#9662;</span>
@@ -15000,7 +15879,7 @@ function buildTGRow(tc) {
   </tr>`;
 
   const expandedRow = `<tr class="tg-row-expanded" data-tc-expand-for="${tc.id}" style="display:none">
-    <td colspan="7" class="tg-expand-cell">
+    <td colspan="8" class="tg-expand-cell">
       <div class="tg-expand-content">
         <div class="tg-expand-grid">
           <div class="tg-expand-section">
@@ -18464,6 +19343,71 @@ window.copyShareLink = function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
+     v9.34 CELEBRATION PANEL
+════════════════════════════════════════════════════════════ -->
+<div id="_celebrationPanel">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+    <div style="font-size:22px" id="_celebEmoji">🎉</div>
+    <button onclick="document.getElementById('_celebrationPanel').classList.remove('show')"
+      style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0;margin:-2px -2px 0 0">&#10005;</button>
+  </div>
+  <div style="font-size:15px;font-weight:800;color:var(--text);line-height:1.35;margin-bottom:6px" id="_celebHeadline"></div>
+  <div style="font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:14px" id="_celebSubline"></div>
+
+  <!-- Quality summary bar -->
+  <div id="_celebQualityBar" style="display:none;margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+      <span style="font-size:11px;font-weight:600;color:var(--text3)">Quality Overview</span>
+      <span style="font-size:11px;color:var(--text3)" id="_celebQualityDetail"></span>
+    </div>
+    <div style="display:flex;gap:3px;height:6px;border-radius:3px;overflow:hidden">
+      <div id="_celebGreenBar"  style="background:#10B981;transition:width .6s ease"></div>
+      <div id="_celebAmberBar"  style="background:#F59E0B;transition:width .6s ease"></div>
+      <div id="_celebRedBar"    style="background:#EF4444;transition:width .6s ease"></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:6px">
+      <span style="font-size:10.5px;color:#10B981" id="_celebGradeA"></span>
+      <span style="font-size:10.5px;color:#F59E0B" id="_celebGradeB"></span>
+      <span style="font-size:10.5px;color:#EF4444" id="_celebGradeC"></span>
+    </div>
+  </div>
+
+  <!-- Stats row -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+    <div style="background:var(--surface2);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--border2)">
+      <div style="font-size:17px;font-weight:800;color:var(--indigo)" id="_celebTCCount">—</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Test Cases</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--border2)">
+      <div style="font-size:17px;font-weight:800;color:#10B981" id="_celebTimeSaved">—</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Time Saved</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:10px;padding:10px;text-align:center;border:1px solid var(--border2)">
+      <div style="font-size:17px;font-weight:800;color:var(--violet)" id="_celebGenTime">—</div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Generated in</div>
+    </div>
+  </div>
+
+  <!-- CTA row -->
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button onclick="document.getElementById('xlsBtn').click();document.getElementById('_celebrationPanel').classList.remove('show')"
+      style="flex:1;padding:9px;border-radius:10px;border:none;
+             background:linear-gradient(135deg,var(--indigo),var(--violet));
+             color:#fff;font-size:12px;font-weight:700;cursor:pointer;
+             font-family:'Plus Jakarta Sans',sans-serif">
+      &#128196; Export Excel
+    </button>
+    <button onclick="document.getElementById('adoBtn').click();document.getElementById('_celebrationPanel').classList.remove('show')"
+      style="flex:1;padding:9px;border-radius:10px;
+             border:1.5px solid var(--border2);background:var(--surface2);
+             color:var(--text);font-size:12px;font-weight:700;cursor:pointer;
+             font-family:'Plus Jakarta Sans',sans-serif">
+      &#128640; Push to ADO
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
      v7.4 FREE TRIAL MODAL
      Shown after 3 free generations — get own key to continue
 ════════════════════════════════════════════════════════════════ -->
@@ -20377,7 +21321,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.27
+// FIREBASE AUTH — v9.34
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -20629,6 +21573,754 @@ if (document.readyState !== 'loading') {
   }); // end _waitForFirebase
 
 })();
+</script>
+
+<!-- ================================================================
+     v9.34 COMMAND PALETTE
+================================================================ -->
+<div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
+  <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
+  <div id="_cmdBox">
+    <input id="_cmdInput" type="text" placeholder="Search commands, templates, platforms…"
+      autocomplete="off" spellcheck="false"
+      oninput="_cmdFilter(this.value)"
+      onkeydown="_cmdKeyNav(event)"/>
+    <div id="_cmdDivider"></div>
+    <div id="_cmdResults"></div>
+    <div id="_cmdFooter">
+      <span class="cmd-hint"><kbd class="cmd-hint-kbd">&uarr;&darr;</kbd> Navigate</span>
+      <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
+      <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
+      <span style="flex:1"></span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.34</span>
+    </div>
+  </div>
+</div>
+<script>
+// v9.34 - Keyboard Shortcuts + Command Palette
+(function _initShortcutsAndPalette() {
+  'use strict';
+
+  function _getCommands() {
+    var tcsExist = typeof tgAllTCs !== 'undefined' && tgAllTCs.length > 0;
+    return [
+      // GENERATE
+      {id:'generate',   section:'Generate',icon:'&#x26A1;',  label:'Generate Test Cases',    desc:'Run AI generation with current settings',      kbd:'Ctrl+G',
+       action:function(){ var b=document.getElementById('genBtn'); if(b&&!b.disabled&&!b.classList.contains('loading')) b.click(); }},
+      {id:'stop',       section:'Generate',icon:'&#x23F9;',  label:'Stop Generation',        desc:'Cancel in-progress generation',
+       action:function(){ var b=document.getElementById('stopBtn'); if(b) b.click(); }},
+      {id:'newsession', section:'Generate',icon:'&#x1F504;', label:'New Session',            desc:'Clear output and start fresh',                 kbd:'Ctrl+Shift+N',
+       action:function(){ if(typeof newSession==='function') newSession(); }},
+      {id:'resetform',  section:'Generate',icon:'&#x1F5D1;', label:'Reset Form',             desc:'Clear all inputs and selections',
+       action:function(){ if(typeof resetForm==='function') resetForm(); }},
+      // EXPORTS
+      {id:'excel',      section:'Export',  icon:'&#x1F4CA;', label:'Export to Excel',        desc:'Download .xlsx with all test cases',           kbd:'Ctrl+E',   show:tcsExist,
+       action:function(){ if(typeof exportExcel==='function') exportExcel(); }},
+      {id:'pdf',        section:'Export',  icon:'&#x1F4C4;', label:'Export to PDF',          desc:'Download formatted PDF report',                               show:tcsExist,
+       action:function(){ if(typeof exportPDF==='function') exportPDF(); }},
+      {id:'gherkin',    section:'Export',  icon:'&#x1F952;', label:'Export Gherkin / BDD',   desc:'Download feature file in Gherkin format',                     show:tcsExist,
+       action:function(){ if(typeof downloadGherkin==='function') downloadGherkin(); }},
+      {id:'playwright', section:'Export',  icon:'&#x1F3AD;', label:'Export Playwright',      desc:'Download Playwright/TypeScript test file',                     show:tcsExist,
+       action:function(){ if(typeof downloadPlaywright==='function') downloadPlaywright(); }},
+      {id:'markdown',   section:'Export',  icon:'&#x1F4DD;', label:'Copy Markdown',          desc:'Copy raw Markdown to clipboard',                              show:tcsExist,
+       action:function(){ if(typeof copyMarkdown==='function') copyMarkdown(); }},
+      {id:'adopush',    section:'Export',  icon:'&#x1F680;', label:'Push to Azure DevOps',   desc:'Upload test cases to ADO Test Plans',                         show:tcsExist,
+       action:function(){ var b=document.getElementById('adoBtn'); if(b&&!b.disabled) b.click(); }},
+      {id:'jirapush',   section:'Export',  icon:'&#x1F527;', label:'Push to Jira',           desc:'Export test cases to Jira Xray',                              show:tcsExist,
+       action:function(){ var b=document.getElementById('jiraBtn'); if(b&&!b.disabled) b.click(); }},
+      // TEMPLATES
+      {id:'tmpl-ap',     section:'Templates',icon:'&#x1F4B3;',label:'Template: Accounts Payable',    desc:'D365 F&O - Invoice processing & 3-way match',
+       action:function(){ if(typeof loadTemplate==='function') loadTemplate('tmpl-ap'); }},
+      {id:'tmpl-lead',   section:'Templates',icon:'&#x2601;', label:'Template: Lead to Opportunity', desc:'Salesforce Sales Cloud - Lead management',
+       action:function(){ if(typeof loadTemplate==='function') loadTemplate('tmpl-lead'); }},
+      {id:'tmpl-auth',   section:'Templates',icon:'&#x1F510;',label:'Template: User Authentication', desc:'Web App - Registration, login, SSO, MFA',
+       action:function(){ if(typeof loadTemplate==='function') loadTemplate('tmpl-auth'); }},
+      {id:'tmpl-po',     section:'Templates',icon:'&#x1F4E6;',label:'Template: Purchase Order',      desc:'D365 F&O - Procurement and goods receipt',
+       action:function(){ if(typeof loadTemplate==='function') loadTemplate('tmpl-po'); }},
+      {id:'tmpl-payroll',section:'Templates',icon:'&#x1F4BC;',label:'Template: HR Payroll',          desc:'Enterprise ERP - Payroll and compliance',
+       action:function(){ if(typeof loadTemplate==='function') loadTemplate('tmpl-payroll'); }},
+      // PLATFORM SWITCH
+      {id:'p-d365fo', section:'Switch Platform',icon:'&#x1F535;',label:'Platform: D365 F&O',        desc:'Microsoft Dynamics 365 Finance & Operations',
+       action:function(){ if(typeof selectPlatform==='function') selectPlatform('D365 F&O'); }},
+      {id:'p-sf',     section:'Switch Platform',icon:'&#x2601;', label:'Platform: Salesforce',       desc:'Salesforce Sales Cloud',
+       action:function(){ if(typeof selectPlatform==='function') selectPlatform('Salesforce Sales'); }},
+      {id:'p-web',    section:'Switch Platform',icon:'&#x1F310;',label:'Platform: Web App',          desc:'General web application testing',
+       action:function(){ if(typeof selectPlatform==='function') selectPlatform('Web App'); }},
+      {id:'p-mobile', section:'Switch Platform',icon:'&#x1F4F1;',label:'Platform: Mobile App',       desc:'iOS / Android mobile testing',
+       action:function(){ if(typeof selectPlatform==='function') selectPlatform('Mobile App'); }},
+      {id:'p-sap',    section:'Switch Platform',icon:'&#x2699;', label:'Platform: SAP',              desc:'SAP S/4HANA, FICO, MM, SD',
+       action:function(){ if(typeof selectPlatform==='function') selectPlatform('SAP'); }},
+      // APP
+      {id:'settings', section:'App',icon:'&#x2699;',  label:'Open Settings',           desc:'Configure AI provider, ADO, Jira, API keys', kbd:'Ctrl+,',
+       action:function(){ if(typeof openSettings==='function') openSettings(); }},
+      {id:'theme',    section:'App',icon:'&#x1F313;', label:'Toggle Dark / Light Mode', desc:'Switch between dark and light theme',        kbd:'Ctrl+Shift+T',
+       action:function(){ if(typeof window.toggleTheme==='function') window.toggleTheme(); }},
+      {id:'tour',     section:'App',icon:'&#x1F5FA;', label:'Start Interactive Tour',   desc:'60-second walkthrough of Shuddhi QA',
+       action:function(){ if(typeof startTour==='function') startTour(); }},
+      {id:'tmplLib',  section:'App',icon:'&#x2728;',  label:'Open Template Library',    desc:'Browse all 5 quick-start templates',         kbd:'Ctrl+T',
+       action:function(){ if(typeof openTemplateLibrary==='function') openTemplateLibrary(); }},
+      {id:'splitview',section:'App',icon:'&#x9707;',  label:'Toggle Split View',         desc:'Requirement doc left, test cases right', kbd:'Ctrl+Shift+S',
+       action:function(){ if(typeof window._toggleSplitView==='function') window._toggleSplitView(); }},
+    ];
+  }
+
+  var _open=false, _activeIdx=0, _filtered=[];
+
+  window._openCmdPalette = function() {
+    var el=document.getElementById('_cmdPalette');
+    var inp=document.getElementById('_cmdInput');
+    if(!el) return;
+    _open=true; el.classList.add('open');
+    if(inp){ inp.value=''; inp.focus(); }
+    _cmdFilter('');
+  };
+
+  window._closeCmdPalette = function() {
+    var el=document.getElementById('_cmdPalette');
+    if(!el) return;
+    _open=false; el.classList.remove('open');
+  };
+
+  window._cmdFilter = function(query) {
+    var q=(query||'').trim().toLowerCase();
+    _filtered=_getCommands().filter(function(c){
+      if(c.show===false) return false;
+      if(!q) return true;
+      return (c.label+' '+(c.desc||'')+' '+(c.section||'')).toLowerCase().indexOf(q)!==-1;
+    });
+    _activeIdx=0;
+    _renderResults();
+  };
+
+  function _renderResults() {
+    var el=document.getElementById('_cmdResults');
+    if(!el) return;
+    if(!_filtered.length){
+      el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No commands found</div>';
+      return;
+    }
+    var seenSecs={}, out='';
+    _filtered.forEach(function(cmd,i){
+      var sec=cmd.section||'';
+      if(!seenSecs[sec]){ seenSecs[sec]=true; out+='<div class="cmd-section">'+sec+'</div>'; }
+      var active=(i===_activeIdx)?' active':'';
+      out+='<div class="cmd-item'+active+'" data-idx="'+i+'" onmouseenter="_cmdSetActive('+i+')" onclick="_cmdRun('+i+')">'
+        +'<div class="cmd-icon">'+(cmd.icon||'&#9672;')+'</div>'
+        +'<div class="cmd-text">'
+        +'<div class="cmd-label">'+cmd.label+'</div>'
+        +(cmd.desc?'<div class="cmd-desc">'+cmd.desc+'</div>':'')
+        +'</div>'
+        +(cmd.kbd?'<span class="cmd-kbd">'+cmd.kbd+'</span>':'')
+        +'</div>';
+    });
+    el.innerHTML=out;
+    setTimeout(function(){
+      var a=document.querySelector('#_cmdResults .cmd-item.active');
+      if(a) a.scrollIntoView({block:'nearest'});
+    },0);
+  }
+
+  window._cmdSetActive=function(i){ _activeIdx=i; _renderResults(); };
+
+  window._cmdRun=function(i){
+    var cmd=_filtered[i]; if(!cmd) return;
+    _closeCmdPalette();
+    setTimeout(function(){ try{ cmd.action(); }catch(e){ console.warn('[CmdPalette]',e.message); } },80);
+  };
+
+  window._cmdKeyNav=function(e){
+    if(e.key==='Escape'){ e.preventDefault(); _closeCmdPalette(); return; }
+    if(e.key==='ArrowDown'){ e.preventDefault(); _activeIdx=Math.min(_activeIdx+1,_filtered.length-1); _renderResults(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); _activeIdx=Math.max(_activeIdx-1,0); _renderResults(); }
+    else if(e.key==='Enter'){ e.preventDefault(); _cmdRun(_activeIdx); }
+  };
+
+  // Global keyboard shortcuts
+  document.addEventListener('keydown', function(e){
+    var ctrl=e.ctrlKey||e.metaKey;
+    // Cmd+K
+    if(ctrl && e.key==='k'){
+      e.preventDefault();
+      if(_open) _closeCmdPalette(); else _openCmdPalette();
+      return;
+    }
+    // Escape closes palette
+    if(e.key==='Escape' && _open){ _closeCmdPalette(); return; }
+    // Block shortcuts when typing in inputs (except palette)
+    var tag=(document.activeElement||{}).tagName;
+    var inInput=(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')
+      && document.activeElement.id!=='_cmdInput';
+    if(!ctrl) return;
+    if(inInput) return;
+    // Ctrl+G - Generate
+    if(e.key==='g'&&!e.shiftKey){
+      e.preventDefault();
+      var b=document.getElementById('genBtn');
+      if(b&&!b.disabled&&!b.classList.contains('loading')){
+        b.click();
+        if(typeof showToast==='function') showToast('Generating\u2026 (Ctrl+G)','\u26A1');
+      }
+      return;
+    }
+    // Ctrl+E - Export Excel
+    if(e.key==='e'&&!e.shiftKey){
+      e.preventDefault();
+      if(typeof tgAllTCs!=='undefined'&&tgAllTCs.length>0&&typeof exportExcel==='function'){
+        exportExcel();
+        if(typeof showToast==='function') showToast('Exporting to Excel\u2026','\ud83d\udcca');
+      } else if(typeof showToast==='function'){
+        showToast('Generate test cases first, then Ctrl+E to export','\u26a0\ufe0f');
+      }
+      return;
+    }
+    // Ctrl+T - Template Library
+    if(e.key==='t'&&!e.shiftKey){
+      e.preventDefault();
+      if(typeof openTemplateLibrary==='function') openTemplateLibrary();
+      return;
+    }
+    // Ctrl+, - Settings
+    if(e.key===','){
+      e.preventDefault();
+      if(typeof openSettings==='function') openSettings();
+      return;
+    }
+    // Ctrl+Shift+N - New Session
+    if(e.shiftKey&&(e.key==='n'||e.key==='N')){
+      e.preventDefault();
+      if(typeof newSession==='function') newSession();
+      if(typeof showToast==='function') showToast('New session started','\u{1F504}');
+      return;
+    }
+    // Ctrl+Shift+T - Toggle Theme
+    if(e.shiftKey&&(e.key==='t'||e.key==='T')){
+      e.preventDefault();
+      if(typeof window.toggleTheme==='function') window.toggleTheme();
+      return;
+    }
+  }, true);
+
+  // Update gen-btn hint
+  document.addEventListener('DOMContentLoaded', function(){
+    var hint=document.querySelector('.gen-btn-hint');
+    if(hint){
+      hint.innerHTML='\u2328\uFE0F '
+        +'<kbd style="font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);font-family:monospace">Ctrl+G</kbd>'
+        +' to generate &nbsp;&nbsp;'
+        +'<kbd style="font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);font-family:monospace">Ctrl+K</kbd>'
+        +' for all commands';
+    }
+  });
+
+})();
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// v9.34 — Split View: Requirement Doc left, Test Cases right
+// ══════════════════════════════════════════════════════════════════════
+(function _initSplitView() {
+  'use strict';
+
+  var _active  = false;
+  var _resizing = false;
+  var _startX  = 0;
+  var _startW  = 0;
+
+  // ── Toggle split view ───────────────────────────────────────────────
+  window._toggleSplitView = function() {
+    _active = !_active;
+    var wrap = document.getElementById('_splitViewWrap');
+    var btn  = document.getElementById('_splitViewBtn');
+    if (!wrap) return;
+
+    if (_active) {
+      wrap.classList.add('active');
+      if (btn) { btn.classList.add('active'); btn.innerHTML = '&#9707; Exit Split'; }
+      _populateReqPane();
+      _initResizer();
+      // Show welcome toast first time
+      try {
+        if (!localStorage.getItem('shuddhi-split-seen')) {
+          localStorage.setItem('shuddhi-split-seen', '1');
+          if (typeof showToast === 'function') showToast('Split view: trace each TC back to your requirement', '\u2195\uFE0F');
+        }
+      } catch(e) {}
+    } else {
+      wrap.classList.remove('active');
+      if (btn) { btn.classList.remove('active'); btn.innerHTML = '&#9707; Split'; }
+    }
+  };
+
+  // ── Populate left pane with requirement text ──────────────────────
+  function _populateReqPane() {
+    var contentEl = document.getElementById('_splitReqContent');
+    var labelEl   = document.getElementById('_splitDocLabel');
+    if (!contentEl) return;
+
+    // Priority: extracted doc text > flowDesc textarea
+    var reqText = '';
+    var source  = '';
+    try {
+      if (typeof extractedDocText !== 'undefined' && extractedDocText
+          && extractedDocText.length > 50
+          && !extractedDocText.startsWith('[VISION_IMAGE]')) {
+        reqText = extractedDocText;
+        source  = 'Uploaded doc';
+      } else {
+        var flowEl = document.getElementById('flowDesc');
+        if (flowEl && flowEl.value.trim().length > 10) {
+          reqText = flowEl.value.trim();
+          source  = 'Business flow';
+        }
+      }
+    } catch(e) {}
+
+    if (labelEl) labelEl.textContent = source;
+
+    if (!reqText) {
+      contentEl.innerHTML = '<div class="_split-req-empty">'
+        + '&#128196; No requirement loaded.<br>'
+        + 'Upload a doc or describe your flow<br>'
+        + 'in the left panel, then generate.'
+        + '</div>';
+      return;
+    }
+
+    // Render requirement with TC keyword highlighting
+    // Extract TC keywords from generated TCs for traceability
+    var tcKeywords = [];
+    try {
+      if (typeof tgAllTCs !== 'undefined' && tgAllTCs.length > 0) {
+        tgAllTCs.slice(0, 15).forEach(function(tc) {
+          // Extract 3-5 word phrases from TC title
+          var words = tc.title.replace(/^TC\d+\s*[\-\u2013\u2014:.\s]+/i, '').trim();
+          var parts = words.split(/\s+/).slice(0, 4).join(' ');
+          if (parts.length > 6) tcKeywords.push(parts.toLowerCase());
+        });
+      }
+    } catch(e) {}
+
+    // Escape HTML then highlight keywords
+    var escaped = reqText
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    if (tcKeywords.length > 0) {
+      tcKeywords.forEach(function(kw) {
+        if (!kw || kw.length < 5) return;
+        try {
+          var re = new RegExp('(' + kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+          escaped = escaped.replace(re, '<span class="req-term-highlight">$1</span>');
+        } catch(e2) {}
+      });
+    }
+
+    contentEl.innerHTML = escaped;
+  }
+
+  // Refresh left pane when generation completes
+  var _origFinalizeOutput = window.finalizeOutput;
+  if (typeof _origFinalizeOutput === 'undefined') {
+    // finalizeOutput is defined later — hook via event
+    document.addEventListener('_shuddhiGenerationComplete', function() {
+      if (_active) _populateReqPane();
+    });
+  }
+
+  // Also expose refresh so finalizeOutput can call it
+  window._splitViewRefresh = function() {
+    if (_active) setTimeout(_populateReqPane, 300);
+  };
+
+  // ── Resizer drag ──────────────────────────────────────────────────
+  function _initResizer() {
+    var resizer = document.getElementById('_splitResizer');
+    if (!resizer || resizer._initDone) return;
+    resizer._initDone = true;
+
+    resizer.addEventListener('mousedown', function(e) {
+      _resizing = true;
+      _startX   = e.clientX;
+      var pane  = document.getElementById('_splitReqPane');
+      _startW   = pane ? pane.offsetWidth : 400;
+      resizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!_resizing) return;
+      var pane = document.getElementById('_splitReqPane');
+      var wrap = document.getElementById('_splitViewWrap');
+      if (!pane || !wrap) return;
+      var dx = e.clientX - _startX;
+      var newW = Math.max(240, Math.min(_startW + dx, wrap.offsetWidth * 0.65));
+      pane.style.width = newW + 'px';
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (!_resizing) return;
+      _resizing = false;
+      var resizer2 = document.getElementById('_splitResizer');
+      if (resizer2) resizer2.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    });
+  }
+
+  // ── Keyboard shortcut Ctrl+Shift+S ───────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 's' || e.key === 'S')) {
+      e.preventDefault();
+      window._toggleSplitView();
+    }
+  }, true);
+
+  // Register in command palette
+  var _origGetCommands = null;
+  var _pollCmds = setInterval(function() {
+    if (typeof window._openCmdPalette !== 'undefined') {
+      clearInterval(_pollCmds);
+      // The command palette re-reads _getCommands() on each open,
+      // so we patch it by adding split view to its action set via a global flag
+      window._splitViewEnabled = true;
+    }
+  }, 500);
+  setTimeout(function() { clearInterval(_pollCmds); }, 8000);
+
+})();
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// v9.34 — Six UX Features
+// ══════════════════════════════════════════════════════════════════════
+
+// ── FEATURE 1: Bulk Delete ────────────────────────────────────────────
+function bulkDeleteSelected() {
+  if (!tgSelectedIds || tgSelectedIds.size === 0) return;
+  var count = tgSelectedIds.size;
+  if (!confirm('Delete ' + count + ' selected test case' + (count !== 1 ? 's' : '') + '? This cannot be undone.')) return;
+  var ids = Array.from(tgSelectedIds);
+  ids.forEach(function(id) {
+    tgAllTCs = tgAllTCs.filter(function(t) { return t.id !== id; });
+  });
+  tgSelectedIds.clear();
+  renderTGTable();
+  if (typeof updateBulkBar === 'function') updateBulkBar();
+  if (typeof showToast === 'function') showToast('Deleted ' + count + ' test case' + (count !== 1 ? 's' : ''), '\uD83D\uDDD1');
+}
+
+// ── FEATURE 2: Drag to Reorder ───────────────────────────────────────
+var _dragTcId = null;
+
+function _tcDragStart(e, tcId) {
+  _dragTcId = tcId;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', tcId);
+  var row = e.currentTarget;
+  if (row) setTimeout(function() { row.style.opacity = '0.4'; }, 0);
+}
+
+function _tcDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  var row = e.currentTarget;
+  if (row && row.classList) row.classList.add('drag-over');
+}
+
+function _tcDragLeave(e) {
+  var row = e.currentTarget;
+  if (row && row.classList) row.classList.remove('drag-over');
+}
+
+function _tcDrop(e, targetId) {
+  e.preventDefault();
+  var row = e.currentTarget;
+  if (row && row.classList) { row.classList.remove('drag-over'); row.style.opacity = ''; }
+  if (!_dragTcId || _dragTcId === targetId) { _dragTcId = null; return; }
+
+  var fromIdx = tgAllTCs.findIndex(function(t) { return t.id === _dragTcId; });
+  var toIdx   = tgAllTCs.findIndex(function(t) { return t.id === targetId; });
+  if (fromIdx < 0 || toIdx < 0) { _dragTcId = null; return; }
+
+  // Reorder
+  var moved = tgAllTCs.splice(fromIdx, 1)[0];
+  tgAllTCs.splice(toIdx, 0, moved);
+  _dragTcId = null;
+
+  renderTGTable();
+  if (typeof showToast === 'function') showToast('TC reordered \u2014 export will use new order', '\u2195\uFE0F');
+}
+
+// Fix opacity on dragend (fallback)
+document.addEventListener('dragend', function(e) {
+  if (e.target && e.target.closest) {
+    var row = e.target.closest('.tg-row-main');
+    if (row) row.style.opacity = '';
+  }
+});
+
+// ── FEATURE 3: Real-Time Step Counter ────────────────────────────────
+window._updateStreamCounter = function() {
+  try {
+    if (!rawMarkdown || !_streamRenderActive) return;
+
+    // Count TC headers and steps
+    var tcMatches  = rawMarkdown.match(/\| TC\d|TC001|TC00\d/g) || [];
+    var stepLines  = rawMarkdown.match(/^\|\s+\|/gm) || rawMarkdown.match(/\|\s*(Log in|Navigate|Enter|Click|Select|Verify|Confirm|Set|Open|Check|Inspect|Expand|Compare|Read|Filter|Export|Locate|Attempt)/gm) || [];
+    var sections   = (rawMarkdown.match(/^## \d+\./gm) || rawMarkdown.match(/^## (End-to-End|Field Validation|Integration|Negative|Smoke)/gm) || []).length;
+    var maxSections = 5;
+    var tcCount    = Math.max(tcMatches.length, (rawMarkdown.match(/TC\d{3}/g) || []).length);
+    var stepCount  = stepLines.length;
+
+    if (tcCount === 0 && stepCount === 0) return; // nothing to show yet
+
+    var el = document.getElementById('_streamCounter');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = '_streamCounter';
+      el.style.cssText = 'position:fixed;bottom:76px;right:24px;z-index:200025;'
+        + 'background:var(--surface);border:1.5px solid rgba(91,95,239,.2);'
+        + 'border-radius:12px;padding:10px 14px;font-family:\'Plus Jakarta Sans\',sans-serif;'
+        + 'font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);'
+        + 'display:flex;flex-direction:column;gap:3px;min-width:200px;';
+      document.body.appendChild(el);
+    }
+
+    el.innerHTML = '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Generating\u2026</div>'
+      + '<div style="display:flex;justify-content:space-between;gap:16px">'
+      + '<span style="color:var(--text2)">&#129514; TCs</span><span style="font-weight:700;color:var(--indigo)">' + tcCount + '</span>'
+      + '</div>'
+      + '<div style="display:flex;justify-content:space-between;gap:16px">'
+      + '<span style="color:var(--text2)">&#9654; Steps</span><span style="font-weight:700;color:var(--indigo)">' + stepCount + '</span>'
+      + '</div>'
+      + (sections > 0 ? '<div style="display:flex;justify-content:space-between;gap:16px">'
+        + '<span style="color:var(--text2)">&#128196; Sections</span><span style="font-weight:700;color:var(--indigo)">' + Math.min(sections, maxSections) + '/' + maxSections + '</span>'
+        + '</div>' : '');
+  } catch(e) { /* non-critical */ }
+};
+
+// Hide counter when generation ends
+(function() {
+  var _origCancel = window._cancelStreamRender;
+  window._cancelStreamRender = function() {
+    if (typeof _origCancel === 'function') _origCancel();
+    var el = document.getElementById('_streamCounter');
+    if (el) { el.style.transition = 'opacity .4s'; el.style.opacity = '0'; setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 400); }
+  };
+})();
+
+// ── FEATURE 4: toggleAdvanced function (was missing) ─────────────────
+function toggleAdvanced() {
+  var fields = document.getElementById('advancedFields');
+  var toggle = document.getElementById('advancedToggle');
+  var icon   = document.getElementById('advIcon');
+  if (!fields) return;
+  var isOpen = fields.classList.contains('open');
+  fields.classList.toggle('open', !isOpen);
+  if (toggle) toggle.classList.toggle('open', !isOpen);
+  if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
+  try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
+}
+
+// ── FEATURE 5: Restore last session on page load ──────────────────────
+function _restoreLastSession() {
+  try {
+    var _sessKey = 'shuddhi-last-session';
+    if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
+    var raw = localStorage.getItem(_sessKey);
+    if (!raw) return;
+    var sess = JSON.parse(raw);
+    if (!sess || !sess.platform) return;
+    // Only restore if session is < 7 days old
+    if (Date.now() - (sess.ts || 0) > 7 * 24 * 3600 * 1000) return;
+
+    // Restore platform
+    if (sess.platform && typeof selectPlatform === 'function') {
+      selectPlatform(sess.platform);
+    }
+    // Restore module
+    if (sess.module) {
+      setTimeout(function() {
+        var modEl = document.getElementById('module');
+        if (modEl) modEl.value = sess.module;
+        if (typeof setCustomModule === 'function') setCustomModule(sess.module);
+      }, 300);
+    }
+    // Restore domain
+    if (sess.domain && typeof selectDomain === 'function') {
+      setTimeout(function() { selectDomain(sess.domain); }, 400);
+    }
+    // Restore output format
+    if (sess.format) {
+      var fmtEl = document.getElementById('outputFormat');
+      if (fmtEl) fmtEl.value = sess.format;
+    }
+
+    // Show welcome back toast
+    var _name = (window._fbUser && window._fbUser.displayName)
+      ? window._fbUser.displayName.split(' ')[0]
+      : null;
+    var _greeting = _name ? ('Welcome back, ' + _name + '!') : 'Welcome back!';
+    var _modStr = sess.module ? ' \u203A ' + sess.module : '';
+    if (typeof showToast === 'function') {
+      setTimeout(function() {
+        showToast(_greeting + ' Continuing with ' + sess.platform + _modStr, '\uD83D\uDC4B');
+      }, 800);
+    }
+  } catch(e) { console.warn('[RestoreSession]', e.message); }
+}
+
+// Also restore advanced toggle state
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    var advOpen = localStorage.getItem('shuddhi-advanced-open');
+    if (advOpen === 'true') {
+      var fields = document.getElementById('advancedFields');
+      var toggle = document.getElementById('advancedToggle');
+      var icon   = document.getElementById('advIcon');
+      if (fields) fields.classList.add('open');
+      if (toggle) toggle.classList.add('open');
+      if (icon)   icon.innerHTML = '&#9650;';
+    }
+  } catch(e) {}
+
+  // Restore after a brief delay (let Firebase auth settle first)
+  setTimeout(_restoreLastSession, 1200);
+});
+
+// Also hook into Firebase auth state change for restoring session
+(function() {
+  var _origUpdateUI = null;
+  // Poll for Firebase auth to be ready, then hook auth state change
+  var _pollFb = setInterval(function() {
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+      clearInterval(_pollFb);
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          setTimeout(_restoreLastSession, 600);
+        }
+      });
+    }
+  }, 500);
+  // Stop polling after 15s
+  setTimeout(function() { clearInterval(_pollFb); }, 15000);
+})();
+
+// ── FEATURE 6: Smart Suggestions ─────────────────────────────────────
+function _checkSmartSuggestions(history) {
+  try {
+    var _dismissKey = 'shuddhi-suggestions-dismissed';
+    var dismissed = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
+
+    // Pattern 1: Same platform 3+ times in last 5 gens
+    if (!dismissed['platform']) {
+      var recent = history.slice(-5);
+      var platforms = recent.map(function(h) { return h.platform; });
+      var topPlatform = _mostCommon(platforms);
+      if (topPlatform && platforms.filter(function(p) { return p === topPlatform; }).length >= 3) {
+        // Check it's not already the first loaded platform
+        var curPlat = (document.getElementById('platform') || {}).value;
+        if (curPlat !== topPlatform) {
+          _showSuggestion(
+            'platform',
+            'You usually use ' + topPlatform + ' \u2014 set as default?',
+            function() { if (typeof selectPlatform === 'function') selectPlatform(topPlatform); },
+            dismissed
+          );
+          return;
+        }
+      }
+    }
+
+    // Pattern 2: Same output format 3+ times
+    if (!dismissed['format']) {
+      var recent2 = history.slice(-5);
+      var formats = recent2.map(function(h) { return h.format; });
+      var topFmt = _mostCommon(formats);
+      var fmtLabels = { full:'Full Suite', e2e:'End-to-End', field:'Field Validation', integration:'Integration', negative:'Negative', smoke:'Smoke' };
+      if (topFmt && topFmt !== 'full' && formats.filter(function(f) { return f === topFmt; }).length >= 3) {
+        var curFmt = (document.getElementById('outputFormat') || {}).value;
+        if (curFmt !== topFmt) {
+          _showSuggestion(
+            'format',
+            'You often generate ' + (fmtLabels[topFmt] || topFmt) + ' TCs \u2014 set as default?',
+            function() { var el = document.getElementById('outputFormat'); if (el) el.value = topFmt; },
+            dismissed
+          );
+          return;
+        }
+      }
+    }
+
+    // Pattern 3: 5+ generations total — suggest Command Palette
+    if (!dismissed['cmdpalette'] && history.length === 5) {
+      _showSuggestion(
+        'cmdpalette',
+        'Power tip: press Ctrl+K to access all commands instantly',
+        function() { if (typeof window._openCmdPalette === 'function') window._openCmdPalette(); },
+        dismissed
+      );
+    }
+  } catch(e) { /* non-critical */ }
+}
+
+function _mostCommon(arr) {
+  var counts = {};
+  arr.forEach(function(v) { counts[v] = (counts[v] || 0) + 1; });
+  var best = null, bestCount = 0;
+  Object.keys(counts).forEach(function(k) { if (counts[k] > bestCount) { bestCount = counts[k]; best = k; } });
+  return best;
+}
+
+function _showSuggestion(id, msg, onAccept, dismissed) {
+  var el = document.getElementById('_suggestionBanner');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_suggestionBanner';
+    el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);'
+      + 'z-index:200024;background:var(--surface);border:1.5px solid rgba(91,95,239,.22);'
+      + 'border-radius:14px;padding:12px 16px;font-family:\'Plus Jakarta Sans\',sans-serif;'
+      + 'box-shadow:0 8px 32px rgba(0,0,0,.2);display:flex;align-items:center;gap:12px;'
+      + 'max-width:460px;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;';
+    document.body.appendChild(el);
+  }
+
+  el.innerHTML = '<span style="font-size:16px">&#x1F4A1;</span>'
+    + '<span style="font-size:12.5px;color:var(--text);flex:1;white-space:normal">' + msg + '</span>'
+    + '<button onclick="_acceptSuggestion(\'' + id + '\')" style="padding:5px 12px;border-radius:8px;border:none;background:var(--indigo);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Plus Jakarta Sans\',sans-serif;white-space:nowrap">Yes</button>'
+    + '<button onclick="_dismissSuggestion(\'' + id + '\')" style="padding:5px 8px;border-radius:8px;border:1px solid var(--border2);background:none;color:var(--text3);font-size:12px;cursor:pointer;white-space:nowrap">Not now</button>';
+
+  window._suggestionAccept  = onAccept;
+  window._suggestionDismiss = dismissed;
+
+  setTimeout(function() { el.style.transform = 'translateX(-50%) translateY(0)'; }, 50);
+  setTimeout(function() { _dismissSuggestion(id); }, 12000);
+}
+
+function _acceptSuggestion(id) {
+  var el = document.getElementById('_suggestionBanner');
+  if (el) el.style.transform = 'translateX(-50%) translateY(80px)';
+  if (window._suggestionAccept) { try { window._suggestionAccept(); } catch(e) {} }
+  _dismissSuggestion(id);
+  if (typeof showToast === 'function') showToast('Preference saved!', '\u2705');
+}
+
+function _dismissSuggestion(id) {
+  var el = document.getElementById('_suggestionBanner');
+  if (el) el.style.transform = 'translateX(-50%) translateY(80px)';
+  try {
+    var _dismissKey = 'shuddhi-suggestions-dismissed';
+    var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
+    d[id] = Date.now();
+    localStorage.setItem(_dismissKey, JSON.stringify(d));
+  } catch(e) {}
+}
+
 </script>
 
 </body>
