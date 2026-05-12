@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.46 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.47 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.46 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.47 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -129,6 +129,8 @@ if (typeof marked !== 'undefined') {
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Mobile: remove tap highlight flash on buttons/links */
+  a, button, [onclick] { -webkit-tap-highlight-color: transparent; }
 
   body {
     background: var(--bg);
@@ -1567,6 +1569,14 @@ if (typeof marked !== 'undefined') {
     align-items: center;
     gap: 5px;
     flex-shrink: 0;
+    flex-wrap: wrap;        /* wrap on very narrow screens */
+    justify-content: flex-end;
+  }
+  @media (max-width: 480px) {
+    /* Stack history item content on small screens */
+    .history-item { flex-wrap: wrap; gap: 6px; }
+    .history-item-actions { width: 100%; justify-content: flex-start; }
+    .history-action-btn { font-size: 10px !important; padding: 2px 6px !important; }
   }
   .history-item-del {
     background: none;
@@ -3050,7 +3060,7 @@ header::after { display: none !important; }
   .tg-steps-popup { display: none !important; }
 
   /* ── Inline expand row (NEW) ──────────────────────────────────── */
-  .tg-row-main { cursor: pointer; transition: background .15s; }
+  .tg-row-main { cursor: pointer; touch-action: none; transition: background .15s; }
   .tg-row-main:hover { background: rgba(99,102,241,.04); }
   .tg-row-main.tg-row-open { background: rgba(99,102,241,.06); }
   .tg-row-main.tg-row-open .tg-steps-chip {
@@ -3200,6 +3210,12 @@ header::after { display: none !important; }
     #appFooter .footer-right { display: none !important; }
   }
   @media (max-width: 480px) {
+    /* On very small phones: hide page title entirely */
+    .hdr-page-info { display: none !important; }
+    .hdr-icon-btn { width: 34px !important; height: 34px !important; font-size: 15px !important; }
+    .hdr-actions { gap: 3px !important; }
+    #newSessionBtn .btn-text { display: none; }
+    #newSessionBtn::before { content: '✦'; }
     #appFooter { display: none !important; }
   }
 
@@ -3718,42 +3734,18 @@ header::after { display: none !important; }
     /* Hamburger visible */
     .hamburger-btn { display: flex !important; }
     /* Header compact */
-    .hdr-actions { gap: 6px !important; }
-    .hdr-cta-btn { padding: 0 12px !important; font-size: 12px !important; }
+    .hdr-actions { gap: 4px !important; flex-wrap: nowrap; }
+    .hdr-cta-btn { padding: 0 10px !important; font-size: 12px !important; }
     #keyStatusRow { display: none !important; }
-
-    /* Overlay when sidebar open */
-    #sidebarOverlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 299;
-      background: rgba(0,0,0,.4);
+    /* Truncate long page title so actions never overflow */
+    .hdr-page-info { min-width: 0; flex-shrink: 1; overflow: hidden; }
+    .hdr-title {
+      font-size: 15px !important;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 160px;
     }
-    #sidebarOverlay.open { display: block; }
+    .hdr-subtitle { display: none !important; }
 
-    #mainWrap { margin-left: 0 !important; }
-    #mainWrap > header { padding: 0 16px !important; }
-    #mainWrap .main-grid { margin: 14px 14px 120px !important; }
-    #mainWrap .history-panel,
-    #mainWrap .bulk-panel { margin: 10px 14px 0 !important; }
-    #bulkActionBar { left: 0 !important; padding: 10px 14px !important; flex-wrap: wrap; }
-
-    /* Hamburger: show on mobile */
-    .hamburger-btn { display: flex !important; }
-
-    /* Header actions: compact */
-    .hdr-actions { gap: 6px !important; }
-    .hdr-cta-btn { padding: 0 12px !important; font-size: 12px !important; }
-    #keyStatusRow { display: none !important; }
-
-    /* Form: single column */
-    .form-body {
-      grid-template-columns: 1fr !important;
-    }
-    /* Already handled above */
-    .form-actions-row {
-      flex-wrap: wrap;
-    }
-    .form-actions-row .reset-btn { width: 100% !important; text-align: center; }
 
     /* Output table: horizontal scroll */
     .tg-table-wrap {
@@ -5006,7 +4998,7 @@ header::after { display: none !important; }
     display: block !important;
     pointer-events: none;
   }
-  /* v9.46: full-color logos (base64 embedded) — no white filter */
+  /* v9.47: full-color logos (base64 embedded) — no white filter */
   .pc-logo-color {
     width: 100% !important;
     height: 100% !important;
@@ -5393,7 +5385,7 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
-  /* ── v9.46: Split View ─────────────────────────────────────────────── */
+  /* ── v9.47: Split View ─────────────────────────────────────────────── */
   /* Non-split state: wrapper transparent, req pane + resizer hidden */
   #_splitViewWrap {
     display: block;           /* was: none — that hid welcome screen on launch */
@@ -5466,9 +5458,18 @@ header::after { display: none !important; }
     #_splitViewWrap.active { flex-direction: column; }
     #_splitReqPane { width: 100%; max-width: 100%; border-right: none; border-bottom: 1.5px solid var(--border2); max-height: 220px; }
     #_splitResizer { display: none; }
+  @media (max-width: 400px) {
+    /* Generating panel: shrink on tiny screens to prevent overflow */
+    #_streamCounter {
+      min-width: 260px !important;
+      max-width: calc(100vw - 24px) !important;
+      right: 12px !important;
+      bottom: 72px !important;
+    }
+  }
   }
 
-  /* ── v9.46: Command Palette ──────────────────────────────────────── */
+  /* ── v9.47: Command Palette ──────────────────────────────────────── */
   #_cmdPalette {
     position: fixed; inset: 0; z-index: 300040;
     display: none; align-items: flex-start;
@@ -5514,7 +5515,7 @@ header::after { display: none !important; }
   .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
   .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  /* ── v9.46: TC Quality Score bar ──────────────────────────────── */
+  /* ── v9.47: TC Quality Score bar ──────────────────────────────── */
   .tc-quality-wrap {
     display: inline-flex;
     align-items: center;
@@ -5547,7 +5548,7 @@ header::after { display: none !important; }
   .tc-quality-grade-C { color: #EF4444; }
   .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
 
-  /* ── v9.46: Celebration panel ──────────────────────────────────── */
+  /* ── v9.47: Celebration panel ──────────────────────────────────── */
   #_celebrationPanel {
     position: fixed;
     bottom: 24px;
@@ -6068,7 +6069,7 @@ header::after { display: none !important; }
     background: rgba(10,12,28,.6) !important;
   }
 
-  /* activeProviderCard removed v9.46 */
+  /* activeProviderCard removed v9.47 */
 
   /* ── Tour card on dark ── */
   [data-theme="dark"] #tourCard {
@@ -6266,7 +6267,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.46</span>
+      <span class="sb-badge">v9.47</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -6915,7 +6916,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card removed v9.46 — provider shown via top card selection -->
+      <!-- Active provider card removed v9.47 — provider shown via top card selection -->
       <!-- claudeTestResult kept hidden for JS null-guard safety -->
       <div id="claudeTestResult" style="display:none"></div>
       <!-- Hidden ghost elements for JS null-guard safety (updateProviderUI writes to these) -->
@@ -7323,7 +7324,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.46</div>
+          <div class="settings-about-val" id="aboutVersion">v9.47</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7358,7 +7359,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.46 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.47 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7367,11 +7368,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.46
+          🆕 What's New in v9.47
         </div>
-        <!-- v9.46 changelog -->
+        <!-- v9.47 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.46 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.47 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -7834,7 +7835,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <!-- v9.46: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- v9.47: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
       <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
       <!-- When split is ON,  #_splitViewWrap shows as flex row -->
       <div id="_splitViewWrap">
@@ -7859,7 +7860,7 @@ header::after { display: none !important; }
         <div class="swh-title">Test cases will appear here</div>
         <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
       </div>
-      <!-- v9.46: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <!-- v9.47: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
         <!-- Hero row -->
@@ -8824,7 +8825,7 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
-// ── v9.46: Template Library ──────────────────────────────────────────
+// ── v9.47: Template Library ──────────────────────────────────────────
 const TEMPLATE_LIBRARY = [
   {
     id: 'tmpl-ap',
@@ -9056,7 +9057,7 @@ const GROUP_GRADIENTS = {
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
 
-// ── v9.46: Celebration Panel ─────────────────────────────────────────
+// ── v9.47: Celebration Panel ─────────────────────────────────────────
 function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   const panel = document.getElementById('_celebrationPanel');
   if (!panel) return;
@@ -9133,7 +9134,7 @@ function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   }, 8000);
 }
 
-// ── v9.46: TC Quality Scoring Engine ────────────────────────────────
+// ── v9.47: TC Quality Scoring Engine ────────────────────────────────
 const _VAGUE_PATTERNS = [
   /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
   /^(the )?page loads?( successfully| correctly)?$/i,
@@ -9210,7 +9211,7 @@ function _onQualityClick(tcId, canImprove) {
   }
 }
 
-// ── v9.46: Render welcome screen template cards + init stats ─────────
+// ── v9.47: Render welcome screen template cards + init stats ─────────
 function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
@@ -9270,7 +9271,7 @@ function renderPlatformCards() {
     const grpInfo = GROUP_ICONS[groupName] || { icon: '◈', bg: grad };
     const isOpen = gi === 0; // First group expanded by default
 
-    // v9.46: white badge groups get a subtle border for definition
+    // v9.47: white badge groups get a subtle border for definition
     const grpBg         = grpInfo.bg || grad;
     const grpBorder     = grpBg === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
     const grpIsEmbedded = grpInfo.logo && grpInfo.logo.startsWith('data:');
@@ -9298,7 +9299,7 @@ function renderPlatformCards() {
       const item = document.createElement('div');
       item.className = 'platform-card platform-list-item';
       item.dataset.value = p.value;
-      // v9.46: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
+      // v9.47: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
       const isEmbedded  = p.logoUrl && p.logoUrl.startsWith('data:');
       const logoClass   = isEmbedded ? 'pc-logo-color' : 'pc-logo';
       const badgeBorder = p.badge === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
@@ -9985,7 +9986,7 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  // v9.46: extended scoring for Web/Mobile/Enterprise ERP
+  // v9.47: extended scoring for Web/Mobile/Enterprise ERP
   const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
 
   const webScore    = _hit(['react','angular','vue','node.js','rest api','graphql','http','browser','frontend','backend','web application','spa','pwa','oauth','jwt','cookie','session token','registration','login page','password reset']);
@@ -9997,7 +9998,7 @@ function detectPlatformFromText(text) {
   return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-// v9.46: auto-detect module from document text
+// v9.47: auto-detect module from document text
 function detectModuleFromText(text, platform) {
   const lower = text.toLowerCase();
   const _hit = (kws) => kws.some(k => lower.includes(k));
@@ -10040,7 +10041,7 @@ function detectModuleFromText(text, platform) {
 }
 
 function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
-  // v9.46: default scores to 0 if called from old code path
+  // v9.47: default scores to 0 if called from old code path
   webScore    = webScore    || 0;
   mobileScore = mobileScore || 0;
   sapScore    = sapScore    || 0;
@@ -10126,7 +10127,7 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
-  // v9.46: don't auto-select for mixed/ambiguous case
+  // v9.47: don't auto-select for mixed/ambiguous case
   if (platform === 'D365+Salesforce') {
     detectedPlatform = 'D365 F&O';
     selectPlatform('D365 F&O');
@@ -10142,7 +10143,7 @@ function detectSpecialPlatform(lower) {
   document.getElementById('platform').value = platform;
   updateModules();
 
-  // v9.46: auto-detect module from document text
+  // v9.47: auto-detect module from document text
   try {
     const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
     if (_docText.length > 50) {
@@ -10161,14 +10162,14 @@ function detectSpecialPlatform(lower) {
     }
   } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
 
-  // v9.46: User-friendly badge with Change link
+  // v9.47: User-friendly badge with Change link
   if (badge) {
     badge.className = `detect-badge visible ${badgeClass}`;
     const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
     badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
   }
 
-  // v9.46: Toast with platform + module
+  // v9.47: Toast with platform + module
   const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
   if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
@@ -10701,7 +10702,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.46 FIX: server may have resolved to a different provider than what the client
+      // v9.47 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -10745,7 +10746,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.46: also mark the actual server-used provider if it differs
+        // v9.47: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -10753,7 +10754,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.46: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.47: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -10768,7 +10769,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.46: use the actual server provider name for user-facing messages
+        // v9.47: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -10870,7 +10871,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.46 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.47 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -10920,7 +10921,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.46 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.47 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -10933,7 +10934,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.46: also reset button visual state in case the queue path left it stuck loading
+      // v9.47: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -10984,12 +10985,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.46 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.47 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.46: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.47: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -11018,7 +11019,7 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  // v9.46 — Progress storytelling: live narrative loader
+  // v9.47 — Progress storytelling: live narrative loader
   window._progressSteps = [
     { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
     { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
@@ -12538,9 +12539,9 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
-  // v9.46: update progress story on each chunk (before TC content appears)
+  // v9.47: update progress story on each chunk (before TC content appears)
   if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
-  // v9.46: update real-time step counter
+  // v9.47: update real-time step counter
   if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
@@ -12844,7 +12845,7 @@ function finalizeOutput(elapsed, platform, module) {
   const _tcCount = _tcs.length || 0;
   if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
 
-  // v9.46: Time-saved celebration toast
+  // v9.47: Time-saved celebration toast
   try {
     const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
     const _savedStr  = _savedMins >= 60
@@ -12855,14 +12856,14 @@ function finalizeOutput(elapsed, platform, module) {
     localStorage.setItem(_cumKey, String(_cumTotal));
       // Sync updated total to Firestore for cross-device stats
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.46: sync cumulative TC count to Firestore
+    // v9.47: sync cumulative TC count to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     const _cumMins   = _cumTotal * 8;
     const _cumStr    = _cumMins >= 60
       ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
       : _cumMins + ' min';
     if (_tcCount > 0) {
-      // v9.46: trigger celebration panel (replaces plain toast)
+      // v9.47: trigger celebration panel (replaces plain toast)
       setTimeout(function() {
         try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
       }, 400);
@@ -12872,7 +12873,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.46: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.47: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -12886,7 +12887,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  // v9.46 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  // v9.47 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
   var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
   document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
   // v9.22 domain badge in meta-bar
@@ -12953,7 +12954,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
-  // v9.46: Remember last session preferences (keyed by Firebase UID if available)
+  // v9.47: Remember last session preferences (keyed by Firebase UID if available)
   try {
     var _sessKey = 'shuddhi-last-session';
     if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
@@ -12965,16 +12966,16 @@ function finalizeOutput(elapsed, platform, module) {
       ts: Date.now()
     };
     localStorage.setItem(_sessKey, JSON.stringify(_sessData));
-    // v9.46: sync to Firestore for cross-device consistency
+    // v9.47: sync to Firestore for cross-device consistency
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.46: record generation for smart suggestions pattern detection
+    // v9.47: record generation for smart suggestions pattern detection
     try {
       var _histKey = 'shuddhi-gen-history';
       var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
       _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
       if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
       localStorage.setItem(_histKey, JSON.stringify(_hist));
-      // v9.46: sync gen history to Firestore
+      // v9.47: sync gen history to Firestore
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
       // Check patterns after 3+ gens
       if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
@@ -13015,7 +13016,7 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
-  // v9.46: refresh split view left pane with requirement text after generation
+  // v9.47: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
   // Re-enable split button after generation
   var _sb = document.getElementById('_splitViewBtn');
@@ -13726,7 +13727,7 @@ function loadHistory(id) {
   });
   document.getElementById('resetBtn').className = 'reset-btn visible';
 
-  // ── v9.46: Render proper TC table (not just raw markdown) ────────
+  // ── v9.47: Render proper TC table (not just raw markdown) ────────
   // This populates tgAllTCs, shows tabs, enables all features
   setTimeout(function() {
     try {
@@ -13794,7 +13795,7 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
-  // v9.46: init welcome screen template grid + stats
+  // v9.47: init welcome screen template grid + stats
   if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
@@ -15579,7 +15580,7 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
-    // v9.46: close command palette
+    // v9.47: close command palette
     if (document.getElementById('_cmdPalette')?.classList.contains('open')
         && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
@@ -15636,7 +15637,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.46';
+  if (ver)  ver.textContent  = 'v9.47';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -16668,7 +16669,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.46';
+  if (version)  version.textContent  = 'v9.47';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -17510,7 +17511,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.46</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.47</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -19613,7 +19614,7 @@ window.copyShareLink = function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
-     v9.46 CELEBRATION PANEL
+     v9.47 CELEBRATION PANEL
 ════════════════════════════════════════════════════════════ -->
 <div id="_celebrationPanel">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
@@ -21591,7 +21592,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.46
+// FIREBASE AUTH — v9.47
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -21886,7 +21887,7 @@ if (document.readyState !== 'loading') {
 </script>
 
 <!-- ================================================================
-     v9.46 COMMAND PALETTE
+     v9.47 COMMAND PALETTE
 ================================================================ -->
 <div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
   <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
@@ -21902,12 +21903,12 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.46</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.47</span>
     </div>
   </div>
 </div>
 <script>
-// v9.46 - Keyboard Shortcuts + Command Palette
+// v9.47 - Keyboard Shortcuts + Command Palette
 (function _initShortcutsAndPalette() {
   'use strict';
 
@@ -22127,7 +22128,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.46 — Split View: Requirement Doc left, Test Cases right
+// v9.47 — Split View: Requirement Doc left, Test Cases right
 // ══════════════════════════════════════════════════════════════════════
 (function _initSplitView() {
   'use strict';
@@ -22306,10 +22307,10 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.46 — Six UX Features
+// v9.47 — Six UX Features
 // ══════════════════════════════════════════════════════════════════════
 
-// ── v9.46: Bulk Regen Selected TCs ───────────────────────────────────
+// ── v9.47: Bulk Regen Selected TCs ───────────────────────────────────
 async function bulkRegenSelected() {
   if (!tgSelectedIds || tgSelectedIds.size === 0) {
     if (typeof showToast === 'function') showToast('Select test cases first, then click Regen Selected', '\u26a0\ufe0f');
@@ -22618,7 +22619,7 @@ function toggleAdvanced() {
   if (toggle) toggle.classList.toggle('open', !isOpen);
   if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
   try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
-  // v9.46: sync advanced toggle state to Firestore
+  // v9.47: sync advanced toggle state to Firestore
   if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
 }
 
@@ -22813,7 +22814,7 @@ function _dismissSuggestion(id) {
     var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
     d[id] = Date.now();
     localStorage.setItem(_dismissKey, JSON.stringify(d));
-    // v9.46: sync dismissed suggestions to Firestore
+    // v9.47: sync dismissed suggestions to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
   } catch(e) {}
 }
@@ -22822,7 +22823,7 @@ function _dismissSuggestion(id) {
 
 <script>
 // ======================================================================
-// v9.46 — FirestorePrefs: cross-device preference sync (bugs fixed v9.46)
+// v9.47 — FirestorePrefs: cross-device preference sync (bugs fixed v9.47)
 // Syncs: lastSession, genHistory, dismissedSuggestions, advancedOpen,
 //        totalTCs, splitSeen
 // Does NOT sync: API keys, ADO/Jira tokens, free-trial counters
