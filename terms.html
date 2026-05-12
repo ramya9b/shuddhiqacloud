@@ -366,5 +366,56 @@ document.querySelectorAll('.section').forEach((el, i) => {
   obs.observe(el);
 });
 </script>
+
+<!-- ── Scroll To Top — Circular Progress Ring ─────────────────── -->
+<style>
+  #scrollTopBtn{position:fixed;bottom:28px;right:28px;width:44px;height:44px;
+    cursor:pointer;z-index:99999;opacity:0;transform:translateY(16px) scale(0.85);
+    transition:opacity .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);
+    pointer-events:none;border:none;background:none;padding:0}
+  #scrollTopBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+  #scrollTopBtn:hover{transform:translateY(-3px) scale(1.08)}
+  #scrollTopBtn:active{transform:scale(0.95)}
+  #scrollTopBtn svg{width:44px;height:44px;display:block}
+  @media(max-width:768px){#scrollTopBtn{bottom:20px;right:16px}}
+</style>
+<button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="22" cy="22" r="19" fill="var(--surface,#fff)"
+            stroke="var(--border2,rgba(91,95,239,0.2))" stroke-width="1.5"/>
+    <circle id="scrollProgressRing" cx="22" cy="22" r="17" fill="none"
+            stroke="url(#scrollGrad)" stroke-width="2.5" stroke-linecap="round"
+            stroke-dasharray="106.8" stroke-dashoffset="106.8"
+            transform="rotate(-90 22 22)"
+            style="transition:stroke-dashoffset .1s linear"/>
+    <path d="M22 28V16M22 16L17 21M22 16L27 21"
+          stroke="var(--indigo,#5B5FEF)" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <defs>
+      <linearGradient id="scrollGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#7C3AED"/>
+        <stop offset="100%" stop-color="#EC4899"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</button>
+<script>
+(function(){
+  var btn=document.getElementById('scrollTopBtn');
+  var ring=document.getElementById('scrollProgressRing');
+  if(!btn||!ring)return;
+  var C=106.8;
+  function onScroll(){
+    var y=window.scrollY||document.documentElement.scrollTop||0;
+    var max=(document.documentElement.scrollHeight-window.innerHeight)||1;
+    ring.style.strokeDashoffset=C*(1-Math.min(y/max,1));
+    y>400?btn.classList.add('visible'):btn.classList.remove('visible');
+  }
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+
 </body>
 </html>

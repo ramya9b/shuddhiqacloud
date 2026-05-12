@@ -22762,5 +22762,126 @@ function _dismissSuggestion(id) {
 })();
 </script>
 
+<!-- ── Scroll To Top — Circular Progress Ring ─────────────────────────── -->
+<style>
+  #scrollTopBtn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+    transition: opacity 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  #scrollTopBtn.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+  #scrollTopBtn:hover { transform: translateY(-3px) scale(1.08); }
+  #scrollTopBtn:active { transform: scale(0.95); }
+  #scrollTopBtn svg { width: 44px; height: 44px; display: block; }
+  /* Push above bulk action bar when visible */
+  body.bulk-bar-visible #scrollTopBtn { bottom: 72px; }
+
+  @media (max-width: 768px) {
+    #scrollTopBtn { bottom: 20px; right: 16px; }
+  }
+</style>
+
+<button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background circle -->
+    <circle cx="22" cy="22" r="19" fill="var(--surface,#fff)"
+            stroke="var(--border2,rgba(91,95,239,0.2))" stroke-width="1.5"/>
+    <!-- Progress ring -->
+    <circle id="scrollProgressRing"
+            cx="22" cy="22" r="17"
+            fill="none"
+            stroke="url(#scrollGrad)"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-dasharray="106.8"
+            stroke-dashoffset="106.8"
+            transform="rotate(-90 22 22)"
+            style="transition: stroke-dashoffset 0.1s linear"/>
+    <!-- Arrow up icon -->
+    <path d="M22 28V16M22 16L17 21M22 16L27 21"
+          stroke="var(--indigo,#5B5FEF)"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+    <defs>
+      <linearGradient id="scrollGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#7C3AED"/>
+        <stop offset="100%" stop-color="#EC4899"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</button>
+
+<script>
+(function() {
+  var btn  = document.getElementById('scrollTopBtn');
+  var ring = document.getElementById('scrollProgressRing');
+  if (!btn || !ring) return;
+
+  var CIRCUMFERENCE = 2 * Math.PI * 17; // r=17 → 106.8
+  var SHOW_AFTER    = 400; // px scrolled before button appears
+
+  // Determine scroll container — the main content area or window
+  function getScrollEl() {
+    // Try the main scrollable area first
+    var main = document.querySelector('.main-content') ||
+               document.querySelector('main') ||
+               document.querySelector('.output-panel') ||
+               document.documentElement;
+    return main;
+  }
+
+  function onScroll() {
+    var scrollY   = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+    var maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    var pct       = Math.min(scrollY / maxScroll, 1);
+
+    // Show/hide button
+    if (scrollY > SHOW_AFTER) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+
+    // Update progress ring
+    var offset = CIRCUMFERENCE * (1 - pct);
+    ring.style.strokeDashoffset = offset;
+  }
+
+  // Smooth scroll to top
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Also try scrolling inner containers
+    var panels = document.querySelectorAll('.output-content, .main, .tg-table-wrap');
+    panels.forEach(function(p) {
+      p.scrollTo && p.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Also listen on inner scrollable divs
+  document.addEventListener('scroll', onScroll, { passive: true, capture: true });
+
+  // Initial check
+  onScroll();
+})();
+</script>
+
 </body>
 </html>
