@@ -22421,8 +22421,8 @@ window._updateStreamCounter = function() {
       el.id = '_streamCounter';
       el.style.cssText = 'position:fixed;bottom:80px;right:24px;z-index:200025;'
         + 'background:var(--surface);border:1.5px solid rgba(91,95,239,.25);'
-        + 'border-radius:14px;padding:14px 16px;font-family:\'Plus Jakarta Sans\',sans-serif;'
-        + 'box-shadow:0 8px 32px rgba(0,0,0,.22);min-width:240px;max-width:280px;'
+        + 'border-radius:16px;padding:16px 18px;font-family:\'Plus Jakarta Sans\',sans-serif;'
+        + 'box-shadow:0 10px 40px rgba(0,0,0,.25);min-width:300px;max-width:340px;'
         + 'animation:_scFadeIn .3s cubic-bezier(.34,1.56,.64,1) both;';
       if (!document.getElementById('_scKeyframes')) {
         var ks = document.createElement('style');
@@ -22436,12 +22436,12 @@ window._updateStreamCounter = function() {
 
     el.innerHTML = ''
       // Header row
-      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
-      +   '<div style="display:flex;align-items:center;gap:7px">'
-      +     '<span style="width:7px;height:7px;border-radius:50%;background:var(--indigo);display:inline-block;animation:_scPulse 1.2s ease infinite"></span>'
-      +     '<span style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Generating\u2026</span>'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'
+      +   '<div style="display:flex;align-items:center;gap:8px">'
+      +     '<span style="width:8px;height:8px;border-radius:50%;background:var(--indigo);display:inline-block;animation:_scPulse 1.2s ease infinite"></span>'
+      +     '<span style="font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3)">Generating\u2026</span>'
       +   '</div>'
-      +   (currentSection ? '<span style="font-size:10px;font-weight:600;color:var(--saffron);background:rgba(232,162,32,.1);padding:2px 8px;border-radius:20px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + currentSection + '</span>' : '')
+      +   (currentSection ? '<span style="font-size:11px;font-weight:600;color:var(--saffron);background:rgba(232,162,32,.1);padding:3px 10px;border-radius:20px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + currentSection + '</span>' : '')
       + '</div>'
 
       // Progress bar
@@ -22450,24 +22450,24 @@ window._updateStreamCounter = function() {
       + '</div>'
 
       // Stats row
-      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">'
 
       // TCs
-      + '<div style="text-align:center;padding:6px 4px;background:rgba(91,95,239,.06);border-radius:8px;border:1px solid rgba(91,95,239,.12)">'
-      +   '<div style="font-size:17px;font-weight:800;color:var(--indigo);line-height:1">' + tcCount + '</div>'
-      +   '<div style="font-size:9.5px;color:var(--text3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">TCs</div>'
+      + '<div style="text-align:center;padding:10px 6px;background:rgba(91,95,239,.07);border-radius:10px;border:1px solid rgba(91,95,239,.14)">'
+      +   '<div style="font-size:22px;font-weight:800;color:var(--indigo);line-height:1">' + tcCount + '</div>'
+      +   '<div style="font-size:10px;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">TCs</div>'
       + '</div>'
 
       // Steps
-      + '<div style="text-align:center;padding:6px 4px;background:rgba(139,92,246,.06);border-radius:8px;border:1px solid rgba(139,92,246,.12)">'
-      +   '<div style="font-size:17px;font-weight:800;color:#8B5CF6;line-height:1">' + stepCount + '</div>'
-      +   '<div style="font-size:9.5px;color:var(--text3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Steps</div>'
+      + '<div style="text-align:center;padding:10px 6px;background:rgba(139,92,246,.07);border-radius:10px;border:1px solid rgba(139,92,246,.14)">'
+      +   '<div style="font-size:22px;font-weight:800;color:#8B5CF6;line-height:1">' + stepCount + '</div>'
+      +   '<div style="font-size:10px;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Steps</div>'
       + '</div>'
 
       // Sections
-      + '<div style="text-align:center;padding:6px 4px;background:rgba(232,162,32,.06);border-radius:8px;border:1px solid rgba(232,162,32,.15)">'
-      +   '<div style="font-size:17px;font-weight:800;color:var(--saffron);line-height:1">' + Math.min(sections, maxSections) + '<span style="font-size:11px;font-weight:500;color:var(--text3)">/' + maxSections + '</span></div>'
-      +   '<div style="font-size:9.5px;color:var(--text3);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Sections</div>'
+      + '<div style="text-align:center;padding:10px 6px;background:rgba(232,162,32,.07);border-radius:10px;border:1px solid rgba(232,162,32,.16)">'
+      +   '<div style="font-size:22px;font-weight:800;color:var(--saffron);line-height:1">' + Math.min(sections, maxSections) + '<span style="font-size:12px;font-weight:500;color:var(--text3)">/' + maxSections + '</span></div>'
+      +   '<div style="font-size:10px;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Sections</div>'
       + '</div>'
 
       + '</div>';
