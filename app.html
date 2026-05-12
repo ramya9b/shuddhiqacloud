@@ -15397,7 +15397,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.21';
+  if (ver)  ver.textContent  = 'v9.42';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -16416,7 +16416,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.21';
+  if (version)  version.textContent  = 'v9.42';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -17199,6 +17199,8 @@ function checkAndTrimFlow(flow) {
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_KEY, theme);
+      // Sync theme preference to Firestore for cross-device consistency
+      if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     syncIcon(theme);
   }
 
@@ -17256,7 +17258,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.21</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.42</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -22495,7 +22497,8 @@ function _dismissSuggestion(id) {
     'shuddhi-suggestions-dismissed': 'dismissedSuggestions',
     'shuddhi-advanced-open':         'advancedOpen',
     'shuddhi-total-tcs':             'totalTCs',
-    'shuddhi-split-seen':            'splitSeen'
+    'shuddhi-split-seen':            'splitSeen',
+    'shuddhi-theme':                 'theme'
   };
 
   // ── Init Firestore once Firebase is ready ─────────────────────────
@@ -22622,6 +22625,13 @@ function _dismissSuggestion(id) {
         setTimeout(function() {
           if (typeof _initWelcomeScreen === 'function') _initWelcomeScreen();
         }, 500);
+        // Apply synced theme immediately
+        setTimeout(function() {
+          var syncedTheme = localStorage.getItem('shuddhi-theme');
+          if (syncedTheme && document.body) {
+            document.body.setAttribute('data-theme', syncedTheme);
+          }
+        }, 300);
         // Show sync indicator toast
         setTimeout(function() {
           if (typeof showToast === 'function') {
