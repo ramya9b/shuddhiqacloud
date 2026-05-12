@@ -8415,6 +8415,20 @@ const ProviderManager = (function() {
     _state.active = (saved && _state.keys[saved] ? saved : null)
                  || (envProvider && _state.keys[envProvider] ? envProvider : null)
                  || firstAvail;
+    // Merge personal user keys from localStorage into _state.keys
+    // so getOrderedProviders() picks them up even if no server env key
+    try {
+      const _userLsKeys = {
+        claude: 'shuddhi-user-claude-key',
+        gemini: 'shuddhi-user-gemini-key',
+        groq:   'shuddhi-user-groq-key',
+      };
+      Object.keys(_userLsKeys).forEach(function(p) {
+        const uk = localStorage.getItem(_userLsKeys[p]);
+        if (uk && uk.length > 8) _state.keys[p] = true;
+      });
+    } catch(e) { /* silent — storage access may fail in private mode */ }
+
     _state.initialized = true;
 
     _syncLegacyFlags();
@@ -10538,10 +10552,26 @@ async function _callProviderWithFallback(requestBody, signal) {
   let toTry = ProviderManager.getOrderedProviders();
 
   if (_skipGroq && toTry.length > 1) {
-    const withoutGroq = toTry.filter(p => p !== 'groq');
-    if (withoutGroq.length > 0) {
-      toTry = withoutGroq;
-      console.log('[Option B] Enterprise platform detected (' + _platformHint + ') — skipping Groq, using:', toTry.join(' → '));
+    const _activeProvider = ProviderManager.getActive();
+    const _userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
+    const _userChoseGroq = _activeProvider === 'groq';
+    const _userHasPersonalGroqKey = !!(_userKeys.groq && _userKeys.groq.length > 8);
+
+    if (_userChoseGroq) {
+      // User explicitly selected Groq — ALWAYS respect their choice.
+      // Only remove Groq from fallback positions (keep it first).
+      console.log('[Option B] Enterprise platform (' + _platformHint + ') detected — but user chose Groq. Respecting explicit choice.');
+    } else if (_userHasPersonalGroqKey) {
+      // User has personal Groq key — their limits, their choice.
+      console.log('[Option B] Enterprise platform — user has personal Groq key, keeping Groq available.');
+    } else {
+      // User did NOT explicitly choose Groq and has no personal Groq key.
+      // Safe to skip Groq from fallback for better enterprise output quality.
+      const withoutGroq = toTry.filter(p => p !== 'groq');
+      if (withoutGroq.length > 0) {
+        toTry = withoutGroq;
+        console.log('[Option B] Enterprise platform (' + _platformHint + ') — skipping Groq fallback, using:', toTry.join(' → '));
+      }
     }
   }
 
@@ -10564,6 +10594,18 @@ async function _callProviderWithFallback(requestBody, signal) {
 
     RequestQueueManager.enqueue(() => {
       console.log('[Queue] Auto-retrying from toTry-empty path');
+      // Dismiss cooldown card before retrying
+      var wrap = document.getElementById('cooldownWrap');
+      if (wrap) wrap.classList.remove('visible');
+      var genBtn = document.getElementById('genBtn');
+      if (genBtn) {
+        genBtn.disabled = false;
+        genBtn.classList.remove('cooling');
+        if (genBtn.querySelector('.btn-text')) {
+          genBtn.querySelector('.btn-text').textContent = '⚡ Generate Test Cases';
+        }
+      }
+      if (typeof showToast === 'function') showToast('Provider available — generating now…', '⚡', 2000);
       generate();
     });
 
@@ -12287,7 +12329,62 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       document.getElementById('placeholder').style.display = 'flex';
       document.getElementById('outputContent').className = 'output-content';
       document.getElementById('statusDot').className = 'status-dot';
-      return; // exit silently — queue handles the rest
+
+      // ── Show user-visible countdown so they know it's auto-retrying ──
+      var _minWait = (typeof ProviderManager !== 'undefined')
+        ? ProviderManager.getMinCooldownSecs() : 30;
+
+      // Show toast with countdown
+      if (typeof showToast === 'function') {
+        showToast('All providers rate-limited — auto-retrying in ' + _minWait + 's…', '⏳', 5000);
+      }
+
+      // Show the cooldown banner with countdown
+      var genBtn = document.getElementById('genBtn');
+      if (genBtn) {
+        genBtn.disabled = true;
+        genBtn.classList.add('cooling');
+        if (genBtn.querySelector('.btn-text')) {
+          genBtn.querySelector('.btn-text').textContent = '⏳ Auto-retrying in ' + _minWait + 's…';
+        }
+
+        var _qWait = _minWait;
+        var _qInterval = setInterval(function() {
+          _qWait--;
+          if (genBtn && genBtn.querySelector('.btn-text') && genBtn.disabled) {
+            genBtn.querySelector('.btn-text').textContent = '⏳ Auto-retrying in ' + _qWait + 's…';
+          }
+          if (_qWait <= 0) {
+            clearInterval(_qInterval);
+            if (genBtn) {
+              genBtn.disabled = false;
+              genBtn.classList.remove('cooling');
+              if (genBtn.querySelector('.btn-text')) {
+                genBtn.querySelector('.btn-text').textContent = '⚡ Generate Test Cases';
+              }
+            }
+          }
+        }, 1000);
+      }
+
+      // Show cooldown card if available
+      var wrap = document.getElementById('cooldownWrap');
+      var msg  = document.getElementById('cooldownMsg');
+      var timer = document.getElementById('cooldownTimer');
+      var fill  = document.getElementById('cooldownBarFill');
+      if (wrap) {
+        wrap.classList.add('visible');
+        if (msg)   msg.textContent = 'All providers cooling — auto-retrying in ' + _minWait + 's. Your request is queued.';
+        if (timer) timer.textContent = _minWait + 's';
+        if (fill)  { fill.style.transition = 'none'; fill.style.width = '100%';
+          setTimeout(function() {
+            fill.style.transition = 'width ' + _minWait + 's linear';
+            fill.style.width = '0%';
+          }, 100);
+        }
+      }
+
+      return; // queue handles the retry
     }
 
     const raw = err.message || '';
@@ -14341,11 +14438,17 @@ function saveUserKey(provider, value) {
     localStorage.setItem(key, value);
     const badge = document.getElementById('user' + provider.charAt(0).toUpperCase() + provider.slice(1) + 'KeyBadge');
     if (badge) badge.style.display = 'inline';
+    // Immediately update ProviderManager so this provider becomes available without reload
+    if (typeof ProviderManager !== 'undefined' && ProviderManager._state) {
+      ProviderManager._state.keys[provider] = true;
+    }
     showToast(provider.charAt(0).toUpperCase() + provider.slice(1) + ' key saved — your limits will be used', '🔑');
   } else {
     localStorage.removeItem(key);
     const badge = document.getElementById('user' + provider.charAt(0).toUpperCase() + provider.slice(1) + 'KeyBadge');
     if (badge) badge.style.display = 'none';
+    // Remove from ProviderManager state only if no server-side key exists
+    // (don't remove if server env key still provides it)
   }
 }
 
