@@ -5,7 +5,7 @@
  * The handler receives a Cloudflare context object { request, env }.
  * env contains the environment variables set in Cloudflare Pages dashboard.
  *
- * Supported providers: Claude, Gemini, Groq
+ * Supported providers: Claude, Gemini, Groq, OpenAI, Together AI (v9.49)
  */
 
 // ── Model mapping per provider ──────────────────────────────────
@@ -22,6 +22,11 @@ const MODELS = {
   geminiLite:  'gemini-2.0-flash',    // FALLBACK 1: stable, no thinking issues
   geminiFlash: 'gemini-1.5-flash',    // FALLBACK 2: oldest stable, always available
   groq:        'llama-3.3-70b-versatile',
+  // ── v9.49: OpenAI ──────────────────────────────────────────────
+  openai:      'gpt-4o-mini',         // Best cost/quality for test case generation
+  // ── v9.49: Together AI ─────────────────────────────────────────
+  together:    'meta-llama/Llama-3.3-70B-Instruct-Turbo',  // Primary
+  togetherDS:  'deepseek-ai/DeepSeek-V3',                   // DeepSeek via Together (US-hosted)
 };
 
 const GEMINI_API_VERSION = {
@@ -62,7 +67,7 @@ function resolveProvider(requestedProvider, env, userKeys) {
   }
 
   // If user supplied any key — try it (any provider)
-  for (const p of ['claude', 'gemini', 'groq']) {
+  for (const p of ['claude', 'gemini', 'openai', 'together', 'groq']) {
     if (uk[p]) return { provider: p, key: uk[p], userSupplied: true };
   }
 
@@ -214,6 +219,54 @@ RULE 4: Minimum 10 step rows per test case.
       }),
     };
   }
+
+  // ── v9.49: OpenAI ──────────────────────────────────────────────
+  if (provider === 'openai') {
+    const msgs = [];
+    if (body.system) msgs.push({ role: 'system', content: body.system });
+    (body.messages || []).forEach(m => msgs.push({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content : (m.content?.[0]?.text || '')
+    }));
+    return {
+      url: 'https://api.openai.com/v1/chat/completions',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + key,
+      },
+      body: JSON.stringify({
+        model:       MODELS.openai,
+        messages:    msgs,
+        max_tokens:  Math.min(body.max_tokens || 8192, 16384),
+        temperature: 0.3,
+        stream:      false,
+      }),
+    };
+  }
+
+  // ── v9.49: Together AI (OpenAI-compatible) ─────────────────────
+  if (provider === 'together') {
+    const msgs = [];
+    if (body.system) msgs.push({ role: 'system', content: body.system });
+    (body.messages || []).forEach(m => msgs.push({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content : (m.content?.[0]?.text || '')
+    }));
+    return {
+      url: 'https://api.together.xyz/v1/chat/completions',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + key,
+      },
+      body: JSON.stringify({
+        model:       MODELS.togetherDS,
+        messages:    msgs,
+        max_tokens:  Math.min(body.max_tokens || 8192, 16384),
+        temperature: 0.3,
+        stream:      false,
+      }),
+    };
+  }
 }
 
 // ── Extract output text from Gemini response (defensive: skip thought parts) ──
@@ -248,6 +301,11 @@ async function normalizeResponse(provider, response) {
   if (provider === 'groq') {
     const text = data.choices?.[0]?.message?.content || '';
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS.groq };
+  }
+  // OpenAI + Together both return chat completions format
+  if (provider === 'openai' || provider === 'together') {
+    const text = data.choices?.[0]?.message?.content || '';
+    return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS[provider] || provider };
   }
   return data; // Claude already in correct format
 }
@@ -365,12 +423,15 @@ export async function onRequest(context) {
   try { body = rawBody ? JSON.parse(rawBody) : {}; }
   catch(e) { body = {}; }
   const { apiKey: userClaudeKey, geminiApiKey: userGeminiKey, groqApiKey: userGroqKey,
+          openaiApiKey: userOpenAIKey, togetherApiKey: userTogetherKey,
           provider: requestedProvider, ...forwardBody } = body;
 
   const _userKeys = {
-    ...(userClaudeKey ? { claude: userClaudeKey } : {}),
-    ...(userGeminiKey ? { gemini: userGeminiKey } : {}),
-    ...(userGroqKey   ? { groq:   userGroqKey   } : {}),
+    ...(userClaudeKey   ? { claude:   userClaudeKey   } : {}),
+    ...(userGeminiKey   ? { gemini:   userGeminiKey   } : {}),
+    ...(userGroqKey     ? { groq:     userGroqKey     } : {}),
+    ...(userOpenAIKey   ? { openai:   userOpenAIKey   } : {}),
+    ...(userTogetherKey ? { together: userTogetherKey } : {}),
   };
 
   // Resolve provider + key (user keys override server env vars per-provider)
@@ -381,7 +442,7 @@ export async function onRequest(context) {
 
   if (!resolved) {
     return new Response(JSON.stringify({
-      error: 'No API key found. The free tier uses Groq (free). For Claude or Gemini, add your own key in Settings → AI Provider → Use Your Own Key.'
+      error: 'No API key found. The free tier uses Groq (server key, always available). For Claude, Gemini, OpenAI, or Together AI, add your own key in Settings → AI Provider → Use Your Own Key.'
     }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
