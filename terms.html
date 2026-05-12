@@ -126,10 +126,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <!-- Hero -->
 <div class="hero fade-up">
-  <div class="hero-pill">📋 Terms of Service · v9.6</div>
+  <div class="hero-pill">📋 Terms of Service · v9.43</div>
   <h1>Simple, fair <span>terms</span></h1>
   <p>Clear rules for using Shuddhi QA. No legalese — written so every QA engineer can understand them.</p>
-  <div class="hero-date">Last updated: May 2026 · Effective immediately</div>
+  <div class="hero-date">Last updated: May 2026 · v9.43 · Effective immediately</div>
 </div>
 
 <!-- 1. Acceptance -->
@@ -153,6 +153,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <h2 class="section-title">2. What Shuddhi QA Is</h2>
   </div>
   <p>Shuddhi QA is a <strong>free, AI-powered test case generator</strong> for QA engineers and software testers. It generates structured test cases from requirement documents, business flow descriptions, Jira tickets, and Azure DevOps work items.</p>
+
+  <h3 style="font-size:15px;font-weight:700;margin:18px 0 10px;color:var(--text)">Account &amp; Usage Limits</h3>
+  <ul style="padding-left:20px;font-size:14px;color:var(--text2);line-height:2">
+    <li><strong>Anonymous use (no sign-in):</strong> 3 free generations per browser. No account required.</li>
+    <li><strong>Signed-in use:</strong> Sign in with Google or Microsoft to get 10 free generations. Your platform preferences sync across devices via Firebase Firestore.</li>
+    <li><strong>Account deletion:</strong> Click your avatar → <em>Delete my data &amp; account</em> inside the app at any time. This permanently deletes all your synced preferences and your Firebase Auth account.</li>
+    <li><strong>Data ownership:</strong> Signing in does not transfer ownership of your content. See our <a href="/privacy" style="color:var(--indigo)">Privacy Policy</a> for full details of what is stored.</li>
+  </ul>
   <ul class="terms-list">
     <li>AI generation powered by Groq (Llama), Google Gemini, or Anthropic Claude — using your own API keys</li>
     <li>Exports to Excel, PDF, Markdown, Jira Zephyr CSV, TestRail, Gherkin, Playwright, and more</li>
@@ -190,7 +198,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   </div>
   <p>You may use Shuddhi QA for lawful purposes only. You agree <strong>not</strong> to:</p>
   <ul class="terms-list">
-    <li>Attempt to bypass or abuse the free tier system (e.g. scripted generation to exhaust shared resources)</li>
+    <li>Attempt to bypass or abuse the free generation limits (3 anonymous / 10 signed-in) by scripted requests, clearing cookies repeatedly, or any other method to exhaust shared AI provider resources</li>
     <li>Use the service to generate content that is illegal, harmful, or violates third-party rights</li>
     <li>Reverse engineer, decompile, or attempt to extract the source code beyond what is publicly available on GitHub</li>
     <li>Use automated scripts or bots to send bulk requests to the API proxy endpoints</li>
@@ -215,7 +223,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <li>You authorise Shuddhi QA to act on your behalf only for the specific actions you initiate (fetch tickets, push test cases, read billing data)</li>
     <li>Your credentials (PAT, API tokens, OAuth tokens) are stored in your browser only and sent only to the respective service's official API</li>
     <li>You are responsible for ensuring you have the right to access the Azure DevOps or Jira resources you connect</li>
-    <li>Shuddhi QA uses Google OAuth with <strong>cloud-billing.readonly</strong> scope only — we never modify your Google Cloud resources</li>
+    <li>Shuddhi QA uses Google OAuth with <strong>cloud-billing.readonly</strong> scope only for billing display — we never modify your Google Cloud resources</li>
+    <li><strong>Firebase Authentication</strong> (optional) — Google and Microsoft SSO is used solely to identify you and sync your preferences. We request only <code>openid</code>, <code>profile</code>, and <code>email</code> scopes. See our <a href="/privacy" style="color:var(--indigo)">Privacy Policy</a> for full details.</li>
     <li>Revoking access is always possible: use the Disconnect button in Settings, or revoke from your provider's account settings</li>
   </ul>
 </div>
@@ -314,8 +323,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div class="contact-card">
     <div class="contact-avatar">R</div>
     <div>
-      <div class="contact-name">Ramya</div>
-      <div class="contact-role">Developer · Senior QA Engineer · Alpha Variance Solutions · Bengaluru, India</div>
+      <div class="contact-name">Ramya B</div>
+      <div class="contact-role">Senior QA Engineer · Bengaluru, India</div>
       <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" class="contact-link">🐙 github.com/ramya9b/shuddhiqacloud</a>
     </div>
   </div>
@@ -331,7 +340,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <a href="/app">App</a>
     <a href="/privacy">Privacy Policy</a>
     <a href="/help">Help</a>
-    <span style="font-size:12px;color:var(--text3)">© 2026 Shuddhi QA · Made in Bengaluru 🇮🇳 · v9.6</span>
+    <span style="font-size:12px;color:var(--text3)">© 2026 Shuddhi QA · Made in Bengaluru 🇮🇳 · v9.43</span>
   </div>
 </footer>
 
