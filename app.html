@@ -6214,12 +6214,14 @@ header::after { display: none !important; }
 
 <!-- ══ SIDEBAR NAVIGATION ══════════════════════════════════════ -->
 <aside id="appSidebar">
-  <a href="/" class="sb-logo" aria-label="Shuddhi QA — Home" style="text-decoration:none;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.56,.64,1)" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-    <div class="sb-logo-mark" style="transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease" onmouseover="this.style.transform='rotate(-6deg) scale(1.12)';this.style.boxShadow='0 4px 20px rgba(100,100,255,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow=''">श</div>
-    <div class="sb-logo-text">
-      <div class="sb-name">Shuddhi QA</div>
-      <div class="sb-sub">AI Test Intelligence</div>
-    </div>
+  <div class="sb-logo">
+    <a href="/" aria-label="Shuddhi QA — Home" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex:1;min-width:0;transition:opacity .15s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <div class="sb-logo-mark" style="transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease" onmouseover="this.style.transform='rotate(-6deg) scale(1.12)';this.style.boxShadow='0 4px 20px rgba(91,95,239,.4)'" onmouseout="this.style.transform='none';this.style.boxShadow=''">श</div>
+      <div class="sb-logo-text">
+        <div class="sb-name">Shuddhi QA</div>
+        <div class="sb-sub">AI Test Intelligence</div>
+      </div>
+    </a>
     <button class="sb-collapse-btn" id="sbCollapseBtn" onclick="toggleSidebar()" data-tip="Collapse sidebar for more workspace">◀</button>
   </div>
 
