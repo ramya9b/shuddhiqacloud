@@ -5401,6 +5401,24 @@ header::after { display: none !important; }
     overflow: hidden; flex-shrink: 0;
   }
   #_splitTCPane { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--surface); overflow: auto; }
+
+  /* Hide full welcome screen when split is active — show simple hint instead */
+  #_splitViewWrap.active #placeholder { display: none !important; }
+  #_splitViewWrap.active #_splitWaitHint { display: flex !important; }
+
+  #_splitWaitHint {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 40px 24px;
+    text-align: center;
+    gap: 12px;
+  }
+  #_splitWaitHint .swh-icon { font-size: 40px; opacity: .4; }
+  #_splitWaitHint .swh-title { font-size: 15px; font-weight: 700; color: var(--text2); }
+  #_splitWaitHint .swh-sub { font-size: 13px; color: var(--text3); line-height: 1.6; max-width: 280px; }
   #_splitResizer {
     width: 6px; background: var(--border2); cursor: col-resize;
     flex-shrink: 0; transition: background .15s;
@@ -7820,6 +7838,12 @@ header::after { display: none !important; }
         </div>
         <div id="_splitResizer"></div>
         <div id="_splitTCPane">
+      <!-- Split view waiting hint — shown only when split is active + no TCs yet -->
+      <div id="_splitWaitHint">
+        <div class="swh-icon">⚡</div>
+        <div class="swh-title">Test cases will appear here</div>
+        <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
+      </div>
       <!-- v9.44: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
@@ -11064,6 +11088,9 @@ async function generate() {
 
   rawMarkdown = '';
   startTime = Date.now();
+  // Disable split btn during generation to prevent blank right pane mid-stream
+  var _splitBtn = document.getElementById('_splitViewBtn');
+  if (_splitBtn) { _splitBtn.disabled = true; _splitBtn.style.opacity = '0.45'; _splitBtn.title = 'Split view available after generation'; }
 
   const isWebOrMobile = ['Web App','Mobile App'].includes(platform);
 
@@ -12975,6 +13002,9 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initPagination     === 'function') initPagination();
   // v9.44: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
+  // Re-enable split button after generation
+  var _sb = document.getElementById('_splitViewBtn');
+  if (_sb) { _sb.disabled = false; _sb.style.opacity = ''; _sb.title = 'Split view — compare requirement with test cases'; }
 
   setTimeout(() => {
     renderTestGenView();
