@@ -129,7 +129,18 @@ nav{
   -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
-.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.nav-logo:hover{transform:scale(1.04)}
+.nav-logo:hover .nav-logo-mark{
+  box-shadow:0 4px 20px rgba(232,162,32,.55);
+  transform:rotate(-6deg) scale(1.12);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease}
+.nav-logo-mark{transition:transform .3s ease,box-shadow .3s ease}
+.nav-logo:hover .nav-brand{background:linear-gradient(90deg,var(--text) 0%,var(--saffron) 40%,var(--text) 80%);
+  background-size:200%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;animation:logoShimmer .6s ease forwards}
+@keyframes logoShimmer{from{background-position:100% 0}to{background-position:0 0}}
 .nav-logo-mark{
   width:36px;height:36px;border-radius:10px;
   background:var(--gradS);
@@ -738,7 +749,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
 <!-- ── NAV ──────────────────────────────────────────────── -->
 <nav>
-  <div class="nav-logo">
+  <a href="/" class="nav-logo" aria-label="Shuddhi QA — Home">
     <div class="nav-logo-mark">श</div>
     <div>
       <div class="nav-brand"><span>Shuddhi</span> QA<sub>शुद्धि</sub></div>
@@ -778,7 +789,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="/app" class="nav-cta">Get Started →</a>
     <button class="nav-hamburger" id="navHamburger" onclick="openMobileDrawer()" aria-label="Open navigation" aria-expanded="false">☰</button>
   </div>
-  </div>
+  </a>
 </nav>
 
 <!-- ── HERO ─────────────────────────────────────────────── -->
@@ -1214,7 +1225,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
       <p class="section-sub">No deployment needed. Add your free Groq API key once — your entire QA team generating test cases immediately.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
         <a href="/app" class="btn-primary">Launch App →</a>
-        <a href="https://github.com/ramya9b/shuddhiqacloud" rel="noopener noreferrer" target="_blank" class="btn-secondary">View on GitHub</a>
+        
       </div>
       <div class="cta-keys">
         <div class="cta-key"><span>⚡</span> Groq API Key (free)</div>
@@ -1381,7 +1392,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   <div class="footer-brand"><span>Shuddhi</span> QA · शुद्धि</div>
   <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
     <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🐛 Report Issue</a>
-    <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">⭐ GitHub</a>
+
     <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
     <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
     <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v9.43</span>

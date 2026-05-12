@@ -80,6 +80,18 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 .fade-up{animation:fadeUp .5s ease both}
 .fade-up-2{animation:fadeUp .5s .1s ease both}
 .fade-up-3{animation:fadeUp .5s .2s ease both}
+
+  .nav-logo{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+  .nav-logo:hover{transform:scale(1.04)}
+  .nav-logo:hover .nav-logo-mark{
+    box-shadow:0 4px 20px rgba(232,162,32,.55) !important;
+    transform:rotate(-6deg) scale(1.12)}
+  .nav-logo-mark{transition:transform .3s ease,box-shadow .3s ease}
+  .nav-logo:hover .nav-brand{background:linear-gradient(90deg,var(--text,#1a1a2e) 0%,var(--saffron,#E8A020) 40%,var(--text,#1a1a2e) 80%);
+    background-size:200%;-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;animation:logoShimmer .6s ease forwards}
+  @keyframes logoShimmer{from{background-position:100% 0}to{background-position:0 0}}
+
 </style>
 </head>
 <body>
