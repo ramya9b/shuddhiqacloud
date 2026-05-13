@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Help & Setup Guide — Shuddhi QA v9.50</title>
-<meta name="description" content="Step-by-step setup guide for Shuddhi QA v9.50. Get your free Groq, Gemini or Claude API key, set up Azure DevOps PAT, and configure Jira in minutes."/>
+<title>Help & Setup Guide — Shuddhi QA v9.53</title>
+<meta name="description" content="Step-by-step setup guide for Shuddhi QA v9.53. Get your free Groq, Gemini or Claude API key, set up Azure DevOps PAT, and configure Jira in minutes."/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/help"/>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23E8A020'/><text y='.9em' font-size='68' x='10' fill='white'>श</text></svg>" type="image/svg+xml"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -364,6 +364,176 @@ footer { position:relative; z-index:1; border-top:1px solid var(--border); paddi
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ OpenAI ══ -->
+<div class="guide-card" id="openai">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(16,163,127,.1)">🟢</div>
+    <div class="guide-title">
+      <h2>OpenAI — API Key Setup</h2>
+      <p>GPT-4o mini · High quality · US-hosted · Pay per use</p>
+    </div>
+    <span class="guide-badge" style="background:rgba(16,163,127,.1);color:#059669">Paid · US-hosted</span>
+    <span class="guide-chevron">▼</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box" style="margin-bottom:16px">
+      <span class="tip-icon">💡</span>
+      <span>OpenAI GPT-4o mini delivers excellent test case quality at <strong>~$0.15/M tokens</strong> — much cheaper than Claude while maintaining enterprise-grade output. US-hosted, GDPR-compliant.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Open OpenAI Platform</h3>
+          <p>Go to the API keys page in your browser.</p>
+          <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener" class="step-link">🔗 platform.openai.com/api-keys</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create a new secret key</h3>
+          <p>Click <strong>+ Create new secret key</strong>. Give it a name like "Shuddhi QA". Set permissions to "All" or at minimum "Model capabilities".</p>
+          <div class="tip-box"><span class="tip-icon">💳</span><span>OpenAI requires a billing method. Add a credit card and top up with $5 — this lasts hundreds of generations at GPT-4o mini rates.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the key</h3>
+          <p>Your key starts with <strong>sk-proj-…</strong> or <strong>sk-…</strong>. Copy it immediately — OpenAI only shows it once.</p>
+          <div class="code-block">sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+          <div class="tip-box"><span class="tip-icon">⚠️</span><span>OpenAI keys are shown only once. Save it immediately.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste it in Shuddhi QA</h3>
+          <p>Open <strong>Settings → AI Provider → Your Personal API Keys → OpenAI</strong>. Paste the key and click <strong>🔌 Test</strong> to verify.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Together AI ══ -->
+<div class="guide-card" id="together">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(245,158,11,.1)">🤝</div>
+    <div class="guide-title">
+      <h2>Together AI — API Key Setup</h2>
+      <p>DeepSeek V3 + Llama 3.3 70B · US-hosted · ~20× cheaper than Claude</p>
+    </div>
+    <span class="guide-badge" style="background:rgba(245,158,11,.1);color:#D97706">Best Value · US-hosted</span>
+    <span class="guide-chevron">▼</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box" style="margin-bottom:16px">
+      <span class="tip-icon">🌟</span>
+      <span>Together AI hosts the open-source DeepSeek V3 model on <strong>US servers</strong> — giving you DeepSeek's intelligence at ~$0.20/M tokens with zero China data exposure. Best value option available.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create a Together AI account</h3>
+          <p>Go to the Together AI platform and sign up (free $1 credit on signup).</p>
+          <a href="https://api.together.xyz" target="_blank" rel="noopener" class="step-link">🔗 api.together.xyz</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Get your API key</h3>
+          <p>Navigate to <strong>Settings → API Keys</strong> and click <strong>Create</strong>.</p>
+          <a href="https://api.together.xyz/settings/api-keys" target="_blank" rel="noopener" class="step-link">🔗 api.together.xyz/settings/api-keys</a>
+          <div class="tip-box" style="margin-top:10px"><span class="tip-icon">💡</span><span>You get <strong>$1 free credit</strong> on signup — enough for ~5,000 test case generations at DeepSeek V3 rates.</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy the key</h3>
+          <p>Your key looks like <strong>together_api_…</strong></p>
+          <div class="code-block">together_api_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste it in Shuddhi QA</h3>
+          <p>Open <strong>Settings → AI Provider → Your Personal API Keys → Together</strong>. Paste the key and click <strong>🔌 Test</strong> to verify.</p>
+          <div class="tip-box"><span class="tip-icon">🛡️</span><span>Together AI is US-hosted. Your requirement documents are NOT sent to Chinese servers — only to Together's US infrastructure running the open-source model weights.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Provider Comparison ══ -->
+<div class="section-label" style="margin-top:48px">📊 Provider Comparison</div>
+<div class="guide-card" id="provider-comparison">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(99,102,241,.1)">📊</div>
+    <div class="guide-title">
+      <h2>AI Provider Comparison</h2>
+      <p>Choose the right provider for your use case</p>
+    </div>
+    <span class="guide-chevron">▼</span>
+  </div>
+  <div class="guide-body">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead>
+        <tr style="background:var(--surface2)">
+          <th style="padding:10px;text-align:left;border-bottom:2px solid var(--border2)">Provider</th>
+          <th style="padding:10px;text-align:center;border-bottom:2px solid var(--border2)">Cost</th>
+          <th style="padding:10px;text-align:center;border-bottom:2px solid var(--border2)">Quality</th>
+          <th style="padding:10px;text-align:center;border-bottom:2px solid var(--border2)">Free Tier</th>
+          <th style="padding:10px;text-align:left;border-bottom:2px solid var(--border2)">Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px"><strong>⚡ Groq</strong></td>
+          <td style="padding:10px;text-align:center"><span style="color:#059669;font-weight:700">Free</span></td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐</td>
+          <td style="padding:10px;text-align:center">✅ Yes</td>
+          <td style="padding:10px">Quick generations, server fallback</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border);background:rgba(16,185,129,.03)">
+          <td style="padding:10px"><strong>✦ Gemini 2.5 Flash</strong></td>
+          <td style="padding:10px;text-align:center"><span style="color:#059669;font-weight:700">Free / $0.30</span></td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐½</td>
+          <td style="padding:10px;text-align:center">✅ 1,000/day</td>
+          <td style="padding:10px">Large FDDs, 1M token context</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px"><strong>🤝 Together AI</strong></td>
+          <td style="padding:10px;text-align:center">~$0.20/M</td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐⭐</td>
+          <td style="padding:10px;text-align:center">$1 credit</td>
+          <td style="padding:10px">Best value, DeepSeek V3 quality</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px"><strong>🟢 OpenAI</strong></td>
+          <td style="padding:10px;text-align:center">~$0.15/M</td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐⭐½</td>
+          <td style="padding:10px;text-align:center">❌ Paid</td>
+          <td style="padding:10px">Enterprise teams with existing OpenAI keys</td>
+        </tr>
+        <tr>
+          <td style="padding:10px"><strong>🤖 Claude</strong></td>
+          <td style="padding:10px;text-align:center">$3–$15/M</td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐⭐⭐</td>
+          <td style="padding:10px;text-align:center">❌ Paid</td>
+          <td style="padding:10px">Maximum quality, complex enterprise flows</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 

@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.50 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.53 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.50 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.53 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -3653,6 +3653,8 @@ header::after { display: none !important; }
 
   /* Responsive: collapse to single column on smaller screens */
   @media (max-width: 900px) {
+    /* 5-pill grid: collapse to 2 cols on phones */
+    #providerPills { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
     .form-body { grid-template-columns: 1fr !important; }
     .form-col + .form-col { border-left: none !important; border-top: 1px solid var(--border) !important; }
   }
@@ -4736,7 +4738,7 @@ header::after { display: none !important; }
   .pc-group-label { display: none !important; }
 
 
-  /* ── Provider Key Accordion Cards (v9.50) ───────────────────── */
+  /* ── Provider Key Accordion Cards (v9.53) ───────────────────── */
   .pka-list { display:flex; flex-direction:column; gap:6px; }
 
   .pka-card {
@@ -4820,6 +4822,48 @@ header::after { display: none !important; }
     .pka-input { min-width:100%; }
   }
 
+
+  /* ── Enterprise Quality Banner (v9.53) ──────────────────────── */
+  #_enterpriseQualityBanner {
+    display: none;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    margin: 0 0 12px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(232,162,32,.35);
+    background: linear-gradient(135deg,rgba(232,162,32,.07),rgba(99,102,241,.05));
+    animation: _scFadeIn .3s ease;
+    position: relative;
+  }
+  #_enterpriseQualityBanner.visible { display: flex; }
+  #_eqb-icon  { font-size:20px;flex-shrink:0;margin-top:1px; }
+  #_eqb-body  { flex:1;min-width:0; }
+  #_eqb-title { font-size:12.5px;font-weight:800;color:var(--text);margin-bottom:3px; }
+  #_eqb-sub   { font-size:11.5px;color:var(--text2);line-height:1.5; }
+  #_eqb-cta   {
+    display:inline-flex;align-items:center;gap:5px;
+    margin-top:8px;padding:5px 12px;border-radius:8px;
+    background:rgba(99,102,241,.1);color:var(--indigo);
+    border:1px solid rgba(99,102,241,.25);
+    font-size:11.5px;font-weight:700;cursor:pointer;
+    text-decoration:none;transition:all .15s;white-space:nowrap;
+  }
+  #_eqb-cta:hover { background:rgba(99,102,241,.18); }
+  #_eqb-dismiss {
+    flex-shrink:0;background:none;border:none;
+    font-size:14px;color:var(--text3);cursor:pointer;
+    padding:2px 4px;border-radius:4px;margin-top:1px;
+    transition:color .15s;line-height:1;
+  }
+  #_eqb-dismiss:hover { color:var(--text); }
+  #_eqb-using {
+    font-size:11px;color:var(--text3);margin-top:6px;
+    display:flex;align-items:center;gap:5px;
+  }
+  @media (max-width: 600px) {
+    #_eqb-cta { width:100%; justify-content:center; }
+  }
   @media (max-width: 1100px) {
     #appSidebar:not(.mobile-open) .sb-platform-section { display: none; }
   }
@@ -5083,7 +5127,7 @@ header::after { display: none !important; }
     display: block !important;
     pointer-events: none;
   }
-  /* v9.50: full-color logos (base64 embedded) — no white filter */
+  /* v9.53: full-color logos (base64 embedded) — no white filter */
   .pc-logo-color {
     width: 100% !important;
     height: 100% !important;
@@ -5470,7 +5514,7 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
-  /* ── v9.50: Split View ─────────────────────────────────────────────── */
+  /* ── v9.53: Split View ─────────────────────────────────────────────── */
   /* Non-split state: wrapper transparent, req pane + resizer hidden */
   #_splitViewWrap {
     display: block;           /* was: none — that hid welcome screen on launch */
@@ -5554,7 +5598,7 @@ header::after { display: none !important; }
   }
   }
 
-  /* ── v9.50: Command Palette ──────────────────────────────────────── */
+  /* ── v9.53: Command Palette ──────────────────────────────────────── */
   #_cmdPalette {
     position: fixed; inset: 0; z-index: 300040;
     display: none; align-items: flex-start;
@@ -5600,7 +5644,7 @@ header::after { display: none !important; }
   .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
   .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  /* ── v9.50: TC Quality Score bar ──────────────────────────────── */
+  /* ── v9.53: TC Quality Score bar ──────────────────────────────── */
   .tc-quality-wrap {
     display: inline-flex;
     align-items: center;
@@ -5633,7 +5677,7 @@ header::after { display: none !important; }
   .tc-quality-grade-C { color: #EF4444; }
   .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
 
-  /* ── v9.50: Celebration panel ──────────────────────────────────── */
+  /* ── v9.53: Celebration panel ──────────────────────────────────── */
   #_celebrationPanel {
     position: fixed;
     bottom: 24px;
@@ -5722,6 +5766,8 @@ header::after { display: none !important; }
   .provider-pill > div { min-width: 0; overflow: hidden; flex: 1; }
   .pill-status { flex-shrink: 0; }
   .pill-icon { flex-shrink: 0; }
+  /* 5-pill grid: collapse to 3+2 on tablet */
+  #providerPills { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
 
   /* ══════════════════════════════════════════════════════════════
      v6.2 MOBILE POLISH — comprehensive touch-friendly overrides
@@ -6154,7 +6200,7 @@ header::after { display: none !important; }
     background: rgba(10,12,28,.6) !important;
   }
 
-  /* activeProviderCard removed v9.50 */
+  /* activeProviderCard removed v9.53 */
 
   /* ── Tour card on dark ── */
   [data-theme="dark"] #tourCard {
@@ -6352,7 +6398,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.50</span>
+      <span class="sb-badge">v9.53</span>
     </div>
 
 <div class="sb-group-label">Industry Domain</div>
@@ -6863,8 +6909,8 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Provider selector pills -->
-      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
+      <!-- Provider selector pills — 5 providers (v9.53) -->
+      <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
         <button class="provider-pill" id="pill-claude"   data-provider="claude"   data-tip="Claude Sonnet — best output quality, paid API required"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
           <span class="pill-icon">🤖</span>
@@ -6878,23 +6924,41 @@ header::after { display: none !important; }
           data-key="GEMINI_API_KEY" data-url="https://aistudio.google.com">
           <span class="pill-icon">✦</span>
           <div>
-            <div class="pill-name">Gemini 2.5 Flash</div>
-            <div class="pill-sub">Google · 15 req/min free</div>
+            <div class="pill-name">Gemini 2.5</div>
+            <div class="pill-sub">Google · Free tier</div>
           </div>
           <span class="pill-status" id="pill-status-gemini">—</span>
         </button>
-        <button class="provider-pill" id="pill-groq"    data-provider="groq"      data-tip="Groq Llama — free tier, fastest, best for quick generations"
+        <button class="provider-pill" id="pill-groq"    data-provider="groq"     data-tip="Groq Llama — free tier, fastest, best for quick generations"
           data-key="GROQ_API_KEY" data-url="https://console.groq.com">
           <span class="pill-icon">⚡</span>
           <div>
             <div class="pill-name">Groq</div>
-            <div class="pill-sub">Llama 3.3 70B · Free · Fallback</div>
+            <div class="pill-sub">Llama 3.3 · Free</div>
           </div>
           <span class="pill-status" id="pill-status-groq">—</span>
         </button>
+        <button class="provider-pill" id="pill-openai"  data-provider="openai"   data-tip="OpenAI GPT-4o mini — US-hosted, high quality, pay per use"
+          data-key="" data-url="https://platform.openai.com/api-keys">
+          <span class="pill-icon">🟢</span>
+          <div>
+            <div class="pill-name">OpenAI</div>
+            <div class="pill-sub">GPT-4o mini</div>
+          </div>
+          <span class="pill-status" id="pill-status-openai">—</span>
+        </button>
+        <button class="provider-pill" id="pill-together" data-provider="together" data-tip="Together AI — runs DeepSeek V3, US-hosted, ~20× cheaper than Claude"
+          data-key="" data-url="https://api.together.xyz/settings/api-keys">
+          <span class="pill-icon">🤝</span>
+          <div>
+            <div class="pill-name">Together</div>
+            <div class="pill-sub">DeepSeek V3</div>
+          </div>
+          <span class="pill-status" id="pill-status-together">—</span>
+        </button>
       </div>
 
-      <!-- ── Your Personal API Keys — Accordion Cards (v9.50) ── -->
+      <!-- ── Your Personal API Keys — Accordion Cards (v9.53) ── -->
       <div id="userKeyBody" style="display:flex;flex-direction:column;gap:10px;
            padding:16px;margin-bottom:16px;border-radius:12px;
            border:1.5px solid var(--border2);background:var(--surface);">
@@ -6903,8 +6967,6 @@ header::after { display: none !important; }
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
           <span style="font-size:15px">🔑</span>
           <span style="font-size:13px;font-weight:800;color:var(--text)">Your Personal API Keys</span>
-          <span style="font-size:11px;padding:2px 8px;border-radius:10px;
-                       background:rgba(99,102,241,.1);color:var(--indigo);font-weight:600">optional</span>
           <span style="font-size:11px;color:var(--text3);margin-left:auto">Your key = your limits</span>
         </div>
 
@@ -7042,7 +7104,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card removed v9.50 — provider shown via top card selection -->
+      <!-- Active provider card removed v9.53 — provider shown via top card selection -->
       <!-- claudeTestResult kept hidden for JS null-guard safety -->
       <div id="claudeTestResult" style="display:none"></div>
       <!-- Hidden ghost elements for JS null-guard safety (updateProviderUI writes to these) -->
@@ -7450,7 +7512,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.50</div>
+          <div class="settings-about-val" id="aboutVersion">v9.53</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7485,7 +7547,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.50 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.53 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7494,11 +7556,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.50
+          🆕 What's New in v9.53
         </div>
-        <!-- v9.50 changelog -->
+        <!-- v9.53 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.50 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.53 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -7778,6 +7840,22 @@ header::after { display: none !important; }
         </div>
         </div>
 
+        <!-- Enterprise quality banner (v9.53) -->
+        <div id="_enterpriseQualityBanner">
+          <span id="_eqb-icon">⚡</span>
+          <div id="_eqb-body">
+            <div id="_eqb-title">Enterprise platform detected</div>
+            <div id="_eqb-sub">
+              <span id="_eqb-msg">Claude produces significantly better test cases for enterprise platforms — more accurate steps, real field names, and proper workflow sequences.</span>
+              <div id="_eqb-using"></div>
+            </div>
+            <a id="_eqb-cta" onclick="_eqbOpenSettings();return false;" href="#">
+              🔑 Add Claude key in Settings →
+            </a>
+          </div>
+          <button id="_eqb-dismiss" onclick="_eqbDismiss()" title="Dismiss">✕</button>
+        </div>
+
         <!-- ══ ACTIONS ROW: Generate + Reset ══ -->
         <div class="form-actions-row">
           <button class="gen-btn" id="genBtn" onclick="generate()" data-tip="Generate 40-70 test cases with full steps · Shortcut: Ctrl+Enter">
@@ -7961,7 +8039,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <!-- v9.50: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- v9.53: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
       <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
       <!-- When split is ON,  #_splitViewWrap shows as flex row -->
       <div id="_splitViewWrap">
@@ -7986,7 +8064,7 @@ header::after { display: none !important; }
         <div class="swh-title">Test cases will appear here</div>
         <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
       </div>
-      <!-- v9.50: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <!-- v9.53: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
         <!-- Hero row -->
@@ -8955,7 +9033,7 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
-// ── v9.50: Template Library ──────────────────────────────────────────
+// ── v9.53: Template Library ──────────────────────────────────────────
 const TEMPLATE_LIBRARY = [
   {
     id: 'tmpl-ap',
@@ -9187,7 +9265,7 @@ const GROUP_GRADIENTS = {
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
 
-// ── v9.50: Celebration Panel ─────────────────────────────────────────
+// ── v9.53: Celebration Panel ─────────────────────────────────────────
 function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   const panel = document.getElementById('_celebrationPanel');
   if (!panel) return;
@@ -9264,7 +9342,7 @@ function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   }, 8000);
 }
 
-// ── v9.50: TC Quality Scoring Engine ────────────────────────────────
+// ── v9.53: TC Quality Scoring Engine ────────────────────────────────
 const _VAGUE_PATTERNS = [
   /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
   /^(the )?page loads?( successfully| correctly)?$/i,
@@ -9341,7 +9419,7 @@ function _onQualityClick(tcId, canImprove) {
   }
 }
 
-// ── v9.50: Render welcome screen template cards + init stats ─────────
+// ── v9.53: Render welcome screen template cards + init stats ─────────
 function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
@@ -9401,7 +9479,7 @@ function renderPlatformCards() {
     const grpInfo = GROUP_ICONS[groupName] || { icon: '◈', bg: grad };
     const isOpen = gi === 0; // First group expanded by default
 
-    // v9.50: white badge groups get a subtle border for definition
+    // v9.53: white badge groups get a subtle border for definition
     const grpBg         = grpInfo.bg || grad;
     const grpBorder     = grpBg === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
     const grpIsEmbedded = grpInfo.logo && grpInfo.logo.startsWith('data:');
@@ -9429,7 +9507,7 @@ function renderPlatformCards() {
       const item = document.createElement('div');
       item.className = 'platform-card platform-list-item';
       item.dataset.value = p.value;
-      // v9.50: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
+      // v9.53: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
       const isEmbedded  = p.logoUrl && p.logoUrl.startsWith('data:');
       const logoClass   = isEmbedded ? 'pc-logo-color' : 'pc-logo';
       const badgeBorder = p.badge === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
@@ -10116,7 +10194,7 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  // v9.50: extended scoring for Web/Mobile/Enterprise ERP
+  // v9.53: extended scoring for Web/Mobile/Enterprise ERP
   const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
 
   const webScore    = _hit(['react','angular','vue','node.js','rest api','graphql','http','browser','frontend','backend','web application','spa','pwa','oauth','jwt','cookie','session token','registration','login page','password reset']);
@@ -10128,7 +10206,7 @@ function detectPlatformFromText(text) {
   return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-// v9.50: auto-detect module from document text
+// v9.53: auto-detect module from document text
 function detectModuleFromText(text, platform) {
   const lower = text.toLowerCase();
   const _hit = (kws) => kws.some(k => lower.includes(k));
@@ -10171,7 +10249,7 @@ function detectModuleFromText(text, platform) {
 }
 
 function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
-  // v9.50: default scores to 0 if called from old code path
+  // v9.53: default scores to 0 if called from old code path
   webScore    = webScore    || 0;
   mobileScore = mobileScore || 0;
   sapScore    = sapScore    || 0;
@@ -10257,7 +10335,7 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
-  // v9.50: don't auto-select for mixed/ambiguous case
+  // v9.53: don't auto-select for mixed/ambiguous case
   if (platform === 'D365+Salesforce') {
     detectedPlatform = 'D365 F&O';
     selectPlatform('D365 F&O');
@@ -10273,7 +10351,7 @@ function detectSpecialPlatform(lower) {
   document.getElementById('platform').value = platform;
   updateModules();
 
-  // v9.50: auto-detect module from document text
+  // v9.53: auto-detect module from document text
   try {
     const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
     if (_docText.length > 50) {
@@ -10292,14 +10370,14 @@ function detectSpecialPlatform(lower) {
     }
   } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
 
-  // v9.50: User-friendly badge with Change link
+  // v9.53: User-friendly badge with Change link
   if (badge) {
     badge.className = `detect-badge visible ${badgeClass}`;
     const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
     badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
   }
 
-  // v9.50: Toast with platform + module
+  // v9.53: Toast with platform + module
   const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
   if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
@@ -10832,7 +10910,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.50 FIX: server may have resolved to a different provider than what the client
+      // v9.53 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -10876,7 +10954,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.50: also mark the actual server-used provider if it differs
+        // v9.53: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -10884,7 +10962,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.50: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.53: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -10899,7 +10977,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.50: use the actual server provider name for user-facing messages
+        // v9.53: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -11001,7 +11079,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.50 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.53 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -11051,7 +11129,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.50 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.53 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -11064,7 +11142,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.50: also reset button visual state in case the queue path left it stuck loading
+      // v9.53: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -11115,12 +11193,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.50 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.53 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.50: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.53: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -11149,7 +11227,7 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  // v9.50 — Progress storytelling: live narrative loader
+  // v9.53 — Progress storytelling: live narrative loader
   window._progressSteps = [
     { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
     { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
@@ -12671,9 +12749,9 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
-  // v9.50: update progress story on each chunk (before TC content appears)
+  // v9.53: update progress story on each chunk (before TC content appears)
   if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
-  // v9.50: update real-time step counter
+  // v9.53: update real-time step counter
   if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
@@ -12977,7 +13055,7 @@ function finalizeOutput(elapsed, platform, module) {
   const _tcCount = _tcs.length || 0;
   if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
 
-  // v9.50: Time-saved celebration toast
+  // v9.53: Time-saved celebration toast
   try {
     const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
     const _savedStr  = _savedMins >= 60
@@ -12988,14 +13066,14 @@ function finalizeOutput(elapsed, platform, module) {
     localStorage.setItem(_cumKey, String(_cumTotal));
       // Sync updated total to Firestore for cross-device stats
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.50: sync cumulative TC count to Firestore
+    // v9.53: sync cumulative TC count to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     const _cumMins   = _cumTotal * 8;
     const _cumStr    = _cumMins >= 60
       ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
       : _cumMins + ' min';
     if (_tcCount > 0) {
-      // v9.50: trigger celebration panel (replaces plain toast)
+      // v9.53: trigger celebration panel (replaces plain toast)
       setTimeout(function() {
         try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
       }, 400);
@@ -13005,7 +13083,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.50: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.53: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -13019,7 +13097,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  // v9.50 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  // v9.53 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
   var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
   document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
   // v9.22 domain badge in meta-bar
@@ -13086,7 +13164,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
-  // v9.50: Remember last session preferences (keyed by Firebase UID if available)
+  // v9.53: Remember last session preferences (keyed by Firebase UID if available)
   try {
     var _sessKey = 'shuddhi-last-session';
     if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
@@ -13098,16 +13176,16 @@ function finalizeOutput(elapsed, platform, module) {
       ts: Date.now()
     };
     localStorage.setItem(_sessKey, JSON.stringify(_sessData));
-    // v9.50: sync to Firestore for cross-device consistency
+    // v9.53: sync to Firestore for cross-device consistency
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.50: record generation for smart suggestions pattern detection
+    // v9.53: record generation for smart suggestions pattern detection
     try {
       var _histKey = 'shuddhi-gen-history';
       var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
       _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
       if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
       localStorage.setItem(_histKey, JSON.stringify(_hist));
-      // v9.50: sync gen history to Firestore
+      // v9.53: sync gen history to Firestore
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
       // Check patterns after 3+ gens
       if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
@@ -13148,7 +13226,7 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
-  // v9.50: refresh split view left pane with requirement text after generation
+  // v9.53: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
   // Re-enable split button after generation
   var _sb = document.getElementById('_splitViewBtn');
@@ -13859,7 +13937,7 @@ function loadHistory(id) {
   });
   document.getElementById('resetBtn').className = 'reset-btn visible';
 
-  // ── v9.50: Render proper TC table (not just raw markdown) ────────
+  // ── v9.53: Render proper TC table (not just raw markdown) ────────
   // This populates tgAllTCs, shows tabs, enables all features
   setTimeout(function() {
     try {
@@ -13927,7 +14005,7 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
-  // v9.50: init welcome screen template grid + stats
+  // v9.53: init welcome screen template grid + stats
   if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
@@ -14721,7 +14799,7 @@ function saveUserKey(provider, value) {
   }
 }
 
-// ── Accordion toggle for provider key cards (v9.50) ─────────────
+// ── Accordion toggle for provider key cards (v9.53) ─────────────
 function _pkaToggle(provider) {
   var card = document.getElementById('pka-card-' + provider);
   if (!card) return;
@@ -14749,6 +14827,12 @@ function _pkaSetSaved(provider, isSaved) {
   var badge = document.getElementById('pka-badge-' + provider);
   if (card)  { card.classList.toggle('pka-saved', isSaved); }
   if (badge) { badge.classList.toggle('visible', isSaved); }
+  // Also update the top provider pill status badge
+  var pillStatus = document.getElementById('pill-status-' + provider);
+  if (pillStatus) {
+    pillStatus.textContent = isSaved ? '✓ Set' : '—';
+    pillStatus.className   = 'pill-status ' + (isSaved ? 'ok' : 'off');
+  }
   // Auto-close after saving
   if (isSaved && card && card.classList.contains('open')) {
     setTimeout(function() { card.classList.remove('open'); }, 600);
@@ -15751,7 +15835,7 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
-    // v9.50: close command palette
+    // v9.53: close command palette
     if (document.getElementById('_cmdPalette')?.classList.contains('open')
         && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
@@ -15808,7 +15892,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.50';
+  if (ver)  ver.textContent  = 'v9.53';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -16840,7 +16924,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.50';
+  if (version)  version.textContent  = 'v9.53';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -16935,21 +17019,41 @@ function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
     ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
   }
 
-  const pills = { claude: claudeKey, gemini: geminiKey, groq: groqKey };
+  // ── v9.53: include openai + together user keys in pill status ──
+  // Read user-saved keys from localStorage for openai + together
+  var _ukLS = {
+    openai:   localStorage.getItem('shuddhi-user-openai-key')   || '',
+    together: localStorage.getItem('shuddhi-user-together-key') || '',
+  };
+  const pills = {
+    claude:   claudeKey,
+    gemini:   geminiKey,
+    groq:     groqKey,
+    openai:   !!(_ukLS.openai   && _ukLS.openai.length   > 8),
+    together: !!(_ukLS.together && _ukLS.together.length > 8),
+  };
   Object.entries(pills).forEach(([p, hasKey]) => {
     const el = document.getElementById('pill-status-' + p);
     if (!el) return;
-    el.textContent = hasKey ? '✓ Set' : '— Not set';
+    el.textContent = hasKey ? '✓ Set' : '—';
     el.className   = 'pill-status ' + (hasKey ? 'ok' : 'off');
   });
 
   const savedP = (() => { try { return localStorage.getItem('shuddhi-ai-provider') || ''; } catch(e) { return ''; } })();
-  const keys   = { claude: claudeKey, gemini: geminiKey, groq: groqKey };
+  const keys   = {
+    claude:   claudeKey,
+    gemini:   geminiKey,
+    groq:     groqKey,
+    openai:   pills.openai,
+    together: pills.together,
+  };
   const provider = (savedP && keys[savedP] ? savedP : null)
     || (activeProvider && keys[activeProvider] ? activeProvider : null)
-    || (keys.groq   ? 'groq'   : null)   // free first
-    || (keys.gemini ? 'gemini' : null)   // cheap second
-    || (keys.claude ? 'claude' : null)   // paid last
+    || (keys.groq     ? 'groq'     : null)   // free first
+    || (keys.gemini   ? 'gemini'   : null)   // cheap second
+    || (keys.together ? 'together' : null)   // budget paid
+    || (keys.openai   ? 'openai'   : null)   // paid
+    || (keys.claude   ? 'claude'   : null)   // premium paid last
     || 'groq';
 
   if (provider !== ProviderManager.getActive()) {
@@ -17682,7 +17786,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.50</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.53</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -18382,16 +18486,126 @@ window.applyOutputFilter = function(filterKey) {
   if (typeof switchArtifactTab === 'function') switchArtifactTab(tabKey, tabBtn);
 };
 
-window.copyShareLink = function() {
-  var url = window.location.href;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(function() {
-      if (typeof showToast === 'function') showToast('Link copied to clipboard', '\uD83D\uDD17');
-    }).catch(function() { prompt('Copy this link:', url); });
-  } else {
-    prompt('Copy this link:', url);
+// ── v9.53: Shareable TC link via Firestore ───────────────────────
+window.copyShareLink = async function() {
+  if (!rawMarkdown || !rawMarkdown.trim()) {
+    showToast('Generate test cases first before sharing', '⚠️'); return;
+  }
+  var btn = document.querySelector('[onclick*="copyShareLink"]');
+  if (btn) { btn.disabled = true; }
+
+  try {
+    // Build share payload
+    var shareData = {
+      markdown:  rawMarkdown,
+      platform:  (document.getElementById('metaPlatform') || {}).textContent || '',
+      module:    (document.getElementById('metaModule')   || {}).textContent || '',
+      tcCount:   tgAllTCs ? tgAllTCs.length : 0,
+      createdAt: new Date().toISOString(),
+      version:   'v9.53',
+    };
+
+    // Write to Firestore shares collection
+    var db = window._fbDb || (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore());
+    var shareId, shareUrl;
+
+    if (db) {
+      // Firestore available — save and get permanent ID
+      var docRef = await db.collection('shares').add(shareData);
+      shareId  = docRef.id;
+      shareUrl = window.location.origin + '/app?share=' + shareId;
+    } else {
+      // Firestore not available — encode in URL (compressed)
+      var compressed = btoa(unescape(encodeURIComponent(JSON.stringify({
+        m: rawMarkdown.substring(0, 8000), // truncate for URL safety
+        p: shareData.platform,
+        d: shareData.module,
+      })))).replace(/=/g,'');
+      shareUrl = window.location.origin + '/app?shareData=' + compressed.substring(0,2000);
+    }
+
+    // Copy to clipboard
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(shareUrl);
+    } else {
+      prompt('Copy this shareable link:', shareUrl);
+    }
+
+    showToast('Shareable link copied! Valid for 30 days.', '🔗');
+
+    // Show share confirmation with the link
+    var existingBanner = document.getElementById('_shareBanner');
+    if (existingBanner) existingBanner.remove();
+    var banner = document.createElement('div');
+    banner.id = '_shareBanner';
+    banner.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;'
+      + 'background:var(--surface);border:1.5px solid rgba(99,102,241,.3);border-radius:12px;'
+      + 'padding:12px 18px;box-shadow:0 8px 32px rgba(0,0,0,.2);display:flex;align-items:center;gap:12px;'
+      + 'max-width:480px;width:calc(100% - 32px);animation:_scFadeIn .3s ease';
+    banner.innerHTML = '<span style="font-size:20px">🔗</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">Link ready to share</div>'
+      + '<div style="font-size:11px;color:var(--indigo);font-family:\'JetBrains Mono\',monospace;'
+      + 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" '
+      + 'onclick="navigator.clipboard&&navigator.clipboard.writeText(this.textContent)">'
+      + shareUrl + '</div></div>'
+      + '<button onclick="this.closest(\'#_shareBanner\').remove()" '
+      + 'style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--text3);flex-shrink:0">✕</button>';
+    document.body.appendChild(banner);
+    setTimeout(function() { if (banner.parentNode) banner.remove(); }, 8000);
+
+  } catch(err) {
+    console.error('[Share] Failed:', err);
+    showToast('Share failed — copying page URL instead', '⚠️');
+    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+  } finally {
+    if (btn) { btn.disabled = false; }
   }
 };
+
+// ── Restore from share link on page load ──────────────────────────
+(function _checkShareParam() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var shareId   = params.get('share');
+    var shareData = params.get('shareData');
+
+    if (shareId) {
+      // Load from Firestore
+      document.addEventListener('DOMContentLoaded', function() {
+        var db = window._fbDb || (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore());
+        if (!db) { console.warn('[Share] Firestore not available for share restore'); return; }
+        db.collection('shares').doc(shareId).get().then(function(doc) {
+          if (!doc.exists) { showToast('Share link expired or not found', '⚠️'); return; }
+          var data = doc.data();
+          rawMarkdown = data.markdown || '';
+          if (rawMarkdown && typeof renderTestGenView === 'function') {
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('outputContent').className = 'output-content visible';
+            document.getElementById('outputContent').innerHTML = marked.parse(rawMarkdown);
+            setTimeout(function() { renderTestGenView(); }, 200);
+            showToast('Shared test cases loaded (' + (data.tcCount||'?') + ' TCs)', '🔗');
+          }
+        }).catch(function(e) { console.error('[Share] Load failed:', e); });
+      });
+    } else if (shareData) {
+      // Load from URL-encoded data (fallback)
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var decoded = JSON.parse(decodeURIComponent(escape(atob(shareData + '=='))));
+          rawMarkdown = decoded.m || '';
+          if (rawMarkdown && typeof renderTestGenView === 'function') {
+            document.getElementById('placeholder').style.display = 'none';
+            document.getElementById('outputContent').className = 'output-content visible';
+            document.getElementById('outputContent').innerHTML = marked.parse(rawMarkdown);
+            setTimeout(function() { renderTestGenView(); }, 200);
+            showToast('Shared test cases loaded', '🔗');
+          }
+        } catch(e) { console.error('[Share] URL decode failed:', e); }
+      });
+    }
+  } catch(e) { /* non-critical */ }
+})();
 </script>
 
 <script>
@@ -18854,7 +19068,124 @@ window.copyShareLink = function() {
     if (txt)  txt.textContent = on ? 'Regenerating…' : '🔄 Regenerate';
   }
 
-  window._runTCRegen = async function() {
+  
+// ── Enterprise Quality Banner (v9.53) ─────────────────────────────
+// Shows when: enterprise platform selected + user does NOT have Claude key
+// Hides when: Claude key is present, or non-enterprise platform, or dismissed
+
+var _eqbDismissedThisSession = false;
+
+function _updateEnterpriseQualityBanner() {
+  var banner = document.getElementById('_enterpriseQualityBanner');
+  if (!banner) return;
+
+  var platform = (document.getElementById('platform') || {}).value || '';
+  var isEnterprise = typeof _ENTERPRISE_PLATFORMS !== 'undefined'
+    ? _ENTERPRISE_PLATFORMS.has(platform)
+    : ['D365 F&O','D365 CRM','D365 BC','D365+Salesforce','Salesforce Sales',
+       'Salesforce Service','Salesforce CPQ','SAP','Oracle ERP','Workday',
+       'Guidewire','ServiceNow','Enterprise ERP'].includes(platform);
+
+  // Get current provider and check Claude key
+  var uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
+  var hasClaudeKey = uk.claude && uk.claude.length > 8;
+  var activeProvider = (typeof ProviderManager !== 'undefined')
+    ? ProviderManager.getActive() : 'groq';
+
+  // Show banner only when: enterprise platform + no Claude key + not dismissed
+  var shouldShow = isEnterprise && !hasClaudeKey && !_eqbDismissedThisSession;
+
+  banner.classList.toggle('visible', shouldShow);
+
+  if (shouldShow) {
+    // Update current provider in the banner
+    var providerNames = {
+      groq: '⚡ Groq (Llama 3.3)', gemini: '✦ Gemini 2.5 Flash',
+      openai: '🟢 OpenAI GPT-4o', together: '🤝 Together AI', claude: '🤖 Claude'
+    };
+    var currentName = providerNames[activeProvider] || activeProvider;
+    var usingEl = document.getElementById('_eqb-using');
+    if (usingEl) {
+      usingEl.innerHTML = '<span style="opacity:.6">Currently generating with:</span> '
+        + '<strong style="color:var(--text2)">' + currentName + '</strong>';
+    }
+    // Update message based on platform
+    var msgEl = document.getElementById('_eqb-msg');
+    if (msgEl) {
+      var msgs = {
+        'D365 F&O':          'For D365 F&O, Claude understands AP workflows, GL posting, and 3-way match logic — producing accurate step-by-step test cases with real field names.',
+        'D365 CRM':          'For D365 CRM, Claude generates precise entity-aware test cases covering lead conversion, opportunity stages, and relationship management.',
+        'Salesforce Sales':  'For Salesforce Sales Cloud, Claude generates tests with accurate object names (Opportunity, Lead, Account), SOQL-aware field references, and process builder flows.',
+        'Salesforce Service':'For Salesforce Service Cloud, Claude produces accurate case management, entitlement, and escalation rule test scenarios.',
+        'SAP':               'For SAP, Claude understands transaction codes, module dependencies, and integration points for accurate enterprise test case generation.',
+        'Enterprise ERP':    'For enterprise ERP platforms, Claude produces significantly more accurate test cases with real workflow sequences and integration validations.',
+      };
+      msgEl.textContent = msgs[platform]
+        || 'Claude produces significantly better test cases for enterprise platforms — more accurate steps, real field names, and proper workflow sequences.';
+    }
+  }
+}
+
+function _eqbDismiss() {
+  _eqbDismissedThisSession = true;
+  var banner = document.getElementById('_enterpriseQualityBanner');
+  if (banner) {
+    banner.style.animation = 'none';
+    banner.style.opacity = '0';
+    banner.style.transform = 'translateY(-4px)';
+    banner.style.transition = 'opacity .2s,transform .2s';
+    setTimeout(function() { banner.classList.remove('visible'); banner.style.cssText = ''; }, 220);
+  }
+}
+
+function _eqbOpenSettings() {
+  // Open settings modal at AI Provider tab and expand Claude accordion
+  if (typeof openSettings === 'function') {
+    openSettings();
+    setTimeout(function() {
+      // Switch to AI Provider tab
+      if (typeof switchSettingsTab === 'function') switchSettingsTab('claude');
+      // Expand the Claude accordion card
+      setTimeout(function() {
+        if (typeof _pkaToggle === 'function') _pkaToggle('claude');
+        // Scroll Claude card into view
+        var card = document.getElementById('pka-card-claude');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 150);
+    }, 80);
+  }
+  return false;
+}
+
+// Reset dismiss flag when platform changes (new context = fresh banner)
+(function _patchSelectPlatformForBanner() {
+  var _origSelectPlatform = window.selectPlatform || function(){};
+  window.selectPlatform = function(value) {
+    _origSelectPlatform(value);
+    // Reset dismiss on platform change so banner shows for new enterprise platform
+    if (typeof _ENTERPRISE_PLATFORMS !== 'undefined' && _ENTERPRISE_PLATFORMS.has(value)) {
+      _eqbDismissedThisSession = false;
+    }
+    _updateEnterpriseQualityBanner();
+  };
+})();
+
+// Also update banner when provider changes (e.g. user adds Claude key)
+var _origSaveUserKey = window.saveUserKey;
+// Hook saveUserKey to refresh banner when Claude key is added/removed
+document.addEventListener('DOMContentLoaded', function() {
+  var _origSUK = window.saveUserKey;
+  if (typeof _origSUK === 'function') {
+    window.saveUserKey = function(provider, value) {
+      _origSUK(provider, value);
+      if (provider === 'claude') _updateEnterpriseQualityBanner();
+    };
+  }
+  // Initial check on page load
+  _updateEnterpriseQualityBanner();
+});
+
+window._runTCRegen = async function() {
     if (_inRegen) return;
     var tcId = _activeTcId;
     if (!tcId) return;
@@ -18889,7 +19220,7 @@ window.copyShareLink = function() {
 
     try {
 
-      // ── v9.50: Use same provider resolution as main generate() ────
+      // ── v9.53: Use same provider resolution as main generate() ────
       // Send only the keys the user has — proxy resolveProvider() handles fallback
       // to server Groq key. Never send a mismatched model ID for the resolved provider.
       var userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
@@ -19797,7 +20128,7 @@ window.copyShareLink = function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
-     v9.50 CELEBRATION PANEL
+     v9.53 CELEBRATION PANEL
 ════════════════════════════════════════════════════════════ -->
 <div id="_celebrationPanel">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
@@ -21775,7 +22106,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.50
+// FIREBASE AUTH — v9.53
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -22070,7 +22401,7 @@ if (document.readyState !== 'loading') {
 </script>
 
 <!-- ================================================================
-     v9.50 COMMAND PALETTE
+     v9.53 COMMAND PALETTE
 ================================================================ -->
 <div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
   <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
@@ -22086,12 +22417,12 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.50</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.53</span>
     </div>
   </div>
 </div>
 <script>
-// v9.50 - Keyboard Shortcuts + Command Palette
+// v9.53 - Keyboard Shortcuts + Command Palette
 (function _initShortcutsAndPalette() {
   'use strict';
 
@@ -22311,7 +22642,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.50 — Split View: Requirement Doc left, Test Cases right
+// v9.53 — Split View: Requirement Doc left, Test Cases right
 // ══════════════════════════════════════════════════════════════════════
 (function _initSplitView() {
   'use strict';
@@ -22490,10 +22821,10 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.50 — Six UX Features
+// v9.53 — Six UX Features
 // ══════════════════════════════════════════════════════════════════════
 
-// ── v9.50: Bulk Regen Selected TCs ───────────────────────────────────
+// ── v9.53: Bulk Regen Selected TCs ───────────────────────────────────
 async function bulkRegenSelected() {
   if (!tgSelectedIds || tgSelectedIds.size === 0) {
     if (typeof showToast === 'function') showToast('Select test cases first, then click Regen Selected', '\u26a0\ufe0f');
@@ -22802,7 +23133,7 @@ function toggleAdvanced() {
   if (toggle) toggle.classList.toggle('open', !isOpen);
   if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
   try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
-  // v9.50: sync advanced toggle state to Firestore
+  // v9.53: sync advanced toggle state to Firestore
   if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
 }
 
@@ -22997,7 +23328,7 @@ function _dismissSuggestion(id) {
     var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
     d[id] = Date.now();
     localStorage.setItem(_dismissKey, JSON.stringify(d));
-    // v9.50: sync dismissed suggestions to Firestore
+    // v9.53: sync dismissed suggestions to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
   } catch(e) {}
 }
@@ -23006,7 +23337,7 @@ function _dismissSuggestion(id) {
 
 <script>
 // ======================================================================
-// v9.50 — FirestorePrefs: cross-device preference sync (bugs fixed v9.50)
+// v9.53 — FirestorePrefs: cross-device preference sync (bugs fixed v9.53)
 // Syncs: lastSession, genHistory, dismissedSuggestions, advancedOpen,
 //        totalTCs, splitSeen
 // Does NOT sync: API keys, ADO/Jira tokens, free-trial counters

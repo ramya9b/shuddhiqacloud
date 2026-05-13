@@ -5,7 +5,7 @@
  * The handler receives a Cloudflare context object { request, env }.
  * env contains the environment variables set in Cloudflare Pages dashboard.
  *
- * Supported providers: Claude, Gemini, Groq, OpenAI, Together AI (v9.49)
+ * Supported providers: Claude, Gemini, Groq, OpenAI, Together AI (v9.52)
  */
 
 // ── Model mapping per provider ──────────────────────────────────
@@ -593,7 +593,80 @@ export async function onRequest(context) {
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
-      let msg = `${provider} API error ${response.status}: ${detail || 'Unknown error'}`;
+      // ── v9.52: OpenAI error handler ──────────────────────────────
+      if (provider === 'openai') {
+        console.error('[OpenAI] Status:', response.status, '| Error:', detail.substring(0,150));
+        if (response.status === 401) {
+          return new Response(JSON.stringify({
+            error: 'Your OpenAI API key is invalid or expired. Check it at platform.openai.com/api-keys and update in Settings → AI Provider.',
+            switchProvider: true, provider: 'openai',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 403) {
+          return new Response(JSON.stringify({
+            error: 'OpenAI key does not have permission (403). Ensure your key has chat completions access and sufficient billing credit.',
+            switchProvider: true, provider: 'openai',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('retry-after') || '60';
+          const waitSecs   = parseInt(retryAfter) || 60;
+          const isQuota = detail.includes('quota') || detail.includes('billing') || detail.includes('limit');
+          return new Response(JSON.stringify({
+            error: isQuota
+              ? 'OpenAI quota exceeded — check your billing at platform.openai.com/usage. Switching provider.'
+              : 'OpenAI rate limit hit — switching to next provider (retry in ' + waitSecs + 's).',
+            waitSecs, switchProvider: true, provider: 'openai',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 400) {
+          return new Response(JSON.stringify({
+            error: 'OpenAI bad request (400): ' + detail.substring(0,150) + '. Check your API key and model access.',
+            switchProvider: true, provider: 'openai',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        return new Response(JSON.stringify({
+          error: 'OpenAI error ' + response.status + ': ' + detail.substring(0,150),
+          switchProvider: true, provider: 'openai',
+        }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // ── v9.52: Together AI error handler ─────────────────────────
+      if (provider === 'together') {
+        console.error('[Together] Status:', response.status, '| Error:', detail.substring(0,150));
+        if (response.status === 401) {
+          return new Response(JSON.stringify({
+            error: 'Your Together AI key is invalid or expired. Get a new key at api.together.xyz and update in Settings → AI Provider.',
+            switchProvider: true, provider: 'together',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('retry-after') || '30';
+          const waitSecs   = parseInt(retryAfter) || 30;
+          return new Response(JSON.stringify({
+            error: 'Together AI rate limit hit — switching to next provider (retry in ' + waitSecs + 's).',
+            waitSecs, switchProvider: true, provider: 'together',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 402) {
+          return new Response(JSON.stringify({
+            error: 'Together AI: Insufficient credits. Top up at api.together.xyz/settings/billing or switch to Groq (free).',
+            switchProvider: true, provider: 'together',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (response.status === 400) {
+          return new Response(JSON.stringify({
+            error: 'Together AI bad request (400): ' + detail.substring(0,150) + '. The model may be unavailable.',
+            switchProvider: true, provider: 'together',
+          }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        return new Response(JSON.stringify({
+          error: 'Together AI error ' + response.status + ': ' + detail.substring(0,150),
+          switchProvider: true, provider: 'together',
+        }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      let msg = \`\${provider} API error \${response.status}: \${detail || 'Unknown error'}\`;
       if (response.status === 400) {
         // Detect Anthropic account usage cap — treat as switchable rate limit
         const isUsageCap = detail && (
@@ -609,7 +682,7 @@ export async function onRequest(context) {
             switchProvider: true
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
-        msg = `${provider} 400 Bad Request: ${detail || 'Invalid payload'}`;
+        msg = \`\${provider} 400 Bad Request: \${detail || 'Invalid payload'}\`;
       }
       if (response.status === 429) {
         const retryAfter = response.headers.get('retry-after') || response.headers.get('x-ratelimit-reset-requests');
