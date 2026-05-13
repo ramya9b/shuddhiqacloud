@@ -666,7 +666,7 @@ export async function onRequest(context) {
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
-      let msg = \`\${provider} API error \${response.status}: \${detail || 'Unknown error'}\`;
+      let msg = `${provider} API error ${response.status}: ${detail || 'Unknown error'}`;
       if (response.status === 400) {
         // Detect Anthropic account usage cap — treat as switchable rate limit
         const isUsageCap = detail && (
@@ -682,7 +682,7 @@ export async function onRequest(context) {
             switchProvider: true
           }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
-        msg = \`\${provider} 400 Bad Request: \${detail || 'Invalid payload'}\`;
+        msg = `${provider} 400 Bad Request: ${detail || 'Invalid payload'}`;
       }
       if (response.status === 429) {
         const retryAfter = response.headers.get('retry-after') || response.headers.get('x-ratelimit-reset-requests');
