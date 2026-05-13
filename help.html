@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Help & Setup Guide — Shuddhi QA v9.59</title>
-<meta name="description" content="Step-by-step setup guide for Shuddhi QA v9.59. Get your free Groq, Gemini or Claude API key, set up Azure DevOps PAT, and configure Jira in minutes."/>
+<title>Help & Setup Guide — Shuddhi QA v9.61</title>
+<meta name="description" content="Step-by-step setup guide for Shuddhi QA v9.61. Get your free Groq, Gemini or Claude API key, set up Azure DevOps PAT, and configure Jira in minutes."/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/help"/>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23E8A020'/><text y='.9em' font-size='68' x='10' fill='white'>श</text></svg>" type="image/svg+xml"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -537,6 +537,131 @@ footer { position:relative; z-index:1; border-top:1px solid var(--border); paddi
   </div>
 </div>
 
+<!-- ══ Claude Haiku — Cost-saving option ══ -->
+<div class="guide-section" style="margin-top:16px">
+  <div class="guide-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="guide-icon" style="background:rgba(5,150,105,.1)">&#x1F4B0;</div>
+      <div class="guide-title">
+        <h2>Claude Haiku — 5&#xD7; Cheaper Option</h2>
+        <p>Same Claude, fraction of the cost</p>
+      </div>
+    </div>
+    <span class="guide-chevron">&#x25BC;</span>
+  </div>
+  <div class="guide-body" style="display:none">
+    <p>Claude Sonnet produces the best quality test cases for enterprise platforms, but costs ~$0.58 per full generation. Claude Haiku 4.5 produces good-quality output at ~$0.15 per generation.</p>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:10px">
+      <thead>
+        <tr style="background:var(--surface2)">
+          <th style="padding:10px;text-align:left;border-bottom:2px solid var(--border2)">Model</th>
+          <th style="padding:10px;text-align:center;border-bottom:2px solid var(--border2)">Full Suite Cost</th>
+          <th style="padding:10px;text-align:center;border-bottom:2px solid var(--border2)">$5 lasts</th>
+          <th style="padding:10px;text-align:left;border-bottom:2px solid var(--border2)">Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)">
+          <td style="padding:10px"><strong>Claude Sonnet 4.6</strong></td>
+          <td style="padding:10px;text-align:center">~$0.58</td>
+          <td style="padding:10px;text-align:center">~8 generations</td>
+          <td style="padding:10px">Complex enterprise workflows, D365, Guidewire</td>
+        </tr>
+        <tr>
+          <td style="padding:10px"><strong>Claude Haiku 4.5</strong></td>
+          <td style="padding:10px;text-align:center;color:#059669;font-weight:700">~$0.15</td>
+          <td style="padding:10px;text-align:center;color:#059669;font-weight:700">~33 generations</td>
+          <td style="padding:10px">Web apps, simpler flows, exploratory testing</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px">To switch: <strong>Settings &#x2192; AI Provider &#x2192; Claude accordion &#x2192; select Haiku or Sonnet</strong>. You can also switch via the live cost indicator below the Generate button.</p>
+    <p>The <strong>live cost indicator</strong> shows the estimated cost before you click Generate. It updates dynamically when you change format (Full Suite, E2E, Smoke etc.).</p>
+  </div>
+</div>
+
+<!-- ══ Shareable Links ══ -->
+<div class="guide-section" style="margin-top:16px">
+  <div class="guide-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="guide-icon" style="background:rgba(99,102,241,.1)">&#x1F517;</div>
+      <div class="guide-title">
+        <h2>Shareable Links</h2>
+        <p>Share generated test cases with a permanent URL</p>
+      </div>
+    </div>
+    <span class="guide-chevron">&#x25BC;</span>
+  </div>
+  <div class="guide-body" style="display:none">
+    <ol>
+      <li>Generate your test cases as normal</li>
+      <li>After generation, click the <strong>&#x1F517; Share Link</strong> button in the output toolbar</li>
+      <li>A permanent URL is created (stored in Firestore) &#8212; copy it with one click</li>
+      <li>Anyone with the link can view the full output: platform, module, all test cases</li>
+      <li>No login required for viewers</li>
+    </ol>
+    <p>Useful for: stakeholder sign-off, QA handoffs, sprint demos, and peer review.</p>
+    <p><strong>Note:</strong> Shared links are publicly accessible to anyone with the URL. Do not include sensitive data in your requirements if you plan to share.</p>
+  </div>
+</div>
+
+<!-- ══ Domain Auto-link ══ -->
+<div class="guide-section" style="margin-top:16px">
+  <div class="guide-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="guide-icon" style="background:rgba(16,185,129,.1)">&#x1F3F7;&#xFE0F;</div>
+      <div class="guide-title">
+        <h2>Platform Autocomplete &amp; Domain Auto-link</h2>
+        <p>Smart form fields that pre-fill from your requirement</p>
+      </div>
+    </div>
+    <span class="guide-chevron">&#x25BC;</span>
+  </div>
+  <div class="guide-body" style="display:none">
+    <p><strong>Platform Autocomplete Field</strong> — A dropdown selector in the main form. Start typing and it filters all 15 supported platforms. Keyword detection and Smart Detect fill it automatically.</p>
+    <p><strong>Industry Domain Auto-link</strong> &#8212; When you select a platform, the domain chip auto-selects based on platform context:</p>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px">
+      <thead>
+        <tr style="background:var(--surface2)">
+          <th style="padding:8px;text-align:left;border-bottom:2px solid var(--border2)">Platform</th>
+          <th style="padding:8px;text-align:left;border-bottom:2px solid var(--border2)">Auto-links to Domain</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px">Guidewire</td><td style="padding:8px">&#x1F6E1;&#xFE0F; Insurance</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px">Workday / SuccessFactors</td><td style="padding:8px">&#x1F465; HR &amp; Payroll</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:8px">D365 F&amp;O / SAP / Oracle</td><td style="padding:8px">&#x2699;&#xFE0F; Enterprise ERP</td></tr>
+        <tr><td style="padding:8px">Salesforce / Web / Mobile</td><td style="padding:8px">User selects manually</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px">You can always override by clicking a different domain chip. Your manual selection is respected and will not be overridden by auto-detection.</p>
+  </div>
+</div>
+
+<!-- ══ Enterprise Quality Banner ══ -->
+<div class="guide-section" style="margin-top:16px">
+  <div class="guide-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="guide-icon" style="background:rgba(232,162,32,.1)">&#x26A1;</div>
+      <div class="guide-title">
+        <h2>Enterprise Quality Banner</h2>
+        <p>Contextual guidance for enterprise platforms</p>
+      </div>
+    </div>
+    <span class="guide-chevron">&#x25BC;</span>
+  </div>
+  <div class="guide-body" style="display:none">
+    <p>When an enterprise platform is detected (D365 F&amp;O, Guidewire, SAP, Salesforce etc.) and you have not yet added a Claude API key, a banner appears explaining why Claude produces significantly better test cases for enterprise workflows:</p>
+    <ul>
+      <li>Real D365 field names (VendAccount, InvoiceId, PurchId)</li>
+      <li>Accurate workflow sequences (3-way match, GL posting, AP approval)</li>
+      <li>Domain-specific terminology (FNOL, deductible, adjudication for insurance)</li>
+      <li>Proper approval chains and exception paths</li>
+    </ul>
+    <p>The banner links directly to the Claude API key setup in Settings. You can dismiss it per session.</p>
+  </div>
+</div>
+
 <!-- ══ Integrations ══ -->
 <div class="section-label" style="margin-top:48px">🔗 Integration Setup</div>
 
@@ -717,7 +842,20 @@ footer { position:relative; z-index:1; border-top:1px solid var(--border); paddi
   <div class="guide-header" onclick="toggleCard(this)">
     <div class="guide-icon" style="background:rgba(232,162,32,.1)">🚀</div>
     <div class="guide-title">
-      <h2>Generate Your First Test Cases</h2>
+      <h2><h3>&#x1F9E0; Smart Detect &#8212; Auto-Identify Platform &amp; Domain</h3>
+<p>Smart Detect uses a 4-phase enterprise intelligence engine to automatically identify the platform and business domain from your requirement text.</p>
+<ol>
+  <li><strong>Paste your requirement</strong> in the Business Flow field (at least 40 characters)</li>
+  <li>The <strong>&#x1F9E0; Smart Detect Platform</strong> button appears below the description</li>
+  <li>Click it &#8212; the AI analyses your text using semantic clue detection and domain ontology mapping</li>
+  <li>The <strong>Platform field</strong> auto-fills (e.g. D365 F&amp;O, Guidewire, SAP)</li>
+  <li>The <strong>Industry Domain chip</strong> auto-selects (e.g. &#x1F6E1;&#xFE0F; Insurance, &#x2699;&#xFE0F; ERP)</li>
+  <li>The <strong>AI Detection badge</strong> shows: Platform, Module, Confidence %, Workflow, Evidence chips, Compliance obligations (IRDAI, SOX, HIPAA), Stakeholders, and Risk level</li>
+</ol>
+<p><strong>Cost:</strong> Smart Detect uses Shuddhi QA&#39;s Groq server key &#8212; completely free for all users. No API key required.</p>
+<p><strong>Keyword auto-detection</strong> also runs automatically as you type &#8212; 200+ enterprise signals covering Insurance, Banking, Healthcare, ERP, HR, Retail, ITSM, and Web/Mobile.</p>
+
+<h3>Generate Your First Test Cases</h2>
       <p>From zero to 40+ test cases in under 60 seconds</p>
     </div>
     <span class="guide-badge badge-rec">Quick Start</span>
