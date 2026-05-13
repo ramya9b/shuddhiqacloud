@@ -14,6 +14,7 @@
 // Preview models still use v1beta API endpoint.
 const MODELS = {
   claude:      'claude-sonnet-4-6',
+  claudeHaiku: 'claude-haiku-4-5-20251001',  // v9.56: 5× cheaper, good for standard TC gen
   // Gemini model chain (May 2026):
   // PRIMARY:      gemini-2.5-flash (GA, best quality, thinkingBudget:0 required)
   // FALLBACK 1:   gemini-2.0-flash (stable GA, no thinking, widely available)
@@ -128,6 +129,10 @@ function buildUpstreamRequest(provider, key, body) {
   const userMessage = messages?.[messages.length - 1]?.content || '';
 
   if (provider === 'claude') {
+    // v9.56: claudeModel field lets frontend request Haiku vs Sonnet
+    const claudeModel = body.claudeModel === 'haiku'
+      ? MODELS.claudeHaiku   // Haiku: ~5× cheaper, good for standard TC generation
+      : MODELS.claude;        // Sonnet: best quality (default)
     return {
       url: 'https://api.anthropic.com/v1/messages',
       headers: {
@@ -135,11 +140,7 @@ function buildUpstreamRequest(provider, key, body) {
         'x-api-key':         key,
         'anthropic-version': '2023-06-01',
       },
-      // REGRESSION FIX: was Math.min(max_tokens, 8192) — this cap was never raised in earlier
-      // sessions even though Groq and Gemini were. claude-sonnet-4-6 supports 64K output tokens.
-      // 8192 tokens is only enough for the gap analysis + test summary + first table header row,
-      // causing the "18 TCs in summary but empty E2E section" truncation shown in screenshot.
-      body: JSON.stringify({ model: MODELS.claude, max_tokens: Math.min(max_tokens, 32768), stream, system, messages }),
+      body: JSON.stringify({ model: claudeModel, max_tokens: Math.min(max_tokens, 32768), stream, system, messages }),
     };
   }
 
@@ -222,8 +223,20 @@ RULE 4: Minimum 10 step rows per test case.
 
   // ── v9.49: OpenAI ──────────────────────────────────────────────
   if (provider === 'openai') {
+    const _OA_FORMAT =
+`CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
+Use this 5-column Markdown table for EVERY test case:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+|---|---|---|---|---|
+| TC001 – Your Test Title | | | QA Engineer | Design |
+| | Navigate to the page. | Page loads. Correct columns visible. | | |
+RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
+RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 — NEVER TC1 TC2.
+RULE 4: Minimum 10 step rows per test case.
+`;
     const msgs = [];
-    if (body.system) msgs.push({ role: 'system', content: body.system });
+    if (body.system) msgs.push({ role: 'system', content: _OA_FORMAT + (body.system || '') });
     (body.messages || []).forEach(m => msgs.push({
       role: m.role,
       content: typeof m.content === 'string' ? m.content : (m.content?.[0]?.text || '')
@@ -237,17 +250,31 @@ RULE 4: Minimum 10 step rows per test case.
       body: JSON.stringify({
         model:       MODELS.openai,
         messages:    msgs,
-        max_tokens:  Math.min(body.max_tokens || 8192, 16384),
+        // Match Claude/Gemini/Groq: honour the frontend budget (up to 16K for gpt-4o-mini)
+        // gpt-4o-mini supports 16,384 output tokens; gpt-4o supports 16,384 too
+        max_tokens:  Math.min(body.max_tokens || 16384, 16384),
         temperature: 0.3,
-        stream:      false,
+        stream:      stream,  // support streaming so generating panel works
       }),
     };
   }
 
   // ── v9.49: Together AI (OpenAI-compatible) ─────────────────────
   if (provider === 'together') {
+    const _TA_FORMAT =
+`CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
+Use this 5-column Markdown table for EVERY test case:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+|---|---|---|---|---|
+| TC001 – Your Test Title | | | QA Engineer | Design |
+| | Navigate to the page. | Page loads. Correct columns visible. | | |
+RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
+RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 — NEVER TC1 TC2.
+RULE 4: Minimum 10 step rows per test case.
+`;
     const msgs = [];
-    if (body.system) msgs.push({ role: 'system', content: body.system });
+    if (body.system) msgs.push({ role: 'system', content: _TA_FORMAT + (body.system || '') });
     (body.messages || []).forEach(m => msgs.push({
       role: m.role,
       content: typeof m.content === 'string' ? m.content : (m.content?.[0]?.text || '')
@@ -261,9 +288,11 @@ RULE 4: Minimum 10 step rows per test case.
       body: JSON.stringify({
         model:       MODELS.togetherDS,
         messages:    msgs,
-        max_tokens:  Math.min(body.max_tokens || 8192, 16384),
+        // DeepSeek V3 on Together supports 16K output tokens
+        // Honour frontend budget up to 16K so full TC sets are generated
+        max_tokens:  Math.min(body.max_tokens || 16384, 16384),
         temperature: 0.3,
-        stream:      false,
+        stream:      stream,  // support streaming so generating panel works
       }),
     };
   }
@@ -302,7 +331,7 @@ async function normalizeResponse(provider, response) {
     const text = data.choices?.[0]?.message?.content || '';
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS.groq };
   }
-  // OpenAI + Together both return chat completions format
+  // OpenAI + Together non-streaming: chat completions format
   if (provider === 'openai' || provider === 'together') {
     const text = data.choices?.[0]?.message?.content || '';
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS[provider] || provider };
@@ -338,7 +367,7 @@ function normalizeStream(provider, upstreamBody) {
             const parts = json.candidates?.[0]?.content?.parts || [];
             const outputPart = parts.find(p => !p.thought) || parts[0];
             text = outputPart?.text || '';
-          } else if (provider === 'groq') {
+          } else if (provider === 'groq' || provider === 'openai' || provider === 'together') {
             // Handle both delta.content and direct content
             text = json.choices?.[0]?.delta?.content
                 || json.choices?.[0]?.message?.content
