@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.64 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.68 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.64 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.68 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -4738,7 +4738,7 @@ header::after { display: none !important; }
   .pc-group-label { display: none !important; }
 
 
-  /* ── Provider Key Accordion Cards (v9.64) ───────────────────── */
+  /* ── Provider Key Accordion Cards (v9.68) ───────────────────── */
   .pka-list { display:flex; flex-direction:column; gap:6px; }
 
   .pka-card {
@@ -4823,7 +4823,7 @@ header::after { display: none !important; }
   }
 
 
-  /* ── Enterprise Quality Banner (v9.64) ──────────────────────── */
+  /* ── Enterprise Quality Banner (v9.68) ──────────────────────── */
   #_enterpriseQualityBanner {
     display: none;
     align-items: flex-start;
@@ -4865,7 +4865,7 @@ header::after { display: none !important; }
     #_eqb-cta { width:100%; justify-content:center; }
   }
 
-  /* ── Cost Indicator (v9.64) ──────────────────────────────────── */
+  /* ── Cost Indicator (v9.68) ──────────────────────────────────── */
   #_costIndicator {
     display: none;
     align-items: center;
@@ -4895,7 +4895,7 @@ header::after { display: none !important; }
     #_costIndicator { font-size: 11px; }
   }
 
-  /* ── Smart Detect Button + AI Badge (v9.64) ─────────────────── */
+  /* ── Smart Detect Button + AI Badge (v9.68) ─────────────────── */
   #_smartDetectBtn {
     display: none;
     align-items: center;
@@ -4998,7 +4998,7 @@ header::after { display: none !important; }
     #_aiDetectBadge .adb-probs { display: none; }
   }
 
-  /* ── Platform Autocomplete Field (v9.64) ───────────────────── */
+  /* ── Platform Autocomplete Field (v9.68) ───────────────────── */
   #_platFieldWrap {
     position: relative;
   }
@@ -5071,7 +5071,7 @@ header::after { display: none !important; }
   }
   .plat-option.selected .plat-opt-check { display: block; }
 
-  /* ── Left nav: hide platform cards section (v9.64) ─────────── */
+  /* ── Left nav: hide platform cards section (v9.68) ─────────── */
   .sb-group-label-platform { display: none !important; }
   .sb-group-label-domain { display: none !important; }
   #sbDomainSection { display: none !important; }
@@ -5081,7 +5081,7 @@ header::after { display: none !important; }
   #sbPlatformSection #platformNone { display: none !important; }
   /* Keep module field visible inside sbPlatformSection */
 
-  /* ── Domain chips in main form (v9.64) ──────────────────────── */
+  /* ── Domain chips in main form (v9.68) ──────────────────────── */
   #_domainFormField { margin-top: 0; }
   #_domainFormChips {
     display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
@@ -5112,7 +5112,7 @@ header::after { display: none !important; }
   }
   #_domainAutoLabel.linked { color: #059669; }
 
-  /* ── AI badge compliance + stakeholder rows (v9.64) ─────────── */
+  /* ── AI badge compliance + stakeholder rows (v9.68) ─────────── */
   #_aiDetectBadge .adb-compliance {
     display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
   }
@@ -5134,7 +5134,7 @@ header::after { display: none !important; }
   #_aiDetectBadge .adb-risk-medium { color:#D97706; }
   #_aiDetectBadge .adb-risk-low    { color:#059669; }
 
-  /* ── Module Autocomplete Field in Form (v9.64) ──────────────── */
+  /* ── Module Autocomplete Field in Form (v9.68) ──────────────── */
   #_modFieldWrap { position: relative; }
   #_modInput {
     width: 100%; padding: 9px 38px 9px 12px;
@@ -5191,6 +5191,272 @@ header::after { display: none !important; }
   #_modAutoLabel.set { color: #059669; }
   /* Hide old sidebar module field when form field is active */
   #sbPlatformSection #moduleField { display: none !important; }
+
+  /* ── Sidebar Output Format + Priority pills (v9.68) ─────────── */
+  .sb-fmt-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 7px;
+    cursor: pointer; transition: all .15s;
+    font-size: 11.5px; color: var(--text2);
+    border: 0.5px solid transparent;
+    user-select: none;
+  }
+  .sb-fmt-pill:hover {
+    background: var(--surface2);
+    border-color: var(--border2);
+    color: var(--text);
+  }
+  .sb-fmt-pill.active {
+    background: rgba(91,95,239,.08);
+    border-color: rgba(91,95,239,.3);
+    color: var(--indigo);
+    font-weight: 600;
+  }
+  .sb-fmt-pill .sb-fmt-check {
+    font-size: 10px; color: var(--indigo);
+    display: none;
+  }
+  .sb-fmt-pill.active .sb-fmt-check { display: inline; }
+
+  .sb-pri-pill {
+    padding: 4px 10px; border-radius: 12px;
+    cursor: pointer; font-size: 11px; font-weight: 600;
+    border: 1px solid transparent; transition: all .15s;
+    user-select: none;
+  }
+  .sb-pri-pill:hover { opacity: .8; }
+  .sb-pri-pill.pri-high   { color:#DC2626; background:rgba(239,68,68,.06); border-color:rgba(239,68,68,.25); }
+  .sb-pri-pill.pri-medium { color:#D97706; background:rgba(245,158,11,.06); border-color:rgba(245,158,11,.25); }
+  .sb-pri-pill.pri-low    { color:#059669; background:rgba(16,185,129,.06); border-color:rgba(16,185,129,.2); }
+  .sb-pri-pill.active     { font-weight: 800; box-shadow: 0 0 0 2px currentColor; }
+
+  .sb-quick-section {
+    padding: 8px 14px 6px;
+    border-top: 1px solid var(--border);
+  }
+  .sb-quick-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  /* ── Example requirement chips (v9.68) ──────────────────────── */
+  #_exampleChips {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 8px;
+    transition: opacity .3s;
+  }
+  #_exampleChips.hidden { display: none; }
+  .example-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 11px; border-radius: 20px;
+    border: 1px dashed var(--border2);
+    background: var(--surface2); color: var(--text2);
+    font-size: 11.5px; cursor: pointer;
+    transition: all .18s; white-space: nowrap;
+  }
+  .example-chip:hover {
+    border-color: var(--indigo); color: var(--indigo);
+    background: rgba(99,102,241,.06);
+    border-style: solid;
+  }
+  .example-chip .ec-icon { font-size: 12px; }
+  #_exampleLabel {
+    font-size: 11px; color: var(--text3);
+    margin-bottom: 4px; display: block;
+  }
+
+  /* ── Smart Summary Bar (v9.68 Phase 2) ──────────────────────── */
+  #_smartSummaryBar {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(99,102,241,.05);
+    border: 1.5px solid rgba(99,102,241,.15);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    cursor: pointer;
+    transition: border-color .18s;
+  }
+  #_smartSummaryBar:hover { border-color: rgba(99,102,241,.35); }
+  #_smartSummaryBar.visible { display: flex; }
+  #_smartSummaryBar .ssb-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 11.5px; font-weight: 600;
+    background: var(--surface); border: 1px solid var(--border2);
+    color: var(--text);
+    white-space: nowrap;
+  }
+  #_smartSummaryBar .ssb-chip.plat { border-color: rgba(91,95,239,.3); color: var(--indigo); }
+  #_smartSummaryBar .ssb-chip.mod  { border-color: var(--border2); }
+  #_smartSummaryBar .ssb-chip.dom  { border-color: rgba(16,185,129,.3); color: #059669; }
+  #_smartSummaryBar .ssb-edit {
+    margin-left: auto; font-size: 11px; color: var(--text3);
+    display: flex; align-items: center; gap: 3px;
+    white-space: nowrap;
+  }
+  #_smartSummaryBar .ssb-edit:hover { color: var(--indigo); }
+
+  /* When form fields are collapsed (summary visible), hide full fields */
+  #_formFieldsExpanded.collapsed #_platFormField,
+  #_formFieldsExpanded.collapsed #_modFormField,
+  #_formFieldsExpanded.collapsed #_domainFormField {
+    display: none !important;
+  }
+
+  /* ── TC Refinement Bar (v9.68 Phase 2) ──────────────────────── */
+  #_refinementBar {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 14px;
+    margin: 8px 0;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1.5px solid var(--border2);
+    transition: border-color .18s;
+  }
+  #_refinementBar.visible { display: flex; }
+  #_refinementBar:focus-within { border-color: var(--indigo); }
+  .refine-header {
+    font-size: 12px; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .refine-chips {
+    display: flex; flex-wrap: wrap; gap: 5px;
+  }
+  .refine-suggestion {
+    padding: 4px 10px; border-radius: 12px;
+    border: 1px solid var(--border2);
+    background: var(--surface2); color: var(--text2);
+    font-size: 11.5px; cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  .refine-suggestion:hover {
+    border-color: var(--indigo); color: var(--indigo);
+    background: rgba(99,102,241,.06);
+  }
+  #_refineInput {
+    width: 100%; padding: 8px 12px;
+    border: 1.5px solid var(--border2); border-radius: 8px;
+    background: var(--surface); color: var(--text);
+    font-size: 13px; font-family: inherit;
+    outline: none; box-sizing: border-box;
+    transition: border-color .15s;
+  }
+  #_refineInput:focus { border-color: var(--indigo); }
+  #_refineInput::placeholder { color: var(--text3); }
+  .refine-actions {
+    display: flex; gap: 8px; align-items: center;
+  }
+  #_refineBtn {
+    padding: 7px 16px; border-radius: 8px;
+    background: var(--indigo); color: #fff;
+    border: none; font-size: 12px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: opacity .15s; white-space: nowrap;
+  }
+  #_refineBtn:hover { opacity: .85; }
+  #_refineBtn:disabled { opacity: .5; cursor: not-allowed; }
+  #_refineDismiss {
+    font-size: 11px; color: var(--text3);
+    cursor: pointer; background: none; border: none;
+    font-family: inherit; padding: 0 4px;
+  }
+  #_refineDismiss:hover { color: var(--text); }
+  .refine-spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: none;
+  }
+  #_refineBtn.loading .refine-spinner { display: inline-block; }
+  #_refineBtn.loading .refine-btn-text { display: none; }
+
+  /* ── Progressive Disclosure (v9.68) ─────────────────────────── */
+  .sb-quick-section.collapsible .sb-quick-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    transition: color .15s;
+  }
+  .sb-quick-section.collapsible .sb-quick-label:hover { color: var(--text); }
+  .sb-quick-section.collapsible .sb-quick-label::after {
+    content: "›";
+    font-size: 14px; color: var(--text3);
+    transform: rotate(90deg);
+    transition: transform .2s;
+    display: inline-block;
+  }
+  .sb-quick-section.collapsible.collapsed .sb-quick-label::after {
+    transform: rotate(0deg);
+  }
+  .sb-quick-section.collapsible .sb-section-body {
+    overflow: hidden;
+    max-height: 300px;
+    transition: max-height .25s ease, opacity .2s;
+    opacity: 1;
+  }
+  .sb-quick-section.collapsible.collapsed .sb-section-body {
+    max-height: 0;
+    opacity: 0;
+  }
+  /* Domain section also collapsible */
+  .sb-domain-section.collapsible .sb-domain-label {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* ── Readiness Indicator (v9.68) ────────────────────────────── */
+  #_readinessBar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 12px; border-radius: 8px;
+    margin-bottom: 8px; font-size: 11.5px;
+    transition: all .3s;
+  }
+  #_readinessBar.not-ready {
+    background: rgba(99,102,241,.04);
+    border: 1px dashed var(--border2);
+    color: var(--text3);
+  }
+  #_readinessBar.almost-ready {
+    background: rgba(245,158,11,.05);
+    border: 1px solid rgba(245,158,11,.25);
+    color: #B45309;
+  }
+  #_readinessBar.ready {
+    background: rgba(16,185,129,.06);
+    border: 1px solid rgba(16,185,129,.25);
+    color: #059669;
+  }
+  .readiness-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0; transition: background .3s;
+  }
+  #_readinessBar.not-ready   .readiness-dot { background: var(--border2); }
+  #_readinessBar.almost-ready .readiness-dot { background: #F59E0B; }
+  #_readinessBar.ready       .readiness-dot { background: #10B981;
+    box-shadow: 0 0 6px rgba(16,185,129,.5); }
+  .readiness-steps {
+    display: flex; gap: 6px; margin-left: auto;
+    align-items: center; flex-wrap: wrap;
+  }
+  .readiness-step {
+    font-size: 10px; padding: 1px 6px;
+    border-radius: 10px;
+  }
+  .readiness-step.done {
+    background: rgba(16,185,129,.1); color: #059669;
+    text-decoration: line-through; opacity: .7;
+  }
+  .readiness-step.pending { background: var(--surface2); color: var(--text3); }
   @media (max-width: 1100px) {
     #appSidebar:not(.mobile-open) .sb-platform-section { display: none; }
   }
@@ -5454,7 +5720,7 @@ header::after { display: none !important; }
     display: block !important;
     pointer-events: none;
   }
-  /* v9.64: full-color logos (base64 embedded) — no white filter */
+  /* v9.68: full-color logos (base64 embedded) — no white filter */
   .pc-logo-color {
     width: 100% !important;
     height: 100% !important;
@@ -5841,7 +6107,7 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
-  /* ── v9.64: Split View ─────────────────────────────────────────────── */
+  /* ── v9.68: Split View ─────────────────────────────────────────────── */
   /* Non-split state: wrapper transparent, req pane + resizer hidden */
   #_splitViewWrap {
     display: block;           /* was: none — that hid welcome screen on launch */
@@ -5925,7 +6191,7 @@ header::after { display: none !important; }
   }
   }
 
-  /* ── v9.64: Command Palette ──────────────────────────────────────── */
+  /* ── v9.68: Command Palette ──────────────────────────────────────── */
   #_cmdPalette {
     position: fixed; inset: 0; z-index: 300040;
     display: none; align-items: flex-start;
@@ -5971,7 +6237,7 @@ header::after { display: none !important; }
   .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
   .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  /* ── v9.64: TC Quality Score bar ──────────────────────────────── */
+  /* ── v9.68: TC Quality Score bar ──────────────────────────────── */
   .tc-quality-wrap {
     display: inline-flex;
     align-items: center;
@@ -6004,7 +6270,7 @@ header::after { display: none !important; }
   .tc-quality-grade-C { color: #EF4444; }
   .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
 
-  /* ── v9.64: Celebration panel ──────────────────────────────────── */
+  /* ── v9.68: Celebration panel ──────────────────────────────────── */
   #_celebrationPanel {
     position: fixed;
     bottom: 24px;
@@ -6527,7 +6793,7 @@ header::after { display: none !important; }
     background: rgba(10,12,28,.6) !important;
   }
 
-  /* activeProviderCard removed v9.64 */
+  /* activeProviderCard removed v9.68 */
 
   /* ── Tour card on dark ── */
   [data-theme="dark"] #tourCard {
@@ -6725,7 +6991,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.64</span>
+      <span class="sb-badge">v9.68</span>
     </div>
 
 <div class="sb-group-label sb-group-label-domain">Industry Domain</div>
@@ -6803,6 +7069,50 @@ header::after { display: none !important; }
         </div>
     </div>
   </nav>
+
+  <!-- Output Format — quick picker in sidebar (v9.68) -->
+  <div class="sb-quick-section collapsible collapsed" id="sbFormatSection">
+    <div class="sb-quick-label" onclick="_sbToggleSection('sbFormatSection')" role="button" aria-expanded="false" aria-controls="sbFormatBody">Output Format</div>
+    <div class="sb-section-body" id="sbFormatBody">
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <div class="sb-fmt-pill active" id="sbfmt-e2e"         onclick="_sbSetFormat('e2e')">
+        <span class="sb-fmt-check">✓</span>End to End
+        <span style="margin-left:auto;font-size:10px;color:var(--text3)">fastest</span>
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-full"        onclick="_sbSetFormat('full')">
+        <span class="sb-fmt-check">✓</span>All Sections
+        <span style="margin-left:auto;font-size:10px;color:var(--text3)">40-70 TCs</span>
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-field"       onclick="_sbSetFormat('field')">
+        <span class="sb-fmt-check">✓</span>Field Validation
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-integration" onclick="_sbSetFormat('integration')">
+        <span class="sb-fmt-check">✓</span>Integration
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-negative"    onclick="_sbSetFormat('negative')">
+        <span class="sb-fmt-check">✓</span>Negative
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-smoke"       onclick="_sbSetFormat('smoke')">
+        <span class="sb-fmt-check">✓</span>Smoke
+      </div>
+      <div class="sb-fmt-pill" id="sbfmt-testdata"    onclick="_sbSetFormat('testdata')">
+        <span class="sb-fmt-check">✓</span>Test Data
+      </div>
+    </div>
+    </div><!-- sb-section-body -->
+  </div>
+
+  <!-- Priority — quick picker in sidebar (v9.68) -->
+  <div class="sb-quick-section collapsible collapsed" id="sbPrioritySection">
+    <div class="sb-quick-label" onclick="_sbToggleSection('sbPrioritySection')" role="button" aria-expanded="false" aria-controls="sbPriorityBody">Priority</div>
+    <div class="sb-section-body" id="sbPriorityBody">
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <div class="sb-pri-pill pri-high active"   id="sbpri-High"   onclick="_sbSetPriority('High')">High</div>
+      <div class="sb-pri-pill pri-medium" id="sbpri-Medium" onclick="_sbSetPriority('Medium')">Medium</div>
+      <div class="sb-pri-pill pri-low"    id="sbpri-Low"    onclick="_sbSetPriority('Low')">Low</div>
+    </div>
+    </div><!-- sb-section-body -->
+  </div>
 
   <!-- Collapse toggle strip at bottom — always visible -->
   <div class="sb-collapse-strip" onclick="toggleSidebar()" title="Toggle sidebar">
@@ -7236,7 +7546,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Provider selector pills — 5 providers (v9.64) -->
+      <!-- Provider selector pills — 5 providers (v9.68) -->
       <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
         <button class="provider-pill" id="pill-claude"   data-provider="claude"   data-tip="Claude Sonnet — best output quality, paid API required"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
@@ -7285,7 +7595,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- ── Your Personal API Keys — Accordion Cards (v9.64) ── -->
+      <!-- ── Your Personal API Keys — Accordion Cards (v9.68) ── -->
       <div id="userKeyBody" style="display:flex;flex-direction:column;gap:10px;
            padding:16px;margin-bottom:16px;border-radius:12px;
            border:1.5px solid var(--border2);background:var(--surface);">
@@ -7445,7 +7755,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card removed v9.64 — provider shown via top card selection -->
+      <!-- Active provider card removed v9.68 — provider shown via top card selection -->
       <!-- claudeTestResult kept hidden for JS null-guard safety -->
       <div id="claudeTestResult" style="display:none"></div>
       <!-- Hidden ghost elements for JS null-guard safety (updateProviderUI writes to these) -->
@@ -7853,7 +8163,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.64</div>
+          <div class="settings-about-val" id="aboutVersion">v9.68</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7888,7 +8198,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.64 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.68 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7897,11 +8207,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.64
+          🆕 What's New in v9.68
         </div>
-        <!-- v9.64 changelog -->
+        <!-- v9.68 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.64 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.68 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -8027,13 +8337,13 @@ header::after { display: none !important; }
           <!-- Detected platform badge -->
           <div class="detect-badge" id="detectBadge"></div>
 
-          <!-- Smart Detect button (v9.64) -->
-          <button id="_smartDetectBtn" onclick="_runSmartDetect()" title="AI-powered platform detection using enterprise intelligence">
+          <!-- Smart Detect button (v9.68) -->
+          <button id="_smartDetectBtn" onclick="_runSmartDetect()" title="AI-powered platform detection using enterprise intelligence" aria-label="Smart Detect — AI analyses your requirement to identify platform, module and domain">
             <span id="_sdb-icon">🧠</span>
             <span id="_sdb-label">Smart Detect Platform</span>
           </button>
 
-          <!-- AI Detection result badge (v9.64) -->
+          <!-- AI Detection result badge (v9.68) -->
           <div id="_aiDetectBadge">
             <div class="adb-header">
               <span class="adb-platform" id="_adb-platform"></span>
@@ -8129,33 +8439,65 @@ header::after { display: none !important; }
           <textarea id="flowDesc" oninput="updateFlowCharCount(this)" placeholder="Describe the business process in plain English...&#10;&#10;e.g. Vendor submits invoice via portal. AP Clerk reviews and matches to PO. Finance Manager approves if amount > ₹50,000. Payment is processed and vendor is notified."></textarea>
         </div>
 
-        <!-- Platform Autocomplete Field (v9.64) -->
+        <!-- Example requirement chips (v9.68) — hidden after user types -->
+        <div id="_exampleWrap">
+          <span id="_exampleLabel">Try an example:</span>
+          <div id="_exampleChips" role="group" aria-label="Example requirements">
+            <button class="example-chip" onclick="_loadExample('d365')" aria-label="Load D365 F&O vendor invoice example">
+              <span class="ec-icon">🔵</span>D365 F&O — Vendor Invoice
+            </button>
+            <button class="example-chip" onclick="_loadExample('sf')" aria-label="Load Salesforce opportunity pipeline example">
+              <span class="ec-icon">☁️</span>Salesforce — Opportunity Pipeline
+            </button>
+            <button class="example-chip" onclick="_loadExample('web')" aria-label="Load Web App user registration example">
+              <span class="ec-icon">🌐</span>Web App — User Registration
+            </button>
+            <button class="example-chip" onclick="_loadExample('insurance')" aria-label="Load Guidewire insurance claims FNOL example">
+              <span class="ec-icon">🛡️</span>Guidewire — FNOL Claims
+            </button>
+          </div>
+        </div>
+
+        <!-- Smart Summary Bar (v9.68) — shown when all 3 fields are set -->
+        <div id="_smartSummaryBar" role="button" aria-label="Current selection — click to edit platform, module or domain" onclick="_ssbToggleExpand()">
+          <span class="ssb-chip plat" id="_ssb-plat">—</span>
+          <span style="color:var(--text3);font-size:12px">›</span>
+          <span class="ssb-chip mod"  id="_ssb-mod">No module</span>
+          <span style="color:var(--text3);font-size:12px">›</span>
+          <span class="ssb-chip dom"  id="_ssb-dom">No domain</span>
+          <span class="ssb-edit">✎ Edit</span>
+        </div>
+
+        <!-- Collapsible 3-field stack -->
+        <div id="_formFieldsExpanded">
+
+        <!-- Platform Autocomplete Field (v9.68) -->
         <div class="field" id="_platFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Platform</span>
             <span id="_platDetectLabel" style="font-size:10.5px;color:var(--text3)">Auto-detected · or select below</span>
           </label>
           <div id="_platFieldWrap">
-            <input type="text" id="_platInput" placeholder="e.g. D365 F&O, Salesforce, SAP, Web App..."
+            <input type="text" id="_platInput" placeholder="e.g. D365 F&O, Salesforce, SAP, Web App..." aria-label="Platform selector — type or select your enterprise platform" role="combobox" aria-autocomplete="list" aria-expanded="false"
               autocomplete="off" spellcheck="false"
               oninput="_platOnInput(this.value)"
               onfocus="_platOnFocus()"
               onkeydown="_platOnKey(event)" />
             <button id="_platClear" onclick="_platClearValue()" title="Clear platform">✕</button>
-            <div id="_platDropdown"></div>
+            <div id="_platDropdown" role="listbox" aria-label="Platform options"></div>
           </div>
         </div>
 
-        <!-- Domain Field (v9.64) — auto-links from platform + keyword detection -->
+        <!-- Domain Field (v9.68) — auto-links from platform + keyword detection -->
         <div class="field" id="_domainFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Industry Domain</span>
             <span id="_domainAutoLabel">Auto-linked from platform · or select below</span>
           </label>
-          <div id="_domainFormChips"></div>
+          <div id="_domainFormChips" role="group" aria-label="Industry domain selection — choose your business domain"></div>
         </div>
 
-        <!-- Module Autocomplete Field (v9.64) — below Domain chips -->
+        <!-- Module Autocomplete Field (v9.68) — below Domain chips -->
         <div class="field" id="_modFormField" style="display:none">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span id="_modPlatLabel">Module</span>
@@ -8163,19 +8505,19 @@ header::after { display: none !important; }
           </label>
           <div id="_modFieldWrap">
             <input type="text" id="_modInput"
-              placeholder="Select or type a module..."
+              placeholder="Select or type a module..." aria-label="Module selector — select the functional module for test generation" role="combobox" aria-autocomplete="list" aria-expanded="false"
               autocomplete="off" spellcheck="false"
               disabled
               oninput="_modOnInput(this.value)"
               onfocus="_modOnFocus()"
               onkeydown="_modOnKey(event)" />
             <button id="_modClear" onclick="_modClearValue()" title="Clear module">✕</button>
-            <div id="_modDropdown"></div>
+            <div id="_modDropdown" role="listbox" aria-label="Module options"></div>
           </div>
         </div>
 
 
-        <!-- Module custom input row (v9.64) -->
+        <!-- Module custom input row (v9.68) -->
         <div id="_modCustomRow" style="display:none;margin-top:-6px;margin-bottom:4px">
           <input type="text" id="_modCustomInput"
             placeholder="Enter custom module name..."
@@ -8188,6 +8530,8 @@ header::after { display: none !important; }
             Press Escape to cancel · Will be used as module context for generation
           </span>
         </div>
+        </div><!-- end _formFieldsExpanded -->
+
         <!-- ── Domain Context Card — v9.22 ─────────────────── -->
         <div class="domain-context-card" id="domainContextCard">
           <div class="dcc-head">
@@ -8262,7 +8606,7 @@ header::after { display: none !important; }
         </div>
         </div>
 
-        <!-- Enterprise quality banner (v9.64) -->
+        <!-- Enterprise quality banner (v9.68) -->
         <div id="_enterpriseQualityBanner">
           <span id="_eqb-icon">⚡</span>
           <div id="_eqb-body">
@@ -8276,6 +8620,17 @@ header::after { display: none !important; }
             </a>
           </div>
           <button id="_eqb-dismiss" onclick="_eqbDismiss()" title="Dismiss">✕</button>
+        </div>
+
+        <!-- Readiness Indicator (v9.68) -->
+        <div id="_readinessBar" class="not-ready" role="status" aria-live="polite">
+          <div class="readiness-dot"></div>
+          <span id="_readiness-msg">Paste a requirement to get started</span>
+          <div class="readiness-steps" id="_readiness-steps">
+            <span class="readiness-step pending" id="_rs-req">📋 Requirement</span>
+            <span class="readiness-step pending" id="_rs-plat">🔵 Platform</span>
+            <span class="readiness-step pending" id="_rs-mod">📁 Module</span>
+          </div>
         </div>
 
         <!-- ══ ACTIONS ROW: Generate + Reset ══ -->
@@ -8293,7 +8648,7 @@ header::after { display: none !important; }
         </div>
         <div class="gen-btn-hint">⌨️ Ctrl+Enter to generate</div>
 
-        <!-- Cost indicator (v9.64) — shown only when Claude is active provider -->
+        <!-- Cost indicator (v9.68) — shown only when Claude is active provider -->
         <div id="_costIndicator">
           <span>💰</span>
           <span id="_ci-label">Est. cost</span>
@@ -8472,7 +8827,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <!-- v9.64: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- v9.68: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
       <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
       <!-- When split is ON,  #_splitViewWrap shows as flex row -->
       <div id="_splitViewWrap">
@@ -8497,7 +8852,7 @@ header::after { display: none !important; }
         <div class="swh-title">Test cases will appear here</div>
         <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
       </div>
-      <!-- v9.64: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <!-- v9.68: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
         <!-- Hero row -->
@@ -8643,6 +8998,34 @@ header::after { display: none !important; }
           <input type="text" id="tcSearch" placeholder="Search test cases…" autocomplete="off" oninput="searchTestCases(this.value)"/>
         </div>
         <div class="jump-nav" id="jumpNav"></div>
+      </div>
+
+      <!-- TC Refinement Bar (v9.68) -->
+      <div id="_refinementBar" role="region" aria-label="Refine generated test cases">
+        <div class="refine-header">
+          <span>🔧</span>
+          <span>Not quite right? Refine these test cases:</span>
+        </div>
+        <div class="refine-chips" id="_refineSuggestions">
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Add more negative scenarios</button>
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Add boundary value tests</button>
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Add security test cases</button>
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Add performance scenarios</button>
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Make steps more detailed</button>
+          <button class="refine-suggestion" onclick="_applyRefineSuggestion(this)">Add API integration tests</button>
+        </div>
+        <input type="text" id="_refineInput"
+          placeholder="e.g. Add more edge cases for amount > ₹1,00,000 and duplicate invoice detection..."
+          aria-label="Describe how to refine the test cases"
+          onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); _runRefinement(); }" />
+        <div class="refine-actions">
+          <button id="_refineBtn" onclick="_runRefinement()" aria-label="Refine test cases">
+            <div class="refine-spinner"></div>
+            <span class="refine-btn-text">⚡ Refine Test Cases</span>
+          </button>
+          <button id="_refineDismiss" onclick="_dismissRefinement()">Dismiss</button>
+          <span id="_refineStatus" style="font-size:11px;color:var(--text3);margin-left:auto"></span>
+        </div>
       </div>
 
       <!-- Output -->
@@ -9467,7 +9850,7 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
-// ── v9.64: Template Library ──────────────────────────────────────────
+// ── v9.68: Template Library ──────────────────────────────────────────
 const TEMPLATE_LIBRARY = [
   {
     id: 'tmpl-ap',
@@ -9699,7 +10082,7 @@ const GROUP_GRADIENTS = {
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
 
-// ── v9.64: Celebration Panel ─────────────────────────────────────────
+// ── v9.68: Celebration Panel ─────────────────────────────────────────
 function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   const panel = document.getElementById('_celebrationPanel');
   if (!panel) return;
@@ -9776,7 +10159,7 @@ function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   }, 8000);
 }
 
-// ── v9.64: TC Quality Scoring Engine ────────────────────────────────
+// ── v9.68: TC Quality Scoring Engine ────────────────────────────────
 const _VAGUE_PATTERNS = [
   /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
   /^(the )?page loads?( successfully| correctly)?$/i,
@@ -9853,7 +10236,7 @@ function _onQualityClick(tcId, canImprove) {
   }
 }
 
-// ── v9.64: Render welcome screen template cards + init stats ─────────
+// ── v9.68: Render welcome screen template cards + init stats ─────────
 function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
@@ -9913,7 +10296,7 @@ function renderPlatformCards() {
     const grpInfo = GROUP_ICONS[groupName] || { icon: '◈', bg: grad };
     const isOpen = gi === 0; // First group expanded by default
 
-    // v9.64: white badge groups get a subtle border for definition
+    // v9.68: white badge groups get a subtle border for definition
     const grpBg         = grpInfo.bg || grad;
     const grpBorder     = grpBg === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
     const grpIsEmbedded = grpInfo.logo && grpInfo.logo.startsWith('data:');
@@ -9941,7 +10324,7 @@ function renderPlatformCards() {
       const item = document.createElement('div');
       item.className = 'platform-card platform-list-item';
       item.dataset.value = p.value;
-      // v9.64: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
+      // v9.68: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
       const isEmbedded  = p.logoUrl && p.logoUrl.startsWith('data:');
       const logoClass   = isEmbedded ? 'pc-logo-color' : 'pc-logo';
       const badgeBorder = p.badge === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
@@ -10020,7 +10403,7 @@ function renderModuleChips(platform) {
   const countEl = document.getElementById('moduleCount');
   if (!grid) return;
 
-  // v9.64: Update module section label with platform name
+  // v9.68: Update module section label with platform name
   const platLbl = document.getElementById('_modulePlatLabel');
   if (platLbl) {
     platLbl.textContent = platform ? 'Module — ' + platform : 'Module';
@@ -10029,7 +10412,7 @@ function renderModuleChips(platform) {
   grid.innerHTML = '';
   const list = modules[platform] || [];
 
-  // v9.64: If no modules for this platform, show a helpful message
+  // v9.68: If no modules for this platform, show a helpful message
   if (!list.length && platform) {
     grid.innerHTML = '<div style="font-size:11.5px;color:var(--text3);padding:8px 0">'
       + 'Type your module in the search field below</div>';
@@ -10649,7 +11032,7 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  // v9.64: extended scoring for Web/Mobile/Enterprise ERP
+  // v9.68: extended scoring for Web/Mobile/Enterprise ERP
   const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
 
   const webScore    = _hit([
@@ -10681,7 +11064,7 @@ function detectPlatformFromText(text) {
   return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-// v9.64: auto-detect module from document text
+// v9.68: auto-detect module from document text
 function detectModuleFromText(text, platform) {
   const lower = text.toLowerCase();
   const _hit = (kws) => kws.some(k => lower.includes(k));
@@ -10724,7 +11107,7 @@ function detectModuleFromText(text, platform) {
 }
 
 function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
-  // v9.64: default scores to 0 if called from old code path
+  // v9.68: default scores to 0 if called from old code path
   webScore    = webScore    || 0;
   mobileScore = mobileScore || 0;
   sapScore    = sapScore    || 0;
@@ -10810,7 +11193,7 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
-  // v9.64: don't auto-select for mixed/ambiguous case
+  // v9.68: don't auto-select for mixed/ambiguous case
   if (platform === 'D365+Salesforce') {
     detectedPlatform = 'D365 F&O';
     selectPlatform('D365 F&O', true);  // from auto-detect
@@ -10826,7 +11209,7 @@ function detectSpecialPlatform(lower) {
   document.getElementById('platform').value = platform;
   updateModules();
 
-  // v9.64: auto-detect module from document text
+  // v9.68: auto-detect module from document text
   try {
     const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
     if (_docText.length > 50) {
@@ -10845,14 +11228,14 @@ function detectSpecialPlatform(lower) {
     }
   } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
 
-  // v9.64: User-friendly badge with Change link
+  // v9.68: User-friendly badge with Change link
   if (badge) {
     badge.className = `detect-badge visible ${badgeClass}`;
     const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
     badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
   }
 
-  // v9.64: Toast with platform + module
+  // v9.68: Toast with platform + module
   const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
   if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
@@ -11385,7 +11768,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.64 FIX: server may have resolved to a different provider than what the client
+      // v9.68 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -11429,7 +11812,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.64: also mark the actual server-used provider if it differs
+        // v9.68: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -11437,7 +11820,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.64: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.68: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -11452,7 +11835,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.64: use the actual server provider name for user-facing messages
+        // v9.68: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -11554,7 +11937,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.64 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.68 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -11604,7 +11987,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.64 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.68 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -11617,7 +12000,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.64: also reset button visual state in case the queue path left it stuck loading
+      // v9.68: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -11668,12 +12051,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.64 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.68 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.64: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.68: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -11702,7 +12085,7 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  // v9.64 — Progress storytelling: live narrative loader
+  // v9.68 — Progress storytelling: live narrative loader
   window._progressSteps = [
     { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
     { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
@@ -13264,9 +13647,9 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
-  // v9.64: update progress story on each chunk (before TC content appears)
+  // v9.68: update progress story on each chunk (before TC content appears)
   if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
-  // v9.64: update real-time step counter
+  // v9.68: update real-time step counter
   if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
@@ -13570,7 +13953,7 @@ function finalizeOutput(elapsed, platform, module) {
   const _tcCount = _tcs.length || 0;
   if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
 
-  // v9.64: Time-saved celebration toast
+  // v9.68: Time-saved celebration toast
   try {
     const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
     const _savedStr  = _savedMins >= 60
@@ -13581,14 +13964,14 @@ function finalizeOutput(elapsed, platform, module) {
     localStorage.setItem(_cumKey, String(_cumTotal));
       // Sync updated total to Firestore for cross-device stats
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.64: sync cumulative TC count to Firestore
+    // v9.68: sync cumulative TC count to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     const _cumMins   = _cumTotal * 8;
     const _cumStr    = _cumMins >= 60
       ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
       : _cumMins + ' min';
     if (_tcCount > 0) {
-      // v9.64: trigger celebration panel (replaces plain toast)
+      // v9.68: trigger celebration panel (replaces plain toast)
       setTimeout(function() {
         try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
       }, 400);
@@ -13598,7 +13981,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.64: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.68: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -13612,7 +13995,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  // v9.64 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  // v9.68 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
   var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
   document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
   // v9.22 domain badge in meta-bar
@@ -13679,7 +14062,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
-  // v9.64: Remember last session preferences (keyed by Firebase UID if available)
+  // v9.68: Remember last session preferences (keyed by Firebase UID if available)
   try {
     var _sessKey = 'shuddhi-last-session';
     if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
@@ -13691,16 +14074,16 @@ function finalizeOutput(elapsed, platform, module) {
       ts: Date.now()
     };
     localStorage.setItem(_sessKey, JSON.stringify(_sessData));
-    // v9.64: sync to Firestore for cross-device consistency
+    // v9.68: sync to Firestore for cross-device consistency
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.64: record generation for smart suggestions pattern detection
+    // v9.68: record generation for smart suggestions pattern detection
     try {
       var _histKey = 'shuddhi-gen-history';
       var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
       _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
       if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
       localStorage.setItem(_histKey, JSON.stringify(_hist));
-      // v9.64: sync gen history to Firestore
+      // v9.68: sync gen history to Firestore
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
       // Check patterns after 3+ gens
       if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
@@ -13741,7 +14124,7 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
-  // v9.64: refresh split view left pane with requirement text after generation
+  // v9.68: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
   // Re-enable split button after generation
   var _sb = document.getElementById('_splitViewBtn');
@@ -14452,7 +14835,7 @@ function loadHistory(id) {
   });
   document.getElementById('resetBtn').className = 'reset-btn visible';
 
-  // ── v9.64: Render proper TC table (not just raw markdown) ────────
+  // ── v9.68: Render proper TC table (not just raw markdown) ────────
   // This populates tgAllTCs, shows tabs, enables all features
   setTimeout(function() {
     try {
@@ -14520,7 +14903,7 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
-  // v9.64: init welcome screen template grid + stats
+  // v9.68: init welcome screen template grid + stats
   if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
@@ -15314,7 +15697,7 @@ function saveUserKey(provider, value) {
   }
 }
 
-// ── Accordion toggle for provider key cards (v9.64) ─────────────
+// ── Accordion toggle for provider key cards (v9.68) ─────────────
 function _pkaToggle(provider) {
   var card = document.getElementById('pka-card-' + provider);
   if (!card) return;
@@ -16350,7 +16733,7 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
-    // v9.64: close command palette
+    // v9.68: close command palette
     if (document.getElementById('_cmdPalette')?.classList.contains('open')
         && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
@@ -16407,7 +16790,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.64';
+  if (ver)  ver.textContent  = 'v9.68';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -17439,7 +17822,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.64';
+  if (version)  version.textContent  = 'v9.68';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -17534,7 +17917,7 @@ function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
     ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
   }
 
-  // ── v9.64: include openai + together user keys in pill status ──
+  // ── v9.68: include openai + together user keys in pill status ──
   // Read user-saved keys from localStorage for openai + together
   var _ukLS = {
     openai:   localStorage.getItem('shuddhi-user-openai-key')   || '',
@@ -18301,7 +18684,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.64</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.68</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -19001,7 +19384,7 @@ window.applyOutputFilter = function(filterKey) {
   if (typeof switchArtifactTab === 'function') switchArtifactTab(tabKey, tabBtn);
 };
 
-// ── v9.64: Shareable TC link via Firestore ───────────────────────
+// ── v9.68: Shareable TC link via Firestore ───────────────────────
 window.copyShareLink = async function() {
   if (!rawMarkdown || !rawMarkdown.trim()) {
     showToast('Generate test cases first before sharing', '⚠️'); return;
@@ -19017,7 +19400,7 @@ window.copyShareLink = async function() {
       module:    (document.getElementById('metaModule')   || {}).textContent || '',
       tcCount:   tgAllTCs ? tgAllTCs.length : 0,
       createdAt: new Date().toISOString(),
-      version:   'v9.64',
+      version:   'v9.68',
     };
 
     // Write to Firestore shares collection
@@ -19584,7 +19967,7 @@ window.copyShareLink = async function() {
   }
 
   
-// ── Enterprise Quality Banner (v9.64) ─────────────────────────────
+// ── Enterprise Quality Banner (v9.68) ─────────────────────────────
 // Shows when: enterprise platform selected + user does NOT have Claude key
 // Hides when: Claude key is present, or non-enterprise platform, or dismissed
 
@@ -19673,7 +20056,7 @@ function _eqbOpenSettings() {
 }
 
 
-// ── v9.64: Auto-detect platform from typed / pasted / fetched text ────────────
+// ── v9.68: Auto-detect platform from typed / pasted / fetched text ────────────
 // Covers: (1) user typing in flowDesc, (2) Jira fetch, (3) ADO fetch
 // Both Jira and ADO already dispatch 'input' on flowDesc — so ONE listener handles all.
 (function _initFlowDescAutoDetect() {
@@ -19738,7 +20121,7 @@ function _eqbOpenSettings() {
 })();
 
 
-// ── v9.64: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
+// ── v9.68: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
 var _claudeModelPref = 'sonnet'; // 'sonnet' or 'haiku'
 
 // Cost estimates per format (USD) — Sonnet vs Haiku
@@ -19852,7 +20235,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── v9.64: Smart Detect Platform (AI-powered via Groq) ───────────
+// ── v9.68: Smart Detect Platform (AI-powered via Groq) ───────────
 // Uses /api/detect endpoint with enterprise intelligence prompt
 // Completely separate from keyword detection — additive, not replacing
 
@@ -19905,7 +20288,7 @@ async function _runSmartDetect() {
     // Apply detected platform + domain to the form
     var platformKey = data.platformKey || '';
 
-    // Apply domain from Smart Detect result (v9.64: uses data.domain directly)
+    // Apply domain from Smart Detect result (v9.68: uses data.domain directly)
     if (!window._domainManuallySelected) {
       var detectedDomainFromSD = null;
       // 1. Use AI-returned domain field directly (most accurate)
@@ -20033,7 +20416,7 @@ function _renderAIBadge(data) {
     }).join('');
   }
 
-  // Compliance chips (NEW v9.64)
+  // Compliance chips (NEW v9.68)
   var compEl = document.getElementById('_adb-compliance');
   if (compEl) {
     var comps = (data.compliance || []).slice(0, 5);
@@ -20046,7 +20429,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Stakeholder chips (NEW v9.64)
+  // Stakeholder chips (NEW v9.68)
   var stakeEl = document.getElementById('_adb-stakeholder');
   if (stakeEl) {
     var stakes = (data.stakeholders || []).slice(0, 4);
@@ -20059,7 +20442,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Risk level badge in testing row (NEW v9.64)
+  // Risk level badge in testing row (NEW v9.68)
   if (testEl) {
     var riskClass = '';
     if (data.riskLevel === 'High')   riskClass = ' adb-risk-high';
@@ -20097,7 +20480,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// ── v9.64: Domain chips in form — auto-link + keyword detection ─
+// ── v9.68: Domain chips in form — auto-link + keyword detection ─
 
 // Platform → domain auto-link map
 var _PLATFORM_DOMAIN_MAP = {
@@ -20296,7 +20679,7 @@ window.clearDomain = function() {
   });
 })();
 
-// ── v9.64: Platform Autocomplete Field ──────────────────────────
+// ── v9.68: Platform Autocomplete Field ──────────────────────────
 // Replaces left-nav platform cards with an autocomplete dropdown in-form.
 // Auto-detection (keyword + Smart Detect) fills it automatically.
 // All existing selectPlatform() / _userManuallySelectedPlatform logic preserved.
@@ -20334,6 +20717,7 @@ window.clearDomain = function() {
       html += '<div class="plat-group-label">' + grp + '</div>';
       groups[grp].forEach(function(p) {
         var isSelected = p.value === currentVal;
+        var friendly = (typeof _PLATFORM_FRIENDLY !== 'undefined' && _PLATFORM_FRIENDLY[p.value]) || p.sub || '';
         var logoHtml = p.logoUrl
           ? '<img class="plat-opt-logo" src="' + p.logoUrl + '" alt="' + p.label + '" onerror="this.style.display=\'none\'">'
           : '<span class="plat-opt-logo" style="display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--indigo)">' + (p.label.charAt(0)) + '</span>';
@@ -20343,7 +20727,7 @@ window.clearDomain = function() {
           + 'onclick="_platSelectOption(\'' + p.value.replace(/'/g, "\\'") + '\', \'' + p.label.replace(/'/g, "\\'") + '\')">'
           + logoHtml
           + '<div><div class="plat-opt-name">' + p.label + '</div>'
-          + '<div class="plat-opt-sub">' + (p.sub || '') + '</div></div>'
+          + '<div class="plat-opt-sub" style="font-size:10.5px">' + friendly + '</div></div>'
           + '<span class="plat-opt-check">✓</span>'
           + '</div>';
         optIdx++;
@@ -20503,7 +20887,7 @@ window.clearDomain = function() {
 })();
 
 
-// ── v9.64: Module Autocomplete Field in Form ────────────────────
+// ── v9.68: Module Autocomplete Field in Form ────────────────────
 // Replaces sidebar module chips with an in-form autocomplete dropdown.
 // Mirrors platform autocomplete UX. All existing selectModule(),
 // filterModules(), moduleGrid etc. preserved in sidebar (hidden).
@@ -20741,6 +21125,635 @@ window._modCustomChanged = function(val) {
   if (typeof setCustomModule === 'function') setCustomModule(val);
 };
 
+
+// ── v9.68: Sidebar Output Format + Priority quick-pickers ────────
+
+function _sbSetFormat(value) {
+  // Update hidden select in form (preserves all generate() logic)
+  var sel = document.getElementById('outputFormat');
+  if (sel) sel.value = value;
+
+  // Sync sidebar pills
+  document.querySelectorAll('.sb-fmt-pill').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  var pill = document.getElementById('sbfmt-' + value);
+  if (pill) pill.classList.add('active');
+
+  // Update cost indicator (format affects cost)
+  if (typeof _updateCostIndicator === 'function') _updateCostIndicator();
+
+  // Fire change event so any existing listeners react
+  if (sel) sel.dispatchEvent(new Event('change'));
+}
+
+function _sbSetPriority(value) {
+  // Update global priority variable (used by generate())
+  window.priority = value;
+
+  // Sync form priority buttons
+  document.querySelectorAll('.priority-btn').forEach(function(b) {
+    b.className = 'priority-btn';
+  });
+  var formBtn = document.querySelector('.priority-btn[onclick*="' + value + '"]');
+  if (formBtn) formBtn.className = 'priority-btn active-' + value.toLowerCase();
+
+  // Sync sidebar pills
+  document.querySelectorAll('.sb-pri-pill').forEach(function(p) {
+    p.classList.remove('active');
+  });
+  var sbPill = document.getElementById('sbpri-' + value);
+  if (sbPill) sbPill.classList.add('active');
+}
+
+// Patch setPriority to also sync sidebar
+var _origSetPriority = window.setPriority;
+if (typeof _origSetPriority === 'function') {
+  window.setPriority = function(p, el) {
+    _origSetPriority(p, el);
+    // Sync sidebar
+    document.querySelectorAll('.sb-pri-pill').forEach(function(pill) {
+      pill.classList.remove('active');
+    });
+    var sbPill = document.getElementById('sbpri-' + p);
+    if (sbPill) sbPill.classList.add('active');
+  };
+}
+
+// Patch outputFormat change to sync sidebar pills
+document.addEventListener('DOMContentLoaded', function() {
+  var fmtSel = document.getElementById('outputFormat');
+  if (fmtSel) {
+    fmtSel.addEventListener('change', function() {
+      var val = fmtSel.value;
+      document.querySelectorAll('.sb-fmt-pill').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      var pill = document.getElementById('sbfmt-' + val);
+      if (pill) pill.classList.add('active');
+    });
+    // Set initial state
+    _sbSetFormat(fmtSel.value || 'e2e');
+  }
+
+  // Set initial priority state from global
+  var initPri = window.priority || 'High';
+  var initPill = document.getElementById('sbpri-' + initPri);
+  if (initPill) {
+    document.querySelectorAll('.sb-pri-pill').forEach(function(p) { p.classList.remove('active'); });
+    initPill.classList.add('active');
+  }
+});
+
+
+// ── v9.68: Change 1 — Auto Smart Detect silently on paste ────────
+// Fires after user pastes/types 50+ chars and pauses 1.5s.
+// Only fires if platform NOT manually set by user.
+// Uses the same /api/detect endpoint as the manual button.
+
+var _autoDetectTimer    = null;
+var _AUTO_DETECT_MS     = 1500;   // 1.5s pause after typing stops
+var _AUTO_DETECT_MIN    = 50;     // min chars to trigger
+var _autoDetectHasFired = false;  // only fire once per requirement
+
+function _initAutoSmartDetect() {
+  var flowEl = document.getElementById('flowDesc');
+  if (!flowEl) { setTimeout(_initAutoSmartDetect, 500); return; }
+
+  flowEl.addEventListener('input', function() {
+    var text = flowEl.value || '';
+
+    // Show/hide example chips based on whether user has typed
+    var exWrap = document.getElementById('_exampleWrap');
+    if (exWrap) exWrap.style.display = text.trim().length > 0 ? 'none' : '';
+
+    // Reset fired flag when text is cleared
+    if (text.trim().length < 10) {
+      _autoDetectHasFired = false;
+      return;
+    }
+
+    // Don't auto-fire if user manually selected platform
+    if (window._userManuallySelectedPlatform) return;
+
+    // Don't fire again if we already detected for this content
+    if (_autoDetectHasFired) return;
+
+    // Don't fire if Smart Detect is already running
+    if (window._smartDetectRunning) return;
+
+    clearTimeout(_autoDetectTimer);
+
+    if (text.length >= _AUTO_DETECT_MIN) {
+      _autoDetectTimer = setTimeout(function() {
+        if (!window._userManuallySelectedPlatform && !_autoDetectHasFired) {
+          _autoDetectHasFired = true;
+          _runAutoSmartDetect(text);
+        }
+      }, _AUTO_DETECT_MS);
+    }
+  });
+
+  // Also fire on paste event immediately (paste = intentional, don't make them wait)
+  flowEl.addEventListener('paste', function() {
+    setTimeout(function() {
+      var text = (document.getElementById('flowDesc') || {}).value || '';
+      if (text.length >= _AUTO_DETECT_MIN
+          && !window._userManuallySelectedPlatform
+          && !_autoDetectHasFired
+          && !window._smartDetectRunning) {
+        _autoDetectHasFired = true;
+        clearTimeout(_autoDetectTimer);
+        // Short delay to let paste complete
+        setTimeout(function() { _runAutoSmartDetect(text); }, 400);
+      }
+    }, 100);
+  });
+}
+
+async function _runAutoSmartDetect(text) {
+  if (!text || text.length < _AUTO_DETECT_MIN) return;
+  if (window._userManuallySelectedPlatform) return;
+
+  // Show a subtle "Detecting..." indicator on Smart Detect button
+  var btn    = document.getElementById('_smartDetectBtn');
+  var iconEl = document.getElementById('_sdb-icon');
+  var lblEl  = document.getElementById('_sdb-label');
+  var origIcon = iconEl ? iconEl.textContent : '🧠';
+  var origLbl  = lblEl  ? lblEl.textContent  : 'Smart Detect Platform';
+
+  window._smartDetectRunning = true;
+  if (btn)    btn.classList.add('loading');
+  if (iconEl) iconEl.textContent = '⏳';
+  if (lblEl)  lblEl.textContent  = 'Detecting…';
+
+  try {
+    var resp = await fetch('/api/detect', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ text: text.substring(0, 3000) }),
+    });
+
+    var data = await resp.json().catch(function() { return {}; });
+    if (!data || data.error || !data.platformKey) return;
+
+    // Apply silently — same as manual Smart Detect
+    var platformKey = data.platformKey || '';
+    if (!window._userManuallySelectedPlatform) {
+      window._userManuallySelectedPlatform = false;
+      if (typeof selectPlatform === 'function') selectPlatform(platformKey, true);
+    }
+
+    // Apply domain
+    if (!window._domainManuallySelected && data.domain && data.domain !== 'unknown') {
+      if (typeof DOMAIN_DATA !== 'undefined' && DOMAIN_DATA[data.domain]) {
+        if (typeof selectDomain === 'function') selectDomain(data.domain);
+        if (typeof _syncDomainFormChips === 'function') _syncDomainFormChips(data.domain, true);
+        var dLbl = document.getElementById('_domainAutoLabel');
+        if (dLbl) { dLbl.textContent = '🧠 Auto-detected (AI)'; dLbl.className = 'linked'; }
+      }
+    }
+
+    // Apply module if detected
+    if (data.module) {
+      if (typeof _modSelectOption === 'function') _modSelectOption(data.module);
+    }
+
+    // Show subtle toast (not intrusive)
+    var conf = data.confidence ? data.confidence + '%' : '';
+    if (typeof showToast === 'function') {
+      showToast('🧠 Detected: ' + (data.platform || platformKey)
+        + (data.module ? ' — ' + data.module : '')
+        + (conf ? ' (' + conf + ')' : ''), '✅');
+    }
+
+    // Render AI badge
+    if (typeof _renderAIBadge === 'function') _renderAIBadge(data);
+
+    // Show Smart Detect button (user can click to re-detect if wrong)
+    if (btn) btn.classList.add('visible');
+
+    // Update enterprise quality banner
+    if (typeof _updateEnterpriseQualityBanner === 'function') _updateEnterpriseQualityBanner();
+
+  } catch(e) {
+    console.warn('[AutoDetect] Silent failure:', e.message);
+    // Don't show error toast for auto-detect — silent failure is fine
+  } finally {
+    window._smartDetectRunning = false;
+    if (btn)    btn.classList.remove('loading');
+    if (iconEl) iconEl.textContent = origIcon;
+    if (lblEl)  lblEl.textContent  = origLbl;
+  }
+}
+
+// ── v9.68: Change 2 — Example requirements ───────────────────────
+var _EXAMPLES = {
+  d365: {
+    platform: 'D365 F&O', module: 'Accounts Payable',
+    text: 'AP Clerk receives vendor invoice via portal. System performs 3-way match against PO and Goods Receipt. If amount exceeds ₹50,000, Finance Manager approval is required via workflow. On approval, GL journal entry is posted to the AP account. Vendor is notified via email. Payment is scheduled per the vendor payment terms. Duplicate invoice detection must prevent re-submission of same invoice number.'
+  },
+  sf: {
+    platform: 'Salesforce Sales', module: 'Opportunity Management',
+    text: 'Sales Rep creates an Opportunity linked to an existing Account. Opportunity must have a close date, amount, and stage. When stage moves to Proposal, system auto-generates a quote via CPQ. If deal value exceeds $100,000, VP Sales approval is required. Won opportunity triggers customer onboarding workflow. Lost opportunity prompts a reason code entry. All stage changes must be logged in activity history.'
+  },
+  web: {
+    platform: 'Web App', module: 'User Authentication & Authorisation',
+    text: 'New users must register using email and password or via OAuth (Google, Microsoft). Required fields: first name, last name, email address, and password. Password must meet complexity rules: minimum 8 characters, 1 uppercase, 1 number, 1 special character. On successful registration, a verification email must be sent within 60 seconds. The verification link must expire after 24 hours. Unverified users must not access protected routes. Email addresses must be case-insensitively unique in the system.'
+  },
+  insurance: {
+    platform: 'Guidewire', module: 'ClaimCenter — FNOL',
+    text: 'Policyholder submits First Notice of Loss (FNOL) via digital portal or call centre. Agent captures incident date, type of loss, location, and affected parties. System validates policy coverage at date of loss. Claim is auto-assigned to an adjuster based on claim type and region. SLA: initial contact with claimant within 24 hours. Reserve amount is set based on loss type. Adjuster reviews, requests additional documents, and updates claim status. Subrogation flag is set if a third party is liable.'
+  }
+};
+
+function _loadExample(key) {
+  var ex = _EXAMPLES[key];
+  if (!ex) return;
+
+  var flowEl = document.getElementById('flowDesc');
+  if (flowEl) {
+    flowEl.value = ex.text;
+    // Fire input event so char count + detection triggers
+    flowEl.dispatchEvent(new Event('input'));
+  }
+
+  // Hide example chips
+  var exWrap = document.getElementById('_exampleWrap');
+  if (exWrap) exWrap.style.display = 'none';
+
+  // Trigger auto Smart Detect immediately (don't make them wait 1.5s)
+  _autoDetectHasFired = false;
+  window._userManuallySelectedPlatform = false;
+  clearTimeout(_autoDetectTimer);
+  setTimeout(function() {
+    _autoDetectHasFired = true;
+    _runAutoSmartDetect(ex.text);
+  }, 300);
+
+  // Show toast
+  if (typeof showToast === 'function') {
+    showToast('Example loaded — click ⚡ Generate to create test cases', '📋');
+  }
+}
+
+// Initialise auto-detect on DOM ready
+document.addEventListener('DOMContentLoaded', _initAutoSmartDetect);
+// Also init after a delay in case DOM is already ready
+if (document.readyState !== 'loading') setTimeout(_initAutoSmartDetect, 100);
+
+
+// ── v9.68 Phase 2: Smart Summary Bar ────────────────────────────
+// Shows compact 1-line summary when Platform+Module+Domain are set.
+// User can click to expand and edit any field.
+
+var _ssbExpanded = true; // start expanded so user can fill fields
+
+function _ssbUpdate() {
+  var platVal  = (document.getElementById('platform')  || {}).value || '';
+  var modVal   = (document.getElementById('module')    || {}).value || '';
+  var domVal   = window.selectedDomain || '';
+
+  var platInp  = (document.getElementById('_platInput') || {}).value || '';
+  var modInp   = (document.getElementById('_modInput')  || {}).value || '';
+
+  var bar      = document.getElementById('_smartSummaryBar');
+  var expanded = document.getElementById('_formFieldsExpanded');
+
+  // Only show summary bar when at least Platform is set
+  if (!platVal && !platInp) {
+    if (bar)      bar.classList.remove('visible');
+    if (expanded) expanded.classList.remove('collapsed');
+    return;
+  }
+
+  // Update chips
+  var platChip = document.getElementById('_ssb-plat');
+  var modChip  = document.getElementById('_ssb-mod');
+  var domChip  = document.getElementById('_ssb-dom');
+
+  if (platChip) platChip.textContent = platInp || platVal || '—';
+  if (modChip)  modChip.textContent  = modInp  || modVal  || 'No module';
+
+  if (domChip) {
+    var domLabels = {
+      insurance:'🛡️ Insurance', banking:'🏦 Banking', hr:'👥 HR & Payroll',
+      erp:'⚙️ ERP', healthcare:'🏥 Healthcare', retail:'🛒 Retail',
+      itsm:'🟩 ITSM', web:'🌐 Web', mobile:'📱 Mobile'
+    };
+    domChip.textContent = domLabels[domVal] || (domVal ? domVal : 'No domain');
+  }
+
+  // Show bar
+  if (bar) bar.classList.add('visible');
+
+  // If all 3 set and not manually expanded → collapse the fields
+  var allSet = !!(platVal || platInp) && !!(modVal || modInp) && !!domVal;
+  if (allSet && !_ssbExpanded) {
+    if (expanded) expanded.classList.add('collapsed');
+  } else {
+    if (expanded) expanded.classList.remove('collapsed');
+  }
+}
+
+function _ssbToggleExpand() {
+  _ssbExpanded = !_ssbExpanded;
+  var expanded = document.getElementById('_formFieldsExpanded');
+  var bar      = document.getElementById('_smartSummaryBar');
+  if (expanded) expanded.classList.toggle('collapsed', !_ssbExpanded);
+  if (bar) {
+    var editLabel = bar.querySelector('.ssb-edit');
+    if (editLabel) editLabel.textContent = _ssbExpanded ? '▲ Collapse' : '✎ Edit';
+  }
+}
+
+// Hook into all 3 field changes to update summary
+(function _hookSummaryBar() {
+  // Patch selectPlatform
+  var _origSPssb = window.selectPlatform;
+  if (typeof _origSPssb === 'function') {
+    window.selectPlatform = function(v, fromAuto) {
+      _origSPssb(v, fromAuto);
+      setTimeout(_ssbUpdate, 100);
+    };
+  }
+  // Patch selectModule
+  var _origSMssb = window.selectModule;
+  if (typeof _origSMssb === 'function') {
+    window.selectModule = function(v, el) {
+      _origSMssb(v, el);
+      setTimeout(_ssbUpdate, 100);
+    };
+  }
+  // Patch selectDomain
+  var _origSDssb = window.selectDomain;
+  if (typeof _origSDssb === 'function') {
+    window.selectDomain = function(key) {
+      _origSDssb(key);
+      setTimeout(_ssbUpdate, 100);
+    };
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(_ssbUpdate, 500);
+  });
+})();
+
+// ── v9.68 Phase 2: TC Refinement ────────────────────────────────
+// Shown after generation. User can type what to fix or click a
+// suggestion chip. Calls /api/claude with original TCs + refine
+// instruction → streams back refined TCs.
+
+var _refineRunning = false;
+
+function _applyRefineSuggestion(el) {
+  var inp = document.getElementById('_refineInput');
+  if (inp) {
+    inp.value = el.textContent;
+    inp.focus();
+  }
+}
+
+function _dismissRefinement() {
+  var bar = document.getElementById('_refinementBar');
+  if (bar) bar.classList.remove('visible');
+}
+
+async function _runRefinement() {
+  if (_refineRunning) return;
+
+  var inp = document.getElementById('_refineInput');
+  var instruction = (inp ? inp.value : '').trim();
+  if (!instruction) {
+    if (inp) { inp.focus(); inp.style.borderColor = '#EF4444'; setTimeout(function(){inp.style.borderColor='';},1500); }
+    return;
+  }
+
+  if (!window.rawMarkdown || window.rawMarkdown.length < 100) {
+    if (typeof showToast === 'function') showToast('No test cases to refine — generate first', '⚠️');
+    return;
+  }
+
+  _refineRunning = true;
+  var btn      = document.getElementById('_refineBtn');
+  var statusEl = document.getElementById('_refineStatus');
+  if (btn) btn.classList.add('loading');
+  if (statusEl) statusEl.textContent = 'Refining…';
+
+  // Build refinement prompt
+  var platform = (document.getElementById('platform') || {}).value || '';
+  var module   = (document.getElementById('module')   || {}).value || '';
+  var provider = typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : 'groq';
+  var uk       = typeof getUserKeys === 'function' ? getUserKeys() : {};
+
+  var refineSystemPrompt = 'You are a senior enterprise QA engineer. You will be given a set of existing test cases and an instruction to refine them. Apply the instruction to improve the test cases. Keep the same markdown table format. Return ONLY the updated test cases, no explanation.';
+  var refineUserPrompt   = 'EXISTING TEST CASES:\n\n' + window.rawMarkdown.substring(0, 8000)
+    + '\n\nINSTRUCTION: ' + instruction
+    + '\n\nContext: Platform=' + platform + ', Module=' + module;
+
+  var body = {
+    provider:     provider,
+    model:        provider === 'claude' ? 'claude-haiku-4-5-20251001' : undefined,
+    system:       refineSystemPrompt,
+    messages:     [{ role: 'user', content: refineUserPrompt }],
+    max_tokens:   16384,
+    stream:       true,
+  };
+  if (uk.claude)   { body.apiKey = uk.claude; body.claudeModel = (typeof _claudeModelPref !== 'undefined') ? _claudeModelPref : 'haiku'; }
+  if (uk.gemini)   body.geminiApiKey   = uk.gemini;
+  if (uk.groq)     body.groqApiKey     = uk.groq;
+  if (uk.openai)   body.openaiApiKey   = uk.openai;
+  if (uk.together) body.togetherApiKey = uk.together;
+
+  try {
+    var resp = await fetch('/api/claude', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+
+    if (!resp.ok) {
+      var err = await resp.json().catch(function(){return{};});
+      if (typeof showToast === 'function') showToast('Refinement failed: ' + (err.error || resp.status), '❌');
+      return;
+    }
+
+    // Stream refined output
+    var reader  = resp.body.getReader();
+    var decoder = new TextDecoder();
+    var refined = '';
+    var outEl   = document.getElementById('outputContent');
+
+    while (true) {
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      var lines = decoder.decode(chunk.value).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line.startsWith('data: ')) continue;
+        var data = line.slice(6);
+        if (data === '[DONE]') break;
+        try {
+          var parsed = JSON.parse(data);
+          var text = parsed.delta || parsed.text || '';
+          if (text) {
+            refined += text;
+            if (outEl && typeof marked !== 'undefined') {
+              outEl.innerHTML = marked.parse(refined);
+            }
+          }
+        } catch(e) {}
+      }
+    }
+
+    if (refined.length > 100) {
+      window.rawMarkdown = refined;
+      if (outEl && typeof marked !== 'undefined') {
+        outEl.innerHTML = marked.parse(refined);
+      }
+      if (typeof postProcessTables === 'function') postProcessTables();
+      if (statusEl) statusEl.textContent = '✅ Refined!';
+      setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000);
+      if (inp) inp.value = '';
+      if (typeof showToast === 'function') showToast('Test cases refined successfully', '✅');
+    }
+  } catch(e) {
+    console.error('[Refinement]', e);
+    if (typeof showToast === 'function') showToast('Refinement error: ' + e.message, '❌');
+  } finally {
+    _refineRunning = false;
+    if (btn) btn.classList.remove('loading');
+  }
+}
+
+// Show refinement bar after generation completes
+// Hook into finalizeOutput
+(function _hookRefinementBar() {
+  var _origFO = window.finalizeOutput;
+  if (typeof _origFO === 'function') {
+    window.finalizeOutput = function(elapsed, platform, module) {
+      _origFO(elapsed, platform, module);
+      // Show refinement bar after TCs are rendered
+      var bar = document.getElementById('_refinementBar');
+      if (bar) {
+        setTimeout(function() { bar.classList.add('visible'); }, 500);
+      }
+    };
+  }
+})();
+
+
+// ── v9.68: Change A — Progressive Disclosure (sidebar sections) ──
+function _sbToggleSection(sectionId) {
+  var section   = document.getElementById(sectionId);
+  var bodyId    = sectionId === 'sbFormatSection' ? 'sbFormatBody' : 'sbPriorityBody';
+  var label     = section ? section.querySelector('.sb-quick-label') : null;
+  if (!section) return;
+  var isCollapsed = section.classList.contains('collapsed');
+  section.classList.toggle('collapsed', !isCollapsed);
+  if (label) label.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
+}
+
+// ── v9.68: Change B — Readiness Indicator ────────────────────────
+function _updateReadiness() {
+  var bar     = document.getElementById('_readinessBar');
+  var msgEl   = document.getElementById('_readiness-msg');
+  var rsReq   = document.getElementById('_rs-req');
+  var rsPlat  = document.getElementById('_rs-plat');
+  var rsMod   = document.getElementById('_rs-mod');
+  if (!bar) return;
+
+  var flowText = (document.getElementById('flowDesc') || {}).value || '';
+  var platVal  = (document.getElementById('_platInput') || {}).value
+              || (document.getElementById('platform') || {}).value || '';
+  var modVal   = (document.getElementById('_modInput')  || {}).value
+              || (document.getElementById('module') || {}).value || '';
+
+  var hasReq  = flowText.trim().length >= 30;
+  var hasPlat = !!platVal.trim();
+  var hasMod  = !!modVal.trim();
+
+  // Update step indicators
+  if (rsReq)  rsReq.className  = 'readiness-step '  + (hasReq  ? 'done' : 'pending');
+  if (rsPlat) rsPlat.className = 'readiness-step '  + (hasPlat ? 'done' : 'pending');
+  if (rsMod)  rsMod.className  = 'readiness-step '  + (hasMod  ? 'done' : 'pending');
+
+  if (!hasReq) {
+    bar.className = 'not-ready';
+    if (msgEl) msgEl.textContent = 'Paste a requirement to get started';
+  } else if (hasReq && !hasPlat) {
+    bar.className = 'not-ready';
+    if (msgEl) msgEl.textContent = 'Detecting platform… or select one below';
+  } else if (hasReq && hasPlat && !hasMod) {
+    bar.className = 'almost-ready';
+    if (msgEl) msgEl.textContent = 'Almost ready — select a module';
+  } else if (hasReq && hasPlat && hasMod) {
+    bar.className = 'ready';
+    if (msgEl) msgEl.textContent = '✅ Ready to generate!';
+    // Auto-expand Format section so user can confirm format before generating
+    var fmtSection = document.getElementById('sbFormatSection');
+    if (fmtSection && fmtSection.classList.contains('collapsed')) {
+      // Only auto-expand once (first time ready)
+      if (!window._readinessExpandedOnce) {
+        window._readinessExpandedOnce = true;
+        _sbToggleSection('sbFormatSection');
+      }
+    }
+  }
+}
+
+// Hook readiness updates into all relevant inputs
+(function _initReadinessHooks() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Requirement text
+    var flowEl = document.getElementById('flowDesc');
+    if (flowEl) flowEl.addEventListener('input', _updateReadiness);
+
+    // Platform + module inputs
+    var platEl = document.getElementById('_platInput');
+    if (platEl) platEl.addEventListener('input', _updateReadiness);
+    var modEl = document.getElementById('_modInput');
+    if (modEl) modEl.addEventListener('input', _updateReadiness);
+
+    _updateReadiness(); // initial state
+  });
+
+  // Patch selectPlatform for readiness update
+  var _origSP_r = window.selectPlatform;
+  if (typeof _origSP_r === 'function') {
+    window.selectPlatform = function(v, fromAuto) {
+      _origSP_r(v, fromAuto);
+      setTimeout(_updateReadiness, 150);
+    };
+  }
+
+  // Patch selectModule for readiness update
+  var _origSM_r = window.selectModule;
+  if (typeof _origSM_r === 'function') {
+    window.selectModule = function(v, el) {
+      _origSM_r(v, el);
+      setTimeout(_updateReadiness, 150);
+    };
+  }
+})();
+
+// ── v9.68: Change C — Friendly platform descriptions ─────────────
+var _PLATFORM_FRIENDLY = {
+  'D365 F&O':        "Microsoft\u2019s enterprise finance system \u2014 AP, AR, GL, procurement",
+  'D365 CRM':        "Microsoft\u2019s CRM \u2014 sales pipeline, leads, customer service",
+  'D365 BC':         "Microsoft\u2019s mid-market ERP \u2014 SME finance and operations",
+  'D365+Salesforce': "D365 + Salesforce integration \u2014 data sync between both systems",
+  'Salesforce Sales':"World\u2019s #1 CRM \u2014 leads, opportunities, quotes, forecasting",
+  'Salesforce Service':"Salesforce for support teams \u2014 cases, SLAs, knowledge base",
+  'Salesforce CPQ':  "Salesforce pricing & quoting \u2014 product catalog, approvals",
+  'SAP':             "Germany\u2019s ERP giant \u2014 finance, manufacturing, supply chain",
+  'Oracle ERP':      "Oracle cloud ERP \u2014 financials, procurement, HCM, NetSuite",
+  'Workday':         "HR & finance platform \u2014 payroll, recruiting, expenses",
+  'Guidewire':       "Insurance core system \u2014 policy administration, claims, billing",
+  'ServiceNow':      "IT service management \u2014 incidents, changes, CMDB, HRSD",
+  'Web App':         "Custom web application \u2014 any browser-based system",
+  'Mobile App':      "iOS or Android app \u2014 native or cross-platform",
+};
+
 // Reset dismiss flag when platform changes (new context = fresh banner)
 (function _patchSelectPlatformForBanner() {
   var _origSelectPlatform = window.selectPlatform || function(){};
@@ -20804,7 +21817,7 @@ window._runTCRegen = async function() {
 
     try {
 
-      // ── v9.64: Use same provider resolution as main generate() ────
+      // ── v9.68: Use same provider resolution as main generate() ────
       // Send only the keys the user has — proxy resolveProvider() handles fallback
       // to server Groq key. Never send a mismatched model ID for the resolved provider.
       var userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
@@ -21715,7 +22728,7 @@ window._runTCRegen = async function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
-     v9.64 CELEBRATION PANEL
+     v9.68 CELEBRATION PANEL
 ════════════════════════════════════════════════════════════ -->
 <div id="_celebrationPanel">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
@@ -23693,7 +24706,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.64
+// FIREBASE AUTH — v9.68
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -23988,7 +25001,7 @@ if (document.readyState !== 'loading') {
 </script>
 
 <!-- ================================================================
-     v9.64 COMMAND PALETTE
+     v9.68 COMMAND PALETTE
 ================================================================ -->
 <div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
   <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
@@ -24004,12 +25017,12 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.64</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.68</span>
     </div>
   </div>
 </div>
 <script>
-// v9.64 - Keyboard Shortcuts + Command Palette
+// v9.68 - Keyboard Shortcuts + Command Palette
 (function _initShortcutsAndPalette() {
   'use strict';
 
@@ -24229,7 +25242,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.64 — Split View: Requirement Doc left, Test Cases right
+// v9.68 — Split View: Requirement Doc left, Test Cases right
 // ══════════════════════════════════════════════════════════════════════
 (function _initSplitView() {
   'use strict';
@@ -24408,10 +25421,10 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.64 — Six UX Features
+// v9.68 — Six UX Features
 // ══════════════════════════════════════════════════════════════════════
 
-// ── v9.64: Bulk Regen Selected TCs ───────────────────────────────────
+// ── v9.68: Bulk Regen Selected TCs ───────────────────────────────────
 async function bulkRegenSelected() {
   if (!tgSelectedIds || tgSelectedIds.size === 0) {
     if (typeof showToast === 'function') showToast('Select test cases first, then click Regen Selected', '\u26a0\ufe0f');
@@ -24720,7 +25733,7 @@ function toggleAdvanced() {
   if (toggle) toggle.classList.toggle('open', !isOpen);
   if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
   try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
-  // v9.64: sync advanced toggle state to Firestore
+  // v9.68: sync advanced toggle state to Firestore
   if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
 }
 
@@ -24915,7 +25928,7 @@ function _dismissSuggestion(id) {
     var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
     d[id] = Date.now();
     localStorage.setItem(_dismissKey, JSON.stringify(d));
-    // v9.64: sync dismissed suggestions to Firestore
+    // v9.68: sync dismissed suggestions to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
   } catch(e) {}
 }
@@ -24924,7 +25937,7 @@ function _dismissSuggestion(id) {
 
 <script>
 // ======================================================================
-// v9.64 — FirestorePrefs: cross-device preference sync (bugs fixed v9.64)
+// v9.68 — FirestorePrefs: cross-device preference sync (bugs fixed v9.68)
 // Syncs: lastSession, genHistory, dismissedSuggestions, advancedOpen,
 //        totalTCs, splitSeen
 // Does NOT sync: API keys, ADO/Jira tokens, free-trial counters
