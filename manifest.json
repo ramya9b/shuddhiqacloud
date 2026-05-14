@@ -1,7 +1,7 @@
 {
   "name": "Shuddhi QA — AI Test Case Generator",
   "short_name": "Shuddhi QA",
-  "description": "Generate production-ready QA test cases for D365, Salesforce, Web Apps and more. Export to ADO, Jira, Excel and PDF. Firebase Auth, 14 platforms, keyboard shortcuts, split view. v9.78",
+  "description": "Generate production-ready QA test cases for D365, Salesforce, Web Apps and more. Export to ADO, Jira, Excel and PDF. Firebase Auth, 14 platforms, keyboard shortcuts, split view. v9.79",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
