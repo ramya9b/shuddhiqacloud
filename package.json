@@ -1,6 +1,6 @@
 {
   "name": "shuddhi-qa",
-  "version": "9.70.0",
+  "version": "9.72.0",
   "description": "AI-powered QA test case generator with Google Cloud Billing sync",
   "scripts": {
     "build": "echo 'Static site — no build step required'",
