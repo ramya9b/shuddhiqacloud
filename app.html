@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v9.63 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v9.64 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.63 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v9.64 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -4738,7 +4738,7 @@ header::after { display: none !important; }
   .pc-group-label { display: none !important; }
 
 
-  /* ── Provider Key Accordion Cards (v9.63) ───────────────────── */
+  /* ── Provider Key Accordion Cards (v9.64) ───────────────────── */
   .pka-list { display:flex; flex-direction:column; gap:6px; }
 
   .pka-card {
@@ -4823,7 +4823,7 @@ header::after { display: none !important; }
   }
 
 
-  /* ── Enterprise Quality Banner (v9.63) ──────────────────────── */
+  /* ── Enterprise Quality Banner (v9.64) ──────────────────────── */
   #_enterpriseQualityBanner {
     display: none;
     align-items: flex-start;
@@ -4865,7 +4865,7 @@ header::after { display: none !important; }
     #_eqb-cta { width:100%; justify-content:center; }
   }
 
-  /* ── Cost Indicator (v9.63) ──────────────────────────────────── */
+  /* ── Cost Indicator (v9.64) ──────────────────────────────────── */
   #_costIndicator {
     display: none;
     align-items: center;
@@ -4895,7 +4895,7 @@ header::after { display: none !important; }
     #_costIndicator { font-size: 11px; }
   }
 
-  /* ── Smart Detect Button + AI Badge (v9.63) ─────────────────── */
+  /* ── Smart Detect Button + AI Badge (v9.64) ─────────────────── */
   #_smartDetectBtn {
     display: none;
     align-items: center;
@@ -4998,7 +4998,7 @@ header::after { display: none !important; }
     #_aiDetectBadge .adb-probs { display: none; }
   }
 
-  /* ── Platform Autocomplete Field (v9.63) ───────────────────── */
+  /* ── Platform Autocomplete Field (v9.64) ───────────────────── */
   #_platFieldWrap {
     position: relative;
   }
@@ -5071,7 +5071,7 @@ header::after { display: none !important; }
   }
   .plat-option.selected .plat-opt-check { display: block; }
 
-  /* ── Left nav: hide platform cards section (v9.63) ─────────── */
+  /* ── Left nav: hide platform cards section (v9.64) ─────────── */
   .sb-group-label-platform { display: none !important; }
   .sb-group-label-domain { display: none !important; }
   #sbDomainSection { display: none !important; }
@@ -5081,7 +5081,7 @@ header::after { display: none !important; }
   #sbPlatformSection #platformNone { display: none !important; }
   /* Keep module field visible inside sbPlatformSection */
 
-  /* ── Domain chips in main form (v9.63) ──────────────────────── */
+  /* ── Domain chips in main form (v9.64) ──────────────────────── */
   #_domainFormField { margin-top: 0; }
   #_domainFormChips {
     display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
@@ -5112,7 +5112,7 @@ header::after { display: none !important; }
   }
   #_domainAutoLabel.linked { color: #059669; }
 
-  /* ── AI badge compliance + stakeholder rows (v9.63) ─────────── */
+  /* ── AI badge compliance + stakeholder rows (v9.64) ─────────── */
   #_aiDetectBadge .adb-compliance {
     display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
   }
@@ -5133,6 +5133,64 @@ header::after { display: none !important; }
   #_aiDetectBadge .adb-risk-high   { color:#DC2626; }
   #_aiDetectBadge .adb-risk-medium { color:#D97706; }
   #_aiDetectBadge .adb-risk-low    { color:#059669; }
+
+  /* ── Module Autocomplete Field in Form (v9.64) ──────────────── */
+  #_modFieldWrap { position: relative; }
+  #_modInput {
+    width: 100%; padding: 9px 38px 9px 12px;
+    border-radius: 9px; border: 1.5px solid var(--border2);
+    background: var(--surface); color: var(--text);
+    font-size: 13px; font-family: inherit;
+    box-sizing: border-box; transition: border-color .15s;
+    outline: none;
+  }
+  #_modInput:focus { border-color: var(--indigo); }
+  #_modInput.mod-set { border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.03); }
+  #_modInput:disabled {
+    opacity: .45; cursor: not-allowed;
+    background: var(--surface2);
+  }
+  #_modClear {
+    position: absolute; right: 10px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 14px; padding: 2px 4px;
+    display: none; transition: color .15s; line-height: 1;
+  }
+  #_modClear:hover { color: var(--text); }
+  #_modClear.visible { display: block; }
+  #_modDropdown {
+    display: none; position: absolute;
+    top: calc(100% + 4px); left: 0; right: 0;
+    background: var(--surface);
+    border: 1.5px solid var(--indigo);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    z-index: 998; max-height: 280px; overflow-y: auto;
+    animation: _scFadeIn .15s ease;
+  }
+  #_modDropdown.open { display: block; }
+  .mod-option {
+    padding: 8px 14px; cursor: pointer; font-size: 12.5px;
+    color: var(--text); transition: background .12s;
+    border-bottom: 1px solid var(--border);
+  }
+  .mod-option:last-child { border-bottom: none; border-radius: 0 0 9px 9px; }
+  .mod-option:first-child { border-radius: 9px 9px 0 0; }
+  .mod-option:hover, .mod-option.highlighted { background: rgba(99,102,241,.08); }
+  .mod-option.selected { background: rgba(16,185,129,.08); color: #059669; font-weight: 600; }
+  .mod-option.custom-opt {
+    font-style: italic; color: var(--text3);
+    border-top: 1px solid var(--border2);
+    background: var(--surface2);
+  }
+  .mod-option.custom-opt:hover { background: rgba(99,102,241,.06); color: var(--indigo); }
+  #_modAutoLabel {
+    font-size: 10.5px; color: var(--text3); transition: color .2s;
+  }
+  #_modAutoLabel.set { color: #059669; }
+  /* Hide old sidebar module field when form field is active */
+  #sbPlatformSection #moduleField { display: none !important; }
   @media (max-width: 1100px) {
     #appSidebar:not(.mobile-open) .sb-platform-section { display: none; }
   }
@@ -5396,7 +5454,7 @@ header::after { display: none !important; }
     display: block !important;
     pointer-events: none;
   }
-  /* v9.63: full-color logos (base64 embedded) — no white filter */
+  /* v9.64: full-color logos (base64 embedded) — no white filter */
   .pc-logo-color {
     width: 100% !important;
     height: 100% !important;
@@ -5783,7 +5841,7 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
-  /* ── v9.63: Split View ─────────────────────────────────────────────── */
+  /* ── v9.64: Split View ─────────────────────────────────────────────── */
   /* Non-split state: wrapper transparent, req pane + resizer hidden */
   #_splitViewWrap {
     display: block;           /* was: none — that hid welcome screen on launch */
@@ -5867,7 +5925,7 @@ header::after { display: none !important; }
   }
   }
 
-  /* ── v9.63: Command Palette ──────────────────────────────────────── */
+  /* ── v9.64: Command Palette ──────────────────────────────────────── */
   #_cmdPalette {
     position: fixed; inset: 0; z-index: 300040;
     display: none; align-items: flex-start;
@@ -5913,7 +5971,7 @@ header::after { display: none !important; }
   .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
   .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  /* ── v9.63: TC Quality Score bar ──────────────────────────────── */
+  /* ── v9.64: TC Quality Score bar ──────────────────────────────── */
   .tc-quality-wrap {
     display: inline-flex;
     align-items: center;
@@ -5946,7 +6004,7 @@ header::after { display: none !important; }
   .tc-quality-grade-C { color: #EF4444; }
   .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
 
-  /* ── v9.63: Celebration panel ──────────────────────────────────── */
+  /* ── v9.64: Celebration panel ──────────────────────────────────── */
   #_celebrationPanel {
     position: fixed;
     bottom: 24px;
@@ -6469,7 +6527,7 @@ header::after { display: none !important; }
     background: rgba(10,12,28,.6) !important;
   }
 
-  /* activeProviderCard removed v9.63 */
+  /* activeProviderCard removed v9.64 */
 
   /* ── Tour card on dark ── */
   [data-theme="dark"] #tourCard {
@@ -6667,7 +6725,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v9.63</span>
+      <span class="sb-badge">v9.64</span>
     </div>
 
 <div class="sb-group-label sb-group-label-domain">Industry Domain</div>
@@ -7178,7 +7236,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Provider selector pills — 5 providers (v9.63) -->
+      <!-- Provider selector pills — 5 providers (v9.64) -->
       <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
         <button class="provider-pill" id="pill-claude"   data-provider="claude"   data-tip="Claude Sonnet — best output quality, paid API required"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
@@ -7227,7 +7285,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- ── Your Personal API Keys — Accordion Cards (v9.63) ── -->
+      <!-- ── Your Personal API Keys — Accordion Cards (v9.64) ── -->
       <div id="userKeyBody" style="display:flex;flex-direction:column;gap:10px;
            padding:16px;margin-bottom:16px;border-radius:12px;
            border:1.5px solid var(--border2);background:var(--surface);">
@@ -7387,7 +7445,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card removed v9.63 — provider shown via top card selection -->
+      <!-- Active provider card removed v9.64 — provider shown via top card selection -->
       <!-- claudeTestResult kept hidden for JS null-guard safety -->
       <div id="claudeTestResult" style="display:none"></div>
       <!-- Hidden ghost elements for JS null-guard safety (updateProviderUI writes to these) -->
@@ -7795,7 +7853,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v9.63</div>
+          <div class="settings-about-val" id="aboutVersion">v9.64</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -7830,7 +7888,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v9.63 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v9.64 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -7839,11 +7897,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v9.63
+          🆕 What's New in v9.64
         </div>
-        <!-- v9.63 changelog -->
+        <!-- v9.64 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.63 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v9.64 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -7969,13 +8027,13 @@ header::after { display: none !important; }
           <!-- Detected platform badge -->
           <div class="detect-badge" id="detectBadge"></div>
 
-          <!-- Smart Detect button (v9.63) -->
+          <!-- Smart Detect button (v9.64) -->
           <button id="_smartDetectBtn" onclick="_runSmartDetect()" title="AI-powered platform detection using enterprise intelligence">
             <span id="_sdb-icon">🧠</span>
             <span id="_sdb-label">Smart Detect Platform</span>
           </button>
 
-          <!-- AI Detection result badge (v9.63) -->
+          <!-- AI Detection result badge (v9.64) -->
           <div id="_aiDetectBadge">
             <div class="adb-header">
               <span class="adb-platform" id="_adb-platform"></span>
@@ -8071,7 +8129,7 @@ header::after { display: none !important; }
           <textarea id="flowDesc" oninput="updateFlowCharCount(this)" placeholder="Describe the business process in plain English...&#10;&#10;e.g. Vendor submits invoice via portal. AP Clerk reviews and matches to PO. Finance Manager approves if amount > ₹50,000. Payment is processed and vendor is notified."></textarea>
         </div>
 
-        <!-- Platform Autocomplete Field (v9.63) -->
+        <!-- Platform Autocomplete Field (v9.64) -->
         <div class="field" id="_platFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Platform</span>
@@ -8088,7 +8146,7 @@ header::after { display: none !important; }
           </div>
         </div>
 
-        <!-- Domain Field (v9.63) — auto-links from platform + keyword detection -->
+        <!-- Domain Field (v9.64) — auto-links from platform + keyword detection -->
         <div class="field" id="_domainFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Industry Domain</span>
@@ -8097,6 +8155,39 @@ header::after { display: none !important; }
           <div id="_domainFormChips"></div>
         </div>
 
+        <!-- Module Autocomplete Field (v9.64) — below Domain chips -->
+        <div class="field" id="_modFormField" style="display:none">
+          <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+            <span id="_modPlatLabel">Module</span>
+            <span id="_modAutoLabel">Select platform first</span>
+          </label>
+          <div id="_modFieldWrap">
+            <input type="text" id="_modInput"
+              placeholder="Select or type a module..."
+              autocomplete="off" spellcheck="false"
+              disabled
+              oninput="_modOnInput(this.value)"
+              onfocus="_modOnFocus()"
+              onkeydown="_modOnKey(event)" />
+            <button id="_modClear" onclick="_modClearValue()" title="Clear module">✕</button>
+            <div id="_modDropdown"></div>
+          </div>
+        </div>
+
+
+        <!-- Module custom input row (v9.64) -->
+        <div id="_modCustomRow" style="display:none;margin-top:-6px;margin-bottom:4px">
+          <input type="text" id="_modCustomInput"
+            placeholder="Enter custom module name..."
+            style="width:100%;background:var(--surface);border:1.5px solid var(--indigo);
+                   border-radius:9px;padding:9px 12px;color:var(--text);font-size:13px;
+                   outline:none;box-sizing:border-box"
+            oninput="_modCustomChanged(this.value)"
+            onkeydown="if(event.key==='Escape'){this.closest('#_modCustomRow').style.display='none'}" />
+          <span style="font-size:11px;color:var(--text3);margin-top:3px;display:block">
+            Press Escape to cancel · Will be used as module context for generation
+          </span>
+        </div>
         <!-- ── Domain Context Card — v9.22 ─────────────────── -->
         <div class="domain-context-card" id="domainContextCard">
           <div class="dcc-head">
@@ -8171,7 +8262,7 @@ header::after { display: none !important; }
         </div>
         </div>
 
-        <!-- Enterprise quality banner (v9.63) -->
+        <!-- Enterprise quality banner (v9.64) -->
         <div id="_enterpriseQualityBanner">
           <span id="_eqb-icon">⚡</span>
           <div id="_eqb-body">
@@ -8202,7 +8293,7 @@ header::after { display: none !important; }
         </div>
         <div class="gen-btn-hint">⌨️ Ctrl+Enter to generate</div>
 
-        <!-- Cost indicator (v9.63) — shown only when Claude is active provider -->
+        <!-- Cost indicator (v9.64) — shown only when Claude is active provider -->
         <div id="_costIndicator">
           <span>💰</span>
           <span id="_ci-label">Est. cost</span>
@@ -8381,7 +8472,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <!-- v9.63: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- v9.64: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
       <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
       <!-- When split is ON,  #_splitViewWrap shows as flex row -->
       <div id="_splitViewWrap">
@@ -8406,7 +8497,7 @@ header::after { display: none !important; }
         <div class="swh-title">Test cases will appear here</div>
         <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
       </div>
-      <!-- v9.63: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <!-- v9.64: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
         <!-- Hero row -->
@@ -9376,7 +9467,7 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
-// ── v9.63: Template Library ──────────────────────────────────────────
+// ── v9.64: Template Library ──────────────────────────────────────────
 const TEMPLATE_LIBRARY = [
   {
     id: 'tmpl-ap',
@@ -9608,7 +9699,7 @@ const GROUP_GRADIENTS = {
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
 
-// ── v9.63: Celebration Panel ─────────────────────────────────────────
+// ── v9.64: Celebration Panel ─────────────────────────────────────────
 function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   const panel = document.getElementById('_celebrationPanel');
   if (!panel) return;
@@ -9685,7 +9776,7 @@ function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   }, 8000);
 }
 
-// ── v9.63: TC Quality Scoring Engine ────────────────────────────────
+// ── v9.64: TC Quality Scoring Engine ────────────────────────────────
 const _VAGUE_PATTERNS = [
   /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
   /^(the )?page loads?( successfully| correctly)?$/i,
@@ -9762,7 +9853,7 @@ function _onQualityClick(tcId, canImprove) {
   }
 }
 
-// ── v9.63: Render welcome screen template cards + init stats ─────────
+// ── v9.64: Render welcome screen template cards + init stats ─────────
 function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
@@ -9822,7 +9913,7 @@ function renderPlatformCards() {
     const grpInfo = GROUP_ICONS[groupName] || { icon: '◈', bg: grad };
     const isOpen = gi === 0; // First group expanded by default
 
-    // v9.63: white badge groups get a subtle border for definition
+    // v9.64: white badge groups get a subtle border for definition
     const grpBg         = grpInfo.bg || grad;
     const grpBorder     = grpBg === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
     const grpIsEmbedded = grpInfo.logo && grpInfo.logo.startsWith('data:');
@@ -9850,7 +9941,7 @@ function renderPlatformCards() {
       const item = document.createElement('div');
       item.className = 'platform-card platform-list-item';
       item.dataset.value = p.value;
-      // v9.63: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
+      // v9.64: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
       const isEmbedded  = p.logoUrl && p.logoUrl.startsWith('data:');
       const logoClass   = isEmbedded ? 'pc-logo-color' : 'pc-logo';
       const badgeBorder = p.badge === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
@@ -9929,7 +10020,7 @@ function renderModuleChips(platform) {
   const countEl = document.getElementById('moduleCount');
   if (!grid) return;
 
-  // v9.63: Update module section label with platform name
+  // v9.64: Update module section label with platform name
   const platLbl = document.getElementById('_modulePlatLabel');
   if (platLbl) {
     platLbl.textContent = platform ? 'Module — ' + platform : 'Module';
@@ -9938,7 +10029,7 @@ function renderModuleChips(platform) {
   grid.innerHTML = '';
   const list = modules[platform] || [];
 
-  // v9.63: If no modules for this platform, show a helpful message
+  // v9.64: If no modules for this platform, show a helpful message
   if (!list.length && platform) {
     grid.innerHTML = '<div style="font-size:11.5px;color:var(--text3);padding:8px 0">'
       + 'Type your module in the search field below</div>';
@@ -10558,7 +10649,7 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  // v9.63: extended scoring for Web/Mobile/Enterprise ERP
+  // v9.64: extended scoring for Web/Mobile/Enterprise ERP
   const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
 
   const webScore    = _hit([
@@ -10590,7 +10681,7 @@ function detectPlatformFromText(text) {
   return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-// v9.63: auto-detect module from document text
+// v9.64: auto-detect module from document text
 function detectModuleFromText(text, platform) {
   const lower = text.toLowerCase();
   const _hit = (kws) => kws.some(k => lower.includes(k));
@@ -10633,7 +10724,7 @@ function detectModuleFromText(text, platform) {
 }
 
 function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
-  // v9.63: default scores to 0 if called from old code path
+  // v9.64: default scores to 0 if called from old code path
   webScore    = webScore    || 0;
   mobileScore = mobileScore || 0;
   sapScore    = sapScore    || 0;
@@ -10719,7 +10810,7 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
-  // v9.63: don't auto-select for mixed/ambiguous case
+  // v9.64: don't auto-select for mixed/ambiguous case
   if (platform === 'D365+Salesforce') {
     detectedPlatform = 'D365 F&O';
     selectPlatform('D365 F&O', true);  // from auto-detect
@@ -10735,7 +10826,7 @@ function detectSpecialPlatform(lower) {
   document.getElementById('platform').value = platform;
   updateModules();
 
-  // v9.63: auto-detect module from document text
+  // v9.64: auto-detect module from document text
   try {
     const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
     if (_docText.length > 50) {
@@ -10754,14 +10845,14 @@ function detectSpecialPlatform(lower) {
     }
   } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
 
-  // v9.63: User-friendly badge with Change link
+  // v9.64: User-friendly badge with Change link
   if (badge) {
     badge.className = `detect-badge visible ${badgeClass}`;
     const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
     badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
   }
 
-  // v9.63: Toast with platform + module
+  // v9.64: Toast with platform + module
   const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
   if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
@@ -11294,7 +11385,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v9.63 FIX: server may have resolved to a different provider than what the client
+      // v9.64 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -11338,7 +11429,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v9.63: also mark the actual server-used provider if it differs
+        // v9.64: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -11346,7 +11437,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v9.63: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v9.64: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -11361,7 +11452,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v9.63: use the actual server provider name for user-facing messages
+        // v9.64: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -11463,7 +11554,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v9.63 FIX: _onlyGroq now also catches the case where the client requested
+    // v9.64 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -11513,7 +11604,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v9.63 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v9.64 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -11526,7 +11617,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v9.63: also reset button visual state in case the queue path left it stuck loading
+      // v9.64: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -11577,12 +11668,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v9.63 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v9.64 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v9.63: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v9.64: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -11611,7 +11702,7 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  // v9.63 — Progress storytelling: live narrative loader
+  // v9.64 — Progress storytelling: live narrative loader
   window._progressSteps = [
     { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
     { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
@@ -13173,9 +13264,9 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
-  // v9.63: update progress story on each chunk (before TC content appears)
+  // v9.64: update progress story on each chunk (before TC content appears)
   if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
-  // v9.63: update real-time step counter
+  // v9.64: update real-time step counter
   if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
@@ -13479,7 +13570,7 @@ function finalizeOutput(elapsed, platform, module) {
   const _tcCount = _tcs.length || 0;
   if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
 
-  // v9.63: Time-saved celebration toast
+  // v9.64: Time-saved celebration toast
   try {
     const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
     const _savedStr  = _savedMins >= 60
@@ -13490,14 +13581,14 @@ function finalizeOutput(elapsed, platform, module) {
     localStorage.setItem(_cumKey, String(_cumTotal));
       // Sync updated total to Firestore for cross-device stats
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.63: sync cumulative TC count to Firestore
+    // v9.64: sync cumulative TC count to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     const _cumMins   = _cumTotal * 8;
     const _cumStr    = _cumMins >= 60
       ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
       : _cumMins + ' min';
     if (_tcCount > 0) {
-      // v9.63: trigger celebration panel (replaces plain toast)
+      // v9.64: trigger celebration panel (replaces plain toast)
       setTimeout(function() {
         try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
       }, 400);
@@ -13507,7 +13598,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v9.63: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v9.64: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -13521,7 +13612,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  // v9.63 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  // v9.64 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
   var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
   document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
   // v9.22 domain badge in meta-bar
@@ -13588,7 +13679,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
-  // v9.63: Remember last session preferences (keyed by Firebase UID if available)
+  // v9.64: Remember last session preferences (keyed by Firebase UID if available)
   try {
     var _sessKey = 'shuddhi-last-session';
     if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
@@ -13600,16 +13691,16 @@ function finalizeOutput(elapsed, platform, module) {
       ts: Date.now()
     };
     localStorage.setItem(_sessKey, JSON.stringify(_sessData));
-    // v9.63: sync to Firestore for cross-device consistency
+    // v9.64: sync to Firestore for cross-device consistency
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v9.63: record generation for smart suggestions pattern detection
+    // v9.64: record generation for smart suggestions pattern detection
     try {
       var _histKey = 'shuddhi-gen-history';
       var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
       _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
       if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
       localStorage.setItem(_histKey, JSON.stringify(_hist));
-      // v9.63: sync gen history to Firestore
+      // v9.64: sync gen history to Firestore
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
       // Check patterns after 3+ gens
       if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
@@ -13650,7 +13741,7 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
-  // v9.63: refresh split view left pane with requirement text after generation
+  // v9.64: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
   // Re-enable split button after generation
   var _sb = document.getElementById('_splitViewBtn');
@@ -14361,7 +14452,7 @@ function loadHistory(id) {
   });
   document.getElementById('resetBtn').className = 'reset-btn visible';
 
-  // ── v9.63: Render proper TC table (not just raw markdown) ────────
+  // ── v9.64: Render proper TC table (not just raw markdown) ────────
   // This populates tgAllTCs, shows tabs, enables all features
   setTimeout(function() {
     try {
@@ -14429,7 +14520,7 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
-  // v9.63: init welcome screen template grid + stats
+  // v9.64: init welcome screen template grid + stats
   if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
@@ -15223,7 +15314,7 @@ function saveUserKey(provider, value) {
   }
 }
 
-// ── Accordion toggle for provider key cards (v9.63) ─────────────
+// ── Accordion toggle for provider key cards (v9.64) ─────────────
 function _pkaToggle(provider) {
   var card = document.getElementById('pka-card-' + provider);
   if (!card) return;
@@ -16259,7 +16350,7 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
-    // v9.63: close command palette
+    // v9.64: close command palette
     if (document.getElementById('_cmdPalette')?.classList.contains('open')
         && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
@@ -16316,7 +16407,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v9.63';
+  if (ver)  ver.textContent  = 'v9.64';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -17348,7 +17439,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v9.63';
+  if (version)  version.textContent  = 'v9.64';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -17443,7 +17534,7 @@ function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
     ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
   }
 
-  // ── v9.63: include openai + together user keys in pill status ──
+  // ── v9.64: include openai + together user keys in pill status ──
   // Read user-saved keys from localStorage for openai + together
   var _ukLS = {
     openai:   localStorage.getItem('shuddhi-user-openai-key')   || '',
@@ -18210,7 +18301,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.63</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v9.64</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -18910,7 +19001,7 @@ window.applyOutputFilter = function(filterKey) {
   if (typeof switchArtifactTab === 'function') switchArtifactTab(tabKey, tabBtn);
 };
 
-// ── v9.63: Shareable TC link via Firestore ───────────────────────
+// ── v9.64: Shareable TC link via Firestore ───────────────────────
 window.copyShareLink = async function() {
   if (!rawMarkdown || !rawMarkdown.trim()) {
     showToast('Generate test cases first before sharing', '⚠️'); return;
@@ -18926,7 +19017,7 @@ window.copyShareLink = async function() {
       module:    (document.getElementById('metaModule')   || {}).textContent || '',
       tcCount:   tgAllTCs ? tgAllTCs.length : 0,
       createdAt: new Date().toISOString(),
-      version:   'v9.63',
+      version:   'v9.64',
     };
 
     // Write to Firestore shares collection
@@ -19493,7 +19584,7 @@ window.copyShareLink = async function() {
   }
 
   
-// ── Enterprise Quality Banner (v9.63) ─────────────────────────────
+// ── Enterprise Quality Banner (v9.64) ─────────────────────────────
 // Shows when: enterprise platform selected + user does NOT have Claude key
 // Hides when: Claude key is present, or non-enterprise platform, or dismissed
 
@@ -19582,7 +19673,7 @@ function _eqbOpenSettings() {
 }
 
 
-// ── v9.63: Auto-detect platform from typed / pasted / fetched text ────────────
+// ── v9.64: Auto-detect platform from typed / pasted / fetched text ────────────
 // Covers: (1) user typing in flowDesc, (2) Jira fetch, (3) ADO fetch
 // Both Jira and ADO already dispatch 'input' on flowDesc — so ONE listener handles all.
 (function _initFlowDescAutoDetect() {
@@ -19647,7 +19738,7 @@ function _eqbOpenSettings() {
 })();
 
 
-// ── v9.63: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
+// ── v9.64: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
 var _claudeModelPref = 'sonnet'; // 'sonnet' or 'haiku'
 
 // Cost estimates per format (USD) — Sonnet vs Haiku
@@ -19761,7 +19852,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── v9.63: Smart Detect Platform (AI-powered via Groq) ───────────
+// ── v9.64: Smart Detect Platform (AI-powered via Groq) ───────────
 // Uses /api/detect endpoint with enterprise intelligence prompt
 // Completely separate from keyword detection — additive, not replacing
 
@@ -19814,7 +19905,7 @@ async function _runSmartDetect() {
     // Apply detected platform + domain to the form
     var platformKey = data.platformKey || '';
 
-    // Apply domain from Smart Detect result (v9.63: uses data.domain directly)
+    // Apply domain from Smart Detect result (v9.64: uses data.domain directly)
     if (!window._domainManuallySelected) {
       var detectedDomainFromSD = null;
       // 1. Use AI-returned domain field directly (most accurate)
@@ -19942,7 +20033,7 @@ function _renderAIBadge(data) {
     }).join('');
   }
 
-  // Compliance chips (NEW v9.63)
+  // Compliance chips (NEW v9.64)
   var compEl = document.getElementById('_adb-compliance');
   if (compEl) {
     var comps = (data.compliance || []).slice(0, 5);
@@ -19955,7 +20046,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Stakeholder chips (NEW v9.63)
+  // Stakeholder chips (NEW v9.64)
   var stakeEl = document.getElementById('_adb-stakeholder');
   if (stakeEl) {
     var stakes = (data.stakeholders || []).slice(0, 4);
@@ -19968,7 +20059,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Risk level badge in testing row (NEW v9.63)
+  // Risk level badge in testing row (NEW v9.64)
   if (testEl) {
     var riskClass = '';
     if (data.riskLevel === 'High')   riskClass = ' adb-risk-high';
@@ -20006,7 +20097,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// ── v9.63: Domain chips in form — auto-link + keyword detection ─
+// ── v9.64: Domain chips in form — auto-link + keyword detection ─
 
 // Platform → domain auto-link map
 var _PLATFORM_DOMAIN_MAP = {
@@ -20205,7 +20296,7 @@ window.clearDomain = function() {
   });
 })();
 
-// ── v9.63: Platform Autocomplete Field ──────────────────────────
+// ── v9.64: Platform Autocomplete Field ──────────────────────────
 // Replaces left-nav platform cards with an autocomplete dropdown in-form.
 // Auto-detection (keyword + Smart Detect) fills it automatically.
 // All existing selectPlatform() / _userManuallySelectedPlatform logic preserved.
@@ -20411,6 +20502,245 @@ window.clearDomain = function() {
 
 })();
 
+
+// ── v9.64: Module Autocomplete Field in Form ────────────────────
+// Replaces sidebar module chips with an in-form autocomplete dropdown.
+// Mirrors platform autocomplete UX. All existing selectModule(),
+// filterModules(), moduleGrid etc. preserved in sidebar (hidden).
+
+(function _initModuleAutocomplete() {
+  var _modHighlightIdx = -1;
+  var _modOpen         = false;
+  var _modCurrentPlat  = '';
+
+  // Build + open dropdown for the current platform
+  function _modBuildDropdown(query) {
+    var dd = document.getElementById('_modDropdown');
+    if (!dd) return;
+    var q   = (query || '').toLowerCase().trim();
+    var list = (typeof modules !== 'undefined' && _modCurrentPlat)
+               ? (modules[_modCurrentPlat] || []) : [];
+    var currentVal = (document.getElementById('module') || {}).value || '';
+
+    // Filter by query
+    var filtered = q ? list.filter(function(m) { return m.toLowerCase().includes(q); }) : list;
+
+    var html = '';
+    filtered.forEach(function(m, i) {
+      var isSel = m === currentVal;
+      html += '<div class="mod-option' + (isSel ? ' selected' : '') + '" '
+        + 'data-value="' + m.replace(/"/g, '&quot;') + '" data-idx="' + i + '" '
+        + 'onclick="_modSelectOption(\'' + m.replace(/'/g, "\\'") + '\')">'
+        + m + '</div>';
+    });
+
+    // Always show "Other / Custom" at bottom
+    html += '<div class="mod-option custom-opt" '
+      + 'onclick="_modOpenCustom()">+ Other / Custom module</div>';
+
+    if (!filtered.length && q) {
+      html = '<div style="padding:10px 14px;font-size:12px;color:var(--text3)">No match — use custom below</div>'
+           + '<div class="mod-option custom-opt" onclick="_modOpenCustom()">+ Other / Custom module</div>';
+    }
+
+    dd.innerHTML = html;
+    _modHighlightIdx = -1;
+  }
+
+  function _modOpenDropdown(query) {
+    _modBuildDropdown(query);
+    var dd = document.getElementById('_modDropdown');
+    if (dd) { dd.classList.add('open'); _modOpen = true; }
+  }
+
+  function _modCloseDropdown() {
+    var dd = document.getElementById('_modDropdown');
+    if (dd) { dd.classList.remove('open'); _modOpen = false; }
+    _modHighlightIdx = -1;
+  }
+
+  window._modOnInput = function(val) {
+    _modOpenDropdown(val);
+    if (!val.trim()) _modClearValue();
+  };
+
+  window._modOnFocus = function() {
+    var inp = document.getElementById('_modInput');
+    _modOpenDropdown(inp ? inp.value : '');
+  };
+
+  window._modOnKey = function(e) {
+    var dd = document.getElementById('_modDropdown');
+    if (!dd || !_modOpen) return;
+    var opts = dd.querySelectorAll('.mod-option:not(.custom-opt)');
+    if (!opts.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      _modHighlightIdx = Math.min(_modHighlightIdx + 1, opts.length - 1);
+      _modHighlight(opts);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      _modHighlightIdx = Math.max(_modHighlightIdx - 1, 0);
+      _modHighlight(opts);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (_modHighlightIdx >= 0 && opts[_modHighlightIdx]) {
+        _modSelectOption(opts[_modHighlightIdx].dataset.value);
+      }
+    } else if (e.key === 'Escape') {
+      _modCloseDropdown();
+    }
+  };
+
+  function _modHighlight(opts) {
+    opts.forEach(function(o, i) {
+      o.classList.toggle('highlighted', i === _modHighlightIdx);
+    });
+    if (_modHighlightIdx >= 0 && opts[_modHighlightIdx]) {
+      opts[_modHighlightIdx].scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  window._modSelectOption = function(value) {
+    if (!value) return;
+    // Set visible input
+    var inp = document.getElementById('_modInput');
+    if (inp) { inp.value = value; inp.classList.add('mod-set'); }
+    // Show clear
+    var clr = document.getElementById('_modClear');
+    if (clr) clr.classList.add('visible');
+    // Update label
+    var lbl = document.getElementById('_modAutoLabel');
+    if (lbl) { lbl.textContent = '✅ Module selected'; lbl.className = 'set'; }
+    // Update hidden module input (preserves all existing generate() logic)
+    var hidden = document.getElementById('module');
+    if (hidden) hidden.value = value;
+    // Also call existing selectModule to sync sidebar state
+    if (typeof selectModule === 'function') {
+      var chip = document.querySelector('.module-chip[data-module="' + value + '"]');
+      selectModule(value, chip || null);
+    }
+    _modCloseDropdown();
+  };
+
+  window._modClearValue = function() {
+    var inp = document.getElementById('_modInput');
+    if (inp) { inp.value = ''; inp.classList.remove('mod-set'); if (!inp.disabled) inp.focus(); }
+    var clr = document.getElementById('_modClear');
+    if (clr) clr.classList.remove('visible');
+    var hidden = document.getElementById('module');
+    if (hidden) hidden.value = '';
+    var lbl = document.getElementById('_modAutoLabel');
+    if (lbl) { lbl.textContent = _modCurrentPlat ? 'Select a module' : 'Select platform first'; lbl.className = ''; }
+    // Clear sidebar selected state too
+    document.querySelectorAll('.module-chip').forEach(function(c) { c.classList.remove('selected'); });
+    var nameEl = document.getElementById('selectedModuleName');
+    if (nameEl) { nameEl.style.display = 'none'; nameEl.textContent = ''; }
+  };
+
+  window._modOpenCustom = function() {
+    _modCloseDropdown();
+    // Show custom input row in form
+    var wrap = document.getElementById('_modCustomRow');
+    if (wrap) {
+      wrap.style.display = 'block';
+      var inp = document.getElementById('_modCustomInput');
+      if (inp) { inp.focus(); }
+    } else {
+      // Fallback to sidebar custom row
+      if (typeof toggleModuleOther === 'function') toggleModuleOther();
+    }
+  };
+
+  // Called when platform changes — enable field + populate options
+  window._modOnPlatformChange = function(platformValue) {
+    _modCurrentPlat = platformValue || '';
+    var field = document.getElementById('_modFormField');
+    var inp   = document.getElementById('_modInput');
+    var lbl   = document.getElementById('_modAutoLabel');
+    var platLbl = document.getElementById('_modPlatLabel');
+
+    if (platformValue) {
+      var list = (typeof modules !== 'undefined') ? (modules[platformValue] || []) : [];
+      if (field) field.style.display = 'block';
+      if (inp)   { inp.disabled = false; inp.placeholder = 'Select or type a module...'; }
+      if (lbl)   { lbl.textContent = list.length + ' modules available'; lbl.className = ''; }
+      if (platLbl) platLbl.textContent = 'Module — ' + platformValue;
+      // Clear previous selection
+      _modClearValue();
+    } else {
+      if (field) field.style.display = 'none';
+      if (inp)   { inp.disabled = true; inp.value = ''; inp.classList.remove('mod-set'); }
+      var clr = document.getElementById('_modClear');
+      if (clr) clr.classList.remove('visible');
+    }
+  };
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    var wrap = document.getElementById('_modFieldWrap');
+    if (wrap && !wrap.contains(e.target)) _modCloseDropdown();
+  });
+
+  // Patch selectPlatform to trigger module field update
+  var _origSPMod = window.selectPlatform;
+  if (typeof _origSPMod === 'function') {
+    window.selectPlatform = function(value, fromAutoDetect) {
+      _origSPMod(value, fromAutoDetect);
+      window._modOnPlatformChange(value);
+    };
+  }
+
+  // Patch selectModule (sidebar) to sync form field
+  var _origSelectMod = window.selectModule;
+  if (typeof _origSelectMod === 'function') {
+    window.selectModule = function(value, chipEl) {
+      _origSelectMod(value, chipEl);
+      // Sync form input
+      var inp = document.getElementById('_modInput');
+      if (inp && value) {
+        inp.value = value; inp.classList.add('mod-set');
+        var clr = document.getElementById('_modClear');
+        if (clr) clr.classList.add('visible');
+        var lbl = document.getElementById('_modAutoLabel');
+        if (lbl) { lbl.textContent = '✅ Module selected'; lbl.className = 'set'; }
+      }
+    };
+  }
+
+  // Smart Detect / AI detection auto-fill module
+  var _origRunSmartDetect_mod = window._runSmartDetect;
+  // Module sync from Smart Detect happens via selectModule patch above
+
+  // Restore on page load if module was previously set
+  document.addEventListener('DOMContentLoaded', function() {
+    var hiddenPlat = (document.getElementById('platform') || {}).value;
+    var hiddenMod  = (document.getElementById('module') || {}).value;
+    if (hiddenPlat) window._modOnPlatformChange(hiddenPlat);
+    if (hiddenMod) {
+      var inp = document.getElementById('_modInput');
+      if (inp) { inp.value = hiddenMod; inp.classList.add('mod-set'); inp.disabled = false; }
+      var clr = document.getElementById('_modClear');
+      if (clr) clr.classList.add('visible');
+    }
+  });
+
+})();
+
+// Handle custom module input
+window._modCustomChanged = function(val) {
+  var hidden = document.getElementById('module');
+  if (hidden) hidden.value = val;
+  var inp = document.getElementById('_modInput');
+  if (inp && val) { inp.value = val; inp.classList.add('mod-set'); }
+  var clr = document.getElementById('_modClear');
+  if (clr) clr.classList.toggle('visible', !!val);
+  var lbl = document.getElementById('_modAutoLabel');
+  if (lbl && val) { lbl.textContent = '✎ Custom module'; lbl.className = 'set'; }
+  // Sync to sidebar setCustomModule
+  if (typeof setCustomModule === 'function') setCustomModule(val);
+};
+
 // Reset dismiss flag when platform changes (new context = fresh banner)
 (function _patchSelectPlatformForBanner() {
   var _origSelectPlatform = window.selectPlatform || function(){};
@@ -20474,7 +20804,7 @@ window._runTCRegen = async function() {
 
     try {
 
-      // ── v9.63: Use same provider resolution as main generate() ────
+      // ── v9.64: Use same provider resolution as main generate() ────
       // Send only the keys the user has — proxy resolveProvider() handles fallback
       // to server Groq key. Never send a mismatched model ID for the resolved provider.
       var userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
@@ -21385,7 +21715,7 @@ window._runTCRegen = async function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
-     v9.63 CELEBRATION PANEL
+     v9.64 CELEBRATION PANEL
 ════════════════════════════════════════════════════════════ -->
 <div id="_celebrationPanel">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
@@ -23363,7 +23693,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v9.63
+// FIREBASE AUTH — v9.64
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -23658,7 +23988,7 @@ if (document.readyState !== 'loading') {
 </script>
 
 <!-- ================================================================
-     v9.63 COMMAND PALETTE
+     v9.64 COMMAND PALETTE
 ================================================================ -->
 <div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
   <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
@@ -23674,12 +24004,12 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.63</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v9.64</span>
     </div>
   </div>
 </div>
 <script>
-// v9.63 - Keyboard Shortcuts + Command Palette
+// v9.64 - Keyboard Shortcuts + Command Palette
 (function _initShortcutsAndPalette() {
   'use strict';
 
@@ -23899,7 +24229,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.63 — Split View: Requirement Doc left, Test Cases right
+// v9.64 — Split View: Requirement Doc left, Test Cases right
 // ══════════════════════════════════════════════════════════════════════
 (function _initSplitView() {
   'use strict';
@@ -24078,10 +24408,10 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v9.63 — Six UX Features
+// v9.64 — Six UX Features
 // ══════════════════════════════════════════════════════════════════════
 
-// ── v9.63: Bulk Regen Selected TCs ───────────────────────────────────
+// ── v9.64: Bulk Regen Selected TCs ───────────────────────────────────
 async function bulkRegenSelected() {
   if (!tgSelectedIds || tgSelectedIds.size === 0) {
     if (typeof showToast === 'function') showToast('Select test cases first, then click Regen Selected', '\u26a0\ufe0f');
@@ -24390,7 +24720,7 @@ function toggleAdvanced() {
   if (toggle) toggle.classList.toggle('open', !isOpen);
   if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
   try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
-  // v9.63: sync advanced toggle state to Firestore
+  // v9.64: sync advanced toggle state to Firestore
   if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
 }
 
@@ -24585,7 +24915,7 @@ function _dismissSuggestion(id) {
     var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
     d[id] = Date.now();
     localStorage.setItem(_dismissKey, JSON.stringify(d));
-    // v9.63: sync dismissed suggestions to Firestore
+    // v9.64: sync dismissed suggestions to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
   } catch(e) {}
 }
@@ -24594,7 +24924,7 @@ function _dismissSuggestion(id) {
 
 <script>
 // ======================================================================
-// v9.63 — FirestorePrefs: cross-device preference sync (bugs fixed v9.63)
+// v9.64 — FirestorePrefs: cross-device preference sync (bugs fixed v9.64)
 // Syncs: lastSession, genHistory, dismissedSuggestions, advancedOpen,
 //        totalTCs, splitSeen
 // Does NOT sync: API keys, ADO/Jira tokens, free-trial counters
