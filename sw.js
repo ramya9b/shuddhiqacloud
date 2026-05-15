@@ -13,9 +13,9 @@ const ALL_CACHES    = [STATIC_CACHE, API_CACHE];
 // ── Assets to pre-cache on install ───────────────────────────────────────────
 const PRECACHE_ASSETS = [
   '/',
-  '/app',
   '/index.html',
   '/app.html',
+  '/templates.html',
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
