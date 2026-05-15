@@ -60,7 +60,7 @@ if (typeof marked !== 'undefined') {
 
 
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <!-- ── Firebase Auth SDK (v9 compat — loads after page content) ── -->
@@ -8048,7 +8048,7 @@ header::after { display: none !important; }
 </script>
   <!-- Google Identity Services (One Tap + OAuth2 Authorization) -->
   <!-- Loaded async — billing connect button checks gisReady before use -->
-  <script src="https://accounts.google.com/gsi/client" async defer
+  <script defer src="https://accounts.google.com/gsi/client" async defer
           onload="window._gisReady=true;if(window._onGisReady)window._onGisReady()"></script>
 </head>
 <body>

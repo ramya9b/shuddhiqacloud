@@ -1,56 +1,40 @@
-# Cloudflare Pages _headers — v6.2 performance
+# Cloudflare Pages _headers — v9.99
 # https://developers.cloudflare.com/pages/configuration/headers/
 
-# ── HTML: short cache, must-revalidate (app updates frequently)
-/app
-  Cache-Control: public, max-age=300, must-revalidate
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-
-# ── HTML fallback
-/app.html
-  Cache-Control: public, max-age=300, must-revalidate
-
-# ── Privacy policy: short cache
-/privacy
-  Cache-Control: public, max-age=3600, must-revalidate
-  X-Content-Type-Options: nosniff
-
-/privacy.html
-  Cache-Control: public, max-age=3600, must-revalidate
-
-# ── Service worker: never cache (must always be fresh)
+# ── Service worker: never cache ──────────────────────────────────
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
   Pragma: no-cache
 
-# ── Manifest: short cache
+# ── Manifest ─────────────────────────────────────────────────────
 /manifest.json
   Cache-Control: public, max-age=3600
   Content-Type: application/manifest+json
 
-# ── Icons: long cache (content never changes)
+# ── Icons: immutable ─────────────────────────────────────────────
 /icons/*
   Cache-Control: public, max-age=31536000, immutable
 
-# ── API routes: no cache (live data)
+# ── API routes: no cache ──────────────────────────────────────────
 /api/*
   Cache-Control: no-store
   Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, POST, OPTIONS
+  Access-Control-Allow-Headers: Content-Type, Authorization
 
 /functions/api/*
   Cache-Control: no-store
 
-# ── Security headers for all routes — v9.20 (TC011-OBS-03)
+# ── Sitemap ───────────────────────────────────────────────────────
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+  Content-Type: application/xml
+
+# ── ALL HTML pages — unified security headers ─────────────────────
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://www.gstatic.com https://apis.google.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.groq.com https://generativelanguage.googleapis.com https://api.exchangerate-api.com https://cloudbilling.googleapis.com https://openidconnect.googleapis.com https://oauth2.googleapis.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://login.microsoftonline.com https://firestore.googleapis.com https://*.firebaseio.com https://www.gstatic.com https://cdnjs.cloudflare.com; frame-src https://shuddhi-qa.firebaseapp.com https://accounts.google.com https://login.microsoftonline.com; frame-ancestors 'none'
-
-# ── Sitemap ──
-/sitemap.xml
-  Cache-Control: public, max-age=86400
-  Content-Type: application/xml
+  Cache-Control: public, max-age=300, must-revalidate
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://www.gstatic.com https://apis.google.com https://accounts.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://api.groq.com https://generativelanguage.googleapis.com https://api.exchangerate-api.com https://cloudbilling.googleapis.com https://openidconnect.googleapis.com https://oauth2.googleapis.com https://securetoken.googleapis.com https://identitytoolkit.googleapis.com https://login.microsoftonline.com https://firestore.googleapis.com https://*.firebaseio.com https://www.gstatic.com https://cdnjs.cloudflare.com; frame-src https://shuddhi-qa.firebaseapp.com https://accounts.google.com https://login.microsoftonline.com; frame-ancestors 'self'
