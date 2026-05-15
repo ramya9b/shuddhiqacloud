@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Template Library — Shuddhi QA v10.4</title>
   <meta name="description" content="100 ready-to-use QA test case templates for D365, Salesforce, Guidewire, ServiceNow and more">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -47,7 +51,7 @@
     .search-count{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);padding:3px 8px;border-radius:20px;white-space:nowrap}
 
     /* Layout */
-    .layout{display:grid;grid-template-columns:220px 1fr;gap:24px;max-width:1280px;margin:20px auto 60px;padding:0 28px;align-items:start}
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:24px;max-width:1280px;margin:20px auto 60px;padding:0 28px;align-items:start}
 
     /* Sidebar */
     .sidebar{position:sticky;top:calc(var(--header-h) + 16px);background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
@@ -91,6 +95,18 @@
     .lvl-btn{padding:6px 13px;border-radius:20px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);font-size:11.5px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s;white-space:nowrap}
     .lvl-btn:hover{border-color:var(--indigo);color:var(--indigo)}
     .lvl-btn.active{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+
+    /* Guided landing panel */
+    .guided-panel{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;padding:36px 20px 28px;text-align:center}
+    .guided-icon{font-size:36px;margin-bottom:14px;opacity:.55}
+    .guided-title{font-size:17px;font-weight:800;color:var(--text);margin:0 0 8px;letter-spacing:-.3px}
+    .guided-sub{font-size:13px;color:var(--text2);margin:0 0 24px;line-height:1.65;max-width:380px}
+    .guided-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;width:100%;max-width:500px}
+    .guided-tile{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s;text-align:left}
+    .guided-tile:hover{border-color:var(--indigo);background:rgba(91,95,239,.04);transform:translateY(-1px)}
+    .guided-tile-icon{font-size:19px;flex-shrink:0}
+    .guided-tile-name{font-size:12.5px;font-weight:700;color:var(--text);line-height:1.2}
+    .guided-tile-count{font-size:10.5px;color:var(--text3);margin-top:2px}
 
     /* Section header */
     .section-header{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:6px 0 10px;margin-top:8px}
@@ -227,7 +243,7 @@
   <div class="content">
     <div class="toolbar">
       <span class="tmpl-grid-label" id="gridLabel">All Templates</span>
-      <div class="level-filter">
+      <div class="level-filter" id="levelFilter">
         <button class="lvl-btn active" data-level="all"          onclick="filterLevel('all')">All Levels</button>
         <button class="lvl-btn"        data-level="beginner"     onclick="filterLevel('beginner')">🟢 Beginner</button>
         <button class="lvl-btn"        data-level="intermediate" onclick="filterLevel('intermediate')">🟡 Mid</button>
@@ -369,6 +385,19 @@ let _activeCat='all',_activeSearch='',_activeLevel='all';
 function renderGrid(){
   const grid=document.getElementById('tmplGrid');
   const noRes=document.getElementById('noResults');
+  const lvlFilter=document.getElementById('levelFilter');
+
+  /* ── Guided landing state: no filter, no search ── */
+  if(_activeCat==='all'&&!_activeSearch){
+    grid.innerHTML=_guidedHTML();
+    noRes.style.display='none';
+    document.getElementById('searchCount').textContent='100 templates';
+    if(lvlFilter)lvlFilter.style.display='none';
+    return;
+  }
+
+  /* ── Filtered / search state ── */
+  if(lvlFilter)lvlFilter.style.display='flex';
   const filtered=TMPL_DATA.filter(t=>{
     const matchCat=_activeCat==='all'||t.cat===_activeCat;
     const matchSearch=!_activeSearch||(t.title+' '+t.subtitle+' '+(t.platform||'')).toLowerCase().includes(_activeSearch);
@@ -378,19 +407,35 @@ function renderGrid(){
   document.getElementById('searchCount').textContent=filtered.length+' template'+(filtered.length!==1?'s':'');
   if(filtered.length===0){grid.innerHTML='';noRes.style.display='block';return;}
   noRes.style.display='none';
-  const showSections=_activeCat==='all'&&!_activeSearch;
   let html='',gi=0;
-  if(showSections){
-    SECTIONS.forEach(sec=>{
-      const items=filtered.filter(t=>t.cat===sec.cat);
-      if(!items.length)return;
-      html+=`<div class="section-header" style="grid-column:1/-1"><span class="section-icon">${sec.icon}</span><span class="section-name" style="color:${sec.color}">${sec.label}</span><span class="section-line"></span><span class="section-count">${items.length} template${items.length!==1?'s':''}</span></div>`;
-      items.forEach(t=>{html+=cardHTML(t,gi++);});
-    });
-  } else {
-    filtered.forEach(t=>{html+=cardHTML(t,gi++);});
-  }
+  filtered.forEach(t=>{html+=cardHTML(t,gi++);});
   grid.innerHTML=html;
+}
+
+function _guidedHTML(){
+  const TILES=[
+    {cat:'d365',       icon:'🔷',label:'D365 F\u0026O'},
+    {cat:'salesforce', icon:'☁️', label:'Salesforce'},
+    {cat:'web',        icon:'🌐',label:'Web / SaaS'},
+    {cat:'insurance',  icon:'🛡️',label:'Insurance'},
+    {cat:'itsm',       icon:'🟩',label:'ITSM'},
+    {cat:'hr',         icon:'👥',label:'HR / Payroll'},
+    {cat:'healthcare', icon:'🏥',label:'Healthcare'},
+    {cat:'omnichannel',icon:'🔁',label:'Omni-Channel'},
+    {cat:'api',        icon:'🔌',label:'API \u0026 Integration'},
+    {cat:'security',   icon:'🔒',label:'Security \u0026 Data'},
+  ];
+  return`<div class="guided-panel">
+    <div class="guided-icon">📋</div>
+    <div class="guided-title">Choose a platform to browse templates</div>
+    <div class="guided-sub">Select a category from the left sidebar or click a tile below to instantly see its 10 ready-to-use test case templates.</div>
+    <div class="guided-tiles">
+      ${TILES.map(t=>`<div class="guided-tile" onclick="filterCat('${t.cat}')">
+        <span class="guided-tile-icon">${t.icon}</span>
+        <div><div class="guided-tile-name">${t.label}</div><div class="guided-tile-count">10 templates</div></div>
+      </div>`).join('')}
+    </div>
+  </div>`;
 }
 
 function cardHTML(t,idx){
@@ -431,13 +476,20 @@ function filterLevel(level){
   renderGrid();
 }
 function filterSearch(val){
-  _activeSearch=val.toLowerCase().trim();_activeCat='all';
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('filterChip').style.display='none';
+  _activeSearch=val.toLowerCase().trim();
+  if(!_activeSearch){
+    _activeCat='all';
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('filterChip').style.display='none';
+  } else {
+    _activeCat='all';
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('filterChip').style.display='none';
+  }
   updateLabels();renderGrid();
 }
 function updateLabels(){
-  const catLabels={all:'All Templates',d365:'D365 F&O',salesforce:'Salesforce',web:'Web / SaaS',insurance:'Insurance / Guidewire',itsm:'ServiceNow / ITSM',hr:'HR / Payroll',healthcare:'Healthcare',omnichannel:'Omni-Channel',api:'API & Integration',security:'Security & Data'};
+  const catLabels={all:'Choose a platform',d365:'D365 F&O',salesforce:'Salesforce',web:'Web / SaaS',insurance:'Insurance / Guidewire',itsm:'ServiceNow / ITSM',hr:'HR / Payroll',healthcare:'Healthcare',omnichannel:'Omni-Channel',api:'API & Integration',security:'Security & Data'};
   document.getElementById('gridLabel').textContent=_activeSearch?'Search results':(catLabels[_activeCat]||_activeCat);
 }
 
