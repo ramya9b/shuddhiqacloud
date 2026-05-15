@@ -12939,7 +12939,7 @@ function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
   if (grid && typeof TEMPLATE_LIBRARY !== 'undefined') {
-    grid.innerHTML = TEMPLATE_LIBRARY.map(t => `
+    grid.innerHTML = TEMPLATE_LIBRARY.slice(0, 5).map(t => `
       <div onclick="loadTemplate('${t.id}')"
         style="background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;
                padding:13px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px"
