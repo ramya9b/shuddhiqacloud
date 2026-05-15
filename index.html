@@ -799,7 +799,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by Claude · Gemini · Groq · v10.6 · Free to Start
+      Powered by Claude · Gemini · Groq · OpenAI · Grok · v10.7 · Free to Start
     </div>
 
     <h1 class="hero-title">
@@ -1371,17 +1371,21 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <div class="cta-inner">
       <div class="section-eye">Get Started</div>
       <h2 class="section-title">Get started in 30 seconds</h2>
-      <p class="section-sub">No deployment needed. Add your free Groq API key once — your entire QA team generating test cases immediately.</p>
+      <p class="section-sub">No deployment needed. Use Groq for free with no API key — or bring your own Claude, Gemini, OpenAI or Grok key.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
         <a href="/app" class="btn-primary">Launch App →</a>
         
       </div>
       <div class="cta-keys">
-        <div class="cta-key"><span>⚡</span> Groq API Key (free)</div>
+        <div class="cta-key"><span>⚡</span> Groq — No Key Needed</div>
         <div style="color:var(--text3);font-size:13px">or</div>
         <div class="cta-key"><span>✦</span> Gemini API Key (free)</div>
         <div style="color:var(--text3);font-size:13px">or</div>
         <div class="cta-key"><span>🤖</span> Claude API Key (paid)</div>
+        <div style="color:var(--text3);font-size:13px">or</div>
+        <div class="cta-key"><span>⚫</span> OpenAI API Key (paid)</div>
+        <div style="color:var(--text3);font-size:13px">or</div>
+        <div class="cta-key"><span>🟣</span> Grok API Key (paid)</div>
         <div style="color:var(--text3);font-size:13px">=</div>
         <div class="cta-key" style="border-color:rgba(20,184,166,.3);color:var(--teall)"><span>✅</span> Ready to generate</div>
       </div>
@@ -1538,11 +1542,11 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 <!-- ── FOOTER ────────────────────────────────────────────── -->
 </main>
 
-<!-- ── v10.6 New Features — dark/saffron theme ─────────────── -->
+<!-- ── v10.7 New Features — dark/saffron theme ─────────────── -->
 <section style="position:relative;z-index:1;padding:72px 48px;max-width:1100px;margin:0 auto">
   <div style="text-align:center;margin-bottom:48px">
-    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.25);background:rgba(232,162,32,.07);font-size:12px;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:14px">✦ New in v10.6</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything new in v10.6</h2>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.25);background:rgba(232,162,32,.07);font-size:12px;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:14px">✦ New in v10.7</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything new in v10.7</h2>
     <p style="font-size:15px;color:var(--text2);max-width:500px;margin:0 auto">Domain Intelligence, Firebase Sign-In, 100 Templates, 5 AI Providers and more.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px">
@@ -1594,7 +1598,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
     <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
-    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v10.6</span>
+    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v10.7</span>
   </div>
 </footer>
 
@@ -1624,7 +1628,7 @@ const thumb     = document.getElementById('themeThumb');
 const html_el   = document.documentElement;
 
 function applyTheme(theme, animate = false) {
-  // v10.6 Bug #2 fix: always set thumb position, regardless of animate flag
+  // v10.7 Bug #2 fix: always set thumb position, regardless of animate flag
   // On page load (animate=false), we want the thumb to snap to the correct
   // position immediately without a transition. On click (animate=true), the
   // CSS transition handles the smooth slide.
