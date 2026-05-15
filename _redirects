@@ -1,2 +1,4 @@
-/app  /app.html  301
-/templates  /templates.html  301
+# Cloudflare Pages _redirects — v10.2
+# REMOVED: /app /app.html 301  ← was causing ERR_TOO_MANY_REDIRECTS loop
+# REMOVED: /templates /templates.html 301  ← same issue
+# Cloudflare Workers html_handling=drop-extension handles extensionless URLs natively.
