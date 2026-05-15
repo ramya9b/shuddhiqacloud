@@ -6448,6 +6448,67 @@ header::after { display: none !important; }
   .form-section {
     gap: 12px !important;
   }
+
+  /* ── Auto-Demo Section (v9.99) ───────────────────────────────── */
+  .demo-section {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid var(--border2);
+    margin-bottom: 4px;
+  }
+  .demo-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text3);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .demo-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .demo-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all .18s;
+    position: relative;
+  }
+  .demo-btn:hover {
+    border-color: var(--indigo);
+    color: var(--indigo);
+    background: rgba(99,102,241,.05);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(99,102,241,.12);
+  }
+  .demo-btn.running {
+    border-color: var(--indigo);
+    color: var(--indigo);
+    background: rgba(99,102,241,.06);
+    pointer-events: none;
+  }
+  .demo-free-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 6px;
+    background: rgba(16,185,129,.1);
+    color: #059669;
+    border: 1px solid rgba(16,185,129,.2);
+  }
   @media (max-width: 1100px) {
     #_panelToggleBtn { display: none !important; }
   }
@@ -10047,9 +10108,35 @@ header::after { display: none !important; }
             </div>
             <button onclick="openTemplateLibrary()"
               style="font-size:11.5px;color:var(--indigo);background:none;border:none;cursor:pointer;
-                     font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;padding:0">
-              View all &#8594;
+                     font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;padding:0"
+              onclick="window.location.href='/templates.html'">
+              View all 70 &#8594;
             </button>
+          </div>
+
+          <!-- ── Auto-Demo Section ── -->
+          <div class="demo-section">
+            <div class="demo-label">
+              <span>⚡</span> Try it now — one click, no setup needed
+              <span class="demo-free-badge">FREE — no API key required</span>
+            </div>
+            <div class="demo-btns">
+              <button class="demo-btn" id="_demo1"
+                onclick="_runAutoDemo('d365-ap','D365 Invoice Flow')"
+                title="Generate D365 AP test cases instantly">
+                🔷 D365 Invoice Flow
+              </button>
+              <button class="demo-btn" id="_demo2"
+                onclick="_runAutoDemo('sf-lead','Salesforce Lead to Opportunity')"
+                title="Generate Salesforce test cases instantly">
+                ☁️ Salesforce Lead Flow
+              </button>
+              <button class="demo-btn" id="_demo3"
+                onclick="_runAutoDemo('web-auth','User Login & Security')"
+                title="Generate Web App test cases instantly">
+                🌐 User Login & Security
+              </button>
+            </div>
           </div>
 
           <!-- 5 template cards -->
@@ -11111,6 +11198,1433 @@ const TEMPLATE_LIBRARY = [
     integrations: 'Leave & Attendance, Employee Master, General Ledger, Bank (NEFT), EPFO Portal, ESIC Portal, Email Service',
     badge: '#7B5EA7',
     flow: `HR locks attendance and leave data by the 20th. Payroll Specialist imports attendance for Loss of Pay calculation. LOP = Absent days not covered by approved leave. LOP deduction = (Monthly Gross / Working days) x LOP days. Salary structure: Basic (40-50% CTC), HRA (50% metro / 40% non-metro), Special Allowance, Transport (INR 1,600 tax-free), Medical (INR 1,250 tax-free). Statutory deductions: Employee PF 12% of Basic (capped INR 1,800 if Basic > INR 15,000), ESI 0.75% of Gross if Gross <= INR 21,000, Professional Tax per state slab, TDS monthly installment of annual liability. System runs exception report flagging: negative net pay, missing PAN (TDS at 20%), missing bank IFSC, employees without salary structure. Finance approves payroll. Payslip generated as password-protected PDF (password = PAN uppercase) and emailed. Bank transfer file generated in NEFT format. Payroll once finalised is locked — no edits.`
+  }
+,
+  {
+    id: 'd365-gl',
+    icon: '📒',
+    title: 'General Ledger',
+    subtitle: 'Journal Entry & Period Close',
+    platform: 'D365 F&O',
+    module: 'General Ledger',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Accountant creates a manual journal entry in D365 F&O with debit and credit lines. System validates that debits equal credits. Finance Controller reviews and approves the entry. System checks that the posting period is open. Journal posts to the General Ledger. Trial balance updates in real time. Period-end close process runs ledger settlement and balance sheet revaluation. Closed period blocks further posting.`
+  },
+  {
+    id: 'd365-bank',
+    icon: '🏦',
+    title: 'Bank Reconciliation',
+    subtitle: 'Statement Matching & Clearing',
+    platform: 'D365 F&O',
+    module: 'Cash and Bank Management',
+    domain: 'banking',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Finance team imports bank statement file (CSV/MT940) into D365 F&O Cash and Bank Management. System auto-matches bank transactions against open ledger entries using amount, date and reference. Unmatched items are flagged for manual review. User manually matches or creates new transactions. Reconciliation is posted after all items are cleared. Outstanding differences are reported. Statement is marked reconciled.`
+  },
+  {
+    id: 'd365-fa',
+    icon: '🏗️',
+    title: 'Fixed Asset',
+    subtitle: 'Acquisition, Depreciation & Disposal',
+    platform: 'D365 F&O',
+    module: 'Fixed Assets',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Finance team creates a fixed asset record in D365 F&O with acquisition date, cost, useful life and depreciation method (Straight-Line or Reducing Balance). Asset acquisition journal posts to the asset account. Monthly depreciation runs automatically via batch. Mid-year disposal triggers partial year depreciation. Disposal journal clears asset net book value and posts gain or loss to P&L. Asset register report is generated.`
+  },
+  {
+    id: 'd365-ar',
+    icon: '📬',
+    title: 'Accounts Receivable',
+    subtitle: 'Customer Invoice & Collection',
+    platform: 'D365 F&O',
+    module: 'Accounts Receivable',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Sales Clerk creates a customer invoice in D365 F&O from a confirmed Sales Order. Invoice is emailed to customer via automated workflow. Customer makes payment by bank transfer or credit card. Payment is posted against the open invoice. Partial payments are supported. Dunning letters are auto-generated for overdue invoices (7-day, 14-day, 30-day). Bad debt provision is calculated and posted at period end.`
+  },
+  {
+    id: 'd365-ic',
+    icon: '🔄',
+    title: 'Intercompany',
+    subtitle: 'Cross-Entity Transactions',
+    platform: 'D365 F&O',
+    module: 'General Ledger',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Company A places a sales order to sell goods to Company B within the same legal entity group. D365 F&O creates a mirror purchase order in Company B automatically. Shipment from Company A triggers a product receipt in Company B. Intercompany invoices are generated and posted in both companies simultaneously. Elimination entries are created for consolidation. Intercompany balances are reconciled and confirmed to be zero at period end.`
+  },
+  {
+    id: 'd365-budget',
+    icon: '📊',
+    title: 'Budget Control',
+    subtitle: 'Encumbrance & Commitment Tracking',
+    platform: 'D365 F&O',
+    module: 'Budgeting',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Budget Manager creates annual budget in D365 F&O Budgeting module by cost center and account. Budget is approved and activated. Purchase requisitions check against available budget before approval. System creates encumbrance (pre-encumbrance) when requisition is approved. Purchase Order converts pre-encumbrance to encumbrance. Invoice posting consumes the budget. Over-budget transactions are blocked or routed for special approval. Budget transfer between accounts is supported.`
+  },
+  {
+    id: 'd365-inv',
+    icon: '🏭',
+    title: 'Inventory Management',
+    subtitle: 'Warehouse & Stock Control',
+    platform: 'D365 F&O',
+    module: 'Inventory Management',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Warehouse Manager receives goods and scans items into D365 F&O inventory using mobile device. System updates on-hand inventory by site, warehouse and location. Stock transfer between warehouses goes through a transfer order. Inventory counting journal is used for physical stock counts. Discrepancies are posted as adjustment journals. FIFO/LIFO costing is applied on issue. Inventory ageing report flags slow-moving or obsolete stock.`
+  },
+  {
+    id: 'd365-proj',
+    icon: '📋',
+    title: 'Project Accounting',
+    subtitle: 'Cost Tracking & Billing',
+    platform: 'D365 F&O',
+    module: 'Project Management',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Project Manager creates a Time & Material project in D365 F&O with budget, milestones and billing schedule. Consultants log timesheets daily against project tasks. Expenses are submitted and approved via mobile app. System posts costs (labor + expenses) to the project WIP account. Monthly invoice is auto-generated based on actual hours and agreed rate. Invoice is reviewed and sent to client. Revenue is recognized on billing. Project profitability report is generated.`
+  },
+  {
+    id: 'sf-cpq',
+    icon: '💰',
+    title: 'Quote to Cash',
+    subtitle: 'Salesforce CPQ & Order Management',
+    platform: 'Salesforce Sales',
+    module: 'CPQ',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Sales Rep creates a Quote in Salesforce CPQ from an Opportunity. Product catalogue is searched and line items are added with quantities. Discounting rules apply automatically. Quote is submitted for approval if discount exceeds 20%. Approved Quote is converted to a Contract. Contract activates and creates an Order. Order fulfilment team processes the order. Invoice is generated and sent to customer. Payment is recorded against the invoice. Opportunity is marked Closed Won.`
+  },
+  {
+    id: 'sf-case',
+    icon: '🎫',
+    title: 'Case Management',
+    subtitle: 'Salesforce Service Cloud',
+    platform: 'Salesforce Sales',
+    module: 'Service Cloud',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Customer submits a support case via email, web form or phone. Case is auto-created in Salesforce Service Cloud and assigned to a queue. Skill-based routing assigns case to an available agent. Agent investigates using knowledge base articles. Escalation rule triggers if case is not resolved within SLA (4 hours for P1). Customer receives automated updates at each status change. Case is resolved and customer is surveyed via CSAT. Closed cases are indexed for knowledge article creation.`
+  },
+  {
+    id: 'sf-campaign',
+    icon: '📣',
+    title: 'Campaign Management',
+    subtitle: 'Salesforce Marketing Cloud',
+    platform: 'Salesforce Sales',
+    module: 'Marketing Cloud',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Marketing Manager creates a Campaign in Salesforce with type, budget, start/end dates and expected ROI. Campaign members (leads and contacts) are added via list import or report. Email campaign is built in Marketing Cloud with personalised content. A/B test is run on subject lines. Campaign is launched and metrics are tracked: open rate, click rate, conversion rate. Leads generated from campaign are linked to the campaign. ROI is calculated at campaign close.`
+  },
+  {
+    id: 'sf-account',
+    icon: '🏢',
+    title: 'Account & Contact Management',
+    subtitle: 'Salesforce CRM Core',
+    platform: 'Salesforce Sales',
+    module: 'Account Management',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Sales Rep creates an Account in Salesforce with company name, industry, billing address and account tier. Contact is created and linked to the Account. Account hierarchy is set up for parent-child company relationships. Activity timeline captures all calls, emails and meetings. Account team is assigned with read/write roles. Account health score is calculated based on open cases, opportunities and last activity. Quarterly Business Review (QBR) is scheduled from the account.`
+  },
+  {
+    id: 'sf-territory',
+    icon: '🗺️',
+    title: 'Territory Management',
+    subtitle: 'Salesforce Enterprise Territory',
+    platform: 'Salesforce Sales',
+    module: 'Territory Management',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Sales Ops creates a territory hierarchy (Region > Area > District) in Salesforce. Assignment rules automatically assign accounts to territories based on postal code, industry and revenue. Sales Reps are assigned to territories. Territory quota is set and approved. Accounts are reviewed and manually reassigned if needed. Territory performance report shows quota attainment by rep and territory. Year-end territory rebalancing triggers mass reassignment.`
+  },
+  {
+    id: 'sf-approval',
+    icon: '✅',
+    title: 'Approval Process',
+    subtitle: 'Salesforce Multi-Level Workflow',
+    platform: 'Salesforce Sales',
+    module: 'Workflow & Automation',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Sales Rep submits an Opportunity for approval when discount exceeds 15%. Approval process routes to direct manager first. If discount exceeds 25%, second approval from VP Sales is required. Approver receives email and can approve/reject from email or Salesforce mobile. Rejected submissions return to rep with comments. Approved opportunities unlock the CPQ quoting process. Approval history is logged and reportable. Delegated approvers can act when primary approver is on leave.`
+  },
+  {
+    id: 'sf-community',
+    icon: '🌐',
+    title: 'Community Portal',
+    subtitle: 'Salesforce Experience Cloud',
+    platform: 'Salesforce Sales',
+    module: 'Experience Cloud',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Customer self-registers on the Salesforce Experience Cloud portal. Email verification is required. Customer logs in and views their account details, open cases and invoices. Customer submits a new support case with attachment. Customer searches the knowledge base for self-service answers. Customer tracks case status in real time. Customer updates their contact information. Customer gives feedback on resolved case via CSAT survey. Portal admin reviews analytics dashboard.`
+  },
+  {
+    id: 'sf-analytics',
+    icon: '📈',
+    title: 'Salesforce Analytics',
+    subtitle: 'Einstein Analytics & Reports',
+    platform: 'Salesforce Sales',
+    module: 'Einstein Analytics',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Sales Manager creates an Einstein Analytics dashboard with pipeline, quota attainment and win rate KPIs. Data from Opportunities, Accounts and Activities is ingested. AI-powered predictions identify deals at risk of churn. Dashboard is shared with the sales team. Scheduled email digest delivers weekly summary. Custom reports are built on filtered datasets. Data export is available in CSV. Row-level security ensures reps see only their own data. Admin refreshes dataflow nightly.`
+  },
+  {
+    id: 'sf-integration',
+    icon: '🔗',
+    title: 'Salesforce ↔ ERP Integration',
+    subtitle: 'Bidirectional Data Sync',
+    platform: 'Salesforce Sales',
+    module: 'Integration',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `A Closed Won opportunity in Salesforce triggers an order creation event via MuleSoft middleware. Order payload (customer, product, qty, price) is transformed and posted to ERP via REST API. ERP acknowledges with order ID which is written back to Salesforce. Delivery date from ERP is synced to Salesforce opportunity. Invoice generated in ERP is surfaced in Salesforce account page. Sync failures trigger an alert to integration support team. Retry mechanism handles transient failures with exponential backoff.`
+  },
+  {
+    id: 'web-onboarding',
+    icon: '👋',
+    title: 'User Onboarding',
+    subtitle: 'Profile Setup & Guided Flow',
+    platform: 'Web Application',
+    module: 'Onboarding',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `New user completes registration and is directed to a 5-step onboarding wizard. Step 1: Profile photo upload (max 5MB, JPG/PNG). Step 2: Personal details (name, title, timezone). Step 3: Preferences (notifications, language, theme). Step 4: Team invitation (email invites, role assignment). Step 5: Feature tour with tooltips. Onboarding progress is saved at each step. User can skip and return later. Completion unlocks all features. Admin dashboard shows onboarding funnel drop-off rates.`
+  },
+  {
+    id: 'web-password',
+    icon: '🔑',
+    title: 'Password Reset',
+    subtitle: 'Email OTP & Token Flow',
+    platform: 'Web Application',
+    module: 'Authentication',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `User clicks Forgot Password on the login page and enters their registered email. System validates the email exists. A one-time reset link with 15-minute expiry is sent. User clicks link and is taken to the reset page. New password must meet strength requirements and cannot match the last 3 passwords. Reset token is invalidated after first use. User is logged out of all active sessions on password change. Confirmation email is sent. Audit log records the reset event with IP and timestamp.`
+  },
+  {
+    id: 'web-rbac',
+    icon: '🛡️',
+    title: 'Role-Based Access Control',
+    subtitle: 'Permissions & Authorization',
+    platform: 'Web Application',
+    module: 'Authorization',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `Admin creates roles (Super Admin, Manager, Editor, Viewer) with specific permissions. Permissions are granular: create, read, update, delete per resource. New user is assigned a role on invitation. Role change triggers immediate session refresh. Resource-level visibility is enforced (editors cannot see admin settings). API endpoints validate JWT token claims for role and permission. Unauthorised access returns 403 with a clear error message. Role audit trail logs every permission change.`
+  },
+  {
+    id: 'web-payment',
+    icon: '💳',
+    title: 'Payment Gateway',
+    subtitle: 'Card, UPI & Wallet Integration',
+    platform: 'Web Application',
+    module: 'Payments',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `Customer proceeds to checkout and selects a payment method: credit card, debit card, UPI or wallet. Card details are tokenised by the payment gateway (Stripe/Razorpay) and never touch the application server. 3D Secure authentication is triggered for card payments. UPI intent is generated and customer completes payment on UPI app. Payment webhook confirms success and order is fulfilled. Failed payments are retried up to 3 times. Refund flow reverses the charge within 5-7 business days.`
+  },
+  {
+    id: 'web-cart',
+    icon: '🛒',
+    title: 'Shopping Cart & Checkout',
+    subtitle: 'E-commerce Order Flow',
+    platform: 'Web Application',
+    module: 'E-commerce',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `Customer browses product catalogue and adds items to cart. Cart persists across sessions for logged-in users. Customer applies a coupon code (system validates and deducts discount). Customer selects delivery address from saved addresses or enters a new one. Delivery options (standard, express) are displayed with ETAs and prices. Order summary is reviewed and payment is completed. Order confirmation email is sent. Inventory is decremented. Customer can track order status in real time.`
+  },
+  {
+    id: 'web-api',
+    icon: '⚡',
+    title: 'API Gateway',
+    subtitle: 'Auth, Rate Limiting & Throttling',
+    platform: 'Web Application',
+    module: 'API Management',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `API consumer registers and obtains an API key and OAuth2 client credentials. API requests are authenticated via Bearer token in the Authorization header. Rate limiting enforces 1000 requests per hour per API key. Throttling applies a 100 requests per second burst limit. Requests exceeding limits receive a 429 Too Many Requests response with a Retry-After header. API Gateway logs each request with timestamp, latency, status code and consumer ID. Webhook is triggered when a consumer approaches 80% of their quota.`
+  },
+  {
+    id: 'web-search',
+    icon: '🔍',
+    title: 'Search & Filter',
+    subtitle: 'Full-Text Search & Faceted Filter',
+    platform: 'Web Application',
+    module: 'Search',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `User enters a search term in the search bar. System queries Elasticsearch index with full-text search across product name, description and tags. Results are returned within 200ms for up to 10,000 documents. User applies filters: category, price range, rating, availability. Filters dynamically update facet counts. Results are sorted by relevance, price or date. Pagination loads 20 results per page. Zero-result state shows suggested terms. Search term is logged for analytics.`
+  },
+  {
+    id: 'web-notifications',
+    icon: '🔔',
+    title: 'Notifications System',
+    subtitle: 'Email, SMS & Push Alerts',
+    platform: 'Web Application',
+    module: 'Notifications',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `System event (order placed, case resolved, payment failed) triggers a notification. Notification service checks user preferences: email on/off, SMS on/off, push on/off. Email is sent via SendGrid with dynamic template. SMS is sent via Twilio. Push notification is delivered via Firebase Cloud Messaging. User sees in-app notification bell with unread count. User can mark notifications as read or delete them. Notification preferences are updated from user settings. Digest email is sent daily for low-priority notifications.`
+  },
+  {
+    id: 'web-multitenant',
+    icon: '🏢',
+    title: 'Multi-Tenant SaaS',
+    subtitle: 'Tenant Isolation & Provisioning',
+    platform: 'Web Application',
+    module: 'Multi-Tenancy',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `New tenant signs up and a subdomain is provisioned (tenant.app.com). Database schema is isolated per tenant using schema-per-tenant pattern. Tenant admin configures branding (logo, colours, domain). Users within the tenant cannot access data from other tenants. Tenant-level feature flags enable or disable features per plan. Usage is metered per tenant (API calls, storage, seats). Billing is calculated monthly based on usage. Tenant can be suspended or deleted by platform admin. Data export is available for GDPR compliance.`
+  },
+  {
+    id: 'ins-fnol',
+    icon: '🚨',
+    title: 'FNOL Claims',
+    subtitle: 'First Notice of Loss Processing',
+    platform: 'Guidewire',
+    module: 'ClaimCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Policyholder reports a claim via phone, web portal or mobile app. FNOL agent collects: policy number, date of loss, type of loss, description and contact details. System validates that the policy is active and covers the reported loss type. Claim is created in Guidewire ClaimCenter with an auto-generated claim number. Reserve is set based on loss type and initial estimate. Claim is assigned to an adjuster based on coverage type and workload. Acknowledgement email is sent to policyholder within 15 minutes.`
+  },
+  {
+    id: 'ins-underwriting',
+    icon: '📝',
+    title: 'Policy Underwriting',
+    subtitle: 'Risk Assessment & Pricing',
+    platform: 'Guidewire',
+    module: 'PolicyCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Underwriter receives a new insurance application in Guidewire PolicyCenter. Risk score is calculated based on applicant history, demographics and asset details. System checks against underwriting guidelines for automatic accept, decline or refer. Referred applications are manually reviewed by a senior underwriter. Premium is calculated using the rating engine and discounts are applied. Policy is issued with coverage effective date and payment schedule. Policy documents are generated and emailed to the insured and agent.`
+  },
+  {
+    id: 'ins-billing',
+    icon: '💰',
+    title: 'Premium Billing',
+    subtitle: 'Payment, Renewal & Collections',
+    platform: 'Guidewire',
+    module: 'BillingCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Policy is issued and a billing account is created in Guidewire BillingCenter with an annual or monthly payment schedule. First payment invoice is generated and sent. Customer pays via credit card, ACH or cheque. System records payment and updates the billing account balance. Missed payment triggers a grace period notice. Policy is cancelled if payment is not received within 30 days of grace period. Renewal notice is sent 60 days before policy expiry. Customer renews and new payment schedule is set up.`
+  },
+  {
+    id: 'ins-adjudication',
+    icon: '⚖️',
+    title: 'Claims Adjudication',
+    subtitle: 'Settlement & Payment Workflow',
+    platform: 'Guidewire',
+    module: 'ClaimCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Adjuster reviews the claim file in Guidewire ClaimCenter. Loss investigation is initiated: statement of loss, photos, police report, medical records collected. Adjuster evaluates coverage and liability. Reserve is updated based on investigation findings. Settlement offer is calculated using loss evaluation tools. Policyholder accepts or disputes the offer. Dispute triggers an independent appraisal. Accepted settlement generates a payment transaction. Cheque or EFT is processed within 5 business days. Claim is closed and closure letter is sent.`
+  },
+  {
+    id: 'ins-endorsement',
+    icon: '📋',
+    title: 'Policy Endorsement',
+    subtitle: 'Mid-Term Policy Changes',
+    platform: 'Guidewire',
+    module: 'PolicyCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Policyholder requests a mid-term change (add driver, increase coverage, change address) via agent or self-service portal. Change is entered as an endorsement in Guidewire PolicyCenter. System re-rates the policy with the new information. Premium difference is calculated for the remaining policy period. Endorsement requires underwriter approval if premium change exceeds $500. Approved endorsement updates the policy and a revised policy schedule is sent. Pro-rated premium adjustment is posted to the billing account.`
+  },
+  {
+    id: 'ins-subrogation',
+    icon: '🔄',
+    title: 'Subrogation',
+    subtitle: 'Recovery & Refund Workflow',
+    platform: 'Guidewire',
+    module: 'ClaimCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `After settling a claim caused by a third party, the subrogation unit identifies recovery potential in Guidewire ClaimCenter. Demand letter is sent to the at-fault party or their insurer. Negotiation begins to recover the claim payment. Recovery agreement is reached and payment is received. Recovered amount is applied to the claim reducing the net loss. If deductible was paid by the insured, their deductible is refunded. Unrecovered amounts are written off after statute of limitations expires. Recovery rate report is generated monthly.`
+  },
+  {
+    id: 'ins-agent',
+    icon: '👤',
+    title: 'Agent Portal',
+    subtitle: 'Commission, Licensing & Appointments',
+    platform: 'Guidewire',
+    module: 'ProducerEngage',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `New agent applies for an appointment via the Guidewire ProducerEngage portal. Carrier validates agent license, E&O insurance and state appointments. Approved agent is onboarded and assigned to a territory. Agent submits new business applications via the portal. Commission is calculated per policy sold based on the agent agreement. Commission statement is generated monthly and payment is made. Agent tracks their performance dashboard: policies written, premium volume, loss ratio. License renewal alerts are sent 90 days before expiry.`
+  },
+  {
+    id: 'ins-reinsurance',
+    icon: '🏛️',
+    title: 'Reinsurance',
+    subtitle: 'Treaty & Facultative Processing',
+    platform: 'Guidewire',
+    module: 'ClaimCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Large claim exceeds the carrier retention threshold and is ceded to the reinsurance treaty. Reinsurance recoverable is calculated based on the treaty layer (XL or Quota Share). Cession report is prepared for the reinsurer. Reinsurer is invoiced for their share of the settlement. Payment is received from reinsurer and applied to the claim. Facultative certificate is obtained for risks outside treaty scope. Annual bordereau report summarises all ceded premiums and losses. Reinsurer commutation is processed if treaty is cancelled.`
+  },
+  {
+    id: 'ins-compliance',
+    icon: '📊',
+    title: 'Compliance Reporting',
+    subtitle: 'Regulatory Filings & Audits',
+    platform: 'Guidewire',
+    module: 'PolicyCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Compliance team runs monthly regulatory reports in Guidewire PolicyCenter. State-mandated statistical plan data is extracted and formatted per NAIC requirements. Report is reviewed for accuracy against source data. Approved report is submitted to the state DOI via the SERFF filing system. Filing receipt is archived. Annual rate and form filing is prepared when rates change by more than 5%. Actuarial certification is obtained and included in the filing. Exam response is prepared when the state initiates a market conduct examination.`
+  },
+  {
+    id: 'ins-documents',
+    icon: '📄',
+    title: 'Document Management',
+    subtitle: 'Policy Issuance & Archiving',
+    platform: 'Guidewire',
+    module: 'PolicyCenter',
+    domain: 'insurance',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E8A020',
+    flow: `Policy is issued in Guidewire PolicyCenter and document generation is triggered. Policy schedule, coverage summary and endorsement forms are merged into a PDF package using DocuSign or XSL-FO templates. Documents are digitally signed if e-signature is required. Policy packet is emailed to insured and agent. Copies are archived in the document management system with policy number and effective date metadata. Customer can download documents from the self-service portal. Physical mailing is triggered for customers without email on file.`
+  },
+  {
+    id: 'itsm-incident',
+    icon: '🚨',
+    title: 'Incident Management',
+    subtitle: 'P1/P2 Triage & Resolution',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `User reports an IT incident via service desk phone, email or self-service portal. ServiceNow auto-categorises the incident based on keywords. Priority is assigned (P1-Critical, P2-High, P3-Medium, P4-Low) based on impact and urgency matrix. P1 incidents trigger a major incident process: war room is created and stakeholders are notified via SMS. Assigned team investigates and provides updates every 30 minutes for P1. Workaround is applied to restore service. Root cause analysis is conducted within 5 days of resolution. Incident is closed after user confirms resolution.`
+  },
+  {
+    id: 'itsm-change',
+    icon: '🔄',
+    title: 'Change Management',
+    subtitle: 'CAB Approval & Implementation',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `IT team submits a Change Request in ServiceNow for a planned system change. Change type is classified: Standard, Normal or Emergency. Normal changes go through risk assessment and CAB (Change Advisory Board) review. CAB meets weekly and approves or rejects changes. Approved changes are scheduled in the change calendar. Change team implements the change within the approved window. Post-implementation review confirms the change was successful or triggers rollback. Change record is closed with implementation notes.`
+  },
+  {
+    id: 'itsm-catalog',
+    icon: '📋',
+    title: 'Service Catalog',
+    subtitle: 'Request Fulfillment Workflow',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `Employee logs into the ServiceNow Service Catalog and browses available services (laptop request, software access, VPN setup). Employee submits a request with required details and business justification. Request is auto-approved for standard items under $500. High-value items route to manager approval. Approved request triggers a fulfillment task assigned to the appropriate IT team. SLA timer starts and employee receives updates at each stage. Fulfilled request is delivered and closed. Employee rates the service experience.`
+  },
+  {
+    id: 'itsm-problem',
+    icon: '🔍',
+    title: 'Problem Management',
+    subtitle: 'Root Cause Analysis & Known Errors',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `Problem Manager identifies a recurring incident pattern from trend analysis in ServiceNow. Problem record is created and linked to related incidents. Problem investigation team is assigned. Root cause is identified through the 5-Whys or Fishbone analysis. Workaround is documented and published in the Known Error Database (KEDB). Permanent fix is implemented via a Change Request. Affected incidents are linked and closed. Problem record is closed with root cause and fix details. PIR (Problem Improvement Review) is conducted.`
+  },
+  {
+    id: 'itsm-asset',
+    icon: '💻',
+    title: 'Asset & CMDB',
+    subtitle: 'Configuration Item Management',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `IT Ops team runs a discovery scan of the network in ServiceNow Discovery. All hardware and software assets are discovered and auto-populated in the CMDB. Configuration Items (CIs) are classified: servers, laptops, applications, network devices. Relationships between CIs are mapped (application runs on server, server in rack). Changes to CIs are tracked with change history. Expired software licenses are flagged for renewal. Asset audit compares physical inventory against CMDB records. Discrepancies are investigated and resolved.`
+  },
+  {
+    id: 'itsm-knowledge',
+    icon: '📚',
+    title: 'Knowledge Management',
+    subtitle: 'Article Creation & Publishing',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `Support analyst resolves a complex incident and creates a knowledge article in ServiceNow. Article includes: title, category, symptoms, resolution steps and related CIs. Article goes through a peer review workflow. Reviewer approves or rejects with comments. Approved article is published and indexed for search. Article is linked to future incidents with the same symptoms. Knowledge base search is available in the self-service portal and agent workspace. Article is reviewed for accuracy every 6 months. Outdated articles are retired.`
+  },
+  {
+    id: 'itsm-sla',
+    icon: '⏱️',
+    title: 'SLA Management',
+    subtitle: 'Escalation & Breach Prevention',
+    platform: 'ServiceNow',
+    module: 'ITSM',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `A new incident is created in ServiceNow and an SLA is automatically attached based on priority and service offering. SLA countdown begins. At 50% breach warning, assigned agent receives an alert. At 75% breach warning, team lead is notified. Breach triggers an escalation task and a notification to IT management. SLA clock is paused when waiting for customer information. Clock resumes when customer responds. SLA reports are generated weekly showing compliance rate per service, team and priority. Breached SLAs are reviewed in service review meetings.`
+  },
+  {
+    id: 'itsm-vendor',
+    icon: '🤝',
+    title: 'Vendor Risk Management',
+    subtitle: 'Third-Party Assessment & Contracts',
+    platform: 'ServiceNow',
+    module: 'GRC',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `Procurement team onboards a new vendor in ServiceNow GRC. Vendor risk questionnaire is sent covering data security, financial stability and compliance. Vendor completes the questionnaire and uploads supporting evidence. Risk team reviews responses and assigns an inherent risk rating. High-risk vendors trigger an on-site audit. Vendor contract is linked to the vendor record. Annual reassessment is scheduled automatically. Vendor incidents are tracked and linked to the vendor record. Vendor performance scorecards are reviewed quarterly.`
+  },
+  {
+    id: 'itsm-hr',
+    icon: '👥',
+    title: 'HR Service Delivery',
+    subtitle: 'Employee IT Requests & Onboarding',
+    platform: 'ServiceNow',
+    module: 'HR Service Delivery',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `HR creates a new employee record in ServiceNow HR Service Delivery on the offer acceptance date. Automated onboarding workflow triggers: IT team receives a task to provision laptop, email and system access. Facilities receives a task to assign a desk. HR sends the employee handbook and tax forms. Day 1 access package is ready before the employee starts. Employee completes pre-boarding tasks via a self-service portal. IT access is provisioned based on role-based access templates. Offboarding workflow reverses all provisioning when employee leaves.`
+  },
+  {
+    id: 'itsm-itops',
+    icon: '📡',
+    title: 'IT Operations',
+    subtitle: 'Alert & Event Management',
+    platform: 'ServiceNow',
+    module: 'IT Operations Management',
+    domain: 'itsm',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#62D84E',
+    flow: `Monitoring tool detects a server CPU utilisation above 90% and sends an alert to ServiceNow ITOM via API. Event is de-duplicated and correlated with related events from the same CI. Alert is converted to an incident if it exceeds threshold for more than 5 minutes. On-call engineer is paged via PagerDuty integration. Health dashboard updates in real time showing affected CIs. Auto-remediation script is triggered for known issues (e.g., clear temp files, restart service). Event is closed when metrics return to normal and incident is resolved.`
+  },
+  {
+    id: 'hr-leave',
+    icon: '🏖️',
+    title: 'Leave Management',
+    subtitle: 'Request, Approval & Balance Tracking',
+    platform: 'HR System',
+    module: 'Leave Management',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Employee applies for leave via HR self-service portal selecting leave type (Annual, Sick, Casual), dates and reason. System checks leave balance and blocks submission if balance is insufficient. Application is routed to direct manager for approval. Manager can approve, reject or request modification. Half-day leave option is available. Leave calendar shows team availability to avoid conflicts. Approved leave updates the employee attendance record and leave balance. HR Manager can override or cancel leave. Leave balance report is generated monthly.`
+  },
+  {
+    id: 'hr-onboarding',
+    icon: '🎉',
+    title: 'Employee Onboarding',
+    subtitle: 'Day 1 Workflow & Documentation',
+    platform: 'HR System',
+    module: 'Onboarding',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `HR creates a new employee profile in the HR system after offer acceptance. Onboarding checklist is triggered: offer letter, NDA, bank details form, PF nomination, tax declaration form. Employee receives a welcome email with login credentials to complete pre-boarding tasks online. IT receives a task to provision laptop, email and system access. Facilities assigns a desk and access card. Buddy is assigned from the team. Day 1 orientation schedule is shared with the employee. HR tracks onboarding completion percentage. Manager receives a 30-day check-in reminder.`
+  },
+  {
+    id: 'hr-appraisal',
+    icon: '⭐',
+    title: 'Performance Appraisal',
+    subtitle: 'Goal Setting & Annual Review',
+    platform: 'HR System',
+    module: 'Performance Management',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `HR Admin opens the appraisal cycle at the start of the year. Employees set 5 SMART goals aligned to department objectives. Manager reviews and approves goals within 2 weeks. Mid-year check-in: employee self-rates progress and manager provides feedback. Year-end: employee completes self-appraisal and ratings (1-5 scale) for each goal. Manager completes the appraisal with ratings and comments. Skip-level review is optional. Final ratings are normalised in a calibration meeting. Ratings are linked to increment and bonus calculations. Employee receives the final appraisal and can acknowledge or appeal.`
+  },
+  {
+    id: 'hr-recruitment',
+    icon: '🎯',
+    title: 'Recruitment',
+    subtitle: 'Job Posting to Offer Management',
+    platform: 'HR System',
+    module: 'Recruitment',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Hiring Manager raises a job requisition in the HR system with job title, grade, budget and required skills. HR reviews and approves the requisition. Job is posted to internal job board and external portals (LinkedIn, Naukri). Applications are received and tracked in the ATS. HR screens resumes and shortlists candidates. Interview schedule is sent to candidates and interviewers via calendar integration. Feedback is captured post-interview in structured scorecards. Offer is generated and sent for digital signature via DocuSign. Offer acceptance triggers the onboarding workflow.`
+  },
+  {
+    id: 'hr-offboarding',
+    icon: '🚪',
+    title: 'Offboarding',
+    subtitle: 'Exit Clearance & Knowledge Transfer',
+    platform: 'HR System',
+    module: 'Offboarding',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Employee submits resignation in the HR system. Manager acknowledges and sets the last working date. Offboarding checklist is triggered: exit interview scheduled, knowledge transfer plan created, assets listed for return. IT receives a task to revoke all system access on the last working day. Finance calculates final settlement: pending salary, leave encashment, gratuity and F&F statement. Employee returns laptop, access card and company property. HR conducts an exit interview and feedback is recorded. Experience letter and relieving letter are generated and emailed on the last day.`
+  },
+  {
+    id: 'hr-training',
+    icon: '📚',
+    title: 'Training & Certification',
+    subtitle: 'L&D Planning & Compliance Training',
+    platform: 'HR System',
+    module: 'Learning Management',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `HR Admin creates a training calendar in the LMS with mandatory and optional courses. Mandatory compliance training (POSH, Code of Conduct, Data Privacy) is auto-assigned to all employees. Employee registers for an elective course and completes it online with quizzes. Completion is tracked and a digital certificate is issued. Manager receives a report of team completion status. Non-compliant employees receive reminder emails at 7, 3 and 1 day before the deadline. Certification expiry triggers renewal reminders 30 days before. Training hours are logged in the employee profile.`
+  },
+  {
+    id: 'hr-benefits',
+    icon: '🎁',
+    title: 'Benefits Administration',
+    subtitle: 'Enrollment & Claims Management',
+    platform: 'HR System',
+    module: 'Benefits',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `New employee is presented with the benefits enrollment form during onboarding. Employee selects health insurance plan, dental plan and life insurance coverage. Dependents (spouse, children, parents) are added with relationship proof. Enrollment is confirmed and the premium is deducted from the salary. Employee submits a medical reimbursement claim with bills and prescription. HR reviews and approves the claim within 5 business days. Reimbursement is processed via payroll. Annual open enrollment allows employees to change their benefits selections. Benefits summary is available on the employee self-service portal.`
+  },
+  {
+    id: 'hr-attendance',
+    icon: '🕐',
+    title: 'Time & Attendance',
+    subtitle: 'Clock-In/Out & Shift Management',
+    platform: 'HR System',
+    module: 'Time & Attendance',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Employee clocks in via biometric scanner or mobile app using geo-fencing. Late arrivals and early departures are flagged and exceptions are sent to the manager. Overtime is calculated for hours worked beyond the standard 8-hour shift. Shift roster is set by the manager at the start of the week. Shift swap requests are approved by the manager. Attendance data is synced to payroll at month end. Missing punch alerts are sent to employees for self-correction. Attendance regularisation is approved by the manager. Monthly attendance report is generated for the HR dashboard.`
+  },
+  {
+    id: 'hr-expense',
+    icon: '🧾',
+    title: 'Expense Management',
+    subtitle: 'Claim Submission & Reimbursement',
+    platform: 'HR System',
+    module: 'Expense Management',
+    domain: 'hr',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Employee submits an expense claim in the HR system with expense category (travel, food, accommodation), amount, date and receipt upload. Policy engine checks the claim: travel class (economy only), meal limit ($30/day), hotel cap ($150/night). Non-compliant items are flagged with a policy violation warning. Claim is submitted to the manager for approval. Approved claims go to Finance for payment. Finance verifies GST compliance for business expenses. Reimbursement is included in the next payroll or processed as a separate payment. Expense analytics dashboard shows department spend vs budget.`
+  },
+  {
+    id: 'hc-registration',
+    icon: '🏥',
+    title: 'Patient Registration',
+    subtitle: 'EHR Intake & Demographics',
+    platform: 'Healthcare System',
+    module: 'Patient Registration',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Patient arrives at the hospital reception or registers via the patient portal. Registration staff collects demographic details: full name, date of birth, gender, address, contact, emergency contact, insurance details and government ID. System checks for duplicate MRN (Medical Record Number). New MRN is assigned if no duplicate found. Patient is linked to their insurance payer and plan. Consent forms are presented and e-signed. Patient is assigned to the appropriate department. Wristband is printed with MRN and barcode. Patient demographics are available to all clinical staff in real time.`
+  },
+  {
+    id: 'hc-appointment',
+    icon: '📅',
+    title: 'Appointment Scheduling',
+    subtitle: 'Calendar Management & Reminders',
+    platform: 'Healthcare System',
+    module: 'Scheduling',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Patient calls or logs into the patient portal to book an appointment. Available slots for the requested doctor are shown based on real-time calendar availability. Patient selects a date, time and visit reason. Appointment is confirmed and a booking confirmation is emailed and SMSed. Automated reminder is sent 48 hours before and 2 hours before the appointment. Patient can cancel or reschedule up to 24 hours before. Cancellation within 24 hours triggers a no-show fee. Doctor is notified of the days schedule at start of shift. Appointment shows in the EHR with pre-visit notes.`
+  },
+  {
+    id: 'hc-clinical',
+    icon: '📋',
+    title: 'Clinical Documentation',
+    subtitle: 'SOAP Notes & EHR Charting',
+    platform: 'Healthcare System',
+    module: 'Clinical Documentation',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Nurse records vitals (BP, temperature, weight, SpO2) in the EHR at patient check-in. Doctor reviews the patient history and previous notes. Doctor records a SOAP note: Subjective (symptoms), Objective (examination findings), Assessment (diagnosis) and Plan (treatment). Diagnosis codes (ICD-10) are searched and attached. Treatment plan includes medication orders, lab orders and imaging orders. Notes are co-signed by the attending physician. Clinical documentation is accessible to all treating clinicians. Notes are locked after 24 hours and can only be amended with an addendum.`
+  },
+  {
+    id: 'hc-prescription',
+    icon: '💊',
+    title: 'Prescription Management',
+    subtitle: 'e-Prescription & Dispensing',
+    platform: 'Healthcare System',
+    module: 'Pharmacy',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Doctor creates an electronic prescription (e-Rx) in the EHR for the patient. System checks for drug-drug interactions and drug-allergy conflicts and alerts the doctor. Controlled substances require an additional authentication step. Prescription is sent electronically to the patient's preferred pharmacy. Pharmacist reviews the prescription and verifies insurance coverage. Drug is dispensed and patient is counselled on dosage and side effects. Dispensing record is updated in the EHR. Refill requests are processed via the patient portal and require doctor approval. Prescription history is visible to all treating clinicians.`
+  },
+  {
+    id: 'hc-lab',
+    icon: '🔬',
+    title: 'Lab Order Management',
+    subtitle: 'Test Request & Results Reporting',
+    platform: 'Healthcare System',
+    module: 'Laboratory',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Doctor orders a lab test (CBC, LFT, HbA1c) via the EHR order entry system. Order is transmitted to the lab via HL7 interface. Phlebotomist collects the blood sample and labels it with the patient MRN and order number. Sample is processed in the lab analyser. Critical values (e.g., potassium > 6.5 mEq/L) trigger an immediate alert to the ordering doctor. Results are published in the EHR and the patient is notified via the patient portal. Doctor reviews results and updates the clinical plan. Abnormal results are flagged with a colour indicator. Cumulative lab history is available for trend analysis.`
+  },
+  {
+    id: 'hc-billing',
+    icon: '💳',
+    title: 'Healthcare Billing',
+    subtitle: 'Claims Submission & Adjudication',
+    platform: 'Healthcare System',
+    module: 'Revenue Cycle',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `After patient discharge, the clinical coding team assigns ICD-10 diagnosis codes and CPT procedure codes to the encounter. Medical claim (CMS-1500 or UB-04) is generated with all required fields. Claim is scrubbed against payer-specific rules to identify errors before submission. Clean claim is submitted electronically to the insurance payer via EDI 837. Payer adjudicates the claim and returns an ERA (Electronic Remittance Advice) via EDI 835. Payment is posted against the claim. Denied claims are worked by the billing team with appeal letters. Patient balance after insurance is billed via patient statement.`
+  },
+  {
+    id: 'hc-icu',
+    icon: '💓',
+    title: 'ICU Monitoring',
+    subtitle: 'Vitals & Critical Alerts',
+    platform: 'Healthcare System',
+    module: 'Critical Care',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `ICU patient is connected to a bedside monitor tracking HR, BP, SpO2, respiratory rate and temperature. Vitals are automatically transmitted to the EHR every 5 minutes via the medical device integration engine. Alarm thresholds are set per patient based on the physician's orders. Critical alarm (SpO2 < 90%) triggers an audible alert at the bedside and a notification to the assigned nurse and doctor via pager. Nurse acknowledges the alarm and documents the intervention in the EHR. Alarm history and response times are reviewed for quality improvement. Daily ICU dashboard shows all patients' vitals and alerts on one screen.`
+  },
+  {
+    id: 'hc-discharge',
+    icon: '🚗',
+    title: 'Discharge Planning',
+    subtitle: 'Discharge Instructions & Coordination',
+    platform: 'Healthcare System',
+    module: 'Discharge Management',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Doctor initiates a discharge order in the EHR. Nurse prepares discharge instructions including medications, diet, activity restrictions, follow-up appointments and red flag symptoms. Discharge summary is generated with diagnosis, treatment, investigations and discharge condition. Pharmacy reviews and dispenses take-home medications. Social worker arranges post-discharge care (home nursing, rehab facility) if needed. Patient is educated on discharge instructions and signs the discharge consent. Final bill is generated and settled. Patient is discharged and transported to the vehicle. Discharge summary is faxed or e-sent to the patient's GP.`
+  },
+  {
+    id: 'hc-telemedicine',
+    icon: '💻',
+    title: 'Telemedicine',
+    subtitle: 'Virtual Consultation & Follow-Up',
+    platform: 'Healthcare System',
+    module: 'Telehealth',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Patient books a virtual consultation via the patient portal or telemedicine app. Video consultation link is sent to the patient and doctor via email and SMS. At appointment time, patient joins the video call via browser or app (no download required). Doctor verifies the patient's identity and reviews EHR history before the call. Consultation is conducted and clinical notes are recorded in the EHR in real time. e-Prescription is sent to the patient's pharmacy directly from the platform. Follow-up appointment is booked at the end of the call. Consultation recording is available for 7 days if the patient consents. Insurance pre-authorisation is obtained for telemedicine if required.`
+  },
+  {
+    id: 'hc-hipaa',
+    icon: '🔒',
+    title: 'HIPAA Compliance',
+    subtitle: 'Audit Trails & Access Controls',
+    platform: 'Healthcare System',
+    module: 'Security & Compliance',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Every access to a patient record in the EHR is logged with user ID, timestamp, patient MRN, action (view/edit/print) and IP address. Audit logs are retained for 6 years as per HIPAA requirements. Access to records of VIP patients (celebrities, executives) triggers an additional approval workflow. After-hours access to patient records sends an automatic alert to the Privacy Officer. Annual HIPAA training is mandatory for all staff and completion is tracked. Data breach response plan is tested quarterly. Risk assessment identifies vulnerabilities in ePHI handling. Business Associate Agreements (BAAs) are maintained for all third-party vendors with ePHI access.`
+  }
+,
+  {
+    id: 'omni-sf-routing',
+    icon: '🎯',
+    title: 'Salesforce Omni-Channel Routing',
+    subtitle: 'Contact Center Agent Assignment & Overflow',
+    platform: 'Salesforce Sales',
+    module: 'Omni-Channel',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Customer contacts support via chat, email or phone. Salesforce Omni-Channel evaluates agent availability, capacity and skill set. Work item is routed to the most qualified available agent using Skills-Based Routing. If no agent is available within 2 minutes, the item overflows to a secondary queue. Agent receives a notification and accepts or declines the work item. Declined items are re-routed to the next available agent. Queue depth and wait time are monitored on the Supervisor dashboard. Abandoned work items are flagged and followed up within 1 hour. Agent utilisation rate is tracked and reported.`
+  },
+  {
+    id: 'omni-bopis',
+    icon: '🏪',
+    title: 'Buy Online Pick Up In Store (BOPIS)',
+    subtitle: 'Cross-Channel Order & Inventory Flow',
+    platform: 'D365 Commerce',
+    module: 'Order Management',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Customer browses the product catalogue online and adds an item to cart. Customer selects "Pick Up In Store" and chooses the nearest store with stock. System checks real-time store inventory and reserves the item for 24 hours. Order confirmation and estimated pickup time are sent via email and SMS. Store staff receives a pick order on the POS. Staff picks the item, marks it ready for pickup and sends a "Ready for Pickup" notification to the customer. Customer arrives at the store, provides order number and is handed the item. Customer can return or exchange the item in-store even though it was purchased online.`
+  },
+  {
+    id: 'omni-inventory',
+    icon: '📦',
+    title: 'Cross-Channel Inventory Sync',
+    subtitle: 'Real-Time Stock Across Web, App & Store',
+    platform: 'D365 Commerce',
+    module: 'Inventory Management',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Inventory is managed centrally in D365 Commerce across all channels: online store, mobile app and physical stores. When a product is sold online, inventory decreases in real time across all channels within 5 seconds. Store staff making a sale on POS decrements the same inventory pool. Safety stock threshold (minimum 2 units) prevents overselling. Backorder is offered when stock reaches zero. Inventory transfer between stores is tracked as a transfer order. Daily reconciliation report identifies discrepancies between physical count and system stock. Inventory adjustment journal corrects confirmed discrepancies.`
+  },
+  {
+    id: 'omni-whatsapp',
+    icon: '💬',
+    title: 'WhatsApp Bot Customer Service',
+    subtitle: 'Automated Chat & Live Agent Handoff',
+    platform: 'Web Application',
+    module: 'Chatbot',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#25D366',
+    flow: `Customer sends a message to the company WhatsApp number. Bot greets the customer and presents a menu: Order Status, Returns, FAQs, Speak to Agent. Customer selects an option or types a free-text query. NLP engine matches the query to an intent with confidence score. High-confidence matches (>85%) are answered automatically. Low-confidence queries are responded to with clarifying questions. If unresolved after 2 attempts, bot offers to connect a live agent. Agent receives the full conversation history on agent console. Agent resolves the issue. Post-chat CSAT survey is sent via WhatsApp. Unresolved outside business hours are queued for next day.`
+  },
+  {
+    id: 'omni-ivr',
+    icon: '📞',
+    title: 'IVR + CRM Call Center Integration',
+    subtitle: 'Caller ID Match, Screen Pop & Call Logging',
+    platform: 'Salesforce Sales',
+    module: 'Service Cloud',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Customer calls the contact centre. IVR system greets and presents options: billing, support, sales. Customer selects an option via keypad or voice. IVR checks the caller's phone number against the CRM customer database. Matched customers are authenticated with a security question. Caller details and selected menu option are passed to the CRM via CTI (Computer Telephony Integration). Agent's screen pops with the customer's account, open cases and last interaction. Call is recorded and linked to the case. After call, agent submits call summary. Recording and transcription are attached to the case automatically.`
+  },
+  {
+    id: 'omni-notifications',
+    icon: '🔔',
+    title: 'Multi-Channel Notification Engine',
+    subtitle: 'Email, SMS, Push — Preference & Deduplication',
+    platform: 'Web Application',
+    module: 'Notifications',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#6B4FD8',
+    flow: `System event triggers a notification (order shipped, payment failed, appointment reminder). Notification service checks the user's channel preferences: email on/off, SMS on/off, push on/off. If user has multiple channels enabled, deduplication rules prevent the same message from being sent twice within 30 minutes. Email is sent via SendGrid, SMS via Twilio, push via Firebase. Delivery receipt is tracked for each channel. Failed deliveries are retried 3 times with exponential backoff. User can update notification preferences from account settings. Notification history is viewable in the app for 90 days.`
+  },
+  {
+    id: 'omni-healthcare',
+    icon: '🏥',
+    title: 'Healthcare Patient Omni-Channel',
+    subtitle: 'Portal, App, SMS & In-Person Visit Sync',
+    platform: 'Healthcare System',
+    module: 'Patient Engagement',
+    domain: 'healthcare',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Patient books an appointment via the web portal. Appointment confirmation is sent via SMS and email. Patient completes pre-visit forms on the mobile app (medical history, insurance). Forms are available to the nurse at check-in without re-entering data. Doctor reviews the visit summary on the clinical desktop. Follow-up instructions are sent via patient portal and SMS after the visit. Patient can message their care team via secure messaging on the app. Replies from care team are delivered to the app and email. All interactions are logged in the EHR under the patient's communication history.`
+  },
+  {
+    id: 'omni-banking',
+    icon: '🏦',
+    title: 'Banking Cross-Channel Transaction',
+    subtitle: 'Mobile, Web, Branch & ATM Session Continuity',
+    platform: 'Banking System',
+    module: 'Digital Banking',
+    domain: 'banking',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#1A73E8',
+    flow: `Customer starts a fund transfer on the mobile banking app, saves it as a draft and switches to the web browser. Draft transfer is available on the web portal. Customer completes and submits the transfer on the web. Transaction confirmation is sent to both the mobile app notification and email. Customer visits the branch the next day and the relationship manager can see the completed transfer in the CRM. Customer uses an ATM to check the updated balance. Balance reflects the transfer in real time. All channel interactions are recorded in the central customer activity log.`
+  },
+  {
+    id: 'omni-social',
+    icon: '📱',
+    title: 'Social Media CRM Integration',
+    subtitle: 'Case Creation from Tweet, Post & DM',
+    platform: 'Salesforce Sales',
+    module: 'Social Studio',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Customer posts a complaint on Twitter or Facebook mentioning the company handle. Social Studio monitors the brand keywords and detects the mention within 2 minutes. Sentiment analysis classifies the post as negative. A case is auto-created in Salesforce Service Cloud linked to the customer's social profile. Social agent is assigned and responds publicly within 15 minutes. Conversation continues in direct messages. Case is updated with each DM exchange. Resolved case triggers a positive response and closes the social listening thread. Social engagement metrics (response time, sentiment) are reported on the social dashboard.`
+  },
+  {
+    id: 'omni-teams',
+    icon: '💼',
+    title: 'D365 + Microsoft Teams Integration',
+    subtitle: 'Approval Notifications & Collaboration Triggers',
+    platform: 'D365 F&O',
+    module: 'Workflow',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `A purchase order approval request is raised in D365 F&O. Workflow triggers a notification card in the approver's Microsoft Teams channel via Power Automate. Approver can see PO details and approve or reject directly from the Teams card without opening D365. Approval decision is written back to D365 via the API. Requestor receives a Teams message confirming the approval. High-value POs (over $100,000) trigger a Teams meeting invitation with the finance committee. Rejected POs send a Teams message to the requestor with rejection reason. Audit log records the approval timestamp and approver identity from Teams.`
+  },
+  {
+    id: 'api-rest',
+    icon: '⚡',
+    title: 'REST API Testing',
+    subtitle: 'CRUD Endpoints, Status Codes & Schema Validation',
+    platform: 'Web Application',
+    module: 'API Testing',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `QA validates REST API endpoints for all CRUD operations. GET /customers returns a 200 with a list matching the documented JSON schema. POST /customers with valid payload returns 201 with the created resource and Location header. PUT /customers/{id} with partial data returns 200. DELETE /customers/{id} returns 204 with no body. Invalid payloads return 400 with structured error messages. Unauthenticated requests return 401. Requests for non-existent resources return 404. Rate-limited requests return 429 with Retry-After header. Response time is under 500ms for all endpoints under normal load.`
+  },
+  {
+    id: 'api-webhook',
+    icon: '🔗',
+    title: 'Webhook Event Delivery',
+    subtitle: 'Retry Logic, Signature Validation & Idempotency',
+    platform: 'Web Application',
+    module: 'Webhooks',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `System event (order placed, payment received) triggers a webhook POST to the subscriber endpoint. Webhook payload includes event type, timestamp and resource ID. HMAC-SHA256 signature is computed from the payload and secret key and included in the X-Signature header. Subscriber validates the signature before processing. If subscriber returns a non-2xx response, webhook is retried after 1 minute, 5 minutes and 30 minutes. After 3 failures, the event is marked as failed and the subscriber is alerted. Duplicate event delivery (same event ID) is rejected by the subscriber using idempotency key check. Webhook delivery log is available in the developer portal.`
+  },
+  {
+    id: 'api-mobile',
+    icon: '📱',
+    title: 'Mobile App API Testing',
+    subtitle: 'Offline Mode, Slow Network & API Contract',
+    platform: 'Web Application',
+    module: 'Mobile',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `Mobile app makes API calls to fetch user data on launch. Slow network (3G simulation) is tested: app shows a loading spinner and does not crash. Offline mode is tested: app displays cached data and shows an offline banner. When connectivity is restored, app syncs pending actions with the server. API contract is validated: response fields match what the app expects. Breaking API change (removed field) is tested: app handles the missing field gracefully without crashing. Push notification is delivered when the app is in the background. Deep link opens the correct screen in the app.`
+  },
+  {
+    id: 'api-mulesoft',
+    icon: '🔄',
+    title: 'MuleSoft API Integration',
+    subtitle: 'Transformation, Error Handling & Timeout',
+    platform: 'Web Application',
+    module: 'Integration',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `MuleSoft API flow receives a request from Salesforce to create an order in D365 F&O. Input payload is transformed from Salesforce JSON format to D365 OData format using DataWeave mapping. Transformed request is sent to the D365 API. Successful response is mapped back to Salesforce format and returned. D365 API timeout (>30 seconds) triggers a retry with exponential backoff. After 3 retries, error is logged and a Salesforce platform event is published to notify the admin. Field mapping errors are caught and a 400 response is returned with the mapping validation details. API call volume, success rate and average latency are monitored on the MuleSoft Anypoint dashboard.`
+  },
+  {
+    id: 'api-realtime',
+    icon: '📡',
+    title: 'Real-Time Data Sync Testing',
+    subtitle: 'Event Processing, Duplicate Handling & Failures',
+    platform: 'Web Application',
+    module: 'Integration',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `System A publishes an event (customer updated) to the message queue. System B subscribes and processes the event within 5 seconds. Duplicate events (same message ID) are detected and ignored without processing. Out-of-order messages are handled: System B checks the event timestamp before applying the update. Large batch of events (10,000 in 1 minute) is processed without message loss. Failed event processing is moved to a dead-letter queue and triggers an alert. Dead-letter queue items are reviewed and reprocessed manually. End-to-end latency (event published to System B updated) is measured and reported. Data consistency between System A and System B is verified after each test scenario.`
+  },
+  {
+    id: 'api-logicapps',
+    icon: '⚙️',
+    title: 'Azure Logic Apps Workflow Testing',
+    subtitle: 'Automated Flows, Conditions & Error Handling',
+    platform: 'Azure',
+    module: 'Logic Apps',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Azure Logic App is triggered by a new row in an Excel file uploaded to SharePoint. Logic App reads the row data and validates required fields (name, email, amount). Valid rows trigger an approval email to the manager via Outlook connector. Manager approves or rejects from the email. Approved rows create a record in Salesforce via the Salesforce connector. Rejected rows send a rejection notification to the submitter. Invalid rows (missing fields) are written to an error log in SharePoint. Logic App run history shows success and failure details. Failed runs trigger a Teams notification to the integration admin.`
+  },
+  {
+    id: 'api-powerbi',
+    icon: '📊',
+    title: 'Power BI Report Validation',
+    subtitle: 'Data Accuracy, Refresh & Row-Level Security',
+    platform: 'D365 F&O',
+    module: 'Power BI',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#F2C811',
+    flow: `Power BI report is connected to D365 F&O via DirectQuery or Import mode. Report data is validated against source D365 data for accuracy: total sales amount, count of records, date ranges. Scheduled refresh runs at 6am daily and data is up to date by 7am. Row-level security is tested: Sales Rep A can only see their own sales data and cannot see Sales Rep B's data. Report filters work correctly: date slicer, region filter, product category filter. Drill-through navigates to the correct detail page. Report is accessible on mobile (Power BI app) with correct layout. Export to Excel and PDF produces accurate data.`
+  },
+  {
+    id: 'api-salesforce-connect',
+    icon: '🔌',
+    title: 'Salesforce External System Connect',
+    subtitle: 'Real-Time External Data & Field Mapping',
+    platform: 'Salesforce Sales',
+    module: 'Integration',
+    domain: null,
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#00A1E0',
+    flow: `Salesforce displays external ERP order data on the Account page via Salesforce Connect External Objects. SOQL query against the external object returns data from the ERP in real time. Field mapping is validated: ERP order number maps correctly to the external object Order Number field. Null handling is tested: ERP fields with no value display as blank in Salesforce, not as an error. Filter on the related list returns only orders for the current account. Sorting by date works correctly. External object data cannot be edited from Salesforce (read-only). Performance is validated: related list loads within 3 seconds for accounts with up to 500 orders.`
+  },
+  {
+    id: 'api-vendor',
+    icon: '🤝',
+    title: 'Third-Party Vendor Integration',
+    subtitle: 'Data Exchange, Authentication & Error Recovery',
+    platform: 'Web Application',
+    module: 'Integration',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `System integrates with a third-party vendor API (payment gateway, logistics, tax engine) using API key authentication. API key is validated on each request and rejected calls return a 401 with a clear error. Successful API call returns vendor data which is mapped and stored in the local database. Vendor API downtime is simulated: system returns a user-friendly error message and logs the failure. Circuit breaker opens after 5 consecutive failures and stops further requests to the vendor for 60 seconds. Vendor API rate limit (100 requests per minute) is respected and excess requests are queued. Daily reconciliation compares data in the local system against the vendor's data report.`
+  },
+  {
+    id: 'api-batch',
+    icon: '⏰',
+    title: 'Batch Processing Validation',
+    subtitle: 'Scheduled Jobs, Error Files & Reconciliation',
+    platform: 'D365 F&O',
+    module: 'Batch Processing',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#0078D4',
+    flow: `Nightly batch job processes 50,000 transactions from the staging table into the main database. Batch starts at 11pm and completes by 2am within the maintenance window. Each transaction is validated before processing: mandatory fields, data types, business rules. Invalid records are written to an error file with the record ID and rejection reason. Error file is emailed to the data admin team each morning. Successfully processed records are marked as processed and excluded from future runs. Duplicate detection prevents the same record from being processed twice. Batch completion triggers a summary report: total processed, total errors, processing time.`
+  },
+  {
+    id: 'sec-login',
+    icon: '🔐',
+    title: 'Login & Authentication Security',
+    subtitle: 'Brute Force, Session Management & MFA',
+    platform: 'Web Application',
+    module: 'Authentication',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Login form is tested for SQL injection: entering 'OR 1=1-- in the username field must not grant access. Brute force protection is validated: account is locked after 5 failed login attempts within 10 minutes. Unlock email is sent with a one-time link. Session token is a cryptographically random UUID, not a sequential integer or username. Session expires after 30 minutes of inactivity. Logout invalidates the session token and redirects to the login page. Multi-factor authentication (TOTP or SMS OTP) is required for admin accounts. MFA code is valid for 30 seconds and cannot be reused. Concurrent login on two devices is handled per the configured policy (allow or terminate older session).`
+  },
+  {
+    id: 'sec-gdpr',
+    icon: '🛡️',
+    title: 'GDPR Data Privacy & Consent',
+    subtitle: 'Right to Erasure, Consent & Data Portability',
+    platform: 'Web Application',
+    module: 'Compliance',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#2ECC71',
+    flow: `New user is shown a cookie consent banner on first visit. Accepting all cookies enables analytics and marketing tracking. Rejecting non-essential cookies disables them and the site still functions normally. User can update consent preferences at any time from the privacy settings page. User submits a Data Subject Access Request (DSAR): system compiles all personal data within 72 hours and sends a downloadable report. User submits a Right to Erasure request: all personal data is deleted or anonymised within 30 days. Deletion confirmation email is sent. Data retention policy auto-deletes inactive accounts after 3 years. Third-party data processors are listed in the privacy notice and are bound by data processing agreements.`
+  },
+  {
+    id: 'sec-financial',
+    icon: '📊',
+    title: 'Financial System Audit Testing',
+    subtitle: 'Segregation of Duties, Controls & SOX',
+    platform: 'D365 F&O',
+    module: 'Security',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Segregation of duties is validated in D365 F&O: a user who can create a vendor invoice cannot also approve it. Conflicting roles trigger a security alert when assigned to the same user. AP Clerk can create and submit invoices but cannot post them to the GL. Finance Manager can approve and post invoices but cannot create them. All financial transactions have a complete audit trail: who created, who approved, timestamp and IP address. Audit log is read-only and cannot be modified even by system administrators. Period-end close locks the accounting period and prevents backdated journal entries. Changes to chart of accounts require dual authorisation. System access review report is generated monthly for compliance.`
+  },
+  {
+    id: 'sec-migration',
+    icon: '🔄',
+    title: 'Data Migration Validation',
+    subtitle: 'Record Count, Field Mapping & Data Integrity',
+    platform: 'D365 F&O',
+    module: 'Data Management',
+    domain: 'erp',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#9B59B6',
+    flow: `Pre-migration: record count in the source system is documented for each entity (customers: 12,450, vendors: 3,200, transactions: 250,000). Data is extracted from the source, transformed to the target format and loaded into D365 via DIXF (Data Import Export Framework). Post-migration: record count in D365 matches the source count exactly. Spot-check: 50 random records are compared field-by-field between source and target. Mandatory field validation: no customer record has a blank name or account number. Date fields are correctly formatted (DD/MM/YYYY). Numeric fields have no commas or currency symbols. Lookup fields (country, currency) are mapped to valid D365 codes. Rejected records are reviewed, corrected and re-migrated. Cutover plan is validated: go-live migration completes within the agreed 4-hour window.`
+  },
+  {
+    id: 'sec-audit',
+    icon: '📝',
+    title: 'Audit Trail & Compliance Logging',
+    subtitle: 'Tamper-Proof Logs, Retention & Access Review',
+    platform: 'Web Application',
+    module: 'Compliance',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Every user action (login, data view, data edit, data export, permission change) is logged with: user ID, timestamp, IP address, action type and affected record ID. Audit logs are written to a separate, read-only database that application users cannot access. System administrators cannot delete or modify audit log entries. Logs are retained for 7 years to meet regulatory requirements. Access to audit logs is restricted to the Compliance team. Daily log integrity check verifies no entries have been tampered with using a hash chain. Suspicious activity report flags: login outside business hours, bulk data export, multiple failed authentication attempts. Monthly access review report lists all users and their current permissions for the Compliance team to certify.`
+  },
+  {
+    id: 'sec-access',
+    icon: '🔑',
+    title: 'User Access & Permission Testing',
+    subtitle: 'Role-Based Access, Privilege Escalation & Lockout',
+    platform: 'Web Application',
+    module: 'Authorization',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `User with Viewer role attempts to access an Admin-only page: receives a 403 Forbidden error and is redirected to a permission-denied page. User with Editor role can create and update records but cannot delete them: delete button is hidden and direct API delete call returns 403. Privilege escalation is tested: user modifies their JWT token to add admin role — server rejects the tampered token. Shared account testing: two users logging in with the same credentials at the same time are handled per the session policy. Inactive user account (no login for 90 days) is automatically disabled. Disabled account receives a clear error on login attempt. Account re-activation requires approval from the system administrator.`
+  },
+  {
+    id: 'sec-dr',
+    icon: '🔧',
+    title: 'Disaster Recovery & Business Continuity',
+    subtitle: 'Failover, RTO/RPO Validation & Backup Restore',
+    platform: 'Web Application',
+    module: 'Infrastructure',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Primary database server is taken offline to simulate a failure. Automatic failover to the secondary replica completes within the agreed RTO (Recovery Time Objective) of 15 minutes. Application reconnects to the secondary database without manual intervention. Data loss is verified against the RPO (Recovery Point Objective) of 1 hour: no more than 1 hour of transactions are lost. Full database backup is restored to a test environment and validated: record counts match, referential integrity is intact, application functions normally against the restored database. DR drill is conducted quarterly. Failover steps are documented in a runbook and tested by a team member who did not write the runbook. DR test results are reported to the CISO and CTO.`
+  },
+  {
+    id: 'sec-dashboard',
+    icon: '📈',
+    title: 'Dashboard & Report Accuracy',
+    subtitle: 'Data Validation, Refresh & Filter Testing',
+    platform: 'Web Application',
+    module: 'Analytics',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#F39C12',
+    flow: `Dashboard KPI (Total Revenue, Open Cases, Active Users) is validated against the source database by running equivalent SQL queries. Chart data matches the underlying data table when exported to CSV. Date filter is tested: selecting "Last 7 Days" shows only records with a created date within the last 7 days. Multiple filters applied simultaneously produce correct intersected results. Dashboard refresh loads data within 5 seconds. Refreshed data reflects records added in the last 5 minutes. Row-level security is validated: Manager A sees only their team's data and cannot see Manager B's team. Report is exported to PDF and Excel formats without data truncation or formatting errors. Scheduled email report is delivered by 8am every Monday with the correct data.`
+  },
+  {
+    id: 'sec-api-boundary',
+    icon: '🛡️',
+    title: 'API Error & Boundary Testing',
+    subtitle: 'Edge Cases, Invalid Input & Rate Limits',
+    platform: 'Web Application',
+    module: 'API Testing',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#FF6B35',
+    flow: `API is tested with boundary values for all numeric fields: minimum value (0), maximum value (999999), negative values, decimal values, and values exceeding the maximum. String fields are tested with: empty string, null, 255 characters (max), 256 characters (over max), special characters (!@#$%^&*()), SQL injection strings, HTML tags, Unicode and emoji characters. Date fields are tested with: invalid dates (30 Feb), past dates, future dates, dates in wrong format. API returns descriptive 400 error messages specifying which field failed validation. Sending 200 requests per second exceeds the rate limit and triggers a 429 response with Retry-After header. API response does not expose internal server paths, stack traces or database error messages.`
+  },
+  {
+    id: 'sec-backup',
+    icon: '💾',
+    title: 'Backup & Data Recovery Testing',
+    subtitle: 'Scheduled Backups, Restore & Verification',
+    platform: 'Web Application',
+    module: 'Infrastructure',
+    domain: 'web',
+    priority: 'High',
+    format: 'full',
+    roles: '',
+    integrations: '',
+    badge: '#E74C3C',
+    flow: `Daily automated backup runs at midnight and completes within 2 hours for a 500GB database. Backup completion notification is sent to the IT admin team. Backup file is verified: size is within 10% of the previous backup and the checksum passes. Weekly restore drill: backup file is restored to a test environment. Restored data is validated: 10 random records are compared between production and restored database and they match exactly. Application is started against the restored database and core functions (login, data retrieval, report generation) work correctly. Backup files are retained for 30 days for daily backups and 12 months for monthly backups. Old backup files outside the retention period are auto-deleted. Backup encryption is validated: backup file cannot be opened without the decryption key.`
   }
 ];
 
@@ -15684,6 +17198,13 @@ function exportPDF() {
   }
 
   addPageNumber();
+
+  // Branding footer on last page (v9.99)
+  var lastY = doc.internal.pageSize.height - 10;
+  doc.setFontSize(7); doc.setTextColor(150,150,150);
+  doc.text('Generated by Shuddhi QA — AI-Powered Test Intelligence | shuddhiqacloud.pages.dev | Built by Ramya, Senior QA Architect', pageW/2, lastY, {align:'center'});
+  doc.setTextColor(0,0,0);
+
   doc.save(`test-cases-${platform.replace(/\s+/g,'-')}-${Date.now()}.pdf`);
   showToast('PDF exported successfully!');
 }
@@ -15906,6 +17427,21 @@ function exportExcel() {
     });
     XLSX.utils.book_append_sheet(wb, wsMeta, 'Metadata');
   }
+
+  // Branding sheet (v9.99)
+  var brandData = [
+    ['Generated by', 'Shuddhi QA — AI-Powered Test Intelligence'],
+    ['URL', 'https://shuddhiqacloud.pages.dev'],
+    ['Built by', 'Ramya, Senior QA Architect · 10+ years enterprise QA'],
+    ['Generated on', new Date().toLocaleString()],
+    ['Platform', platform || '—'],
+    ['Module', module || '—'],
+    ['', ''],
+    ['Note', 'Shuddhi QA generates production-grade test cases for D365, Salesforce, Guidewire and 7 more platforms.'],
+  ];
+  var wsBrand = XLSX.utils.aoa_to_sheet(brandData);
+  wsBrand['!cols'] = [{wch:18},{wch:70}];
+  XLSX.utils.book_append_sheet(wb, wsBrand, '⚡ Shuddhi QA');
 
   XLSX.writeFile(wb, `test-cases-${platform.replace(/\s+/g,'-')}-${Date.now()}.xlsx`);
   showToast('Excel exported with test case format!');
@@ -23738,6 +25274,74 @@ window._toggleIntPanel = function(type) {
       .replace(/\n/g,'<br>');
   };
 })();
+
+
+// ── v9.99: URL template parameter ?t=template-id ─────────────────
+(function _loadTemplateFromURL() {
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var tId = params.get('t');
+      if (tId && typeof loadTemplate === 'function') {
+        setTimeout(function() {
+          loadTemplate(tId);
+          // Clean URL after loading
+          var url = new URL(window.location.href);
+          url.searchParams.delete('t');
+          window.history.replaceState({}, '', url.toString());
+          if (typeof showToast === 'function') {
+            showToast('✨ Template loaded — click ⚡ Generate to create test cases');
+          }
+        }, 400);
+      }
+    } catch(e) {}
+  });
+})();
+
+
+// ── v9.99: Auto-Demo "Try Now" ────────────────────────────────────
+window._runAutoDemo = async function(templateId, label) {
+  // Mark button as running
+  var btn = document.querySelector(`[onclick*="${templateId}"]`);
+  if (btn) {
+    btn.classList.add('running');
+    btn.innerHTML = '<span style="animation:spin .8s linear infinite;display:inline-block">⚡</span> Generating ' + label + '...';
+  }
+
+  // 1. Load template
+  if (typeof loadTemplate === 'function') {
+    loadTemplate(templateId);
+  }
+
+  // 2. Switch to Gemini (free provider) if available to avoid API key requirement
+  try {
+    var providerBtns = document.querySelectorAll('[data-provider]');
+    var geminiBtn = [...providerBtns].find(b =>
+      (b.dataset.provider||'').toLowerCase().includes('gemini'));
+    if (geminiBtn && geminiBtn.click) geminiBtn.click();
+  } catch(e) {}
+
+  // 3. Wait for template to load then generate
+  await new Promise(r => setTimeout(r, 600));
+
+  // 4. Scroll to output and trigger generation
+  var outPanel = document.querySelector('.output-panel');
+  if (outPanel) outPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (typeof generate === 'function') {
+    generate();
+  }
+
+  // 5. Reset button after generation completes
+  setTimeout(function() {
+    if (btn) {
+      btn.classList.remove('running');
+      var icons = {'d365-ap':'🔷','sf-lead':'☁️','web-auth':'🌐'};
+      var labels = {'d365-ap':'D365 Invoice Flow','sf-lead':'Salesforce Lead Flow','web-auth':'User Login & Security'};
+      btn.innerHTML = (icons[templateId]||'⚡') + ' ' + (labels[templateId]||label);
+    }
+  }, 25000);
+};
 
 // Reset dismiss flag when platform changes (new context = fresh banner)
 (function _patchSelectPlatformForBanner() {
