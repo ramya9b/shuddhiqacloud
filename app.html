@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v10.5 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v10.6 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v10.5 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v10.6 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -35,7 +35,7 @@
 <meta name="msapplication-TileColor" content="#E8A020"/>
 <meta name="msapplication-TileImage" content="/icons/icon-144x144.png"/>
 <!-- Performance: preconnect reduces font round-trip by ~150ms -->
-                                              <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+                                                                      <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png"/>
@@ -176,7 +176,7 @@ if (typeof marked !== 'undefined') {
 
   /* Header — mockup styled */
   header {
-    padding: 0 20px;    /* v10.5: tighter padding, logo now in header */
+    padding: 0 20px;    /* v10.6: tighter padding, logo now in header */
     height: 64px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 0;
@@ -363,7 +363,7 @@ if (typeof marked !== 'undefined') {
   }
 
   /* Layout */
-  /* main-grid base — overridden by v10.5 drag CSS above */
+  /* main-grid base — overridden by v10.6 drag CSS above */
   .main-grid-base-placeholder { display: none; }
 
   /* Form Panel — full width horizontal layout */
@@ -1922,7 +1922,7 @@ if (typeof marked !== 'undefined') {
   .module-chip.selected { border-color: var(--d365); background: rgba(0,120,212,.08); color: var(--d365); font-weight: 600; }
   .module-chip.hidden { display: none; }
 
-  /* ── Domain Intelligence — v10.5 ─────────────────────────── */
+  /* ── Domain Intelligence — v10.6 ─────────────────────────── */
   .sb-domain-section {
     margin-top: 4px;
     padding: 0 2px;
@@ -3089,7 +3089,7 @@ header::after { display: none !important; }
     display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px;
   }
 
-  /* ── Fix 3: Mobile scroll reduction (v10.5) ─────────────────── */
+  /* ── Fix 3: Mobile scroll reduction (v10.6) ─────────────────── */
   @media (max-width: 768px) {
     /* Collapse advanced section by default on mobile */
     #advancedFields { display: none !important; }
@@ -3170,7 +3170,7 @@ header::after { display: none !important; }
 
   /* ── SIDEBAR ─────────────────────────────────────────────────── */
   #appSidebar {
-    display: none !important;    /* v10.5: sidebar removed */
+    display: none !important;    /* v10.6: sidebar removed */
     position: fixed;
     top: 0; left: 0; bottom: 0;
     width: 260px;
@@ -3255,7 +3255,7 @@ header::after { display: none !important; }
 
   /* ── LAYOUT WITH SIDEBAR ─────────────────────────────────────── */
   #mainWrap {
-    margin-left: 0 !important;    /* v10.5: no sidebar */
+    margin-left: 0 !important;    /* v10.6: no sidebar */
     max-width: none !important;
     padding: 0 !important;
     min-height: 100vh;
@@ -4763,7 +4763,7 @@ header::after { display: none !important; }
   .pc-group-label { display: none !important; }
 
 
-  /* ── Provider Key Accordion Cards (v10.5) ───────────────────── */
+  /* ── Provider Key Accordion Cards (v10.6) ───────────────────── */
   .pka-list { display:flex; flex-direction:column; gap:6px; }
 
   .pka-card {
@@ -4848,7 +4848,7 @@ header::after { display: none !important; }
   }
 
 
-  /* ── Enterprise Quality Banner (v10.5) ──────────────────────── */
+  /* ── Enterprise Quality Banner (v10.6) ──────────────────────── */
   #_enterpriseQualityBanner {
     display: none;
     align-items: flex-start;
@@ -4890,7 +4890,7 @@ header::after { display: none !important; }
     #_eqb-cta { width:100%; justify-content:center; }
   }
 
-  /* ── Cost Indicator (v10.5) ──────────────────────────────────── */
+  /* ── Cost Indicator (v10.6) ──────────────────────────────────── */
   #_costIndicator {
     display: none;
     align-items: center;
@@ -4920,7 +4920,7 @@ header::after { display: none !important; }
     #_costIndicator { font-size: 11px; }
   }
 
-  /* ── Smart Detect Button + AI Badge (v10.5) ─────────────────── */
+  /* ── Smart Detect Button + AI Badge (v10.6) ─────────────────── */
   #_smartDetectBtn {
     display: none;
     align-items: center;
@@ -5023,7 +5023,7 @@ header::after { display: none !important; }
     #_aiDetectBadge .adb-probs { display: none; }
   }
 
-  /* ── Platform Autocomplete Field (v10.5) ───────────────────── */
+  /* ── Platform Autocomplete Field (v10.6) ───────────────────── */
   #_platFieldWrap {
     position: relative;
   }
@@ -5096,7 +5096,7 @@ header::after { display: none !important; }
   }
   .plat-option.selected .plat-opt-check { display: block; }
 
-  /* ── Left nav: hide platform cards section (v10.5) ─────────── */
+  /* ── Left nav: hide platform cards section (v10.6) ─────────── */
   .sb-group-label-platform { display: none !important; }
   .sb-group-label-domain { display: none !important; }
   #sbDomainSection { display: none !important; }
@@ -5106,7 +5106,7 @@ header::after { display: none !important; }
   #sbPlatformSection #platformNone { display: none !important; }
   /* Keep module field visible inside sbPlatformSection */
 
-  /* ── Domain chips in main form (v10.5) ──────────────────────── */
+  /* ── Domain chips in main form (v10.6) ──────────────────────── */
   #_domainFormField { margin-top: 0; }
   #_domainFormChips {
     display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
@@ -5137,7 +5137,7 @@ header::after { display: none !important; }
   }
   #_domainAutoLabel.linked { color: #059669; }
 
-  /* ── AI badge compliance + stakeholder rows (v10.5) ─────────── */
+  /* ── AI badge compliance + stakeholder rows (v10.6) ─────────── */
   #_aiDetectBadge .adb-compliance {
     display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
   }
@@ -5159,7 +5159,7 @@ header::after { display: none !important; }
   #_aiDetectBadge .adb-risk-medium { color:#D97706; }
   #_aiDetectBadge .adb-risk-low    { color:#059669; }
 
-  /* ── Module Autocomplete Field in Form (v10.5) ──────────────── */
+  /* ── Module Autocomplete Field in Form (v10.6) ──────────────── */
   #_modFieldWrap { position: relative; }
   #_modInput {
     width: 100%; padding: 9px 38px 9px 12px;
@@ -5217,7 +5217,7 @@ header::after { display: none !important; }
   /* Hide old sidebar module field when form field is active */
   #sbPlatformSection #moduleField { display: none !important; }
 
-  /* ── Sidebar Output Format + Priority pills (v10.5) ─────────── */
+  /* ── Sidebar Output Format + Priority pills (v10.6) ─────────── */
   .sb-fmt-pill {
     display: flex; align-items: center; gap: 6px;
     padding: 5px 10px; border-radius: 7px;
@@ -5265,7 +5265,7 @@ header::after { display: none !important; }
     margin-bottom: 6px;
   }
 
-  /* ── Example requirement chips (v10.5) ──────────────────────── */
+  /* ── Example requirement chips (v10.6) ──────────────────────── */
   #_exampleChips {
     display: flex; flex-wrap: wrap; gap: 6px;
     margin-top: 8px;
@@ -5291,7 +5291,7 @@ header::after { display: none !important; }
     margin-bottom: 4px; display: block;
   }
 
-  /* ── Smart Summary Bar (v10.5 Phase 2) ──────────────────────── */
+  /* ── Smart Summary Bar (v10.6 Phase 2) ──────────────────────── */
   #_smartSummaryBar {
     display: none;
     align-items: center;
@@ -5332,7 +5332,7 @@ header::after { display: none !important; }
     display: none !important;
   }
 
-  /* ── TC Refinement Bar (v10.5 Phase 2) ──────────────────────── */
+  /* ── TC Refinement Bar (v10.6 Phase 2) ──────────────────────── */
   #_refinementBar {
     display: none;
     flex-direction: column;
@@ -5403,7 +5403,7 @@ header::after { display: none !important; }
   #_refineBtn.loading .refine-spinner { display: inline-block; }
   #_refineBtn.loading .refine-btn-text { display: none; }
 
-  /* ── Progressive Disclosure (v10.5) ─────────────────────────── */
+  /* ── Progressive Disclosure (v10.6) ─────────────────────────── */
   .sb-quick-section.collapsible .sb-quick-label {
     cursor: pointer;
     display: flex;
@@ -5439,7 +5439,7 @@ header::after { display: none !important; }
     user-select: none;
   }
 
-  /* ── Readiness Indicator (v10.5) ────────────────────────────── */
+  /* ── Readiness Indicator (v10.6) ────────────────────────────── */
   #_readinessBar {
     display: flex; align-items: center; gap: 8px;
     padding: 7px 12px; border-radius: 8px;
@@ -5483,7 +5483,7 @@ header::after { display: none !important; }
   }
   .readiness-step.pending { background: var(--surface2); color: var(--text3); }
 
-  /* ── Fix 2: Hide Platform/Module/Domain until req typed (v10.5) */
+  /* ── Fix 2: Hide Platform/Module/Domain until req typed (v10.6) */
   #_formFieldsExpanded.req-pending {
     display: none;
   }
@@ -5494,9 +5494,9 @@ header::after { display: none !important; }
     display: none;
   }
   /* Smooth reveal */
-  /* #_formFieldsExpanded old rule removed v10.5 */
+  /* #_formFieldsExpanded old rule removed v10.6 */
 
-  /* ── Fix 4: Mobile scroll + layout fixes (v10.5) ─────────────── */
+  /* ── Fix 4: Mobile scroll + layout fixes (v10.6) ─────────────── */
   @media (max-width: 768px) {
     .form-body {
       grid-template-columns: 1fr !important;
@@ -5555,9 +5555,9 @@ header::after { display: none !important; }
     .hdr-subtitle { display: none !important; }
   }
 
-  /* ── Fix 2 responsive preserved (v10.5 updates above) ── */
+  /* ── Fix 2 responsive preserved (v10.6 updates above) ── */
 
-  /* ── Drag/Collapse Panels (v10.5) ───────────────────────────── */
+  /* ── Drag/Collapse Panels (v10.6) ───────────────────────────── */
   .main-grid {
     display: grid;
     grid-template-columns: var(--form-w, minmax(420px,520px)) 6px 1fr;
@@ -5566,7 +5566,7 @@ header::after { display: none !important; }
     position: relative;
   }
 
-  /* ── Drag handle — resize only (v10.5) ── */
+  /* ── Drag handle — resize only (v10.6) ── */
   #_dragHandle {
     width: 20px;
     cursor: col-resize;
@@ -5599,17 +5599,17 @@ header::after { display: none !important; }
     color: var(--indigo);
   }
 
-  /* ── Collapsed form panel (v10.5 — clean strip) ── */
+  /* ── Collapsed form panel (v10.6 — clean strip) ── */
   .main-grid.form-collapsed {
-    grid-template-columns: 1fr !important;        /* v10.5: single col, output fills */
+    grid-template-columns: 1fr !important;        /* v10.6: single col, output fills */
     align-items: start !important;
   }
   /* Hide everything in form when collapsed */
-    /* v10.5: removed — form fully hidden */
+    /* v10.6: removed — form fully hidden */
   .main-grid.form-collapsed .form-panel {
-    display: none !important;          /* v10.5: completely hidden */
+    display: none !important;          /* v10.6: completely hidden */
   }
-    /* v10.5: removed — form fully hidden */
+    /* v10.6: removed — form fully hidden */
   .main-grid.form-collapsed .form-panel .panel-header .panel-icon {
     width: 28px !important;
     height: 28px !important;
@@ -5621,7 +5621,7 @@ header::after { display: none !important; }
     margin-left: 0 !important;
   }
 
-  /* ── Collapsed output panel (v10.5 — clean strip) ── */
+  /* ── Collapsed output panel (v10.6 — clean strip) ── */
   .main-grid.output-collapsed {
     grid-template-columns: 1fr 6px 44px;
   }
@@ -5679,7 +5679,7 @@ header::after { display: none !important; }
 
   /* ── Drag handle hidden on mobile ── */
 
-  /* ── Step 1: TC counts on tabs (v10.5) ──────────────────────── */
+  /* ── Step 1: TC counts on tabs (v10.6) ──────────────────────── */
   .atab-count {
     display: none;
     font-size: 10px; font-weight: 700;
@@ -5700,7 +5700,7 @@ header::after { display: none !important; }
     color: var(--indigo);
   }
 
-  /* ── Step 2: Estimated time (v10.5) ──────────────────────────── */
+  /* ── Step 2: Estimated time (v10.6) ──────────────────────────── */
   #_genTimeEstimate {
     display: flex; align-items: center; gap: 5px;
     font-size: 11px; color: var(--text3);
@@ -5720,7 +5720,7 @@ header::after { display: none !important; }
     50%      { opacity: 1;  transform: scale(1.2); }
   }
 
-  /* ── Step 3: Shuddhi Insight card (v10.5) ───────────────────── */
+  /* ── Step 3: Shuddhi Insight card (v10.6) ───────────────────── */
   #_insightCard {
     display: none;
     margin: 12px 0;
@@ -5774,7 +5774,7 @@ header::after { display: none !important; }
   .insight-chip.edge { background:rgba(245,158,11,.07); color:#B45309; border-color:rgba(245,158,11,.2); }
   .insight-chip.comp { background:rgba(99,102,241,.07); color:var(--indigo); border-color:rgba(99,102,241,.2); }
 
-  /* ── Step 4: Workflow visualization (v10.5) ──────────────────── */
+  /* ── Step 4: Workflow visualization (v10.6) ──────────────────── */
   #_workflowViz {
     display: none;
     margin: 10px 0;
@@ -5825,7 +5825,7 @@ header::after { display: none !important; }
     margin-bottom: 6px;
   }
 
-  /* ── Step 5: Bottom stats bar (v10.5) ───────────────────────── */
+  /* ── Step 5: Bottom stats bar (v10.6) ───────────────────────── */
   #_statsBar {
     display: none !important;
     padding: 12px 20px;
@@ -5857,7 +5857,7 @@ header::after { display: none !important; }
   .stat-item.stat-saved .stat-count { color: #059669; }
   .stat-item.stat-saved .stat-label { color: #059669; opacity: .8; }
 
-  /* ── Single Column Form Layout (v10.5) ──────────────────────── */
+  /* ── Single Column Form Layout (v10.6) ──────────────────────── */
   .form-body {
     padding: 0 !important;
     display: flex !important;
@@ -5925,7 +5925,7 @@ header::after { display: none !important; }
   .upload-label { font-size: 12px !important; }
   .upload-hint  { font-size: 10px !important; }
 
-  /* ── Panel Toggle Button — Claude-style (v10.5) ─────────────── */
+  /* ── Panel Toggle Button — Claude-style (v10.6) ─────────────── */
   #_panelToggleBtn {
     display: flex;
     align-items: center;
@@ -5994,7 +5994,7 @@ header::after { display: none !important; }
   }
   #_panelToggleBtn:hover::after { opacity: 1; }
 
-  /* ── Rich Header Title (v10.5) ──────────────────────────────── */
+  /* ── Rich Header Title (v10.6) ──────────────────────────────── */
   .hdr-page-info {
     display: flex;
     flex-direction: column;
@@ -6078,7 +6078,7 @@ header::after { display: none !important; }
     .hdr-title { font-size: 13px !important; }
   }
 
-  /* ── Shuddhi QA Rich Logo (v10.5) ───────────────────────────── */
+  /* ── Shuddhi QA Rich Logo (v10.6) ───────────────────────────── */
   .sq-logo-link {
     display: flex;
     align-items: center;
@@ -6202,7 +6202,7 @@ header::after { display: none !important; }
     .sq-logo-link  { margin-right: 8px; }
   }
 
-  /* ── Integration Logo Buttons (v10.5) ──────────────────────── */
+  /* ── Integration Logo Buttons (v10.6) ──────────────────────── */
   .integration-logos {
     display: flex;
     gap: 8px;
@@ -6328,7 +6328,7 @@ header::after { display: none !important; }
     --int-icon-bg: rgba(0,120,212,.1);
   }
 
-  /* ── First-visit hint (v10.5) ────────────────────────────────── */
+  /* ── First-visit hint (v10.6) ────────────────────────────────── */
   #_firstVisitHint {
     display: none;
     align-items: flex-start;
@@ -6354,7 +6354,7 @@ header::after { display: none !important; }
   #_firstVisitHint .fvh-dismiss:hover { color: var(--text); }
   #_firstVisitHint strong { color: var(--indigo); }
 
-  /* ── Output preview hint (v10.5) ────────────────────────────── */
+  /* ── Output preview hint (v10.6) ────────────────────────────── */
   #_outputPreviewHint {
     display: flex;
     align-items: flex-start;
@@ -6392,12 +6392,12 @@ header::after { display: none !important; }
     margin-top: 4px; line-height: 1.4;
   }
 
-  /* ── Split button hidden (v10.5) — redundant with two-panel layout ── */
+  /* ── Split button hidden (v10.6) — redundant with two-panel layout ── */
   #_splitViewBtn {
     display: none !important;
   }
 
-  /* ── Form Field Spacing Fix (v10.5) ─────────────────────────── */
+  /* ── Form Field Spacing Fix (v10.6) ─────────────────────────── */
 
   /* 1. Increase gap between label and input in all .field containers */
   .field {
@@ -6451,7 +6451,7 @@ header::after { display: none !important; }
     gap: 12px !important;
   }
 
-  /* ── Auto-Demo Section (v10.5) ───────────────────────────────── */
+  /* ── Auto-Demo Section (v10.6) ───────────────────────────────── */
   .demo-section {
     padding: 0 20px 16px;
     border-bottom: 1px solid var(--border2);
@@ -6515,7 +6515,7 @@ header::after { display: none !important; }
     #_panelToggleBtn { display: none !important; }
   }
   .main-grid.form-collapsed #_dragHandle {
-    display: none !important;          /* v10.5: hide divider when form hidden */
+    display: none !important;          /* v10.6: hide divider when form hidden */
   }
   @media (max-width: 1100px) {
     #_dragHandle { display: none !important; }
@@ -6805,7 +6805,7 @@ header::after { display: none !important; }
     display: block !important;
     pointer-events: none;
   }
-  /* v10.5: full-color logos (base64 embedded) — no white filter */
+  /* v10.6: full-color logos (base64 embedded) — no white filter */
   .pc-logo-color {
     width: 100% !important;
     height: 100% !important;
@@ -7192,7 +7192,7 @@ header::after { display: none !important; }
 
   .form-actions-row { position: relative; }
 
-  /* ── v10.5: Split View ─────────────────────────────────────────────── */
+  /* ── v10.6: Split View ─────────────────────────────────────────────── */
   /* Non-split state: wrapper transparent, req pane + resizer hidden */
   #_splitViewWrap {
     display: block;           /* was: none — that hid welcome screen on launch */
@@ -7276,7 +7276,7 @@ header::after { display: none !important; }
   }
   }
 
-  /* ── v10.5: Command Palette ──────────────────────────────────────── */
+  /* ── v10.6: Command Palette ──────────────────────────────────────── */
   #_cmdPalette {
     position: fixed; inset: 0; z-index: 300040;
     display: none; align-items: flex-start;
@@ -7322,7 +7322,7 @@ header::after { display: none !important; }
   .cmd-hint { font-size: 10.5px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
   .cmd-hint-kbd { font-size: 10px; padding: 1px 5px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border2); color: var(--text3); font-family: 'DM Mono', monospace; }
 
-  /* ── v10.5: TC Quality Score bar ──────────────────────────────── */
+  /* ── v10.6: TC Quality Score bar ──────────────────────────────── */
   .tc-quality-wrap {
     display: inline-flex;
     align-items: center;
@@ -7355,7 +7355,7 @@ header::after { display: none !important; }
   .tc-quality-grade-C { color: #EF4444; }
   .tc-quality-grade-C .tc-quality-fill { background: #EF4444; }
 
-  /* ── v10.5: Celebration panel ──────────────────────────────────── */
+  /* ── v10.6: Celebration panel ──────────────────────────────────── */
   #_celebrationPanel {
     position: fixed;
     bottom: 24px;
@@ -7878,7 +7878,7 @@ header::after { display: none !important; }
     background: rgba(10,12,28,.6) !important;
   }
 
-  /* activeProviderCard removed v10.5 */
+  /* activeProviderCard removed v10.6 */
 
   /* ── Tour card on dark ── */
   [data-theme="dark"] #tourCard {
@@ -8076,7 +8076,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v10.5</span>
+      <span class="sb-badge">v10.6</span>
     </div>
 
 <div class="sb-group-label sb-group-label-domain" style="display:none">Industry Domain</div>
@@ -8167,7 +8167,7 @@ header::after { display: none !important; }
   <!-- Header -->
   <!-- New mockup-style header: page title + actions, no logo (sidebar has it) -->
   <header>
-    <!-- Panel toggle — Claude-style (v10.5) -->
+    <!-- Panel toggle — Claude-style (v10.6) -->
     <button id="_panelToggleBtn"
       onclick="_toggleFormPanel()"
       data-tip="Toggle form panel  ·  Ctrl+B"
@@ -8180,7 +8180,7 @@ header::after { display: none !important; }
       </div>
     </button>
 
-    <!-- Logo in header — Rich UI (v10.5) -->
+    <!-- Logo in header — Rich UI (v10.6) -->
     <a href="/" class="sq-logo-link" aria-label="Shuddhi QA — Home">
       <div class="sq-logo-mark">श</div>
       <div class="sq-logo-text">
@@ -8626,7 +8626,7 @@ header::after { display: none !important; }
         </div>
       </div>
 
-      <!-- Provider selector pills — 5 providers (v10.5) -->
+      <!-- Provider selector pills — 5 providers (v10.6) -->
       <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:18px" id="providerPills">
         <button class="provider-pill" id="pill-claude"   data-provider="claude"   data-tip="Claude Sonnet — best output quality, paid API required"
           data-key="CLAUDE_API_KEY" data-url="https://console.anthropic.com">
@@ -8675,7 +8675,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- ── Your Personal API Keys — Accordion Cards (v10.5) ── -->
+      <!-- ── Your Personal API Keys — Accordion Cards (v10.6) ── -->
       <div id="userKeyBody" style="display:flex;flex-direction:column;gap:10px;
            padding:16px;margin-bottom:16px;border-radius:12px;
            border:1.5px solid var(--border2);background:var(--surface);">
@@ -8835,7 +8835,7 @@ header::after { display: none !important; }
         </button>
       </div>
 
-      <!-- Active provider card removed v10.5 — provider shown via top card selection -->
+      <!-- Active provider card removed v10.6 — provider shown via top card selection -->
       <!-- claudeTestResult kept hidden for JS null-guard safety -->
       <div id="claudeTestResult" style="display:none"></div>
       <!-- Hidden ghost elements for JS null-guard safety (updateProviderUI writes to these) -->
@@ -9243,7 +9243,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v10.5</div>
+          <div class="settings-about-val" id="aboutVersion">v10.6</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -9278,20 +9278,20 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v10.5 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v10.6 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
-      <!-- v10.5 Changelog -->
+      <!-- v10.6 Changelog -->
       <div style="margin-top:14px;padding:14px 16px;border-radius:12px;
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v10.5
+          🆕 What's New in v10.6
         </div>
-        <!-- v10.5 changelog -->
+        <!-- v10.6 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v10.5 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v10.6 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
@@ -9405,7 +9405,7 @@ header::after { display: none !important; }
           <textarea id="flowDesc" oninput="updateFlowCharCount(this)" placeholder="e.g. User submits login form with email and password → system validates → redirects to dashboard&#10;&#10;Or paste a user story, acceptance criteria, Jira description, or any feature requirement — AI detects the platform and generates 40+ test cases automatically."></textarea>
         </div>
 
-        <!-- First-visit hint (v10.5) -->
+        <!-- First-visit hint (v10.6) -->
         <div id="_firstVisitHint" role="note" aria-label="Getting started tip">
           <span class="fvh-icon">💡</span>
           <span class="fvh-text">
@@ -9417,13 +9417,13 @@ header::after { display: none !important; }
           <button class="fvh-dismiss" onclick="_dismissFirstVisitHint()" title="Got it">✕</button>
         </div>
 
-        <!-- Smart Detect button (Fix 3 v10.5) — directly below textarea -->
+        <!-- Smart Detect button (Fix 3 v10.6) — directly below textarea -->
         <button id="_smartDetectBtn" onclick="_runSmartDetect()" title="AI-powered platform detection using enterprise intelligence" aria-label="Smart Detect — AI analyses your requirement to identify platform, module and domain">
           <span id="_sdb-icon">🧠</span>
           <span id="_sdb-label">Smart Detect Platform</span>
         </button>
 
-        <!-- AI Detection result badge (Fix 3 v10.5) -->
+        <!-- AI Detection result badge (Fix 3 v10.6) -->
         <div id="_aiDetectBadge">
           <div class="adb-header">
             <span class="adb-platform" id="_adb-platform"></span>
@@ -9439,7 +9439,7 @@ header::after { display: none !important; }
           <div class="adb-testing" id="_adb-testing"></div>
         </div>
 
-        <!-- Shuddhi Insight card (v10.5) — appears after Smart Detect -->
+        <!-- Shuddhi Insight card (v10.6) — appears after Smart Detect -->
         <div id="_insightCard">
           <div class="insight-header">
             <div class="insight-logo">श</div>
@@ -9451,7 +9451,7 @@ header::after { display: none !important; }
           <div class="insight-rows" id="_insightRows"></div>
         </div>
 
-        <!-- Example requirement chips (v10.5) — hidden after user types -->
+        <!-- Example requirement chips (v10.6) — hidden after user types -->
         <div id="_exampleWrap">
           <span id="_exampleLabel">Try an example:</span>
           <div id="_exampleChips" role="group" aria-label="Example requirements">
@@ -9511,7 +9511,7 @@ header::after { display: none !important; }
           <!-- Detected platform badge -->
           <div class="detect-badge" id="detectBadge"></div>
 
-          <!-- Smart Detect + AI badge moved to Column C below textarea (Fix 3 v10.5) -->
+          <!-- Smart Detect + AI badge moved to Column C below textarea (Fix 3 v10.6) -->
 
           <!-- Detected language badge -->
           <div class="lang-badge" id="langBadge">
@@ -9528,7 +9528,7 @@ header::after { display: none !important; }
             <span class="form-section-title">Fetch from Jira / ADO</span>
             <span class="form-section-badge">(optional)</span>
           </div>
-          <!-- Integration Logo Buttons (v10.5) -->
+          <!-- Integration Logo Buttons (v10.6) -->
           <div class="integration-logos">
             <!-- Jira button -->
             <button class="int-logo-btn" data-int="jira"
@@ -9633,7 +9633,7 @@ header::after { display: none !important; }
             <span class="form-step-num" data-n="4" id="_sn4"></span>
             <span class="form-section-title">Platform &amp; Module</span>
           </div>
-          <!-- Smart Summary Bar (v10.5) — shown when all 3 fields are set -->
+          <!-- Smart Summary Bar (v10.6) — shown when all 3 fields are set -->
         <div id="_smartSummaryBar" role="button" aria-label="Current selection — click to edit platform, module or domain" onclick="_ssbToggleExpand()">
           <span class="ssb-chip plat" id="_ssb-plat">—</span>
           <span style="color:var(--text3);font-size:12px">›</span>
@@ -9646,7 +9646,7 @@ header::after { display: none !important; }
         <!-- Collapsible 3-field stack -->
         <div id="_formFieldsExpanded" class="req-pending">
 
-        <!-- Platform Autocomplete Field (v10.5) -->
+        <!-- Platform Autocomplete Field (v10.6) -->
         <div class="field" id="_platFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Platform</span>
@@ -9663,7 +9663,7 @@ header::after { display: none !important; }
           </div>
         </div>
 
-        <!-- Domain Field (v10.5) — auto-links from platform + keyword detection -->
+        <!-- Domain Field (v10.6) — auto-links from platform + keyword detection -->
         <div class="field req-pending" id="_domainFormField">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span>Industry Domain</span>
@@ -9672,7 +9672,7 @@ header::after { display: none !important; }
           <div id="_domainFormChips" role="group" aria-label="Industry domain selection — choose your business domain"></div>
         </div>
 
-        <!-- Module Autocomplete Field (v10.5) — below Domain chips -->
+        <!-- Module Autocomplete Field (v10.6) — below Domain chips -->
         <div class="field" id="_modFormField" style="display:none;margin-top:4px">
           <label style="display:flex;align-items:center;gap:8px;justify-content:space-between">
             <span id="_modPlatLabel">Module</span>
@@ -9692,7 +9692,7 @@ header::after { display: none !important; }
         </div>
 
 
-        <!-- Module custom input row (v10.5) -->
+        <!-- Module custom input row (v10.6) -->
         <div id="_modCustomRow" style="display:none;margin-top:-6px;margin-bottom:4px">
           <input type="text" id="_modCustomInput"
             placeholder="Enter custom module name..."
@@ -9707,7 +9707,7 @@ header::after { display: none !important; }
         </div>
         </div><!-- end _formFieldsExpanded -->
 
-          <!-- ── Domain Context Card — v10.5 ─────────────────── -->
+          <!-- ── Domain Context Card — v10.6 ─────────────────── -->
         <div class="domain-context-card" id="domainContextCard">
           <div class="dcc-head">
             <div class="dcc-title">🧠 Shuddhi knows about this domain</div>
@@ -9788,7 +9788,7 @@ header::after { display: none !important; }
         </div>
         </div>
 
-        <!-- Enterprise quality banner (v10.5) -->
+        <!-- Enterprise quality banner (v10.6) -->
         <div id="_enterpriseQualityBanner">
           <span id="_eqb-icon">⚡</span>
           <div id="_eqb-body">
@@ -9804,7 +9804,7 @@ header::after { display: none !important; }
           <button id="_eqb-dismiss" onclick="_eqbDismiss()" title="Dismiss">✕</button>
         </div>
 
-        <!-- Readiness Indicator (v10.5) -->
+        <!-- Readiness Indicator (v10.6) -->
         <div id="_readinessBar" class="not-ready" role="status" aria-live="polite">
           <div class="readiness-dot"></div>
           <span id="_readiness-msg">Paste a requirement to get started</span>
@@ -9815,7 +9815,7 @@ header::after { display: none !important; }
           </div>
         </div>
 
-        <!-- Cost indicator moved ABOVE Generate (Fix 1 v10.5) -->
+        <!-- Cost indicator moved ABOVE Generate (Fix 1 v10.6) -->
         <div id="_costIndicator" role="status" aria-label="Estimated generation cost">
           <span>💰</span>
           <span id="_ci-label">Est. cost</span>
@@ -9845,7 +9845,7 @@ header::after { display: none !important; }
           <span id="_te-text">Est. time: 15–30s</span>
         </div>
 
-        <!-- Output preview hint (v10.5) -->
+        <!-- Output preview hint (v10.6) -->
         <div id="_outputPreviewHint" role="note">
           <span class="oph-icon">📋</span>
           <div class="oph-body">
@@ -9872,7 +9872,7 @@ header::after { display: none !important; }
       </div>
     </div>
 
-    <!-- Drag Handle (v10.5 — Claude-style) -->
+    <!-- Drag Handle (v10.6 — Claude-style) -->
     <div id="_dragHandle"
       aria-label="Drag to resize panels · Double-click to reset"
       title="Drag to resize · Double-click to reset"
@@ -9888,8 +9888,8 @@ header::after { display: none !important; }
             <span>Generated Test Artifact</span>
           </div>
           <div style="margin-left:auto;padding-right:4px;display:flex;align-items:center;gap:6px">
-            <!-- Output collapse removed v10.5 — form collapse covers this use case -->
-            <!-- Split button hidden v10.5 — two-panel layout covers this use case -->
+            <!-- Output collapse removed v10.6 — form collapse covers this use case -->
+            <!-- Split button hidden v10.6 — two-panel layout covers this use case -->
             <button id="_splitViewBtn" onclick="_toggleSplitView()"
               data-tip="Split view: requirement doc left, test cases right — for traceability"
               title="Split View"
@@ -10041,7 +10041,7 @@ header::after { display: none !important; }
       </div>
 
       <!-- Placeholder -->
-      <!-- v10.5: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
+      <!-- v10.6: Split view wrapper — #_splitViewWrap wraps req-pane + tc-pane -->
       <!-- When split is OFF, #_splitTCPane is display:contents (transparent wrapper) -->
       <!-- When split is ON,  #_splitViewWrap shows as flex row -->
       <div id="_splitViewWrap">
@@ -10066,7 +10066,7 @@ header::after { display: none !important; }
         <div class="swh-title">Test cases will appear here</div>
         <div class="swh-sub">Your requirement is loaded on the left.<br>Hit Generate to produce test cases — they'll display alongside your requirement.</div>
       </div>
-      <!-- v10.5: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
+      <!-- v10.6: Redesigned Welcome Screen — id/class preserved for JS compatibility -->
       <div class="output-placeholder" id="placeholder" style="padding:0;background:none;border:none;text-align:left;max-width:100%">
 
         <!-- Hero row -->
@@ -10239,7 +10239,7 @@ header::after { display: none !important; }
         <div class="jump-nav" id="jumpNav"></div>
       </div>
 
-      <!-- TC Refinement Bar (v10.5) -->
+      <!-- TC Refinement Bar (v10.6) -->
       <div id="_refinementBar" role="region" aria-label="Refine generated test cases">
         <div class="refine-header">
           <span>🔧</span>
@@ -10478,7 +10478,7 @@ header::after { display: none !important; }
                  border-radius:8px;font-size:12.5px;color:var(--error);line-height:1.5">
         </div>
 
-      <!-- Bottom Stats Bar (v10.5) — inside output-panel -->
+      <!-- Bottom Stats Bar (v10.6) — inside output-panel -->
       <div id="_statsBar" role="region" aria-label="Generation statistics">
         <div class="stat-item">
           <span class="stat-icon">🧪</span>
@@ -10932,16 +10932,16 @@ function _updateProviderUI(provider) {
     if (el) el.textContent = fields[id];
   });
   var statusIcon  = document.getElementById('activeKeyStatusIcon');
-  var statusLabel = null; // element removed in v10.5
+  var statusLabel = null; // element removed in v10.6
   var card        = document.getElementById('activeProviderCard');
   var dot         = document.getElementById('claudeKeyDot');
   var dotLabel    = document.getElementById('claudeKeyDotLabel');
   var hasK        = ProviderManager.hasKey(provider);
-  // Key status row removed (v10.5) — users configure own keys in Personal API Keys section above
+  // Key status row removed (v10.6) — users configure own keys in Personal API Keys section above
   if (card)        card.style.borderColor  = hasK ? 'rgba(16,185,129,.3)' : 'rgba(220,38,38,.25)';
   if (dot)         dot.style.background    = hasK ? 'var(--success,#10B981)' : 'var(--error,#EF4444)';
   if (dotLabel)    dotLabel.textContent    = meta.name || provider;
-  // v10.5 — sync provider-specific help link
+  // v10.6 — sync provider-specific help link
   var helpLink = document.getElementById('providerHelpLink');
   if (helpLink) {
     var anchor = (provider === 'claude' || provider === 'gemini' || provider === 'groq') ? provider : 'groq';
@@ -11123,7 +11123,7 @@ let priority = 'High';
 let rawMarkdown = '';
 let startTime = 0;
 
-// ── v10.5: Template Library ──────────────────────────────────────────
+// ── v10.6: Template Library ──────────────────────────────────────────
 const TEMPLATE_LIBRARY = [
   {
     id: 'tmpl-ap',
@@ -12782,7 +12782,7 @@ const GROUP_GRADIENTS = {
 
 const PLATFORM_GROUPS = ['Microsoft', 'Salesforce', 'Enterprise ERP', 'Web / Mobile'];
 
-// ── v10.5: Celebration Panel ─────────────────────────────────────────
+// ── v10.6: Celebration Panel ─────────────────────────────────────────
 function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   const panel = document.getElementById('_celebrationPanel');
   if (!panel) return;
@@ -12859,7 +12859,7 @@ function _showCelebration(tcCount, savedStr, cumStr, elapsed) {
   }, 8000);
 }
 
-// ── v10.5: TC Quality Scoring Engine ────────────────────────────────
+// ── v10.6: TC Quality Scoring Engine ────────────────────────────────
 const _VAGUE_PATTERNS = [
   /^success$/i, /^pass$/i, /^works?( fine| correctly| ok)?$/i,
   /^(the )?page loads?( successfully| correctly)?$/i,
@@ -12936,7 +12936,7 @@ function _onQualityClick(tcId, canImprove) {
   }
 }
 
-// ── v10.5: Render welcome screen template cards + init stats ─────────
+// ── v10.6: Render welcome screen template cards + init stats ─────────
 function _initWelcomeScreen() {
   // Populate template grid
   const grid = document.getElementById('welcomeTemplateGrid');
@@ -12996,7 +12996,7 @@ function renderPlatformCards() {
     const grpInfo = GROUP_ICONS[groupName] || { icon: '◈', bg: grad };
     const isOpen = gi === 0; // First group expanded by default
 
-    // v10.5: white badge groups get a subtle border for definition
+    // v10.6: white badge groups get a subtle border for definition
     const grpBg         = grpInfo.bg || grad;
     const grpBorder     = grpBg === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
     const grpIsEmbedded = grpInfo.logo && grpInfo.logo.startsWith('data:');
@@ -13024,7 +13024,7 @@ function renderPlatformCards() {
       const item = document.createElement('div');
       item.className = 'platform-card platform-list-item';
       item.dataset.value = p.value;
-      // v10.5: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
+      // v10.6: use pc-logo-color for embedded base64 images, pc-logo for CDN SVGs
       const isEmbedded  = p.logoUrl && p.logoUrl.startsWith('data:');
       const logoClass   = isEmbedded ? 'pc-logo-color' : 'pc-logo';
       const badgeBorder = p.badge === '#FFFFFF' ? 'border:1px solid #E5E7EB;' : '';
@@ -13103,7 +13103,7 @@ function renderModuleChips(platform) {
   const countEl = document.getElementById('moduleCount');
   if (!grid) return;
 
-  // v10.5: Update module section label with platform name
+  // v10.6: Update module section label with platform name
   const platLbl = document.getElementById('_modulePlatLabel');
   if (platLbl) {
     platLbl.textContent = platform ? 'Module — ' + platform : 'Module';
@@ -13112,7 +13112,7 @@ function renderModuleChips(platform) {
   grid.innerHTML = '';
   const list = modules[platform] || [];
 
-  // v10.5: If no modules for this platform, show a helpful message
+  // v10.6: If no modules for this platform, show a helpful message
   if (!list.length && platform) {
     grid.innerHTML = '<div style="font-size:11.5px;color:var(--text3);padding:8px 0">'
       + 'Type your module in the search field below</div>';
@@ -13732,7 +13732,7 @@ function detectPlatformFromText(text) {
     sfScore += hits * weight;
   });
 
-  // v10.5: extended scoring for Web/Mobile/Enterprise ERP
+  // v10.6: extended scoring for Web/Mobile/Enterprise ERP
   const _hit = (kws) => kws.reduce((s, k) => s + (lower.includes(k) ? 2 : 0), 0);
 
   const webScore    = _hit([
@@ -13764,7 +13764,7 @@ function detectPlatformFromText(text) {
   return { d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore };
 }
 
-// v10.5: auto-detect module from document text
+// v10.6: auto-detect module from document text
 function detectModuleFromText(text, platform) {
   const lower = text.toLowerCase();
   const _hit = (kws) => kws.some(k => lower.includes(k));
@@ -13807,7 +13807,7 @@ function detectModuleFromText(text, platform) {
 }
 
 function applyDetectedPlatform(d365Score, sfScore, webScore, mobileScore, sapScore, wdScore, snScore) {
-  // v10.5: default scores to 0 if called from old code path
+  // v10.6: default scores to 0 if called from old code path
   webScore    = webScore    || 0;
   mobileScore = mobileScore || 0;
   sapScore    = sapScore    || 0;
@@ -13893,7 +13893,7 @@ function detectSpecialPlatform(lower) {
     return;
   }
 
-  // v10.5: don't auto-select for mixed/ambiguous case
+  // v10.6: don't auto-select for mixed/ambiguous case
   if (platform === 'D365+Salesforce') {
     detectedPlatform = 'D365 F&O';
     selectPlatform('D365 F&O', true);  // from auto-detect
@@ -13909,7 +13909,7 @@ function detectSpecialPlatform(lower) {
   document.getElementById('platform').value = platform;
   updateModules();
 
-  // v10.5: auto-detect module from document text
+  // v10.6: auto-detect module from document text
   try {
     const _docText = extractedDocText || document.getElementById('flowDesc').value || '';
     if (_docText.length > 50) {
@@ -13928,14 +13928,14 @@ function detectSpecialPlatform(lower) {
     }
   } catch(e) { console.warn('[AutoDetect] Module detection error:', e.message); }
 
-  // v10.5: User-friendly badge with Change link
+  // v10.6: User-friendly badge with Change link
   if (badge) {
     badge.className = `detect-badge visible ${badgeClass}`;
     const _modStr = window._autoDetectedModule ? ` › ${window._autoDetectedModule}` : '';
     badge.innerHTML = `${badgeText}${_modStr} &nbsp;<span style="opacity:.7;font-size:10.5px;cursor:pointer;text-decoration:underline" onclick="document.getElementById('detectBadge').className='detect-badge';window._autoDetectedModule=null">Not right? Change ✕</span>`;
   }
 
-  // v10.5: Toast with platform + module
+  // v10.6: Toast with platform + module
   const _toastMod = window._autoDetectedModule ? ` — ${window._autoDetectedModule}` : '';
   if (typeof showToast === 'function') showToast(`✨ Auto-detected: ${platform}${_toastMod} — you can change it if needed`);
 }
@@ -14468,7 +14468,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       const errText = (err.error || err.detail || '').toString();
       const waitS   = err.waitSecs || 60;
 
-      // v10.5 FIX: server may have resolved to a different provider than what the client
+      // v10.6 FIX: server may have resolved to a different provider than what the client
       // requested (e.g. client sent provider:"gemini" but no Gemini key exists so server
       // fell back to Groq). Use err.provider (actual server provider) where available.
       const _serverProv     = (err.provider && err.provider !== provider) ? err.provider : provider;
@@ -14512,7 +14512,7 @@ async function _callProviderWithFallback(requestBody, signal) {
       if (isRateLimit) {
 
         ProviderManager._state.failed.add(provider);
-        // v10.5: also mark the actual server-used provider if it differs
+        // v10.6: also mark the actual server-used provider if it differs
         if (_serverProv !== provider) ProviderManager._state.failed.add(_serverProv);
         ProviderManager._state.switchCount++;
 
@@ -14520,7 +14520,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const minCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[provider] || 35000;
         const cooldownMs  = Math.max(apiWaitMs, minCooldown);
         ProviderManager._state.cooldown[provider] = Date.now() + cooldownMs;
-        // v10.5: also cool down the actual server provider (e.g. Groq when server fell back)
+        // v10.6: also cool down the actual server provider (e.g. Groq when server fell back)
         if (_serverProv !== provider) {
           const _spCooldown = { groq: 35000, gemini: 30000, claude: 120000 }[_serverProv] || 35000;
           ProviderManager._state.cooldown[_serverProv] = Date.now() + Math.max(apiWaitMs, _spCooldown);
@@ -14535,7 +14535,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         const isOverload    = status === 529 || errText.includes('overloaded');
         const isUnavailable = err.switchProvider === true && (errText.includes('unavailable') || errText.includes('model'));
         const isKeyIssue    = errText.includes('API key') || errText.includes('not enabled') || errText.includes('API_NOT_ENABLED') || errText.includes('invalid');
-        // v10.5: use the actual server provider name for user-facing messages
+        // v10.6: use the actual server provider name for user-facing messages
         const provName      = ProviderManager.getConfig(_serverProv).name || ProviderManager.getConfig(provider).name;
 
         let toastMsg;
@@ -14637,7 +14637,7 @@ async function _callProviderWithFallback(requestBody, signal) {
 
   if (wasTooLarge) {
 
-    // v10.5 FIX: _onlyGroq now also catches the case where the client requested
+    // v10.6 FIX: _onlyGroq now also catches the case where the client requested
     // Gemini but the server silently fell back to Groq (no Gemini key configured).
     const _serverUsedGroq = errText.toLowerCase().includes('groq') ||
       (lastErr && typeof lastErr.message === 'string' && lastErr.message.toLowerCase().includes('groq'));
@@ -14687,7 +14687,7 @@ async function generate() {
     if (stuckMs > 60000) {
       console.warn('[Generate] Detected stuck flag (>' + Math.round(stuckMs/1000) + 's) — force resetting');
       ProviderManager.endGenerate();
-      // v10.5 FIX: force-clear ALL active cooldowns so the retry has fresh providers
+      // v10.6 FIX: force-clear ALL active cooldowns so the retry has fresh providers
       // (resetSession only clears expired cooldowns, leaving stuck providers still cooling)
       Object.keys(ProviderManager._state.cooldown).forEach(p => {
         delete ProviderManager._state.cooldown[p];
@@ -14700,7 +14700,7 @@ async function generate() {
       const _gb = document.getElementById('genBtn');
       if (_gb) { _gb.classList.remove('loading'); _gb.disabled = false; }
       showToast('Previous generation timed out — retrying with fresh providers…', '⚠️');
-      // v10.5: also reset button visual state in case the queue path left it stuck loading
+      // v10.6: also reset button visual state in case the queue path left it stuck loading
       try {
         const _genBtn = document.getElementById('genBtn');
         if (_genBtn) { _genBtn.classList.remove('loading'); _genBtn.disabled = false; }
@@ -14751,12 +14751,12 @@ async function generate() {
   if (!platform) { showError('Please select a platform.'); _isGenerating = false; return; }
   if (!flow && !extractedDocText) { showError('Please describe the business flow or upload a requirement document.'); _isGenerating = false; return; }
 
-  // ── v10.5 FREE TRIAL GATE (Firebase-aware) ───────────────────
+  // ── v10.6 FREE TRIAL GATE (Firebase-aware) ───────────────────
   var _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasAnyOwnKey = (_uk.groq && _uk.groq.length > 8) ||
                       (_uk.gemini && _uk.gemini.length > 8) ||
                       (_uk.claude && _uk.claude.length > 8);
-  // v10.5: use Firebase UID to key the counter (unique per Google/Microsoft account)
+  // v10.6: use Firebase UID to key the counter (unique per Google/Microsoft account)
   // If not signed in, falls back to legacy 'shuddhi-free-uses' key (anonymous device counter)
   var _fbUid = (window._fbUser && window._fbUser.uid) ? window._fbUser.uid : null;
   var _freeKey = _fbUid ? ('shuddhi-free-uses-' + _fbUid) : 'shuddhi-free-uses';
@@ -14786,7 +14786,7 @@ async function generate() {
 
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('outputContent').className = 'output-content visible';
-  // v10.5 — Progress storytelling: live narrative loader
+  // v10.6 — Progress storytelling: live narrative loader
   window._progressSteps = [
     { icon: '🔍', msg: 'Analysing your requirement…',        minChars: 0     },
     { icon: '📋', msg: 'Identifying test scenarios…',         minChars: 50    },
@@ -14879,7 +14879,7 @@ async function generate() {
   const isWebOrMobile = ['Web App','Mobile App'].includes(platform);
 
   const outputLang = document.getElementById('outputLanguage')?.value || 'English';
-  // ── v10.5 Domain Intelligence injection ─────────────────────
+  // ── v10.6 Domain Intelligence injection ─────────────────────
   const _domainBlock = getDomainContextBlock();
   const systemPrompt_base = isWebOrMobile
     ? `▶ OUTPUT FORMAT CONTRACT — READ FIRST, FOLLOW EXACTLY:
@@ -15967,7 +15967,7 @@ Make the output production-ready and specific to ${platform}. Use real field nam
 
     const _uk = (typeof getUserKeys === 'function') ? getUserKeys() : {};
 
-    // ── v10.5 Domain Intelligence: append domain context to systemPrompt ──
+    // ── v10.6 Domain Intelligence: append domain context to systemPrompt ──
     const finalSystemPrompt = _domainBlock
       ? systemPrompt_base + '\n\n' + _domainBlock
       : systemPrompt_base;
@@ -16348,9 +16348,9 @@ let _streamRenderActive = false; // true while generate() stream is open
 
 function scheduleStreamRender() {
   if (_streamRenderTimer !== null) return; // already queued — coalesce this chunk
-  // v10.5: update progress story on each chunk (before TC content appears)
+  // v10.6: update progress story on each chunk (before TC content appears)
   if (typeof window._updateProgressStory === 'function') window._updateProgressStory();
-  // v10.5: update real-time step counter
+  // v10.6: update real-time step counter
   if (typeof window._updateStreamCounter === 'function') window._updateStreamCounter();
   _streamRenderTimer = setTimeout(_executeStreamRender, 200);
 }
@@ -16654,7 +16654,7 @@ function finalizeOutput(elapsed, platform, module) {
   const _tcCount = _tcs.length || 0;
   if (_tcCountEl) _tcCountEl.textContent = _tcCount || '?';
 
-  // v10.5: Time-saved celebration toast
+  // v10.6: Time-saved celebration toast
   try {
     const _savedMins = Math.round((_tcCount * 8)); // ~8 min per TC manual effort
     const _savedStr  = _savedMins >= 60
@@ -16665,14 +16665,14 @@ function finalizeOutput(elapsed, platform, module) {
     localStorage.setItem(_cumKey, String(_cumTotal));
       // Sync updated total to Firestore for cross-device stats
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v10.5: sync cumulative TC count to Firestore
+    // v10.6: sync cumulative TC count to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
     const _cumMins   = _cumTotal * 8;
     const _cumStr    = _cumMins >= 60
       ? Math.round(_cumMins / 60) + ' hour' + (Math.round(_cumMins/60) === 1 ? '' : 's')
       : _cumMins + ' min';
     if (_tcCount > 0) {
-      // v10.5: trigger celebration panel (replaces plain toast)
+      // v10.6: trigger celebration panel (replaces plain toast)
       setTimeout(function() {
         try { _showCelebration(_tcCount, _savedStr, _cumStr, elapsed); } catch(e) {}
       }, 400);
@@ -16682,7 +16682,7 @@ function finalizeOutput(elapsed, platform, module) {
   document.getElementById('genTime').textContent = elapsed;
   document.getElementById('metaPlatform').textContent = platform;
 
-  // ── v10.5: increment free trial counter (Firebase UID-keyed when signed in) ──
+  // ── v10.6: increment free trial counter (Firebase UID-keyed when signed in) ──
   var _ukF = (typeof getUserKeys === 'function') ? getUserKeys() : {};
   var _hasOwnKeyF = (_ukF.groq && _ukF.groq.length > 8) ||
                     (_ukF.gemini && _ukF.gemini.length > 8) ||
@@ -16696,10 +16696,10 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(e) {}
   }
   document.getElementById('metaModule').textContent = module || 'General';
-  // v10.5 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
+  // v10.6 FIX: outputLang is const-scoped to generate() — read from DOM directly in finalizeOutput
   var _outputLang = (document.getElementById('outputLanguage') || {}).value || 'English';
   document.getElementById('metaLang').textContent = _outputLang === 'English' ? (detectedLanguage + ' \u2192 EN') : ('\u2192 ' + _outputLang);
-  // v10.5 domain badge in meta-bar
+  // v10.6 domain badge in meta-bar
   (function() {
     var _mDw = document.getElementById('metaDomainWrap');
     var _mD  = document.getElementById('metaDomain');
@@ -16763,7 +16763,7 @@ function finalizeOutput(elapsed, platform, module) {
     } catch(_e) { console.warn('[Usage] Recording failed:', _e.message); }
   })();
 
-  // v10.5: Remember last session preferences (keyed by Firebase UID if available)
+  // v10.6: Remember last session preferences (keyed by Firebase UID if available)
   try {
     var _sessKey = 'shuddhi-last-session';
     if (window._fbUser && window._fbUser.uid) _sessKey = 'shuddhi-last-session-' + window._fbUser.uid;
@@ -16775,16 +16775,16 @@ function finalizeOutput(elapsed, platform, module) {
       ts: Date.now()
     };
     localStorage.setItem(_sessKey, JSON.stringify(_sessData));
-    // v10.5: sync to Firestore for cross-device consistency
+    // v10.6: sync to Firestore for cross-device consistency
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
-    // v10.5: record generation for smart suggestions pattern detection
+    // v10.6: record generation for smart suggestions pattern detection
     try {
       var _histKey = 'shuddhi-gen-history';
       var _hist = JSON.parse(localStorage.getItem(_histKey) || '[]');
       _hist.push({ platform: platform, module: module||'', format: (document.getElementById('outputFormat')||{}).value||'full', ts: Date.now() });
       if (_hist.length > 30) _hist = _hist.slice(-30); // keep last 30
       localStorage.setItem(_histKey, JSON.stringify(_hist));
-      // v10.5: sync gen history to Firestore
+      // v10.6: sync gen history to Firestore
       if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
       // Check patterns after 3+ gens
       if (_hist.length >= 3 && typeof _checkSmartSuggestions === 'function') {
@@ -16825,9 +16825,9 @@ function finalizeOutput(elapsed, platform, module) {
   if (typeof initStepsChips     === 'function') initStepsChips();
   if (typeof initBulkSelect     === 'function') initBulkSelect();
   if (typeof initPagination     === 'function') initPagination();
-  // v10.5: refresh split view left pane with requirement text after generation
+  // v10.6: refresh split view left pane with requirement text after generation
   if (typeof window._splitViewRefresh === 'function') window._splitViewRefresh();
-  // v10.5: Split button hidden — two-panel layout covers this use case
+  // v10.6: Split button hidden — two-panel layout covers this use case
   // var _sb = document.getElementById('_splitViewBtn');
   // if (_sb) { _sb.disabled = false; ... } // not needed
 
@@ -17200,7 +17200,7 @@ function exportPDF() {
 
   addPageNumber();
 
-  // Branding footer on last page (v10.5)
+  // Branding footer on last page (v10.6)
   var lastY = doc.internal.pageSize.height - 10;
   doc.setFontSize(7); doc.setTextColor(150,150,150);
   doc.text('Generated by Shuddhi QA — AI-Powered Test Intelligence | shuddhiqacloud.pages.dev | Built by Ramya, Senior QA Architect', pageW/2, lastY, {align:'center'});
@@ -17429,7 +17429,7 @@ function exportExcel() {
     XLSX.utils.book_append_sheet(wb, wsMeta, 'Metadata');
   }
 
-  // Branding sheet (v10.5)
+  // Branding sheet (v10.6)
   var brandData = [
     ['Generated by', 'Shuddhi QA — AI-Powered Test Intelligence'],
     ['URL', 'https://shuddhiqacloud.pages.dev'],
@@ -17558,7 +17558,7 @@ function loadHistory(id) {
   });
   document.getElementById('resetBtn').className = 'reset-btn visible';
 
-  // ── v10.5: Render proper TC table (not just raw markdown) ────────
+  // ── v10.6: Render proper TC table (not just raw markdown) ────────
   // This populates tgAllTCs, shows tabs, enables all features
   setTimeout(function() {
     try {
@@ -17626,7 +17626,7 @@ function toggleHistory() {
 document.addEventListener('DOMContentLoaded', () => {
   renderHistory();
   renderPlatformCards();
-  // v10.5: init welcome screen template grid + stats
+  // v10.6: init welcome screen template grid + stats
   if (typeof _initWelcomeScreen === 'function') setTimeout(_initWelcomeScreen, 100);
 
   const errEl = document.getElementById('errorMsg');
@@ -18034,7 +18034,7 @@ function syncEditedContent() {
 
 
 // ═══════════════════════════════════════════════════════════════════
-// EXPORT FUNCTIONS — v10.5 (TestRail, Gherkin, Playwright, Postman,
+// EXPORT FUNCTIONS — v10.6 (TestRail, Gherkin, Playwright, Postman,
 //                           Coverage Matrix, Export All)
 // ═══════════════════════════════════════════════════════════════════
 
@@ -18420,7 +18420,7 @@ function saveUserKey(provider, value) {
   }
 }
 
-// ── Accordion toggle for provider key cards (v10.5) ─────────────
+// ── Accordion toggle for provider key cards (v10.6) ─────────────
 function _pkaToggle(provider) {
   var card = document.getElementById('pka-card-' + provider);
   if (!card) return;
@@ -19456,7 +19456,7 @@ document.addEventListener('keydown', e => {
     closeMobileNav();
     if (document.getElementById('settingsModal')?.classList.contains('open')) closeSettings();
     if (document.getElementById('adoModal')?.classList.contains('open')) closeADOModal();
-    // v10.5: close command palette
+    // v10.6: close command palette
     if (document.getElementById('_cmdPalette')?.classList.contains('open')
         && typeof window._closeCmdPalette === 'function') window._closeCmdPalette();
   }
@@ -19513,7 +19513,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v10.5';
+  if (ver)  ver.textContent  = 'v10.6';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -20545,7 +20545,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v10.5';
+  if (version)  version.textContent  = 'v10.6';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -20640,7 +20640,7 @@ function applyProviderStatus(claudeKey,geminiKey,groqKey,activeProvider){
     ProviderManager.init({ claudeKey, geminiKey: geminiKey||false, groqKey: groqKey||false, aiProvider: activeProvider||'' });
   }
 
-  // ── v10.5: include openai + together user keys in pill status ──
+  // ── v10.6: include openai + together user keys in pill status ──
   // Read user-saved keys from localStorage for openai + together
   var _ukLS = {
     openai:   localStorage.getItem('shuddhi-user-openai-key')   || '',
@@ -20827,9 +20827,9 @@ function saveJiraSettings() {
     const email = document.getElementById('settingsJiraEmail')?.value || '';
     const token = document.getElementById('settingsJiraToken')?.value || '';
     localStorage.setItem(JIRA_LS_KEY, JSON.stringify({ url, email, token }));
-    // v10.5: TC021-BUG-02c — update status card after save
+    // v10.6: TC021-BUG-02c — update status card after save
     if (typeof checkJiraSettingsStatus === 'function') checkJiraSettingsStatus();
-    // v10.5: TC021-BUG-01 — show toast when all 3 fields are filled
+    // v10.6: TC021-BUG-01 — show toast when all 3 fields are filled
     if (url && email && token) {
       if (typeof showToast === 'function') showToast('Jira credentials saved', '🟦');
     }
@@ -20904,7 +20904,7 @@ async function testJiraConnection() {
     return;
   }
 
-  // v10.5: TC021-BUG-02a — validate URL has https:// before making network call
+  // v10.6: TC021-BUG-02a — validate URL has https:// before making network call
   if (baseUrl && !baseUrl.startsWith('https://') && !baseUrl.startsWith('http://')) {
     baseUrl = 'https://' + baseUrl;
     if (urlEl) urlEl.value = baseUrl; // auto-correct the input field too
@@ -21407,7 +21407,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v10.5</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v10.6</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -22107,7 +22107,7 @@ window.applyOutputFilter = function(filterKey) {
   if (typeof switchArtifactTab === 'function') switchArtifactTab(tabKey, tabBtn);
 };
 
-// ── v10.5: Shareable TC link via Firestore ───────────────────────
+// ── v10.6: Shareable TC link via Firestore ───────────────────────
 window.copyShareLink = async function() {
   if (!rawMarkdown || !rawMarkdown.trim()) {
     showToast('Generate test cases first before sharing', '⚠️'); return;
@@ -22123,7 +22123,7 @@ window.copyShareLink = async function() {
       module:    (document.getElementById('metaModule')   || {}).textContent || '',
       tcCount:   tgAllTCs ? tgAllTCs.length : 0,
       createdAt: new Date().toISOString(),
-      version:   'v10.5',
+      version:   'v10.6',
     };
 
     // Write to Firestore shares collection
@@ -22690,7 +22690,7 @@ window.copyShareLink = async function() {
   }
 
   
-// ── Enterprise Quality Banner (v10.5) ─────────────────────────────
+// ── Enterprise Quality Banner (v10.6) ─────────────────────────────
 // Shows when: enterprise platform selected + user does NOT have Claude key
 // Hides when: Claude key is present, or non-enterprise platform, or dismissed
 
@@ -22779,7 +22779,7 @@ function _eqbOpenSettings() {
 }
 
 
-// ── v10.5: Auto-detect platform from typed / pasted / fetched text ────────────
+// ── v10.6: Auto-detect platform from typed / pasted / fetched text ────────────
 // Covers: (1) user typing in flowDesc, (2) Jira fetch, (3) ADO fetch
 // Both Jira and ADO already dispatch 'input' on flowDesc — so ONE listener handles all.
 (function _initFlowDescAutoDetect() {
@@ -22844,7 +22844,7 @@ function _eqbOpenSettings() {
 })();
 
 
-// ── v10.5: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
+// ── v10.6: Claude Cost Indicator + Haiku/Sonnet model toggle ─────────
 var _claudeModelPref = 'sonnet'; // 'sonnet' or 'haiku'
 
 // Cost estimates per format (USD) — Sonnet vs Haiku
@@ -22958,7 +22958,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── v10.5: Smart Detect Platform (AI-powered via Groq) ───────────
+// ── v10.6: Smart Detect Platform (AI-powered via Groq) ───────────
 // Uses /api/detect endpoint with enterprise intelligence prompt
 // Completely separate from keyword detection — additive, not replacing
 
@@ -23011,7 +23011,7 @@ async function _runSmartDetect() {
     // Apply detected platform + domain to the form
     var platformKey = data.platformKey || '';
 
-    // Apply domain from Smart Detect result (v10.5: uses data.domain directly)
+    // Apply domain from Smart Detect result (v10.6: uses data.domain directly)
     if (!window._domainManuallySelected) {
       var detectedDomainFromSD = null;
       // 1. Use AI-returned domain field directly (most accurate)
@@ -23139,7 +23139,7 @@ function _renderAIBadge(data) {
     }).join('');
   }
 
-  // Compliance chips (NEW v10.5)
+  // Compliance chips (NEW v10.6)
   var compEl = document.getElementById('_adb-compliance');
   if (compEl) {
     var comps = (data.compliance || []).slice(0, 5);
@@ -23152,7 +23152,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Stakeholder chips (NEW v10.5)
+  // Stakeholder chips (NEW v10.6)
   var stakeEl = document.getElementById('_adb-stakeholder');
   if (stakeEl) {
     var stakes = (data.stakeholders || []).slice(0, 4);
@@ -23165,7 +23165,7 @@ function _renderAIBadge(data) {
     }
   }
 
-  // Risk level badge in testing row (NEW v10.5)
+  // Risk level badge in testing row (NEW v10.6)
   if (testEl) {
     var riskClass = '';
     if (data.riskLevel === 'High')   riskClass = ' adb-risk-high';
@@ -23203,7 +23203,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// ── v10.5: Domain chips in form — auto-link + keyword detection ─
+// ── v10.6: Domain chips in form — auto-link + keyword detection ─
 
 // Platform → domain auto-link map
 var _PLATFORM_DOMAIN_MAP = {
@@ -23402,7 +23402,7 @@ window.clearDomain = function() {
   });
 })();
 
-// ── v10.5: Platform Autocomplete Field ──────────────────────────
+// ── v10.6: Platform Autocomplete Field ──────────────────────────
 // Replaces left-nav platform cards with an autocomplete dropdown in-form.
 // Auto-detection (keyword + Smart Detect) fills it automatically.
 // All existing selectPlatform() / _userManuallySelectedPlatform logic preserved.
@@ -23610,7 +23610,7 @@ window.clearDomain = function() {
 })();
 
 
-// ── v10.5: Module Autocomplete Field in Form ────────────────────
+// ── v10.6: Module Autocomplete Field in Form ────────────────────
 // Replaces sidebar module chips with an in-form autocomplete dropdown.
 // Mirrors platform autocomplete UX. All existing selectModule(),
 // filterModules(), moduleGrid etc. preserved in sidebar (hidden).
@@ -23672,7 +23672,7 @@ window.clearDomain = function() {
   };
 
   window._modOnFocus = function() {
-    // v10.5: only open if user is actively focused (not programmatic)
+    // v10.6: only open if user is actively focused (not programmatic)
     var inp = document.getElementById('_modInput');
     if (!inp || inp.disabled) return;
     _modOpenDropdown(inp ? inp.value : '');
@@ -23734,7 +23734,7 @@ window.clearDomain = function() {
 
   window._modClearValue = function() {
     var inp = document.getElementById('_modInput');
-    // v10.5: removed inp.focus() — was triggering dropdown open via _modOnFocus
+    // v10.6: removed inp.focus() — was triggering dropdown open via _modOnFocus
     // on every platform change (programmatic clear should NOT open dropdown)
     if (inp) { inp.value = ''; inp.classList.remove('mod-set'); }
     var clr = document.getElementById('_modClear');
@@ -23773,11 +23773,11 @@ window.clearDomain = function() {
 
     if (platformValue) {
       var list = (typeof modules !== 'undefined') ? (modules[platformValue] || []) : [];
-      if (field) field.style.display = 'flex'; /* v10.5: flex not block — preserves .field gap */
+      if (field) field.style.display = 'flex'; /* v10.6: flex not block — preserves .field gap */
       if (inp)   { inp.disabled = false; inp.placeholder = 'Select or type a module...'; }
       if (lbl)   { lbl.textContent = list.length + ' modules available'; lbl.className = ''; }
       if (platLbl) platLbl.textContent = 'Module — ' + platformValue;
-      // v10.5: Clear previous selection WITHOUT opening dropdown
+      // v10.6: Clear previous selection WITHOUT opening dropdown
       _modClearValue();
       // Ensure dropdown stays closed after platform change
       var dd = document.getElementById('_modDropdown');
@@ -23857,7 +23857,7 @@ window._modCustomChanged = function(val) {
 };
 
 
-// ── v10.5: Sidebar Output Format + Priority quick-pickers ────────
+// ── v10.6: Sidebar Output Format + Priority quick-pickers ────────
 
 function _sbSetFormat(value) {
   // Update hidden select in form (preserves all generate() logic)
@@ -23937,7 +23937,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── v10.5: Change 1 — Auto Smart Detect silently on paste ────────
+// ── v10.6: Change 1 — Auto Smart Detect silently on paste ────────
 // Fires after user pastes/types 50+ chars and pauses 1.5s.
 // Only fires if platform NOT manually set by user.
 // Uses the same /api/detect endpoint as the manual button.
@@ -23958,7 +23958,7 @@ function _initAutoSmartDetect() {
     var exWrap = document.getElementById('_exampleWrap');
     if (exWrap) exWrap.style.display = text.trim().length > 0 ? 'none' : '';
 
-    // Fix 2 v10.5: Show Platform/Module/Domain fields once user types >= 10 chars
+    // Fix 2 v10.6: Show Platform/Module/Domain fields once user types >= 10 chars
     var hasText = text.trim().length >= 10;
     var fieldsEl = document.getElementById('_formFieldsExpanded');
     var domainEl = document.getElementById('_domainFormField');
@@ -24085,7 +24085,7 @@ async function _runAutoSmartDetect(text) {
   }
 }
 
-// ── v10.5: Change 2 — Example requirements ───────────────────────
+// ── v10.6: Change 2 — Example requirements ───────────────────────
 var _EXAMPLES = {
   d365: {
     platform: 'D365 F&O', module: 'Accounts Payable',
@@ -24141,7 +24141,7 @@ document.addEventListener('DOMContentLoaded', _initAutoSmartDetect);
 if (document.readyState !== 'loading') setTimeout(_initAutoSmartDetect, 100);
 
 
-// ── v10.5 Phase 2: Smart Summary Bar ────────────────────────────
+// ── v10.6 Phase 2: Smart Summary Bar ────────────────────────────
 // Shows compact 1-line summary when Platform+Module+Domain are set.
 // User can click to expand and edit any field.
 
@@ -24162,7 +24162,7 @@ function _ssbUpdate() {
   var hasModule   = !!(modVal  || modInp);
   var hasDomain   = !!domVal;
 
-  // v10.5: Only show summary bar when ALL 3 are properly set
+  // v10.6: Only show summary bar when ALL 3 are properly set
   // If any missing → hide bar + show full fields
   var allSet = hasPlatform && hasModule && hasDomain;
 
@@ -24251,7 +24251,7 @@ function _ssbToggleExpand() {
   });
 })();
 
-// ── v10.5 Phase 2: TC Refinement ────────────────────────────────
+// ── v10.6 Phase 2: TC Refinement ────────────────────────────────
 // Shown after generation. User can type what to fix or click a
 // suggestion chip. Calls /api/claude with original TCs + refine
 // instruction → streams back refined TCs.
@@ -24395,7 +24395,7 @@ async function _runRefinement() {
 })();
 
 
-// ── v10.5: Change A — Progressive Disclosure (sidebar sections) ──
+// ── v10.6: Change A — Progressive Disclosure (sidebar sections) ──
 function _sbToggleSection(sectionId) {
   var section   = document.getElementById(sectionId);
   var bodyId    = sectionId === 'sbFormatSection' ? 'sbFormatBody' : 'sbPriorityBody';
@@ -24406,7 +24406,7 @@ function _sbToggleSection(sectionId) {
   if (label) label.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
 }
 
-// ── v10.5: Change B — Readiness Indicator ────────────────────────
+// ── v10.6: Change B — Readiness Indicator ────────────────────────
 function _updateReadiness() {
   var bar     = document.getElementById('_readinessBar');
   var msgEl   = document.getElementById('_readiness-msg');
@@ -24489,7 +24489,7 @@ function _updateReadiness() {
   }
 })();
 
-// ── v10.5: Change C — Friendly platform descriptions ─────────────
+// ── v10.6: Change C — Friendly platform descriptions ─────────────
 var _PLATFORM_FRIENDLY = {
   'D365 F&O':        "Microsoft\u2019s enterprise finance system \u2014 AP, AR, GL, procurement",
   'D365 CRM':        "Microsoft\u2019s CRM \u2014 sales pipeline, leads, customer service",
@@ -24508,7 +24508,7 @@ var _PLATFORM_FRIENDLY = {
 };
 
 
-// ── v10.5: Draggable/Collapsible Panels ─────────────────────────
+// ── v10.6: Draggable/Collapsible Panels ─────────────────────────
 (function _initPanelResize() {
   var LS_KEY = 'shuddhi-panel-split';
   var _dragging = false;
@@ -24675,7 +24675,7 @@ var _PLATFORM_FRIENDLY = {
 
 
 // ══════════════════════════════════════════════════════════════
-// v10.5 — 5 Feature Implementations
+// v10.6 — 5 Feature Implementations
 // ══════════════════════════════════════════════════════════════
 
 // ── Step 1: TC Counts on Tabs ─────────────────────────────────
@@ -24961,12 +24961,12 @@ function _updateStatsBar() {
 })();
 
 
-// ── v10.5: Claude-style Drag Handle Collapse ─────────────────────
+// ── v10.6: Claude-style Drag Handle Collapse ─────────────────────
 // Single click on handle = collapse form (like Claude's sidebar)
 // Arrow direction on handle updates based on state
 // Clicking collapsed form strip = expand it back
 
-// v10.5: drag handle click removed — use ☰ header button instead
+// v10.6: drag handle click removed — use ☰ header button instead
 
 function _updateDragHandleArrow() {
   var handle = document.getElementById('_dragHandle');
@@ -25036,7 +25036,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// ── v10.5: Claude-style Panel Toggle Button ──────────────────────
+// ── v10.6: Claude-style Panel Toggle Button ──────────────────────
 (function _initPanelToggleBtn() {
   function _updateToggleBtn() {
     var btn  = document.getElementById('_panelToggleBtn');
@@ -25081,7 +25081,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 
-// v10.5: When domain/platform/module cleared → reset summary bar
+// v10.6: When domain/platform/module cleared → reset summary bar
 (function _watchFieldClears() {
   var _origClearDomain = window.clearDomain;
   if (typeof _origClearDomain === 'function') {
@@ -25110,7 +25110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })();
 
 
-// ── v10.5: Integration Logo Buttons ──────────────────────────────
+// ── v10.6: Integration Logo Buttons ──────────────────────────────
 var _intPanelState = { jira: false, ado: false };
 
 window._toggleIntPanel = function(type) {
@@ -25196,7 +25196,7 @@ window._toggleIntPanel = function(type) {
 })();
 
 
-// ── v10.5: First-visit hint ──────────────────────────────────────
+// ── v10.6: First-visit hint ──────────────────────────────────────
 (function _initFirstVisitHint() {
   var LS_KEY = 'shuddhi-hint-dismissed';
 
@@ -25233,7 +25233,7 @@ window._toggleIntPanel = function(type) {
 })();
 
 
-// ── v10.5: Safe marked wrapper + CDN fallback ─────────────────────
+// ── v10.6: Safe marked wrapper + CDN fallback ─────────────────────
 (function _initSafeMarked() {
 
   // Load fallback CDN if primary failed
@@ -25277,7 +25277,7 @@ window._toggleIntPanel = function(type) {
 })();
 
 
-// ── v10.5: URL template parameter ?t=template-id ─────────────────
+// ── v10.6: URL template parameter ?t=template-id ─────────────────
 (function _loadTemplateFromURL() {
   document.addEventListener('DOMContentLoaded', function() {
     try {
@@ -25300,7 +25300,7 @@ window._toggleIntPanel = function(type) {
 })();
 
 
-// ── v10.5: Auto-Demo "Try Now" ────────────────────────────────────
+// ── v10.6: Auto-Demo "Try Now" ────────────────────────────────────
 window._runAutoDemo = async function(templateId, label) {
   // Mark button as running
   var btn = document.querySelector(`[onclick*="${templateId}"]`);
@@ -25407,7 +25407,7 @@ window._runTCRegen = async function() {
 
     try {
 
-      // ── v10.5: Use same provider resolution as main generate() ────
+      // ── v10.6: Use same provider resolution as main generate() ────
       // Send only the keys the user has — proxy resolveProvider() handles fallback
       // to server Groq key. Never send a mismatched model ID for the resolved provider.
       var userKeys = (typeof getUserKeys === 'function') ? getUserKeys() : {};
@@ -26318,7 +26318,7 @@ window._runTCRegen = async function() {
 </div>
 
 <!-- ════════════════════════════════════════════════════════════
-     v10.5 CELEBRATION PANEL
+     v10.6 CELEBRATION PANEL
 ════════════════════════════════════════════════════════════ -->
 <div id="_celebrationPanel">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
@@ -27973,7 +27973,7 @@ window._runTCRegen = async function() {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// DOMAIN INTELLIGENCE — v10.5
+// DOMAIN INTELLIGENCE — v10.6
 // Safe additive feature — does not modify any existing function.
 // Injects domain context into systemPrompt as an appendix block.
 // ══════════════════════════════════════════════════════════════
@@ -28296,7 +28296,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════
-// FIREBASE AUTH — v10.5
+// FIREBASE AUTH — v10.6
 // Soft gate: anonymous → 3 free uses → sign in prompt
 //            signed in  → 10 free uses → API key prompt
 // Zero interference with existing functionality.
@@ -28591,7 +28591,7 @@ if (document.readyState !== 'loading') {
 </script>
 
 <!-- ================================================================
-     v10.5 COMMAND PALETTE
+     v10.6 COMMAND PALETTE
 ================================================================ -->
 <div id="_cmdPalette" role="dialog" aria-label="Command palette" aria-modal="true">
   <div id="_cmdPaletteBackdrop" onclick="_closeCmdPalette()"></div>
@@ -28607,12 +28607,12 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v10.5</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v10.6</span>
     </div>
   </div>
 </div>
 <script>
-// v10.5 - Keyboard Shortcuts + Command Palette
+// v10.6 - Keyboard Shortcuts + Command Palette
 (function _initShortcutsAndPalette() {
   'use strict';
 
@@ -28832,7 +28832,7 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v10.5 — Split View: Requirement Doc left, Test Cases right
+// v10.6 — Split View: Requirement Doc left, Test Cases right
 // ══════════════════════════════════════════════════════════════════════
 (function _initSplitView() {
   'use strict';
@@ -29011,10 +29011,10 @@ if (document.readyState !== 'loading') {
 
 <script>
 // ══════════════════════════════════════════════════════════════════════
-// v10.5 — Six UX Features
+// v10.6 — Six UX Features
 // ══════════════════════════════════════════════════════════════════════
 
-// ── v10.5: Bulk Regen Selected TCs ───────────────────────────────────
+// ── v10.6: Bulk Regen Selected TCs ───────────────────────────────────
 async function bulkRegenSelected() {
   if (!tgSelectedIds || tgSelectedIds.size === 0) {
     if (typeof showToast === 'function') showToast('Select test cases first, then click Regen Selected', '\u26a0\ufe0f');
@@ -29323,7 +29323,7 @@ function toggleAdvanced() {
   if (toggle) toggle.classList.toggle('open', !isOpen);
   if (icon)   icon.innerHTML = isOpen ? '&#9660;' : '&#9650;';
   try { localStorage.setItem('shuddhi-advanced-open', String(!isOpen)); } catch(e) {}
-  // v10.5: sync advanced toggle state to Firestore
+  // v10.6: sync advanced toggle state to Firestore
   if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
 }
 
@@ -29518,7 +29518,7 @@ function _dismissSuggestion(id) {
     var d = JSON.parse(localStorage.getItem(_dismissKey) || '{}');
     d[id] = Date.now();
     localStorage.setItem(_dismissKey, JSON.stringify(d));
-    // v10.5: sync dismissed suggestions to Firestore
+    // v10.6: sync dismissed suggestions to Firestore
     if (typeof window._fsWritePrefs === 'function') window._fsWritePrefs();
   } catch(e) {}
 }
@@ -29527,7 +29527,7 @@ function _dismissSuggestion(id) {
 
 <script>
 // ======================================================================
-// v10.5 — FirestorePrefs: cross-device preference sync (bugs fixed v10.5)
+// v10.6 — FirestorePrefs: cross-device preference sync (bugs fixed v10.6)
 // Syncs: lastSession, genHistory, dismissedSuggestions, advancedOpen,
 //        totalTCs, splitSeen
 // Does NOT sync: API keys, ADO/Jira tokens, free-trial counters
