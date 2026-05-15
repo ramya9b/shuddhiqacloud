@@ -3,91 +3,66 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Shuddhi QA v10.6 — AI-Powered Test Case Generator for Enterprise QA</title>
-<meta name="description" content="AI-powered test case generator with Smart Detect for D365, Salesforce, Guidewire, SAP and more. Generate 5-column QA test suites in seconds. Push directly to Azure DevOps or Jira."/>
+<title>Shuddhi QA — AI-Powered Test Case Generator for Enterprise QA</title>
+<meta name="description" content="AI-powered test case generator with Smart Detect for D365, Salesforce, Guidewire, SAP and more. Generate 5-column QA test suites in seconds. Push directly to Azure DevOps or Jira. Free with Groq.">/>
 <meta name="keywords" content="QA test cases, D365 testing, Salesforce QA, Azure DevOps, Jira Zephyr, test automation, Shuddhi QA, ERP testing, Claude AI, Google Cloud Billing"/>
 <meta name="author" content="Shuddhi QA — Made in Bengaluru"/>
-<meta property="og:type" content="website"/>
-<meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Workday, Oracle ERP, Guidewire, SAP, ServiceNow and more."/>
-<meta property="og:url" content="https://shuddhiqacloud.pages.dev/"/>
-<meta property="og:image" content="https://shuddhiqacloud.pages.dev/og-preview.png"/>
-<meta property="og:locale" content="en_IN"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Shuddhi QA — AI Test Case Generator"/>
+<meta property="og:type"        content="website"/>
+<meta property="og:title"       content="Shuddhi QA — AI Test Case Generator"/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Workday, Oracle ERP, Guidewire, SAP, ServiceNow and more. Export to ADO, Jira, Gherkin, Playwright, Postman in seconds."/>
+<meta property="og:url"         content="https://shuddhiqacloud.pages.dev/"/>
+<meta property="og:image"       content="https://shuddhiqacloud.pages.dev/og-preview.png"/>
+<meta property="og:locale"      content="en_IN"/>
+<meta name="twitter:card"        content="summary_large_image"/>
+<meta name="twitter:title"       content="Shuddhi QA — AI Test Case Generator"/>
 <meta name="twitter:description" content="D365 · Salesforce · Workday · Oracle · Guidewire · SAP · ServiceNow · Web · Mobile. Generate QA test cases in 30 seconds."/>
-<meta name="twitter:image" content="https://shuddhiqacloud.pages.dev/og-preview.png"/>
+<meta name="twitter:image"       content="https://shuddhiqacloud.pages.dev/og-preview.png"/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
-<link rel="manifest" href="/manifest.json"/>
-<meta name="theme-color" content="#5B5FEF" media="(prefers-color-scheme: light)"/>
-<meta name="theme-color" content="#0E0F1A" media="(prefers-color-scheme: dark)"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="Shuddhi QA"/>
-<meta name="msapplication-TileImage" content="/icons/icon-144x144.png"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+<!-- ── PWA ── -->
 <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png"/>
   <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
   <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#E8A020" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#0b0d13" media="(prefers-color-scheme: dark)"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Shuddhi QA"/>
+<meta name="msapplication-TileColor" content="#E8A020"/>
+<meta name="msapplication-TileImage" content="/icons/icon-144x144.png"/>
+<meta name="msapplication-config" content="none"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#F7F8FD;--bg2:#F0F2FA;--surface:#FFFFFF;--surface2:#F0F2FA;--surface3:#E8EBF7;--border:#E2E5F0;--border2:#D0D5EE;--border3:#B8C0E0;--accent:#5B5FEF;--indigo:#5B5FEF;--indigo-l:rgba(91,95,239,0.08);--indigol:#818CF8;--violet:#8B5CF6;--pink:#EC4899;--text:#0E0F1A;--text2:#525672;--text3:#9298B8;--success:#10B981;--error:#EF4444;--warning:#F59E0B;--grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);--grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);--nav-bg:rgba(255,255,255,0.94);--orb1:rgba(91,95,239,0.07);--orb2:rgba(139,92,246,0.05)}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 60% 50% at 0% 0%,rgba(91,95,239,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 45% at 100% 100%,rgba(139,92,246,0.05) 0%,transparent 55%)}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(91,95,239,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,0.025) 1px,transparent 1px);background-size:44px 44px}
-.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
-.orb-1{width:600px;height:600px;top:-200px;left:-150px;background:radial-gradient(circle,var(--orb1) 0%,transparent 70%)}
-.orb-2{width:500px;height:500px;bottom:-100px;right:-100px;background:radial-gradient(circle,var(--orb2) 0%,transparent 70%)}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.nav-logo-mark{width:36px;height:36px;border-radius:10px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;box-shadow:0 3px 12px rgba(91,95,239,.4);flex-shrink:0;transition:transform .2s}
-.nav-logo:hover .nav-logo-mark{transform:rotate(-6deg) scale(1.08)}
-.nav-logo-text{display:flex;flex-direction:column;gap:1px}
-.nav-logo-name{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.3px;display:flex;align-items:baseline;gap:3px}
-.nav-logo-name .qa{color:var(--indigo)}
-.nav-logo-tag{font-size:9.5px;font-weight:600;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
-.nav-cta{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:#fff;text-decoration:none;padding:8px 18px;border-radius:9px;background:var(--grad);transition:opacity .15s;box-shadow:0 3px 12px rgba(91,95,239,.3)}
-.nav-cta:hover{opacity:.88}
-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--surface)}
-.footer-brand{font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
-.footer-brand-mark{width:24px;height:24px;border-radius:6px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
-.footer-brand .qa{color:var(--indigo)}
-.footer-links{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.footer-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s}
-.footer-links a:hover{color:var(--indigo)}
-.footer-copy{font-size:11.5px;color:var(--text3)}
-
-
 /* ── Variables — Dark (default) ────────────────────────── */
 :root {
-  --bg:       var(--bg);
-  --bg2:      var(--bg2);
-  --surface:  var(--surface);
-  --surface2: var(--surface2);
-  --border:   rgba(91,95,239,.12);
-  --border2:  rgba(91,95,239,.22);
-  --saffron:  #5B5FEF;
-  --saffronl: #8B5CF6;
+  --bg:       #0b0d13;
+  --bg2:      #10131c;
+  --surface:  #151923;
+  --surface2: #1c2230;
+  --border:   rgba(232,162,32,.12);
+  --border2:  rgba(232,162,32,.22);
+  --saffron:  #E8A020;
+  --saffronl: #F5B840;
   --saffronD: #C4851A;
-  --teal:     #8B5CF6;
+  --teal:     #14B8A6;
   --teall:    #2DD4C4;
-  --text:     var(--text);
-  --text2:    var(--text2);
-  --text3:    var(--text3);
-  --grad:     linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#8B5CF6 100%);
-  --gradS:    linear-gradient(135deg,#5B5FEF,#C4851A);
+  --text:     #F0EDE6;
+  --text2:    #9AA3B2;
+  --text3:    #4E5A6B;
+  --grad:     linear-gradient(135deg,#E8A020 0%,#F5B840 50%,#14B8A6 100%);
+  --gradS:    linear-gradient(135deg,#E8A020,#C4851A);
   --nav-bg:   rgba(11,13,19,.85);
   --code-bg:  #080a10;
-  --orb1:     rgba(91,95,239,.07);
-  --orb2:     rgba(139,92,246,.06);
+  --orb1:     rgba(232,162,32,.07);
+  --orb2:     rgba(20,184,166,.06);
   --shadow:   0 12px 40px rgba(0,0,0,.4);
 }
 /* ── Variables — Light ─────────────────────────────────── */
@@ -110,8 +85,8 @@ html.light {
   --gradS:    linear-gradient(135deg,#B87414,#9C6010);
   --nav-bg:   rgba(250,250,247,.94);
   --code-bg:  #EAE4D6;
-  --orb1:     rgba(91,95,239,.05);
-  --orb2:     rgba(139,92,246,.04);
+  --orb1:     rgba(232,162,32,.05);
+  --orb2:     rgba(20,184,166,.04);
   --shadow:   0 8px 32px rgba(0,0,0,.10);
 }
 /* ── Theme transition ──────────────────────────────────── */
@@ -125,7 +100,7 @@ html{scroll-behavior:smooth}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:'Plus Jakarta Sans',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:15px;
   line-height:1.7;
   overflow-x:hidden;
@@ -144,7 +119,7 @@ html.light body::after { opacity:.08; }
 .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
 .orb-1{width:600px;height:600px;top:-200px;left:-150px;background:radial-gradient(circle,var(--orb1) 0%,transparent 70%)}
 .orb-2{width:500px;height:500px;bottom:-100px;right:-100px;background:radial-gradient(circle,var(--orb2) 0%,transparent 70%)}
-.orb-3{width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(91,95,239,.03) 0%,transparent 70%)}
+.orb-3{width:300px;height:300px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(232,162,32,.03) 0%,transparent 70%)}
 
 /* ── Nav ───────────────────────────────────────────────── */
 nav{
@@ -159,24 +134,24 @@ nav{
   transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .nav-logo:hover{transform:scale(1.04)}
 .nav-logo:hover .nav-logo-mark{
-  box-shadow:0 4px 20px rgba(91,95,239,.55);
+  box-shadow:0 4px 20px rgba(232,162,32,.55);
   transform:rotate(-6deg) scale(1.12);
   transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease}
 .nav-logo-mark{transition:transform .3s ease,box-shadow .3s ease}
-.nav-logo:hover .nav-brand{background:linear-gradient(90deg,var(--text) 0%,var(--indigo) 40%,var(--text) 80%);
+.nav-logo:hover .nav-brand{background:linear-gradient(90deg,var(--text) 0%,var(--saffron) 40%,var(--text) 80%);
   background-size:200%;-webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;animation:logoShimmer .6s ease forwards}
 @keyframes logoShimmer{from{background-position:100% 0}to{background-position:0 0}}
 .nav-logo-mark{
   width:36px;height:36px;border-radius:10px;
-  background:var(--grad);
+  background:var(--gradS);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:18px;font-weight:700;color:#fff;
-  box-shadow:0 4px 16px rgba(91,95,239,.3);
+  box-shadow:0 4px 16px rgba(232,162,32,.3);
 }
-.nav-brand{font-family:'Plus Jakarta Sans',serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:.3px}
-.nav-brand span{color:var(--indigo)}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.nav-brand span{color:var(--saffron)}
 .nav-brand sub{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3);margin-left:4px;vertical-align:middle;font-style:normal}
 .nav-links{display:flex;align-items:center;gap:32px}
 .nav-links a{font-size:13.5px;color:var(--text2);text-decoration:none;transition:color .15s}
@@ -205,9 +180,9 @@ section{position:relative;z-index:1}
   content:'';position:absolute;
   top:0;left:0;right:0;bottom:0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(91,95,239,.08) 0%, transparent 60%),
-    repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(91,95,239,.025) 80px),
-    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(91,95,239,.025) 80px);
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(232,162,32,.08) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(232,162,32,.025) 80px),
+    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(232,162,32,.025) 80px);
   pointer-events:none;
   pointer-events:none;
 }
@@ -220,18 +195,18 @@ section{position:relative;z-index:1}
   padding:6px 16px 6px 8px;
   border-radius:20px;
   border:1px solid var(--border2);
-  background:rgba(91,95,239,.06);
-  font-size:12px;color:var(--indigol);
+  background:rgba(232,162,32,.06);
+  font-size:12px;color:var(--saffronl);
   font-family:'JetBrains Mono',monospace;
   margin-bottom:32px;
   animation:fadeUp .6s ease both;
 }
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--indigo);animation:pulse 2s infinite}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--saffron);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* Brand name */
 .hero-title{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:clamp(52px, 8vw, 96px);
   font-weight:700;
   line-height:1.05;
@@ -247,9 +222,9 @@ section{position:relative;z-index:1}
 
 /* Devanagari subtitle */
 .hero-devanagari{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:22px;
-  color:var(--violet);
+  color:var(--saffronD);
   letter-spacing:6px;
   margin-bottom:28px;
   opacity:.7;
@@ -282,11 +257,11 @@ section{position:relative;z-index:1}
 .btn-secondary{
   padding:14px 32px;border-radius:10px;
   border:1px solid var(--border2);
-  background:rgba(91,95,239,.04);
+  background:rgba(232,162,32,.04);
   color:var(--text);font-size:15px;
   text-decoration:none;transition:all .2s;
 }
-.btn-secondary:hover{border-color:var(--indigo);color:var(--indigol);background:rgba(91,95,239,.08)}
+.btn-secondary:hover{border-color:var(--saffron);color:var(--saffronl);background:rgba(232,162,32,.08)}
 
 /* Stats row */
 .hero-stats{
@@ -296,7 +271,7 @@ section{position:relative;z-index:1}
   animation:fadeUp .7s .4s ease both;
 }
 .hero-stat-n{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:36px;font-weight:700;
   background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   line-height:1;margin-bottom:4px;
@@ -310,10 +285,10 @@ section{position:relative;z-index:1}
 .section-eye{
   font-family:'JetBrains Mono',monospace;
   font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  color:var(--indigo);margin-bottom:16px;
+  color:var(--saffron);margin-bottom:16px;
 }
 .section-title{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:clamp(32px,4vw,48px);font-weight:700;
   line-height:1.15;letter-spacing:-.8px;margin-bottom:20px;
 }
@@ -333,8 +308,8 @@ section{position:relative;z-index:1}
 .what-visual::before{
   content:'शुद्धि';
   position:absolute;right:-20px;bottom:-20px;
-  font-family:'Plus Jakarta Sans',serif;font-size:120px;
-  color:rgba(91,95,239,.04);pointer-events:none;line-height:1;
+  font-family:'Cormorant Garamond',serif;font-size:120px;
+  color:rgba(232,162,32,.04);pointer-events:none;line-height:1;
 }
 .code-block{
   background:var(--code-bg);border-radius:12px;padding:20px;
@@ -344,8 +319,8 @@ section{position:relative;z-index:1}
 .code-line{display:flex;align-items:baseline;gap:12px;padding:3px 0}
 .code-ln{color:var(--text3);width:16px;text-align:right;flex-shrink:0}
 .code-kw{color:#E879F9}
-.code-fn{color:var(--indigol)}
-.code-str{color:var(--indigol)}
+.code-fn{color:var(--teall)}
+.code-str{color:var(--saffronl)}
 .code-cmt{color:var(--text3);font-style:italic}
 .code-op{color:var(--text2)}
 
@@ -354,9 +329,9 @@ section{position:relative;z-index:1}
   padding:5px 12px;border-radius:20px;margin:4px;
   font-size:11.5px;font-family:'JetBrains Mono',monospace;
 }
-.tc-pill.e2e{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);color:var(--indigol)}
+.tc-pill.e2e{background:rgba(20,184,166,.1);border:1px solid rgba(20,184,166,.3);color:var(--teall)}
 .tc-pill.neg{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#FCA5A5}
-.tc-pill.val{background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.25);color:var(--indigol)}
+.tc-pill.val{background:rgba(232,162,32,.08);border:1px solid rgba(232,162,32,.25);color:var(--saffronl)}
 .tc-pill.int{background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);color:#C4B5FD}
 
 .what-points{display:flex;flex-direction:column;gap:32px}
@@ -366,7 +341,7 @@ section{position:relative;z-index:1}
   background:var(--surface2);border:1px solid var(--border);
   display:flex;align-items:center;justify-content:center;font-size:20px;
 }
-.what-point-title{font-family:'Plus Jakarta Sans',serif;font-size:19px;font-weight:600;margin-bottom:6px}
+.what-point-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin-bottom:6px}
 .what-point-desc{font-size:14px;color:var(--text2);line-height:1.65}
 
 /* ── FEATURES ───────────────────────────────────────────── */
@@ -384,20 +359,20 @@ section{position:relative;z-index:1}
 }
 .feat-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--grad);opacity:0;transition:opacity .25s;
+  background:var(--gradS);opacity:0;transition:opacity .25s;
 }
-.feat-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(91,95,239,.08)}
+.feat-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(232,162,32,.08)}
 .feat-card:hover::before{opacity:1}
 .feat-icon{font-size:28px;margin-bottom:16px}
-.feat-title{font-family:'Plus Jakarta Sans',serif;font-size:19px;font-weight:600;margin-bottom:8px}
+.feat-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin-bottom:8px}
 .feat-desc{font-size:13.5px;color:var(--text2);line-height:1.65}
 .feat-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
 .feat-tag{
   font-family:'JetBrains Mono',monospace;font-size:10px;
   padding:2px 8px;border-radius:6px;
-  background:rgba(91,95,239,.06);
-  border:1px solid rgba(91,95,239,.15);
-  color:var(--violet);
+  background:rgba(232,162,32,.06);
+  border:1px solid rgba(232,162,32,.15);
+  color:var(--saffronD);
 }
 
 /* ── PLATFORMS ──────────────────────────────────────────── */
@@ -410,7 +385,7 @@ section{position:relative;z-index:1}
 }
 .plat-card:hover{border-color:var(--border2);background:var(--surface2)}
 .plat-icon{font-size:28px;margin-bottom:12px}
-.plat-name{font-family:'Plus Jakarta Sans',serif;font-size:15px;font-weight:600;margin-bottom:6px}
+.plat-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;margin-bottom:6px}
 .plat-modules{font-size:11.5px;color:var(--text3);font-family:'JetBrains Mono',monospace}
 
 /* ── HOW IT WORKS ───────────────────────────────────────── */
@@ -419,7 +394,7 @@ section{position:relative;z-index:1}
 .how-steps::before{
   content:'';position:absolute;
   top:32px;left:calc(12.5% + 32px);right:calc(12.5% + 32px);
-  height:1px;background:linear-gradient(90deg,var(--indigo),var(--violet));
+  height:1px;background:linear-gradient(90deg,var(--saffron),var(--teal));
   opacity:.3;
 }
 .how-step{text-align:center;padding:0 20px;position:relative}
@@ -427,12 +402,12 @@ section{position:relative;z-index:1}
   width:64px;height:64px;border-radius:50%;
   background:var(--surface);border:2px solid var(--border2);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Plus Jakarta Sans',serif;font-size:24px;font-weight:700;
-  color:var(--indigo);margin:0 auto 20px;
+  font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;
+  color:var(--saffron);margin:0 auto 20px;
   position:relative;z-index:1;
   box-shadow:0 0 0 8px var(--bg2);
 }
-.how-step-title{font-family:'Plus Jakarta Sans',serif;font-size:17px;font-weight:600;margin-bottom:8px}
+.how-step-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;margin-bottom:8px}
 .how-step-desc{font-size:13px;color:var(--text2);line-height:1.6}
 
 /* ── SECURITY ───────────────────────────────────────────── */
@@ -447,7 +422,7 @@ section{position:relative;z-index:1}
   content:'';position:absolute;
   top:-80px;right:-80px;width:300px;height:300px;
   border-radius:50%;
-  background:radial-gradient(circle,rgba(139,92,246,.08) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(20,184,166,.08) 0%,transparent 70%);
 }
 .security-flow{display:flex;flex-direction:column;gap:12px}
 .sec-row{
@@ -456,17 +431,17 @@ section{position:relative;z-index:1}
   background:var(--bg2);border:1px solid var(--border);
   font-size:13px;font-family:'JetBrains Mono',monospace;
 }
-.sec-row.good{border-color:rgba(139,92,246,.3);background:rgba(139,92,246,.05)}
-.sec-row.good .sec-dot{background:var(--violet)}
-.sec-row.lock{border-color:rgba(91,95,239,.3);background:rgba(91,95,239,.05)}
-.sec-row.lock .sec-dot{background:var(--indigo)}
+.sec-row.good{border-color:rgba(20,184,166,.3);background:rgba(20,184,166,.05)}
+.sec-row.good .sec-dot{background:var(--teal)}
+.sec-row.lock{border-color:rgba(232,162,32,.3);background:rgba(232,162,32,.05)}
+.sec-row.lock .sec-dot{background:var(--saffron)}
 .sec-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sec-label{color:var(--text2);flex:1}
 .sec-badge{
   font-size:10px;padding:2px 8px;border-radius:6px;
-  background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);color:var(--indigol);
+  background:rgba(20,184,166,.1);border:1px solid rgba(20,184,166,.3);color:var(--teall);
 }
-.sec-badge.amber{background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.3);color:var(--indigol)}
+.sec-badge.amber{background:rgba(232,162,32,.1);border-color:rgba(232,162,32,.3);color:var(--saffronl)}
 .sec-arrow{color:var(--text3);font-size:14px;margin:0 6px}
 
 /* ── TESTIMONIAL / QUOTE ────────────────────────────────── */
@@ -480,12 +455,12 @@ section{position:relative;z-index:1}
 .quote-card::before{
   content:'"';
   position:absolute;top:-10px;left:32px;
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:180px;line-height:1;
-  color:rgba(91,95,239,.06);pointer-events:none;
+  color:rgba(232,162,32,.06);pointer-events:none;
 }
 .quote-text{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:clamp(22px,3vw,30px);font-weight:400;font-style:italic;
   line-height:1.5;color:var(--text);max-width:700px;margin:0 auto 24px;
 }
@@ -502,7 +477,7 @@ section{position:relative;z-index:1}
 }
 .cta-inner::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(91,95,239,.07) 0%,transparent 60%);
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(232,162,32,.07) 0%,transparent 60%);
   pointer-events:none;
 }
 .cta-inner .section-title{max-width:600px;margin:0 auto 16px}
@@ -527,10 +502,10 @@ footer{
   flex-wrap:wrap;gap:16px;
 }
 .footer-brand{
-  font-family:'Plus Jakarta Sans',serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:16px;font-weight:700;color:var(--text2);
 }
-.footer-brand span{color:var(--indigo)}
+.footer-brand span{color:var(--saffron)}
 .footer-copy{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace}
 
 /* ── RESPONSIVE ─────────────────────────────────────────── */
@@ -565,24 +540,24 @@ html.light .features::before { background: linear-gradient(90deg,transparent,var
 
 html.light .code-line { color: var(--text2); }
 html.light .code-kw   { color: #9333EA; }
-html.light .code-fn   { color: var(--violet); }
-html.light .code-str  { color: var(--indigol); }
+html.light .code-fn   { color: var(--teal); }
+html.light .code-str  { color: var(--saffronl); }
 html.light .code-cmt  { color: var(--text3); }
 html.light .code-op   { color: var(--text2); }
 
 html.light .sec-row          { background: var(--bg2); }
 html.light .sec-row.good     { background: rgba(13,122,110,.05); border-color: rgba(13,122,110,.25); }
 html.light .sec-row.lock     { background: rgba(180,116,20,.05); border-color: rgba(180,116,20,.25); }
-html.light .sec-badge        { background: rgba(13,122,110,.08); border-color: rgba(13,122,110,.25); color: var(--violet); }
-html.light .sec-badge.amber  { background: rgba(180,116,20,.08); border-color: rgba(180,116,20,.25); color: var(--indigol); }
+html.light .sec-badge        { background: rgba(13,122,110,.08); border-color: rgba(13,122,110,.25); color: var(--teal); }
+html.light .sec-badge.amber  { background: rgba(180,116,20,.08); border-color: rgba(180,116,20,.25); color: var(--saffronl); }
 
-html.light .tc-pill.e2e  { background: rgba(13,122,110,.08);  border-color: rgba(13,122,110,.25);  color: var(--indigol); }
+html.light .tc-pill.e2e  { background: rgba(13,122,110,.08);  border-color: rgba(13,122,110,.25);  color: var(--teall); }
 html.light .tc-pill.neg  { background: rgba(185,28,28,.07);   border-color: rgba(185,28,28,.2);    color: #B91C1C; }
-html.light .tc-pill.val  { background: rgba(180,116,20,.08);  border-color: rgba(180,116,20,.25);  color: var(--indigol); }
+html.light .tc-pill.val  { background: rgba(180,116,20,.08);  border-color: rgba(180,116,20,.25);  color: var(--saffronl); }
 html.light .tc-pill.int  { background: rgba(109,40,217,.07);  border-color: rgba(109,40,217,.2);   color: #6D28D9; }
 
-html.light .feat-tag  { background: rgba(180,116,20,.07); border-color: rgba(180,116,20,.18); color: var(--violet); }
-html.light .hero-badge{ background: rgba(180,110,20,.06); border-color: rgba(180,110,20,.2);  color: var(--indigol); }
+html.light .feat-tag  { background: rgba(180,116,20,.07); border-color: rgba(180,116,20,.18); color: var(--saffronD); }
+html.light .hero-badge{ background: rgba(180,110,20,.06); border-color: rgba(180,110,20,.2);  color: var(--saffronl); }
 
 html.light .how-num { background: var(--surface); border-color: var(--border2); box-shadow: 0 0 0 8px var(--bg2); }
 
@@ -590,7 +565,7 @@ html.light .cta-key { background: var(--surface2); border-color: var(--border); 
 
 html.light .btn-primary  { color: #FFFFFF; }
 html.light .btn-secondary{ color: var(--text); border-color: var(--border2); background: rgba(180,110,20,.04); }
-html.light .btn-secondary:hover { border-color: var(--indigo); color: var(--indigol); background: rgba(180,110,20,.08); }
+html.light .btn-secondary:hover { border-color: var(--saffron); color: var(--saffronl); background: rgba(180,110,20,.08); }
 
 html.light .nav-cta { color: #FFFFFF; }
 
@@ -601,7 +576,7 @@ html.light .what-visual::before { color: rgba(180,110,20,.05); }
 html.light .feat-card:hover { box-shadow: 0 12px 40px rgba(180,110,20,.1); }
 
 /* Light hero-devanagari */
-html.light .hero-devanagari { color: var(--violet); opacity: .85; }
+html.light .hero-devanagari { color: var(--saffronD); opacity: .85; }
 
 /* Light shadow overrides */
 html.light .nav-logo-mark { box-shadow: 0 4px 16px rgba(180,110,20,.25); }
@@ -621,7 +596,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     border-radius: 8px; padding: 7px 12px; cursor: pointer;
     color: var(--text2); font-size: 18px; transition: all .15s;
   }
-  .nav-hamburger:hover { border-color: var(--indigo); color: var(--text); }
+  .nav-hamburger:hover { border-color: var(--saffron); color: var(--text); }
   .mobile-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,.65); z-index: 500; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
@@ -640,14 +615,14 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     display: flex; align-items: center; justify-content: space-between;
     padding: 20px 20px 16px; border-bottom: 1px solid var(--border);
   }
-  .mobile-drawer-brand { font-family: 'Plus Jakarta Sans',serif; font-size: 18px; font-weight: 700; color: var(--text); }
-  .mobile-drawer-brand span { color: var(--indigo); }
+  .mobile-drawer-brand { font-family: 'Cormorant Garamond',serif; font-size: 18px; font-weight: 700; color: var(--text); }
+  .mobile-drawer-brand span { color: var(--saffron); }
   .mobile-drawer-close { background: none; border: none; cursor: pointer; color: var(--text2); font-size: 20px; padding: 4px 8px; border-radius: 6px; transition: color .15s; }
   .mobile-drawer-close:hover { color: var(--text); }
   .mobile-drawer-links { display: flex; flex-direction: column; padding: 16px 12px; gap: 4px; flex: 1; }
   .mobile-drawer-link { display: flex; align-items: center; padding: 12px 16px; border-radius: 10px; color: var(--text2); text-decoration: none; font-size: 14px; font-weight: 500; transition: all .15s; border: 1px solid transparent; }
-  .mobile-drawer-link:hover { background: rgba(91,95,239,.06); border-color: var(--border2); color: var(--text); }
-  .mobile-drawer-cta { margin: 8px 12px 20px; display: block; text-align: center; padding: 13px; border-radius: 10px; background: var(--grad); color: #fff !important; font-weight: 700; font-size: 14px; text-decoration: none; transition: opacity .15s; -webkit-text-fill-color: #fff; }
+  .mobile-drawer-link:hover { background: rgba(232,162,32,.06); border-color: var(--border2); color: var(--text); }
+  .mobile-drawer-cta { margin: 8px 12px 20px; display: block; text-align: center; padding: 13px; border-radius: 10px; background: var(--gradS); color: #fff !important; font-weight: 700; font-size: 14px; text-decoration: none; transition: opacity .15s; -webkit-text-fill-color: #fff; }
   .mobile-drawer-cta:hover { opacity: .9; }
   @media (max-width: 768px) {
     .nav-links { display: none !important; }
@@ -665,7 +640,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   }
   /* Hero stat numbers: indigo (connects to app's indigo) */
   .hero-stat-n {
-    background: linear-gradient(135deg, #5B5FEF, #8B5CF6) !important;
+    background: linear-gradient(135deg, #E8A020, #F5B840) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
@@ -695,7 +670,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   width: 100%; background: none; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 0; gap: 16px; text-align: left;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 .faq-q-text {
   font-size: 15px; font-weight: 600; color: var(--text);
@@ -705,10 +680,10 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   width: 28px; height: 28px; border-radius: 50%;
   background: var(--surface2); border: 1.5px solid var(--border2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--indigo); flex-shrink: 0;
+  font-size: 16px; color: var(--saffron); flex-shrink: 0;
   transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .2s;
 }
-.faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(91,95,239,.1); }
+.faq-item.open .faq-icon { transform: rotate(45deg); background: rgba(232,162,32,.1); }
 /* Smooth slide animation using grid-template-rows trick */
 .faq-a-wrap {
   display: grid;
@@ -734,39 +709,88 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 .faq-a code {
   background: var(--surface2); padding: 1px 6px;
   border-radius: 4px; font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px; color: var(--violet);
+  font-size: 12.5px; color: var(--teal);
 }
 @media(max-width:640px) {
   .faq { padding: 60px 0; }
   .faq-q-text { font-size: 14px; }
 }
-
-
-  #scrollTopBtn{position:fixed;bottom:28px;right:28px;width:44px;height:44px;
-    cursor:pointer;z-index:99999;opacity:0;transform:translateY(16px) scale(0.85);
-    transition:opacity .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);
-    pointer-events:none;border:none;background:none;padding:0}
-  #scrollTopBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
-  #scrollTopBtn:hover{transform:translateY(-3px) scale(1.08)}
-  #scrollTopBtn:active{transform:scale(0.95)}
-  #scrollTopBtn svg{width:44px;height:44px;display:block}
-  @media(max-width:768px){#scrollTopBtn{bottom:20px;right:16px}}
-
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shuddhi QA",
+  "description": "AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds.",
+  "url": "https://shuddhiqacloud.pages.dev",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+  "author": { "@type": "Person", "name": "Ramya", "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressCountry": "IN" } },
+  "keywords": "QA testing, D365, Salesforce, Azure DevOps, test automation, Jira, test cases"
+}
+</script>
 </head>
 <body>
-<div class="orb orb-1" aria-hidden="true"></div>
-<div class="orb orb-2" aria-hidden="true"></div>
+<a href="#main-content" 
+   style="position:absolute;top:-40px;left:8px;z-index:9999;
+          background:var(--gradS);color:#fff;padding:8px 16px;
+          border-radius:0 0 8px 8px;font-size:13px;font-weight:600;
+          transition:top .15s;text-decoration:none"
+   onfocus="this.style.top='0'"
+   onblur="this.style.top='-40px'">
+  Skip to main content
+</a>
 
+<!-- Orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
 <nav>
-  <a href="/" class="nav-logo" aria-label="Shuddhi QA Home">
+  <a href="/" class="nav-logo" aria-label="Shuddhi QA — Home">
     <div class="nav-logo-mark">श</div>
-    <div class="nav-logo-text">
-      <div class="nav-logo-name">Shuddhi<span class="qa">QA</span></div>
-      <div class="nav-logo-tag">AI Test Intelligence</div>
+    <div>
+      <div class="nav-brand"><span>Shuddhi</span> QA<sub>शुद्धि</sub></div>
     </div>
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#how">How it works</a>
+    <a href="#security">Security</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button id="themeToggle" onclick="toggleTheme()"
+      aria-label="Toggle theme"
+      style="
+        width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;
+        background:var(--surface2);position:relative;
+        border:1.5px solid var(--border2);
+        transition:background .3s, border-color .3s;
+        flex-shrink:0;
+        /* WCAG 2.5.5: 44px touch target via padding */
+        padding: 10px 0;
+        margin: -10px 0;
+        box-sizing: content-box;
+      ">
+      <span id="themeThumb" style="
+        position:absolute;top:2px;left:2px;
+        width:16px;height:16px;border-radius:50%;
+        background:var(--gradS);
+        transition:transform .3s cubic-bezier(.34,1.56,.64,1), background .3s;
+        display:flex;align-items:center;justify-content:center;
+        font-size:12px;line-height:1;
+      ">🌙</span>
+    </button>
+    <a href="/app" class="nav-cta">Get Started →</a>
+    <button class="nav-hamburger" id="navHamburger" onclick="openMobileDrawer()" aria-label="Open navigation" aria-expanded="false">☰</button>
+  </div>
   </a>
-  <a href="/app" class="nav-cta" aria-label="Launch App">Launch App →</a>
 </nav>
 
 <!-- ── HERO ─────────────────────────────────────────────── -->
@@ -775,7 +799,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by Claude · Gemini · Groq · OpenAI · Grok · v10.6 · Free to Start
+      Powered by Claude · Gemini · Groq · v10.6 · Free to Start
     </div>
 
     <h1 class="hero-title">
@@ -1067,15 +1091,15 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div style="padding:22px;display:flex;flex-direction:column;gap:14px">
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text3);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase">Platform</div>
-            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--indigol)">🌐 General Web Application → User Authentication & Authorisation</div>
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--saffronl)">🌐 General Web Application → User Authentication & Authorisation</div>
           </div>
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text3);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase">Business Flow</div>
             <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;color:var(--text2);line-height:1.65">New user visits /register, fills name + email + password. System sends verification email. User clicks link → onboarding wizard. Subsequent logins use email + password with optional 2FA OTP. Forgot Password sends reset link valid 15 minutes.</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div style="padding:4px 12px;border-radius:20px;background:rgba(232,162,32,.08);border:1px solid rgba(232,162,32,.2);font-size:11px;color:var(--indigol);font-family:'JetBrains Mono',monospace">🔴 High Priority</div>
-            <div style="padding:4px 12px;border-radius:20px;background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.2);font-size:11px;color:var(--violetl);font-family:'JetBrains Mono',monospace">QA Engineer · Dev · PO</div>
+            <div style="padding:4px 12px;border-radius:20px;background:rgba(232,162,32,.08);border:1px solid rgba(232,162,32,.2);font-size:11px;color:var(--saffronl);font-family:'JetBrains Mono',monospace">🔴 High Priority</div>
+            <div style="padding:4px 12px;border-radius:20px;background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.2);font-size:11px;color:var(--teall);font-family:'JetBrains Mono',monospace">QA Engineer · Dev · PO</div>
           </div>
         </div>
       </div>
@@ -1094,7 +1118,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           </div>
         </div>
         <div style="padding:18px">
-          <div style="font-size:11px;font-weight:700;color:var(--indigol);margin-bottom:10px;font-family:'JetBrains Mono',monospace">## 2. End-to-End Test Cases</div>
+          <div style="font-size:11px;font-weight:700;color:var(--saffronl);margin-bottom:10px;font-family:'JetBrains Mono',monospace">## 2. End-to-End Test Cases</div>
           <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border)">
             <table style="width:100%;border-collapse:collapse;font-size:11px">
               <thead><tr style="background:rgba(0,120,212,.08)">
@@ -1126,10 +1150,10 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
             </table>
           </div>
           <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
-            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--violetl);font-family:'JetBrains Mono',monospace">📊 Excel</div>
-            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--violetl);font-family:'JetBrains Mono',monospace">📄 PDF</div>
-            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--violetl);font-family:'JetBrains Mono',monospace">🔷 ADO Push</div>
-            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--violetl);font-family:'JetBrains Mono',monospace">🟦 Jira CSV</div>
+            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--teall);font-family:'JetBrains Mono',monospace">📊 Excel</div>
+            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--teall);font-family:'JetBrains Mono',monospace">📄 PDF</div>
+            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--teall);font-family:'JetBrains Mono',monospace">🔷 ADO Push</div>
+            <div style="padding:4px 10px;border-radius:6px;background:rgba(0,120,212,.08);border:1px solid rgba(0,120,212,.2);font-size:10.5px;color:var(--teall);font-family:'JetBrains Mono',monospace">🟦 Jira CSV</div>
           </div>
         </div>
       </div>
@@ -1177,10 +1201,10 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <h2 class="section-title" style="font-size:36px">Your keys stay in your browser</h2>
         <p style="color:var(--text2);font-size:15px;line-height:1.7;margin-bottom:28px">Your API keys (Groq, Gemini, Claude) are stored only in your browser's localStorage — never on our servers. ADO PAT and Jira tokens are also browser-only. The Cloudflare proxy never logs or stores your credentials.</p>
         <div style="display:flex;flex-wrap:wrap;gap:10px">
-          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--violet)">✓ API keys stored in browser localStorage only</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--violet)">✓ No eval() or new Function()</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--violet)">✓ ADO URL allowlist enforced</div>
-          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--violet)">✓ CORS restricted to Cloudflare Pages origins</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--teal)">✓ API keys stored in browser localStorage only</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--teal)">✓ No eval() or new Function()</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--teal)">✓ ADO URL allowlist enforced</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--teal)">✓ CORS restricted to Cloudflare Pages origins</div>
         </div>
       </div>
 
@@ -1359,7 +1383,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div style="color:var(--text3);font-size:13px">or</div>
         <div class="cta-key"><span>🤖</span> Claude API Key (paid)</div>
         <div style="color:var(--text3);font-size:13px">=</div>
-        <div class="cta-key" style="border-color:rgba(20,184,166,.3);color:var(--violetl)"><span>✅</span> Ready to generate</div>
+        <div class="cta-key" style="border-color:rgba(20,184,166,.3);color:var(--teall)"><span>✅</span> Ready to generate</div>
       </div>
     </div>
   </div>
@@ -1514,76 +1538,216 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 <!-- ── FOOTER ────────────────────────────────────────────── -->
 </main>
 
-
-<!-- ── v10.6 Feature Highlights ─────────────────────────────── -->
-<section class="features-v10" style="position:relative;z-index:1;padding:60px 32px;max-width:1100px;margin:0 auto">
-  <div style="text-align:center;margin-bottom:44px">
-    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--indigo-l);font-size:12px;color:var(--indigo);font-family:'JetBrains Mono',monospace;margin-bottom:14px">✦ New in v10.6</div>
-    <h2 style="font-size:clamp(24px,4vw,40px);font-weight:900;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything you need to ship better QA</h2>
-    <p style="font-size:15px;color:var(--text2);max-width:520px;margin:0 auto">Built for enterprise QA teams. Powered by the best AI models. Free to start.</p>
+<!-- ── v10.6 New Features — dark/saffron theme ─────────────── -->
+<section style="position:relative;z-index:1;padding:72px 48px;max-width:1100px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:48px">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.25);background:rgba(232,162,32,.07);font-size:12px;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:14px">✦ New in v10.6</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything new in v10.6</h2>
+    <p style="font-size:15px;color:var(--text2);max-width:500px;margin:0 auto">Domain Intelligence, Firebase Sign-In, 100 Templates, 5 AI Providers and more.</p>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px">
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">🧠</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">Domain Intelligence</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">Automatically detects your enterprise domain — D365, Salesforce, Guidewire, ServiceNow, Healthcare and more — and enriches test cases with domain-specific risk coverage and terminology.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Domain Intelligence</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">Automatically detects your enterprise domain — D365, Salesforce, Guidewire, ServiceNow, Healthcare and more — enriching test cases with domain-specific risk and terminology.</p>
     </div>
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">🎯</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">Free Trial — No Credit Card</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">3 free generations for anonymous users. Sign in with Google or Microsoft for 10 free. Share on LinkedIn to unlock unlimited access. Groq AI is always free with no API key required.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Free Trial — No Credit Card</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">3 free generations for anonymous users. Sign in with Google or Microsoft for 10 free. Share on LinkedIn to unlock unlimited. Groq is always free — no API key needed.</p>
     </div>
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">📚</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">100 Template Library</h3>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">100 Template Library</h3>
       <p style="font-size:13px;color:var(--text2);line-height:1.65">100 production-ready templates across 10 domains. D365, Salesforce, Insurance, ITSM, Healthcare, HR, API, Security and more. One click pre-fills your entire form.</p>
-      <a href="/templates" style="display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12px;font-weight:700;color:var(--indigo);text-decoration:none">Browse Templates →</a>
+      <a href="/templates" style="display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12px;font-weight:600;color:var(--saffron);text-decoration:none">Browse Templates →</a>
     </div>
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">🤖</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">5 AI Providers</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">Claude · Gemini · Groq (free) · OpenAI · Grok. Bring your own API key or use Groq at zero cost. Switch providers at any time with a single click.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">5 AI Providers</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">Claude · Gemini · Groq (free) · OpenAI · Grok. Use your own API key or Groq at zero cost. Switch providers any time with one click.</p>
     </div>
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">📊</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">Power BI &amp; Azure Synapse</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">Full support for D365 F&amp;O Power BI report validation — Open Aged Orders, financial reports, operational dashboards. Row-level security, refresh, filter and data accuracy test cases generated automatically.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Power BI &amp; Azure Synapse</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">Full D365 F&amp;O Power BI report validation — Open Aged Orders, financial dashboards, row-level security, refresh and data accuracy test cases generated automatically.</p>
     </div>
 
-    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:24px;transition:all .2s" onmouseover="this.style.borderColor='var(--indigo)';this.style.boxShadow='0 4px 24px rgba(91,95,239,.1)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">🔐</div>
-      <h3 style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px">Sign In with Google or Microsoft</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">Optional Firebase Authentication. Sign in with Google or Microsoft to sync preferences across all your devices. Your API keys never leave your browser.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">Google &amp; Microsoft Sign-In</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">Optional Firebase Authentication. Sign in with Google or Microsoft for cross-device sync. Your API keys never leave your browser.</p>
     </div>
 
   </div>
 </section>
 
 <footer>
-  <div class="footer-brand">
-    <div class="footer-brand-mark">श</div>
-    Shuddhi<span class="qa">QA</span>
+  <div class="footer-brand"><span>Shuddhi</span> QA · शुद्धि</div>
+  <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🐛 Report Issue</a>
+
+    <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
+    <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
+    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v10.6</span>
   </div>
-  <div class="footer-links">
-    <a href="/">Home</a><a href="/app">App</a><a href="/templates">Templates</a>
-    <a href="/help">Help</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
-  </div>
-  <div class="footer-copy">© 2025 Shuddhi QA · Made in Bengaluru 🇮🇳</div>
 </footer>
 
-<style>#scrollTopBtn{position:fixed;bottom:28px;right:28px;width:44px;height:44px;cursor:pointer;z-index:99999;opacity:0;transform:translateY(16px) scale(0.85);transition:opacity .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;border:none;background:none;padding:0}#scrollTopBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all}#scrollTopBtn:hover{transform:translateY(-3px) scale(1.08)}#scrollTopBtn svg{width:44px;height:44px;display:block}@media(max-width:768px){#scrollTopBtn{bottom:20px;right:16px}}</style>
-<button id="scrollTopBtn" aria-label="Scroll to top"><svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="19" fill="var(--surface)" stroke="var(--border2)" stroke-width="1.5"/><circle id="scrollProgressRing" cx="22" cy="22" r="17" fill="none" stroke="url(#sG)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="106.8" stroke-dashoffset="106.8" transform="rotate(-90 22 22)" style="transition:stroke-dashoffset .1s linear"/><path d="M22 28V16M22 16L17 21M22 16L27 21" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="sG" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5B5FEF"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient></defs></svg></button>
-<script>(function(){var b=document.getElementById('scrollTopBtn'),r=document.getElementById('scrollProgressRing');if(!b||!r)return;var C=106.8;function s(){var y=window.scrollY||0,m=(document.documentElement.scrollHeight-window.innerHeight)||1;r.style.strokeDashoffset=C*(1-Math.min(y/m,1));y>400?b.classList.add('visible'):b.classList.remove('visible');}b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});window.addEventListener('scroll',s,{passive:true});s();})();</script>
+<!-- Scroll fade-in animations -->
+<script>
+// ── Scroll fade-in ────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.feat-card, .plat-card, .how-step, .what-point').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+
+// ── Theme toggle ─────────────────────────────────────────
+const THEME_KEY = 'shuddhi-theme';
+const toggle    = document.getElementById('themeToggle');
+const thumb     = document.getElementById('themeThumb');
+const html_el   = document.documentElement;
+
+function applyTheme(theme, animate = false) {
+  // v10.6 Bug #2 fix: always set thumb position, regardless of animate flag
+  // On page load (animate=false), we want the thumb to snap to the correct
+  // position immediately without a transition. On click (animate=true), the
+  // CSS transition handles the smooth slide.
+  if (!animate) {
+    thumb.style.transition = 'none';
+  } else {
+    thumb.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), background .3s';
+  }
+  if (theme === 'light') {
+    html_el.classList.add('light');
+    thumb.style.transform = 'translateX(20px)';
+    thumb.textContent = '☀️';
+    toggle.style.background = 'var(--surface2)';
+    localStorage.setItem(THEME_KEY, 'light');
+  } else {
+    html_el.classList.remove('light');
+    thumb.style.transform = 'translateX(0)';
+    thumb.textContent = '🌙';
+    toggle.style.background = 'var(--surface2)';
+    localStorage.setItem(THEME_KEY, 'dark');
+  }
+  // Restore transition after the snap (so next click animates)
+  if (!animate) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        thumb.style.transition = 'transform .3s cubic-bezier(.34,1.56,.64,1), background .3s';
+      });
+    });
+  }
+}
+
+function toggleTheme() {
+  const isDark = !html_el.classList.contains('light');
+  applyTheme(isDark ? 'light' : 'dark', true);
+}
+
+// Load saved preference — default to dark
+const saved = localStorage.getItem(THEME_KEY) || 'dark';
+applyTheme(saved, false);
+
+// ── Keyboard shortcut: Ctrl+Shift+L ──────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'L') {
+    e.preventDefault();
+    toggleTheme();
+  }
+});
+
+function openMobileDrawer() {
+  document.getElementById('mobileOverlay').classList.add('open');
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('navHamburger').setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function toggleFaq(btn) {
+    var item = btn.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(el) {
+      el.classList.remove('open');
+      el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+  }
+
+function closeMobileDrawer() {
+  document.getElementById('mobileOverlay').classList.remove('open');
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('navHamburger').setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeMobileDrawer(); });
+
+</script>
+
+
+  <!-- Mobile nav overlay + drawer -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer" role="navigation" aria-label="Mobile navigation">
+    <div class="mobile-drawer-head">
+      <span class="mobile-drawer-brand"><span>Shuddhi</span> QA</span>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Close menu">✕</button>
+    </div>
+    <div class="mobile-drawer-links">
+      <a href="#features"  class="mobile-drawer-link" onclick="closeMobileDrawer()">✨ Features</a>
+      <a href="#platforms" class="mobile-drawer-link" onclick="closeMobileDrawer()">🧩 Platforms</a>
+      <a href="#how"       class="mobile-drawer-link" onclick="closeMobileDrawer()">⚡ How it Works</a>
+      <a href="#security"  class="mobile-drawer-link" onclick="closeMobileDrawer()">🔒 Security</a>
+          <a href="#faq" class="mobile-drawer-link" onclick="closeMobileDrawer()">❓ FAQ</a>
+    </div>
+    <a href="/app" class="mobile-drawer-cta" onclick="closeMobileDrawer()">Get Started →</a>
+  </div>
+
+<!-- Privacy banner (minimal, GDPR-aware) -->
+<div id="privacyBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--surface2);border-top:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:12.5px;color:var(--text2)">
+  <span>🍪 This site uses <strong style="color:var(--text)">localStorage</strong> only to save your theme preference. No tracking, no cookies, no analytics.</span>
+  <button onclick="document.getElementById('privacyBanner').style.display='none';localStorage.setItem('shuddhi-privacy','ok')" style="background:var(--gradS);border:none;color:#fff;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0">Got it</button>
+</div>
 <script>
 if (!localStorage.getItem('shuddhi-privacy')) {
   document.getElementById('privacyBanner').style.display = 'flex';
 }
 </script>
+<!-- ── PWA: Service Worker + Install Prompt ──────────────────────────────── -->
+<div id="pwaInstallBanner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;
+  background:linear-gradient(135deg,#1c2230,#151923);border:1px solid rgba(232,162,32,.35);
+  border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:14px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:440px;width:calc(100vw - 48px)">
+  <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#E8A020,#C4851A);
+    display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">श</div>
+  <div style="flex:1;min-width:0">
+    <div style="font-size:13px;font-weight:600;color:#F0EDE6;margin-bottom:2px">Install Shuddhi QA</div>
+    <div style="font-size:11.5px;color:#9AA3B2">Add to desktop for instant access — works offline too</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-shrink:0">
+    <button id="pwaInstallBtn" onclick="triggerPWAInstall()" style="background:linear-gradient(135deg,#E8A020,#C4851A);
+      color:#0b0d13;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">
+      Install
+    </button>
+    <button onclick="dismissPWABanner()" style="background:transparent;color:#9AA3B2;border:1px solid rgba(255,255,255,.12);
+      padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer">✕</button>
+  </div>
+</div>
+
 <script>
 // ── Service Worker Registration ───────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
@@ -1645,6 +1809,8 @@ window.addEventListener('appinstalled', () => {
   console.log('[PWA] App installed successfully');
 });
 </script>
+
+<!-- Smooth scroll polyfill for Safari < 15.4 (TC012-BUG-02) -->
 <script>
 (function(){
   if ('scrollBehavior' in document.documentElement.style) return; // native supported
@@ -1669,6 +1835,56 @@ window.addEventListener('appinstalled', () => {
       requestAnimationFrame(step);
     });
   });
+})();
+</script>
+
+<!-- ── Scroll To Top — Circular Progress Ring ─────────────────── -->
+<style>
+  #scrollTopBtn{position:fixed;bottom:28px;right:28px;width:44px;height:44px;
+    cursor:pointer;z-index:99999;opacity:0;transform:translateY(16px) scale(0.85);
+    transition:opacity .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);
+    pointer-events:none;border:none;background:none;padding:0}
+  #scrollTopBtn.visible{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+  #scrollTopBtn:hover{transform:translateY(-3px) scale(1.08)}
+  #scrollTopBtn:active{transform:scale(0.95)}
+  #scrollTopBtn svg{width:44px;height:44px;display:block}
+  @media(max-width:768px){#scrollTopBtn{bottom:20px;right:16px}}
+</style>
+<button id="scrollTopBtn" aria-label="Scroll to top" title="Back to top">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="22" cy="22" r="19" fill="var(--surface,#fff)"
+            stroke="var(--border2,rgba(91,95,239,0.2))" stroke-width="1.5"/>
+    <circle id="scrollProgressRing" cx="22" cy="22" r="17" fill="none"
+            stroke="url(#scrollGrad)" stroke-width="2.5" stroke-linecap="round"
+            stroke-dasharray="106.8" stroke-dashoffset="106.8"
+            transform="rotate(-90 22 22)"
+            style="transition:stroke-dashoffset .1s linear"/>
+    <path d="M22 28V16M22 16L17 21M22 16L27 21"
+          stroke="var(--indigo,#5B5FEF)" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <defs>
+      <linearGradient id="scrollGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#7C3AED"/>
+        <stop offset="100%" stop-color="#EC4899"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</button>
+<script>
+(function(){
+  var btn=document.getElementById('scrollTopBtn');
+  var ring=document.getElementById('scrollProgressRing');
+  if(!btn||!ring)return;
+  var C=106.8;
+  function onScroll(){
+    var y=window.scrollY||document.documentElement.scrollTop||0;
+    var max=(document.documentElement.scrollHeight-window.innerHeight)||1;
+    ring.style.strokeDashoffset=C*(1-Math.min(y/max,1));
+    y>400?btn.classList.add('visible'):btn.classList.remove('visible');
+  }
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
 })();
 </script>
 
