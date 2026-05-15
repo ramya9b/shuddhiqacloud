@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Template Library — Shuddhi QA v10.3</title>
+  <title>Template Library — Shuddhi QA v10.4</title>
   <meta name="description" content="100 ready-to-use QA test case templates for D365, Salesforce, Guidewire, ServiceNow and more">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="/manifest.json">
@@ -63,6 +63,25 @@
     .cat-count{margin-left:auto;font-size:10px;font-weight:700;background:var(--surface2);color:var(--text3);padding:2px 7px;border-radius:20px;flex-shrink:0}
     .cat-btn.active .cat-count{background:rgba(91,95,239,.15);color:var(--indigo)}
     .sidebar-divider{height:1px;background:var(--border);margin:6px 8px}
+    .filter-chip{display:none;padding:8px 8px 0}
+    .filter-chip-inner{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:var(--radius-sm);background:rgba(91,95,239,.1);border:1.5px solid rgba(91,95,239,.25)}
+    .filter-chip-lbl{font-size:12px;font-weight:700;color:var(--indigo);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .filter-chip-clear{border:none;background:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:var(--indigo);opacity:.6;line-height:1;transition:opacity .15s;font-size:14px}
+    .filter-chip-clear:hover{opacity:1}
+    .recent-section{border-top:1px solid var(--border);padding:10px 10px 12px}
+    .recent-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.09em;text-transform:uppercase;margin:0 0 8px;padding:0 4px}
+    .recent-empty{border:1.5px dashed var(--border2);border-radius:var(--radius-sm);padding:14px 10px;text-align:center}
+    .recent-empty-icon{font-size:20px;display:block;margin-bottom:5px;opacity:.5}
+    .recent-empty-text{font-size:11px;color:var(--text3);line-height:1.5}
+    .recent-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius-sm);cursor:pointer;border:1.5px solid var(--border);background:var(--surface);transition:all .15s;margin-bottom:5px}
+    .recent-item:last-child{margin-bottom:0}
+    .recent-item:hover{border-color:var(--indigo);background:rgba(91,95,239,.04)}
+    .recent-item-icon{font-size:16px;flex-shrink:0}
+    .recent-item-info{min-width:0;flex:1}
+    .recent-item-name{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .recent-item-meta{font-size:10px;color:var(--text3);margin-top:1px}
+    .recent-item-arrow{font-size:13px;color:var(--text3);flex-shrink:0;transition:transform .15s,color .15s}
+    .recent-item:hover .recent-item-arrow{transform:translateX(2px);color:var(--indigo)}
 
     /* Content */
     .content{min-width:0}
@@ -175,9 +194,14 @@
 <div class="layout">
   <aside class="sidebar">
     <div class="sidebar-head"><div class="sidebar-title">Filter by Platform</div></div>
+    <div class="filter-chip" id="filterChip">
+      <div class="filter-chip-inner">
+        <span id="chipIcon" style="font-size:14px;flex-shrink:0"></span>
+        <span class="filter-chip-lbl" id="chipLabel"></span>
+        <button class="filter-chip-clear" onclick="clearFilter()" title="Show all templates" aria-label="Clear filter">✕</button>
+      </div>
+    </div>
     <div class="sidebar-body">
-      <button class="cat-btn active" data-cat="all"         onclick="filterCat('all')"><span class="cat-icon">📋</span><span class="cat-label">All</span><span class="cat-count">100</span></button>
-      <div class="sidebar-divider"></div>
       <button class="cat-btn" data-cat="d365"        onclick="filterCat('d365')"><span class="cat-icon">🔷</span><span class="cat-label">D365 F&amp;O</span><span class="cat-count">10</span></button>
       <button class="cat-btn" data-cat="salesforce"  onclick="filterCat('salesforce')"><span class="cat-icon">☁️</span><span class="cat-label">Salesforce</span><span class="cat-count">10</span></button>
       <button class="cat-btn" data-cat="web"         onclick="filterCat('web')"><span class="cat-icon">🌐</span><span class="cat-label">Web / SaaS</span><span class="cat-count">10</span></button>
@@ -189,6 +213,14 @@
       <button class="cat-btn" data-cat="omnichannel" onclick="filterCat('omnichannel')"><span class="cat-icon">🔁</span><span class="cat-label">Omni-Channel</span><span class="cat-count">10</span></button>
       <button class="cat-btn" data-cat="api"         onclick="filterCat('api')"><span class="cat-icon">🔌</span><span class="cat-label">API &amp; Integration</span><span class="cat-count">10</span></button>
       <button class="cat-btn" data-cat="security"    onclick="filterCat('security')"><span class="cat-icon">🔒</span><span class="cat-label">Security &amp; Data</span><span class="cat-count">10</span></button>
+    </div>
+    <div class="recent-section">
+      <p class="recent-title">Recently used</p>
+      <div class="recent-empty" id="recentEmpty">
+        <span class="recent-empty-icon">⏱</span>
+        <span class="recent-empty-text">Templates you use<br>will appear here</span>
+      </div>
+      <div id="recentList"></div>
     </div>
   </aside>
 
@@ -375,6 +407,22 @@ function filterCat(cat){
   _activeCat=cat;_activeSearch='';
   document.getElementById('searchInput').value='';
   document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+  const btn=document.querySelector('.cat-btn[data-cat="'+cat+'"]');
+  const chip=document.getElementById('filterChip');
+  if(btn){
+    document.getElementById('chipIcon').textContent=btn.querySelector('.cat-icon').textContent;
+    const lbl=btn.querySelector('.cat-label').textContent;
+    const count=btn.querySelector('.cat-count').textContent;
+    document.getElementById('chipLabel').textContent=lbl+' \u00b7 '+count+' templates';
+    chip.style.display='block';
+  }
+  updateLabels();renderGrid();
+}
+function clearFilter(){
+  _activeCat='all';_activeSearch='';
+  document.getElementById('searchInput').value='';
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('filterChip').style.display='none';
   updateLabels();renderGrid();
 }
 function filterLevel(level){
@@ -384,22 +432,64 @@ function filterLevel(level){
 }
 function filterSearch(val){
   _activeSearch=val.toLowerCase().trim();_activeCat='all';
-  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat==='all'));
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('filterChip').style.display='none';
   updateLabels();renderGrid();
 }
 function updateLabels(){
   const catLabels={all:'All Templates',d365:'D365 F&O',salesforce:'Salesforce',web:'Web / SaaS',insurance:'Insurance / Guidewire',itsm:'ServiceNow / ITSM',hr:'HR / Payroll',healthcare:'Healthcare',omnichannel:'Omni-Channel',api:'API & Integration',security:'Security & Data'};
   document.getElementById('gridLabel').textContent=_activeSearch?'Search results':(catLabels[_activeCat]||_activeCat);
 }
+
+/* ── Option D: Recently Used (localStorage) ── */
+const _RECENT_KEY='shuddhi-recent-v1';
+const _MAX_RECENT=3;
+
+function _addToRecent(t){
+  let list=[];
+  try{list=JSON.parse(localStorage.getItem(_RECENT_KEY)||'[]');}catch(e){}
+  list=list.filter(r=>r.id!==t.id);
+  list.unshift({id:t.id,icon:t.icon,title:t.title,catLabel:t.catLabel||t.cat,ts:Date.now()});
+  if(list.length>_MAX_RECENT)list=list.slice(0,_MAX_RECENT);
+  try{localStorage.setItem(_RECENT_KEY,JSON.stringify(list));}catch(e){}
+  _renderRecent();
+}
+function _relTime(ts){
+  const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(d/3600000),dy=Math.floor(d/86400000);
+  if(m<1)return'just now';
+  if(m<60)return m+'m ago';
+  if(h<24)return h+'h ago';
+  if(dy===1)return'yesterday';
+  return dy+'d ago';
+}
+function _renderRecent(){
+  let list=[];
+  try{list=JSON.parse(localStorage.getItem(_RECENT_KEY)||'[]');}catch(e){}
+  const empty=document.getElementById('recentEmpty');
+  const container=document.getElementById('recentList');
+  if(!list.length){empty.style.display='block';container.innerHTML='';return;}
+  empty.style.display='none';
+  container.innerHTML=list.map(r=>`
+    <div class="recent-item" onclick="useTemplate('${r.id}')" title="Load ${r.title}">
+      <span class="recent-item-icon">${r.icon}</span>
+      <div class="recent-item-info">
+        <div class="recent-item-name">${r.title}</div>
+        <div class="recent-item-meta">${r.catLabel} \u00b7 ${_relTime(r.ts)}</div>
+      </div>
+      <span class="recent-item-arrow">\u2192</span>
+    </div>`).join('');
+}
+
 function useTemplate(id){
   const t=TMPL_DATA.find(x=>x.id===id);
   if(!t)return;
+  _addToRecent(t);
   const toast=document.getElementById('tmplToast');
-  document.getElementById('tmplToastMsg').textContent=t.title+' — loading in Shuddhi QA\u2026';
+  document.getElementById('tmplToastMsg').textContent=t.title+' \u2014 loading in Shuddhi QA\u2026';
   toast.classList.add('show');
   setTimeout(()=>{window.location.href='/?t='+encodeURIComponent(id);},850);
 }
-document.addEventListener('DOMContentLoaded',renderGrid);
+document.addEventListener('DOMContentLoaded',()=>{renderGrid();_renderRecent();});
 </script>
 </body>
 </html>
