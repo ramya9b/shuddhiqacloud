@@ -9293,6 +9293,7 @@ header::after { display: none !important; }
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
           <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v11.4 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
+            <div>🔧 <strong>Sidebar marginLeft cleanup</strong> — removed stale JS that set marginLeft: 64px on mainWrap (lines 20505, 20537). The sidebar was removed in v10.8; this aligns the JS with the existing CSS which already set margin-left: 0 !important.</div>
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
             <div>🌐 <strong>Multi-language fix</strong> — Deutsch, Español, Français and Português (BR) now generate correctly; output language injected into AI prompt</div>
             <div>🔔 <strong>Notification renderer fix</strong> — resolved pre-existing JS syntax error in notification panel hover styles</div>
