@@ -13,11 +13,11 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v11.8 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v11.9 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v11.8 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v11.9 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -108,7 +108,7 @@ if (typeof marked !== 'undefined') {
     /* Text */
     --text:        #0E0F1A;
     --text2:       #525672;
-    --text3:       #9298B8;
+    --text3:       #666F9C;
 
     /* Status */
     --success:     #10B981;
@@ -2074,7 +2074,7 @@ if (typeof marked !== 'undefined') {
     --surface: #1e2130;
     --text:    #e8eaf0;
     --text2:   #9ba3b8;
-    --text3:   #5a6080;
+    --text3:   #8288A7;
     --border:  rgba(255,255,255,.08);
     --border2: rgba(255,255,255,.14);
     --d365:    #4da6ff;
@@ -2089,7 +2089,7 @@ if (typeof marked !== 'undefined') {
     --surface: #ffffff;
     --text:    #1a1d2e;
     --text2:   #4a5068;
-    --text3:   #8a92a8;
+    --text3:   #67708A;
     --border:  rgba(0,0,0,.08);
     --border2: rgba(0,0,0,.14);
     --d365:    #0078D4;
@@ -8076,7 +8076,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v11.8</span>
+      <span class="sb-badge">v11.9</span>
     </div>
 
 <div class="sb-group-label sb-group-label-domain" style="display:none">Industry Domain</div>
@@ -9243,7 +9243,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v11.8</div>
+          <div class="settings-about-val" id="aboutVersion">v11.9</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -9278,7 +9278,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v11.8 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v11.9 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -9287,11 +9287,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v11.8
+          🆕 What's New in v11.9
         </div>
         <!-- v11.3 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v11.8 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v11.9 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🔧 <strong>Sidebar marginLeft cleanup</strong> — removed stale JS that set marginLeft: 64px on mainWrap (lines 20505, 20537). The sidebar was removed in v10.8; this aligns the JS with the existing CSS which already set margin-left: 0 !important.</div>
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
@@ -9402,7 +9402,7 @@ header::after { display: none !important; }
               onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)';this.style.background='var(--surface2)'">?</button>
           </div>
           <div class="field">
-          <label style="display:flex;align-items:center;gap:6px">What needs to be tested?<span style="font-size:10px;color:var(--text3);font-weight:400">— paste a user story, requirement or process description</span></label>
+          <label for="flowDesc" style="display:flex;align-items:center;gap:6px">What needs to be tested?<span style="font-size:10px;color:var(--text3);font-weight:400">— paste a user story, requirement or process description</span></label>
           <textarea id="flowDesc" oninput="updateFlowCharCount(this)" placeholder="e.g. User submits login form with email and password → system validates → redirects to dashboard&#10;&#10;Or paste a user story, acceptance criteria, Jira description, or any feature requirement — AI detects the platform and generates 40+ test cases automatically."></textarea>
         </div>
 
@@ -9733,11 +9733,11 @@ header::after { display: none !important; }
         </div>
         <div class="advanced-fields" id="advancedFields">
           <div class="field">
-            <label>User Roles Involved</label>
+            <label for="roles">User Roles Involved</label>
             <input type="text" id="roles" placeholder="e.g. AP Clerk, Finance Manager, Vendor, Admin" />
           </div>
           <div class="field">
-            <label>Integrations / Systems</label>
+            <label for="integrations">Integrations / Systems</label>
             <input type="text" id="integrations" placeholder="e.g. Power Automate, Azure Service Bus, Outlook" />
           </div>
         </div>
@@ -9750,7 +9750,7 @@ header::after { display: none !important; }
           </div>
         </div>
           <div class="field">
-          <label>Output Format</label>
+          <label for="outputFormat">Output Format</label>
           <select id="outputFormat" data-tip="Choose which test case sections to generate — E2E is fastest, Full covers all 8 sections">
             <option value="e2e">End to End</option>
             <option value="full">All Sections</option>
@@ -10398,7 +10398,7 @@ header::after { display: none !important; }
         <!-- Manual PAT input (shown when not in env) -->
         <div id="adoPatManualRow" style="margin-bottom:14px">
           <div class="ado-field" style="margin:0">
-            <label>Personal Access Token</label>
+            <label for="adoPatInput">Personal Access Token</label>
             <input type="password" id="adoPatInput" placeholder="Paste your ADO PAT here..."
               autocomplete="off" style="font-family:'JetBrains Mono',monospace;font-size:13px"/>
             <span class="ado-hint">Scopes needed:
@@ -10535,13 +10535,13 @@ header::after { display: none !important; }
 
           <!-- New plan name (shown only when Create New selected) -->
           <div class="ado-field" id="adoNewPlanField" style="display:none">
-            <label>New Test Plan Name</label>
+            <label for="adoNewPlanName">New Test Plan Name</label>
             <input type="text" id="adoNewPlanName" placeholder="e.g. Sprint 24 — ERP QA" />
           </div>
 
           <!-- Test Suite name -->
           <div class="ado-field">
-            <label>Test Suite Name <span class="ado-optional">(auto-filled)</span></label>
+            <label for="adoSuiteName">Test Suite Name <span class="ado-optional">(auto-filled)</span></label>
             <input type="text" id="adoSuiteName" placeholder="e.g. D365 F&O — Accounts Payable — 2026-04-19" />
             <span class="ado-hint">A new suite will be created under the selected Test Plan</span>
           </div>
@@ -10601,7 +10601,7 @@ header::after { display: none !important; }
           <!-- Area / Iteration -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div class="ado-field">
-              <label>Area Path <span class="ado-optional">(optional)</span></label>
+              <label for="adoArea">Area Path <span class="ado-optional">(optional)</span></label>
               <input type="text" id="adoArea" placeholder="MyProject\\AP Module" />
             </div>
             <div class="ado-field">
@@ -10655,15 +10655,15 @@ header::after { display: none !important; }
       </div>
       <div class="ado-fields">
         <div class="ado-field">
-          <label>Area Path <span class="ado-optional">(optional)</span></label>
+          <label for="csvArea">Area Path <span class="ado-optional">(optional)</span></label>
           <input type="text" id="csvArea" placeholder="e.g. MyProject\\AP Module" />
         </div>
         <div class="ado-field">
-          <label>Iteration Path <span class="ado-optional">(optional)</span></label>
+          <label for="csvIteration">Iteration Path <span class="ado-optional">(optional)</span></label>
           <input type="text" id="csvIteration" placeholder="e.g. MyProject\\Sprint 1" />
         </div>
         <div class="ado-field">
-          <label>Priority <span class="ado-optional">(1=Critical, 2=High, 3=Medium, 4=Low)</span></label>
+          <label for="csvPriority">Priority <span class="ado-optional">(1=Critical, 2=High, 3=Medium, 4=Low)</span></label>
           <select id="csvPriority">
             <option value="2">2 — High</option>
             <option value="1">1 — Critical</option>
@@ -18800,7 +18800,7 @@ async function initADOModal() {
           div.id = 'adoManualOrgInjected';
           div.className = 'ado-field';
           div.style.marginTop = '12px';
-          div.innerHTML = `<label>Enter Organisation Name</label>
+          div.innerHTML = `<label for="adoOrgTextInputVisible">Enter Organisation Name</label>
             <div style="display:flex;gap:8px;align-items:center">
               <input type="text" id="adoOrgTextInputVisible" placeholder="e.g. RSATwithAzure"
                 style="flex:1;background:var(--surface);border:1.5px solid var(--border2);border-radius:8px;
@@ -19514,7 +19514,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v11.8';
+  if (ver)  ver.textContent  = 'v11.9';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -20546,7 +20546,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v11.8';
+  if (version)  version.textContent  = 'v11.9';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -21408,7 +21408,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v11.8</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v11.9</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -22124,7 +22124,7 @@ window.copyShareLink = async function() {
       module:    (document.getElementById('metaModule')   || {}).textContent || '',
       tcCount:   tgAllTCs ? tgAllTCs.length : 0,
       createdAt: new Date().toISOString(),
-      version:   'v11.8',
+      version:   'v11.9',
     };
 
     // Write to Firestore shares collection
@@ -22615,7 +22615,7 @@ window.copyShareLink = async function() {
         '<div class="regen-tc-title" id="regenTcTitle"></div>' +
         '<div class="regen-tc-steps" id="regenTcSteps"></div>' +
       '</div>' +
-      '<label style="font-size:12px;font-weight:700;color:var(--text2);display:block;margin-bottom:6px">Additional context <span style="font-weight:400;color:var(--text3)">(optional)</span></label>' +
+      '<label for="tcRegenContext" style="font-size:12px;font-weight:700;color:var(--text2);display:block;margin-bottom:6px">Additional context <span style="font-weight:400;color:var(--text3)">(optional)</span></label>' +
       '<textarea id="tcRegenContext" placeholder="e.g. Focus on boundary conditions, add negative scenarios, improve step detail..."></textarea>' +
       '<div class="regen-actions">' +
         '<button class="regen-cancel-btn" onclick="_closeRegenModal()">Cancel</button>' +
@@ -28715,7 +28715,7 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v11.8</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v11.9</span>
     </div>
   </div>
 </div>

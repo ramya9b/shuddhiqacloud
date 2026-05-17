@@ -5,7 +5,7 @@
 //   • HTML pages     → Network First (always latest, fallback to cache)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const VERSION       = 'shuddhi-qa-v11.8';
+const VERSION       = 'shuddhi-qa-v11.9';
 const STATIC_CACHE  = `${VERSION}-static`;
 const API_CACHE     = `${VERSION}-api`;
 const ALL_CACHES    = [STATIC_CACHE, API_CACHE];
