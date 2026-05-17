@@ -4,7 +4,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [assets]
 directory = "."
-# drop-extension: /app → serves app.html, /app.html → 301 to /app
+# auto-trailing-slash: requests for /app serve app.html; /app.html redirects 307 to /app
 # This prevents redirect loops with _redirects rules
-html_handling = "drop-extension"
+html_handling = "auto-trailing-slash"
 not_found_handling = "404-page"

@@ -13,17 +13,17 @@
 <link rel="dns-prefetch" href="https://api.groq.com"/>
 <!-- Prefetch marked.js from CDN -->
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" as="script"/>
-<title>Shuddhi QA v12.0 — AI-Powered Test Intelligence for Enterprise Platforms</title>
+<title>Shuddhi QA v12.1 — AI-Powered Test Intelligence for Enterprise Platforms</title>
 <meta name="description" content="AI-powered QA test case generator for Microsoft Dynamics 365, Salesforce, General Web Apps and Mobile. Generate, edit and export test suites to Azure DevOps or Jira in seconds."/>
 <meta name="keywords" content="QA test case generator, D365 testing, Salesforce QA, Azure DevOps test plans, Jira Zephyr, test automation"/>
 <meta property="og:title" content="Shuddhi QA — AI Test Case Generator"/>
-<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v12.0 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
+<meta property="og:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile. Export to Excel, PDF, ADO or Jira. v12.1 — Domain Intelligence + Multi-language Fix + Firebase Auth."/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://shuddhi-qa.vercel.app/og-preview.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Shuddhi QA — AI Test Case Generator"/>
 <meta name="twitter:description" content="Generate production-ready QA test cases for D365, Salesforce, Web Apps and Mobile."/>
-<link rel="canonical" href="https://shuddhiqacloud.pages.dev/app.html"/>
+<link rel="canonical" href="https://shuddhiqacloud.pages.dev/app"/>
 
 <!-- ── PWA ── -->
 <link rel="manifest" href="/manifest.json"/>
@@ -8076,7 +8076,7 @@ header::after { display: none !important; }
     <div class="sb-group-label">Test Management</div>
     <div class="sb-item active">
       <span class="sb-icon">✦</span><span>Generate Test Cases</span>
-      <span class="sb-badge">v12.0</span>
+      <span class="sb-badge">v12.1</span>
     </div>
 
 <div class="sb-group-label sb-group-label-domain" style="display:none">Industry Domain</div>
@@ -9243,7 +9243,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">📦</div>
           <div class="settings-about-label">Version</div>
-          <div class="settings-about-val" id="aboutVersion">v12.0</div>
+          <div class="settings-about-val" id="aboutVersion">v12.1</div>
         </div>
         <div class="settings-about-card">
           <div class="settings-about-icon">🌐</div>
@@ -9278,7 +9278,7 @@ header::after { display: none !important; }
         <div class="settings-about-card">
           <div class="settings-about-icon">🆕</div>
           <div class="settings-about-label">What's New</div>
-          <div class="settings-about-val" style="color:var(--indigo)">v12.0 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div class="settings-about-val" style="color:var(--indigo)">v12.1 — Domain Intelligence + Language Fix + Firebase Auth</div>
         </div>
       </div>
 
@@ -9287,11 +9287,11 @@ header::after { display: none !important; }
                   background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2)">
         <div style="font-size:11px;font-weight:700;color:var(--indigo);
                     text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">
-          🆕 What's New in v12.0
+          🆕 What's New in v12.1
         </div>
         <!-- v11.3 changelog -->
         <div style="margin-bottom:12px;padding:10px 12px;background:rgba(91,95,239,0.06);border-radius:8px;border-left:3px solid var(--indigo)">
-          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v12.0 — Domain Intelligence + Language Fix + Firebase Auth</div>
+          <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--indigo);margin-bottom:6px;font-weight:700">v12.1 — Domain Intelligence + Language Fix + Firebase Auth</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8">
             <div>🔧 <strong>Sidebar marginLeft cleanup</strong> — removed stale JS that set marginLeft: 64px on mainWrap (lines 20505, 20537). The sidebar was removed in v10.8; this aligns the JS with the existing CSS which already set margin-left: 0 !important.</div>
             <div>🏢 <strong>Industry Domain Intelligence</strong> — select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware test cases with business risk tagging</div>
@@ -19514,7 +19514,7 @@ function downloadADOCSV() {
 function _populateAboutStatusFallback() {
   const ver = document.getElementById('aboutVersion');
   const prov = document.getElementById('aboutProvider');
-  if (ver)  ver.textContent  = 'v12.0';
+  if (ver)  ver.textContent  = 'v12.1';
   if (prov) prov.textContent = (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : '—');
 
   try { if (typeof runProviderDiagnostics === 'function') runProviderDiagnostics(); }
@@ -20546,7 +20546,7 @@ function closeMobileSidebar(){
 function populateAboutStatus() {
   var version  = document.getElementById('aboutVersion');
   var provider = document.getElementById('aboutProvider');
-  if (version)  version.textContent  = 'v12.0';
+  if (version)  version.textContent  = 'v12.1';
   if (provider) provider.textContent = typeof getActiveProvider === 'function' ? getActiveProvider() : '—';
   runProviderDiagnostics();
 }
@@ -21408,7 +21408,7 @@ function checkAndTrimFlow(flow) {
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow:hidden;min-width:0;flex-shrink:1">
     <span style="font-weight:800;color:#fff;font-size:12px;letter-spacing:-.01em;white-space:nowrap;flex-shrink:0">🧪 Shuddhi QA</span>
     <span style="padding:1px 8px;border-radius:8px;background:rgba(255,255,255,.15);
-                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v12.0</span>
+                 color:#fff;font-weight:700;font-size:10.5px;border:1px solid rgba(255,255,255,.2);flex-shrink:0">v12.1</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
     <span style="color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">AI Test Intelligence</span>
     <span style="color:rgba(255,255,255,.25);flex-shrink:0">·</span>
@@ -22124,7 +22124,7 @@ window.copyShareLink = async function() {
       module:    (document.getElementById('metaModule')   || {}).textContent || '',
       tcCount:   tgAllTCs ? tgAllTCs.length : 0,
       createdAt: new Date().toISOString(),
-      version:   'v12.0',
+      version:   'v12.1',
     };
 
     // Write to Firestore shares collection
@@ -28715,7 +28715,7 @@ if (document.readyState !== 'loading') {
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">&crarr;</kbd> Run</span>
       <span class="cmd-hint"><kbd class="cmd-hint-kbd">Esc</kbd> Close</span>
       <span style="flex:1"></span>
-      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v12.0</span>
+      <span class="cmd-hint" style="color:var(--text3)">Shuddhi QA v12.1</span>
     </div>
   </div>
 </div>
