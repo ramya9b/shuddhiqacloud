@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Help & Setup Guide — Shuddhi QA v11.6</title>
+<title>Help & Setup Guide — Shuddhi QA v11.7</title>
 <meta name="description" content="Shuddhi QA help guide — how to get started, configure AI providers, push to ADO and Jira, and use Smart Detect for enterprise platforms."/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/help"/>
@@ -629,7 +629,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   </div>
   <div class="guide-body">
     <div class="info-box">
-      A <strong>Personal Access Token (PAT)</strong> is like a password that lets Shuddhi QA talk to Azure DevOps on your behalf. It is stored only in your browser — never on Shuddhi QA servers.
+      A <strong>Personal Access Token (PAT)</strong> is like a password that lets Shuddhi QA talk to Azure DevOps on your behalf. It is stored only in your browser and is never stored on Shuddhi QA servers; it is sent over HTTPS to our /api/ado proxy only to forward your request to Azure DevOps.
     </div>
     <div class="steps">
       <div class="step">
@@ -927,7 +927,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
       <li><strong>Google Sign-In</strong> — OAuth 2.0. Only requests name, email, profile photo. No access to Gmail, Drive or Calendar.</li>
       <li><strong>Microsoft Sign-In</strong> — OAuth 2.0. Only requests name, email, profile. No access to Microsoft 365 or OneDrive.</li>
     </ol>
-    <p>Authentication is managed by <strong>Firebase Auth</strong> (Google LLC). Your API keys are stored in browser local storage only — they never touch our servers.</p>
+    <p>Authentication is managed by <strong>Firebase Auth</strong> (Google LLC). Your API keys are stored in browser local storage only; when you generate test cases they are sent as a POST body over HTTPS to our Cloudflare Functions proxy, which never stores them server-side and uses them only to forward the request to the AI provider.</p>
   </div>
 
   <!-- ── Template Library ── -->
