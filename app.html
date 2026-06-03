@@ -25512,6 +25512,14 @@ async function _runRefinement() {
   if (uk.groq)     body.groqApiKey     = uk.groq;
   if (uk.openai)   body.openaiApiKey   = uk.openai;
   if (uk.together) body.togetherApiKey = uk.together;
+  // v12.21.7: attach Azure BYO config so Refine works when Azure is the active provider
+  var _azCfg = (typeof getAzureConfig === 'function') ? getAzureConfig() : {};
+  if (_azCfg && _azCfg.endpoint && _azCfg.apiKey && _azCfg.deployment) {
+    body.azureEndpoint   = _azCfg.endpoint;
+    body.azureApiKey     = _azCfg.apiKey;
+    body.azureDeployment = _azCfg.deployment;
+    body.azureApiVersion = _azCfg.apiVersion || '2024-12-01-preview';
+  }
 
   try {
     var resp = await fetch('/api/claude', {
@@ -25543,7 +25551,11 @@ async function _runRefinement() {
         if (data === '[DONE]') break;
         try {
           var parsed = JSON.parse(data);
-          var text = parsed.delta || parsed.text || '';
+          // proxy emits Anthropic-style content_block_delta: { delta: { text } }
+          var text = '';
+          if (parsed.delta && typeof parsed.delta === 'object' && parsed.delta.text) text = parsed.delta.text;
+          else if (typeof parsed.delta === 'string') text = parsed.delta;
+          else if (typeof parsed.text === 'string') text = parsed.text;
           if (text) {
             refined += text;
             if (outEl && typeof marked !== 'undefined') {
