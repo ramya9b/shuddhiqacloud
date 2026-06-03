@@ -323,7 +323,7 @@ RULE 4: Minimum 10 step rows per test case.
 `;
     const azEndpoint   = String(body.azureEndpoint || '').replace(/\/+$/, '');
     const azDeployment = body.azureDeployment || '';
-    const azVersion    = body.azureApiVersion || '2024-08-01-preview';
+    const azVersion    = body.azureApiVersion || '2024-12-01-preview';
     const msgs = [];
     if (body.system) msgs.push({ role: 'system', content: _AZ_FORMAT + (body.system || '') });
     (body.messages || []).forEach(m => msgs.push({
@@ -336,11 +336,13 @@ RULE 4: Minimum 10 step rows per test case.
         'Content-Type': 'application/json',
         'api-key':      key,
       },
+      // v12.21.5: next-gen Azure models (gpt-5 / o-series) require max_completion_tokens
+      // and reject a custom temperature; gpt-4o / gpt-4.1 accept this shape too — so it
+      // stays compatible across all current Azure OpenAI chat deployments.
       body: JSON.stringify({
-        messages:    msgs,
-        max_tokens:  Math.min(body.max_tokens || 16384, 16384),
-        temperature: 0.3,
-        stream:      stream,
+        messages:              msgs,
+        max_completion_tokens: Math.min(body.max_tokens || 16384, 16384),
+        stream:                stream,
       }),
     };
   }

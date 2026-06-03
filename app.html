@@ -9057,7 +9057,7 @@ header::after { display: none !important; }
                 </label>
                 <label style="font-size:11px;color:var(--text3);font-weight:600;display:block">API Version
                   <input type="text" id="az-ver" class="pka-input" style="margin-top:3px;width:100%"
-                    value="2024-08-01-preview" autocomplete="off" spellcheck="false"
+                    value="2024-12-01-preview" autocomplete="off" spellcheck="false"
                     oninput="recheckAzureDot()" />
                 </label>
               </div>
@@ -16918,7 +16918,7 @@ Make the output production-ready and specific to ${platform}. Use real field nam
       ...(_uk.openai   ? { openaiApiKey:  _uk.openai   } : {}),  // user OpenAI key
       ...(_uk.together ? { togetherApiKey:_uk.together } : {}),  // user Together AI key
       ...(_azCfg && _azCfg.endpoint && _azCfg.apiKey && _azCfg.deployment   // v12.21: Azure BYO config
-        ? { azureEndpoint: _azCfg.endpoint, azureApiKey: _azCfg.apiKey, azureDeployment: _azCfg.deployment, azureApiVersion: (_azCfg.apiVersion || '2024-08-01-preview') }
+        ? { azureEndpoint: _azCfg.endpoint, azureApiKey: _azCfg.apiKey, azureDeployment: _azCfg.deployment, azureApiVersion: (_azCfg.apiVersion || '2024-12-01-preview') }
         : {}),
       model:    'claude-sonnet-4-6',   // proxy maps to correct model per provider
       max_tokens: _maxTokens,
@@ -19399,7 +19399,7 @@ const _USER_KEY_LS = { claude: 'shuddhi-user-claude-key', gemini: 'shuddhi-user-
 // Stored under ONE localStorage key as JSON: { endpoint, apiKey, deployment, apiVersion }.
 // Kept separate from _USER_KEY_LS (the 5 single-string providers) by design.
 const _USER_AZURE_LS = 'shuddhi-azure-config';
-const _AZ_DEFAULT_VER = '2024-08-01-preview';
+const _AZ_DEFAULT_VER = '2024-12-01-preview';
 
 function getAzureConfig() {
   try { return JSON.parse(localStorage.getItem(_USER_AZURE_LS) || '{}'); }
@@ -19513,7 +19513,10 @@ async function _testAzureConnection() {
       var msg;
       if (status === 401)      msg = '✕ Invalid API key';
       else if (status === 404) msg = '✕ Deployment not found — check name';
-      else                     msg = '✕ Error ' + status;
+      else {
+        var _d = (typeof data.error === 'string') ? data.error.replace(/^Azure OpenAI error \d+:\s*/, '') : '';
+        msg = '✕ Error ' + status + (_d ? ' — ' + (_d.length > 80 ? _d.slice(0, 80) + '…' : _d) : '');
+      }
       _setAzDot('red');
       _showKeyTestResult(resultId, 'error', msg);
     }
@@ -26678,7 +26681,7 @@ window._runTCRegen = async function() {
         reqBody.azureEndpoint   = _azCfg.endpoint;
         reqBody.azureApiKey     = _azCfg.apiKey;
         reqBody.azureDeployment = _azCfg.deployment;
-        reqBody.azureApiVersion = _azCfg.apiVersion || '2024-08-01-preview';
+        reqBody.azureApiVersion = _azCfg.apiVersion || '2024-12-01-preview';
       }
 
       var resp = await fetch('/api/claude', {
