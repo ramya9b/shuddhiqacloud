@@ -25586,6 +25586,14 @@ async function _runRefinement() {
   }
 }
 
+// v12.21.9: these three are declared inside the _initTCRegen IIFE, so they are NOT
+// global by default — the refinement bar's inline onclick handlers (_applyRefineSuggestion,
+// _runRefinement, _dismissRefinement) could not see them, throwing ReferenceError.
+// Expose them on window explicitly (same pattern as window._runTCRegen below).
+window._applyRefineSuggestion = _applyRefineSuggestion;
+window._dismissRefinement     = _dismissRefinement;
+window._runRefinement         = _runRefinement;
+
 // Show refinement bar after generation completes
 // Hook into finalizeOutput
 (function _hookRefinementBar() {
