@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shuddhi QA — Guides</title>
+<meta name="description" content="User guides and feature documentation for Shuddhi QA — the AI-powered test case generator."/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--indigo:#5B5FEF;--violet:#7C3AED;--pink:#EC4899;--dark:#0D0D1A;--dark2:#1A1A2E;--surface:#fff;--border:#E5E4FF;--text2:#4B4B6B;--grad:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column}
+header{padding:18px 32px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:14px}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.back{margin-left:auto;font-size:13px;color:rgba(255,255,255,.55);text-decoration:none}
+.back:hover{color:#A5A8FF}
+main{flex:1;max-width:920px;margin:0 auto;padding:64px 32px;width:100%}
+.eyebrow{display:inline-block;font-size:11px;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:1.4px;text-transform:uppercase;color:#A5A8FF;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);padding:4px 12px;border-radius:20px;margin-bottom:18px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;letter-spacing:-1.5px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.sub{font-size:16px;color:rgba(255,255,255,.6);max-width:560px;margin-bottom:48px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s,background .15s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:0;transition:opacity .2s}
+.card:hover{transform:translateY(-2px);border-color:rgba(91,95,239,.5);background:rgba(255,255,255,.06)}
+.card:hover::before{opacity:1}
+.card-icon{font-size:28px;margin-bottom:14px}
+.card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:6px;color:#fff}
+.card-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:14px}
+.card-meta{font-size:11px;color:#A5A8FF;font-family:'DM Sans',sans-serif;font-weight:500;display:flex;align-items:center;gap:6px}
+.card-meta::after{content:'→';transition:transform .15s}
+.card:hover .card-meta::after{transform:translateX(3px)}
+footer{padding:24px 32px;font-size:12px;color:rgba(255,255,255,.4);text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+footer a{color:#A5A8FF;text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">Shuddhi QA</a>
+  <a class="back" href="/">← Back to app</a>
+</header>
+<main>
+  <div class="eyebrow">Documentation</div>
+  <h1>Guides</h1>
+  <p class="sub">Walkthroughs and feature references for getting the most out of Shuddhi QA — from your first generation to enterprise integrations.</p>
+  <div class="grid">
+    <a class="card" href="step-by-step.html">
+      <div class="card-icon">📘</div>
+      <div class="card-title">Step-by-Step User Guide</div>
+      <div class="card-desc">15 chapters covering everything from first launch and AI provider setup to Azure DevOps push, Jira Zephyr export, and troubleshooting. Includes UI mockups.</div>
+      <div class="card-meta">Open guide</div>
+    </a>
+    <a class="card" href="features.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Feature Overview</div>
+      <div class="card-desc">High-level tour of every capability — 6 AI providers, 14 platforms, 8 export formats, integrations, and the 383-check QA pipeline.</div>
+      <div class="card-meta">Open overview</div>
+    </a>
+    <a class="card" href="documentation.html">
+      <div class="card-icon">📚</div>
+      <div class="card-title">Documentation</div>
+      <div class="card-desc">Everything in one document — 21 chapters covering Welcome Tour, Domain Intelligence, Multi-Language Output, AI-Review Gate, PWA Install, plus full troubleshooting. Sticky sidebar nav.</div>
+      <div class="card-meta">Open master guide</div>
+    </a>
+  </div>
+</main>
+<footer>
+  Shuddhi QA · <a href="/help.html">Help</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a>
+</footer>
+</body>
+</html>

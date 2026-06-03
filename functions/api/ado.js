@@ -48,16 +48,51 @@ export async function onRequest(context) {
   const authHeader = 'Basic ' + btoa(':' + pat);
 
   // ── test_connection action ────────────────────────────────────
+  // ADO returns "success-looking" responses for invalid PATs in three ways
+  // that all defeat a naive `r.ok` check:
+  //   (a) 302/303 redirect to login.microsoftonline.com — fetch follows by
+  //       default and the login page returns 200 OK HTML
+  //   (b) 203 Non-Authoritative with an HTML sign-in body (still a 2xx)
+  //   (c) 200 OK with the X-VSS-AuthorizationEndpoint header set, asking
+  //       the caller to authenticate
+  // The cheapest reliable check that covers all three: refuse to follow
+  // redirects, then verify the response is JSON whose body has the
+  // {value:[...]} shape that `_apis/projects` always returns on real auth.
   if (action === 'test_connection') {
     const org = bodyOrg || '';
     if (!org) return respond({ error: 'Organisation name required' }, 400);
     try {
       const r = await fetch(`https://dev.azure.com/${encodeURIComponent(org)}/_apis/projects?api-version=7.1&$top=1`, {
-        headers: { 'Authorization': authHeader, 'Accept': 'application/json' }
+        headers:  { 'Authorization': authHeader, 'Accept': 'application/json' },
+        redirect: 'manual',
       });
-      if (r.ok) return respond({ success: true });
-      if (r.status === 401) return respond({ error: 'PAT invalid or expired. Renew in ADO → User Settings → Personal Access Tokens.' }, 401);
-      return respond({ error: 'HTTP ' + r.status }, r.status);
+
+      const isRedirect = r.status >= 300 && r.status < 400;
+      const wantsAuth  = !!r.headers.get('X-VSS-AuthorizationEndpoint');
+      if (r.status === 401 || r.status === 403 || r.status === 203 || isRedirect || wantsAuth) {
+        return respond({
+          error: 'PAT invalid or expired. Renew in ADO → User Settings → Personal Access Tokens.'
+        }, 401);
+      }
+      if (!r.ok) {
+        return respond({ error: 'HTTP ' + r.status }, r.status);
+      }
+
+      // 200 OK reached. Now confirm the body actually looks like ADO's project
+      // list — a followed redirect to MSA's login page is also "200 OK".
+      const ct = r.headers.get('Content-Type') || '';
+      if (!/application\/json/i.test(ct)) {
+        return respond({
+          error: 'PAT invalid (ADO returned non-JSON response — likely a sign-in page).'
+        }, 401);
+      }
+      const data = await r.json().catch(() => null);
+      if (!data || !Array.isArray(data.value)) {
+        return respond({
+          error: 'PAT invalid (ADO response missing the expected project list shape).'
+        }, 401);
+      }
+      return respond({ success: true });
     } catch(e) {
       return respond({ error: 'Network error: ' + e.message }, 500);
     }

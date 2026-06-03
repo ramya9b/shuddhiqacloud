@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Terms of Service — Shuddhi QA v12.4</title>
+<title>Terms of Service — Shuddhi QA v12.21</title>
 <meta name="description" content="Terms of Service for Shuddhi QA — AI-powered test case generator. Rules for using the service, API key ownership, acceptable use, and liability."/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/terms"/>
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#5B5FEF"/>
+<script>(function(){try{var t=localStorage.getItem('shuddhi-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
@@ -19,7 +20,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#F7F8FD;--bg2:#F0F2FA;--surface:#FFFFFF;--surface2:#F0F2FA;--surface3:#E8EBF7;--border:#E2E5F0;--border2:#D0D5EE;--border3:#B8C0E0;--accent:#5B5FEF;--indigo:#5B5FEF;--indigo-l:rgba(91,95,239,0.08);--indigol:#818CF8;--violet:#8B5CF6;--pink:#EC4899;--text:#0E0F1A;--text2:#525672;--text3:#666F9C;--success:#10B981;--error:#EF4444;--warning:#F59E0B;--grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);--grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);--nav-bg:rgba(255,255,255,0.94);--orb1:rgba(91,95,239,0.07);--orb2:rgba(139,92,246,0.05)}
+:root{--bg:#F7F8FD;--bg2:#F0F2FA;--surface:#FFFFFF;--surface2:#F0F2FA;--surface3:#E8EBF7;--border:#E2E5F0;--border2:#D0D5EE;--border3:#B8C0E0;--accent:#5B5FEF;--indigo:#5B5FEF;--indigo-l:rgba(91,95,239,0.08);--indigol:#818CF8;--violet:#8B5CF6;--pink:#EC4899;--text:#0E0F1A;--text2:#525672;--text3:#5E6680;--success:#10B981;--error:#EF4444;--warning:#F59E0B;--grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);--grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);--nav-bg:rgba(255,255,255,0.94);--orb1:rgba(91,95,239,0.07);--orb2:rgba(139,92,246,0.05)}
+[data-theme="dark"]{--bg:#0f1117;--bg2:#1a1d27;--surface:#1e2130;--surface2:#262a3a;--surface3:#2e334a;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);--border3:rgba(255,255,255,.22);--text:#e8eaf0;--text2:#9ba3b8;--text3:#9499B7;--nav-bg:rgba(30,33,48,0.94);--orb1:rgba(91,95,239,0.04);--orb2:rgba(139,92,246,0.03)}
+[data-theme="dark"] .section code,[data-theme="dark"] .contact-link,[data-theme="dark"] .hero-pill,[data-theme="dark"] .nav-logo-name .qa,[data-theme="dark"] .footer-brand .qa{color:#818CF8 !important}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -79,7 +82,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 .contact-avatar{width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0}
 .contact-name{font-size:14px;font-weight:700;color:var(--text)}
 .contact-role{font-size:12px;color:var(--text3);margin-top:2px}
-.fade-up{opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease}
 </style>
 </head>
 <body>
@@ -87,7 +89,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="orb orb-2" aria-hidden="true"></div>
 <nav>
   <a href="/" class="nav-logo" aria-label="Shuddhi QA Home">
-    <div class="nav-logo-mark">श</div>
+    <img class="nav-logo-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA" style="object-fit:cover"/>
     <div class="nav-logo-text">
       <div class="nav-logo-name">Shuddhi<span class="qa">QA</span></div>
       <div class="nav-logo-tag">AI Test Intelligence</div>
@@ -103,15 +105,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="wrap">
 
 <!-- Hero -->
-<div class="hero fade-up">
-  <div class="hero-pill">📋 Terms of Service · v12.4</div>
+<div class="hero">
+  <div class="hero-pill">📋 Terms of Service · v12.21</div>
   <h1>Simple, fair <span>terms</span></h1>
   <p>Clear rules for using Shuddhi QA. No legalese — written so every QA engineer can understand them.</p>
-  <div class="hero-date">Last updated: May 2026 · v12.4 · Effective immediately</div>
+  <div class="hero-date">Last updated: May 2026 · v12.21 · Effective immediately</div>
 </div>
 
 <!-- 1. Acceptance -->
-<div class="section fade-up">
+<div class="section">
   <div class="section-header">
     <span class="section-icon">✅</span>
     <h2 class="section-title">1. Acceptance of Terms</h2>
@@ -140,7 +142,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <li><strong>Data ownership:</strong> Signing in does not transfer ownership of your content. See our <a href="/privacy" style="color:var(--indigo)">Privacy Policy</a> for full details of what is stored.</li>
   </ul>
   <ul class="terms-list">
-    <li>AI generation powered by Anthropic Claude, Google Gemini, Groq (Llama), OpenAI GPT-4o, and Together AI (DeepSeek V3) — using shared or your own API keys</li>
+    <li>AI generation powered by Anthropic Claude, Google Gemini, Groq (Llama), OpenAI GPT-4o, Together AI (DeepSeek V3), and Azure OpenAI (enterprise · bring-your-own resource) — using shared or your own API keys</li>
     <li>Exports to Excel, PDF, Markdown, Jira Zephyr CSV, TestRail, Gherkin, Playwright, and more</li>
     <li>Direct push to Azure DevOps Test Plans</li>
     <li>Google Cloud Billing sync (read-only)</li>
@@ -310,7 +312,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 </div>
 
 
-  <div class="section fade-up">
+  <div class="section">
     <div class="section-header"><span class="section-num">13</span><span class="section-icon">🎯</span><h2 class="section-title">Free Trial &amp; LinkedIn Unlock</h2></div>
     <p>The free tier is subject to usage limits: 3 generations for anonymous users, 10 for signed-in users. Users may unlock unlimited access by sharing Shuddhi QA via the in-app LinkedIn share button.</p>
     <ul class="terms-list">
@@ -325,7 +327,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <footer>
   <div class="footer-brand">
-    <div class="footer-brand-mark">श</div>
+    <img class="footer-brand-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA" style="object-fit:cover"/>
     Shuddhi<span class="qa">QA</span>
   </div>
   <div class="footer-links">

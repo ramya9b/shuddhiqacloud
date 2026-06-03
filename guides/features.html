@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shuddhi QA — Complete Feature Guide v12.19</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--indigo:#5B5FEF;--violet:#7C3AED;--pink:#EC4899;--dark:#0D0D1A;--dark2:#1A1A2E;--surface:#fff;--surface2:#F8F7FF;--surface3:#EEEEFF;--border:#E5E4FF;--text:#0D0D1A;--text2:#4B4B6B;--text3:#6B6B8F;--green:#10B981;--amber:#F59E0B;--red:#EF4444;--grad:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899);--shadow:0 4px 24px rgba(91,95,239,.10);--shadow-lg:0 12px 48px rgba(91,95,239,.16)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--text)}
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;gap:16px;height:52px}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-v{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--surface3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;color:var(--indigo)}
+.nav-links{margin-left:auto;display:flex;gap:16px}
+.nav-links a{font-size:12px;color:var(--text2);text-decoration:none;font-weight:500;padding:4px 10px;border-radius:6px;transition:all .15s}
+.nav-links a:hover{background:var(--surface3);color:var(--indigo)}
+.hero{background:var(--dark2);padding:72px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--grad)}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 14px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.7);font-family:'JetBrains Mono',monospace;margin-bottom:20px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-2px;margin-bottom:12px}
+.hero p{font-size:16px;color:rgba(255,255,255,.6);max-width:520px;margin:0 auto 36px}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.stat{text-align:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:14px 24px;border-radius:10px}
+.stat-n{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-l{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.container{max-width:1100px;margin:0 auto;padding:48px 32px}
+.section{margin-bottom:64px}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--indigo);background:var(--surface3);border:1px solid var(--border);padding:3px 10px;border-radius:4px;margin-bottom:10px}
+.section h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.section-sub{font-size:14px;color:var(--text2);max-width:640px;margin-bottom:28px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:all .2s;position:relative;overflow:hidden}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.card-accent{position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:8px}
+.card p{font-size:13px;color:var(--text2);line-height:1.6}
+.card-icon{font-size:24px;margin-bottom:10px}
+.provider-card{display:flex;align-items:flex-start;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;transition:all .2s}
+.provider-card:hover{box-shadow:var(--shadow)}
+.provider-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.provider-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px}
+.provider-model{font-size:12px;color:var(--text3);margin-top:1px}
+.provider-desc{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.5}
+.provider-cost{margin-left:auto;flex-shrink:0;text-align:right}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-block}
+.badge-free{background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.2)}
+.badge-paid{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.badge-best{background:rgba(124,58,237,.1);color:var(--violet);border:1px solid rgba(124,58,237,.2)}
+.export-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.export-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;transition:all .2s;cursor:pointer}
+.export-card:hover{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,95,239,.1)}
+.export-icon{font-size:28px;margin-bottom:8px}
+.export-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:4px}
+.export-desc{font-size:11px;color:var(--text3)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.step-n{width:36px;height:36px;background:var(--grad);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;margin:0 auto 10px}
+.step h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px}
+.step p{font-size:11.5px;color:var(--text2);line-height:1.5}
+.platform-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.platform-chip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center;transition:all .2s}
+.platform-chip:hover{border-color:var(--indigo);background:var(--surface3)}
+.platform-chip .pc-icon{font-size:20px;margin-bottom:4px}
+.platform-chip .pc-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700}
+.platform-chip .pc-desc{font-size:9px;color:var(--text3);margin-top:2px}
+.callout{border-radius:10px;padding:14px 18px;margin:20px 0;display:flex;gap:12px;align-items:flex-start}
+.callout.tip{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2)}
+.callout.success{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2)}
+.callout.warn{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2)}
+.callout-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.callout-text{font-size:13px;color:var(--text2);line-height:1.6}
+.callout-text strong{color:var(--text)}
+.shortcuts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.shortcut{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+.shortcut-action{font-size:13px;color:var(--text2)}
+.kbd{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--indigo);font-weight:600;margin-left:3px}
+.table-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;background:var(--dark2);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:hover td{background:var(--surface3)}
+.test-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.test-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+.test-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(16,185,129,.1);color:var(--green);border:1px solid rgba(16,185,129,.2);flex-shrink:0}
+.test-name{font-size:13px;font-weight:600;color:var(--text)}
+.test-count{font-size:11px;color:var(--text3);margin-left:auto;flex-shrink:0}
+.cta{background:var(--dark2);border-radius:16px;padding:48px;text-align:center;margin-top:48px;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.cta h2{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:12px}
+.cta p{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:28px}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--grad);padding:14px 32px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#fff;text-decoration:none;transition:opacity .2s}
+.cta-btn:hover{opacity:.9}
+.cta-url{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,.4)}
+footer{text-align:center;padding:24px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:32px}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4,.export-grid,.steps,.shortcuts-grid,.platform-grid,.test-grid{grid-template-columns:1fr}.hero{padding:48px 24px}.container{padding:32px 20px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">🧪 Shuddhi QA</div>
+  <div class="nav-v">v12.19</div>
+  <div class="nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#providers">Providers</a>
+    <a href="#platforms">Platforms</a>
+    <a href="#exports">Exports</a>
+    <a href="#integrations">Integrations</a>
+    <a href="https://shuddhiqacloud.pages.dev" target="_blank">Live App ↗</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-pill">📖 Complete Feature Guide · v12.19</div>
+  <h1>Shuddhi QA</h1>
+  <p>AI-powered test case generator for enterprise platforms. From requirement to production-ready test suite in 30 seconds.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">14</div><div class="stat-l">Platforms</div></div>
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">AI Providers</div></div>
+    <div class="stat"><div class="stat-n">100+</div><div class="stat-l">Templates</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Export Formats</div></div>
+    <div class="stat"><div class="stat-n">383</div><div class="stat-l">Automated Tests</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+  <div class="section-tag">01 — Overview</div>
+  <h2>What is Shuddhi QA?</h2>
+  <p class="section-sub">Transform plain-English requirements into production-ready test suites. No manual writing. No templates to fill. Just describe what needs to be tested.</p>
+  <div class="grid-2">
+    <div class="card"><div class="card-accent"></div><div class="card-icon">⚡</div><h3>Instant Generation</h3><p>Generate 10–20 test cases in 10–30 seconds. Streams in real-time with quality scores for each test case.</p></div>
+    <div class="card"><div class="card-accent"></div><div class="card-icon">🏢</div><h3>Enterprise-Grade</h3><p>Domain-aware for D365, Salesforce, ServiceNow, Guidewire, SAP, Workday, and 8 more enterprise platforms.</p></div>
+    <div class="card"><div class="card-accent"></div><div class="card-icon">🔌</div><h3>Direct Integration</h3><p>Push to Azure DevOps Test Plans or export Jira Zephyr CSV. No copy-paste required.</p></div>
+    <div class="card"><div class="card-accent"></div><div class="card-icon">🔒</div><h3>Privacy First</h3><p>API keys stay in your browser. Requirements never stored. Sign-in is optional. No advertising.</p></div>
+  </div>
+</div>
+
+<!-- QUICK START -->
+<div class="section" id="quickstart">
+  <div class="section-tag">02 — Quick Start</div>
+  <h2>Generate test cases in 4 steps</h2>
+  <p class="section-sub">No account or API key required to start. Free for the first 3 generations.</p>
+  <div class="steps">
+    <div class="step"><div class="step-n">1</div><h3>Open the App</h3><p>Go to shuddhiqacloud.pages.dev in any browser. No installation needed.</p></div>
+    <div class="step"><div class="step-n">2</div><h3>Select Platform</h3><p>Click a platform chip — D365, Salesforce, Web App, etc.</p></div>
+    <div class="step"><div class="step-n">3</div><h3>Describe Requirement</h3><p>Paste a user story, BRD, or process description. Up to 6,000 characters.</p></div>
+    <div class="step"><div class="step-n">4</div><h3>Generate</h3><p>Press Generate (or Ctrl+Enter). Test cases stream in real-time.</p></div>
+  </div>
+  <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>No API key needed.</strong> The app uses a shared server-side Groq key for free generations. Add your own key in Settings for unlimited usage.</div></div>
+</div>
+
+<!-- AI PROVIDERS -->
+<div class="section" id="providers">
+  <div class="section-tag">03 — AI Providers</div>
+  <h2>6 AI Providers</h2>
+  <p class="section-sub">Switch providers anytime. Your key stays in your browser — never on our servers. Hover the Generate button to see estimated cost.</p>
+
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(16,185,129,.1)">⚡</div>
+    <div style="flex:1"><div class="provider-name">Groq — Llama 3.3</div><div class="provider-model">Fastest responses · Best for quick iterations</div><div class="provider-desc">Ideal for high-volume testing. Near-instant responses. Free with personal key.</div></div>
+    <div class="provider-cost"><span class="badge badge-free">FREE</span></div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(245,158,11,.1)">✦</div>
+    <div style="flex:1"><div class="provider-name">Gemini 2.5 Flash — Google</div><div class="provider-model">1M token context · Recommended for large requirements</div><div class="provider-desc">Best cost-to-quality ratio. Handles extremely long requirements. Free tier available.</div></div>
+    <div class="provider-cost"><span class="badge badge-paid">~$0.001/run</span></div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(124,58,237,.1)">🤖</div>
+    <div style="flex:1"><div class="provider-name">Claude Sonnet 4 — Anthropic</div><div class="provider-model">Best quality · Most detailed steps and edge cases</div><div class="provider-desc">Deepest reasoning. Most thorough test cases. Recommended for complex enterprise flows.</div></div>
+    <div class="provider-cost"><span class="badge badge-best">BEST QUALITY</span><br/><small style="color:var(--amber);font-size:11px">~$0.015/run</small></div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(14,165,233,.1)">🟢</div>
+    <div style="flex:1"><div class="provider-name">OpenAI GPT-4o</div><div class="provider-model">Strong reasoning · Complex multi-role flows</div><div class="provider-desc">Excellent for scenarios with multiple user roles and complex business logic.</div></div>
+    <div class="provider-cost"><span class="badge badge-paid">~$0.010/run</span></div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(239,68,68,.1)">🔴</div>
+    <div style="flex:1"><div class="provider-name">Together AI — Open Source</div><div class="provider-model">Cost-effective · Open source models</div><div class="provider-desc">Good balance of cost and performance. Multiple open source model options.</div></div>
+    <div class="provider-cost"><span class="badge badge-paid">~$0.002/run</span></div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-icon" style="background:rgba(91,95,239,.1)">☁️</div>
+    <div style="flex:1"><div class="provider-name">Azure OpenAI — Enterprise</div><div class="provider-model">Bring your own Azure resource · Data residency friendly</div><div class="provider-desc">Connect your own Azure OpenAI deployment for enterprise compliance. Requests run in your own Azure resource region. Configure under Settings → AI Provider → Your Personal API Keys → expand "Azure OpenAI" and enter Endpoint, API Key, Deployment name, and API Version (default 2024-08-01-preview), then "Test connection".</div></div>
+    <div class="provider-cost"><span class="badge badge-paid">BYO</span></div>
+  </div>
+</div>
+
+<!-- PLATFORMS -->
+<div class="section" id="platforms">
+  <div class="section-tag">04 — Platforms</div>
+  <h2>14 Supported Platforms</h2>
+  <p class="section-sub">Domain-aware generation with platform-specific terminology, navigation paths, and field names.</p>
+  <div class="platform-grid">
+    <div class="platform-chip"><div class="pc-icon">🔷</div><div class="pc-name">D365 F&O</div><div class="pc-desc">Finance, SCM, Mfg</div></div>
+    <div class="platform-chip"><div class="pc-icon">☁️</div><div class="pc-name">Salesforce</div><div class="pc-desc">CRM, Sales, Service</div></div>
+    <div class="platform-chip"><div class="pc-icon">🌐</div><div class="pc-name">Web App</div><div class="pc-desc">Custom portals</div></div>
+    <div class="platform-chip"><div class="pc-icon">📱</div><div class="pc-name">Mobile App</div><div class="pc-desc">iOS, Android</div></div>
+    <div class="platform-chip"><div class="pc-icon">🔧</div><div class="pc-name">ServiceNow</div><div class="pc-desc">ITSM, workflows</div></div>
+    <div class="platform-chip"><div class="pc-icon">🏥</div><div class="pc-name">Guidewire</div><div class="pc-desc">Insurance suites</div></div>
+    <div class="platform-chip"><div class="pc-icon">📊</div><div class="pc-name">SAP</div><div class="pc-desc">S/4HANA, ECC</div></div>
+    <div class="platform-chip"><div class="pc-icon">👥</div><div class="pc-name">Workday</div><div class="pc-desc">HCM, Financials</div></div>
+    <div class="platform-chip"><div class="pc-icon">🏦</div><div class="pc-name">Banking</div><div class="pc-desc">Core banking</div></div>
+    <div class="platform-chip"><div class="pc-icon">🛡️</div><div class="pc-name">Insurance</div><div class="pc-desc">Policy, claims</div></div>
+  </div>
+  <div class="callout tip"><div class="callout-icon">🎯</div><div class="callout-text"><strong>Smart Detect:</strong> Paste your requirement and Shuddhi QA automatically identifies the platform from keywords. D365 keywords (Action Pane, infolog, legal entity) → D365 mode. Salesforce keywords (SOQL, LWC, Apex trigger) → Salesforce mode.</div></div>
+</div>
+
+<!-- EXPORTS -->
+<div class="section" id="exports">
+  <div class="section-tag">05 — Exports</div>
+  <h2>8 Export Formats</h2>
+  <p class="section-sub">Export in the format that fits your workflow. All exports reflect any inline edits you've made.</p>
+  <div class="export-grid">
+    <div class="export-card"><div class="export-icon">📊</div><div class="export-name">Excel</div><div class="export-desc">Separate sheets per TC type. Stakeholder ready.</div></div>
+    <div class="export-card"><div class="export-icon">📑</div><div class="export-name">PDF</div><div class="export-desc">Formatted for sign-off packages.</div></div>
+    <div class="export-card"><div class="export-icon">📋</div><div class="export-name">Markdown</div><div class="export-desc">Copy to Confluence or Notion.</div></div>
+    <div class="export-card"><div class="export-icon">🔷</div><div class="export-name">Azure DevOps</div><div class="export-desc">Push directly to ADO Test Plans.</div></div>
+    <div class="export-card"><div class="export-icon">🟦</div><div class="export-name">Jira Zephyr</div><div class="export-desc">CSV for Zephyr Squad/Scale.</div></div>
+    <div class="export-card"><div class="export-icon">🥒</div><div class="export-name">Gherkin</div><div class="export-desc">Given/When/Then for BDD.</div></div>
+    <div class="export-card"><div class="export-icon">🎭</div><div class="export-name">Playwright</div><div class="export-desc">TypeScript skeleton code.</div></div>
+    <div class="export-card"><div class="export-icon">🧪</div><div class="export-name">TestRail</div><div class="export-desc">CSV for TestRail import.</div></div>
+  </div>
+  <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>More ▾ dropdown:</strong> Gherkin, Playwright, TestRail, and Postman are in the More dropdown to keep the toolbar clean.</div></div>
+</div>
+
+<!-- INTEGRATIONS -->
+<div class="section" id="integrations">
+  <div class="section-tag">06 — Integrations</div>
+  <h2>Azure DevOps & Jira</h2>
+  <div class="grid-2">
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px">Azure DevOps Push</h3>
+      <div class="table-wrap"><table>
+        <tr><th>Step</th><th>Action</th></tr>
+        <tr><td>1. Get PAT</td><td>ADO → User Settings → PAT → Test Plans (R&W)</td></tr>
+        <tr><td>2. Configure</td><td>⚙️ Settings → Azure DevOps → Enter Org URL + PAT</td></tr>
+        <tr><td>3. Test</td><td>Click "Test Connection" — validates PAT format</td></tr>
+        <tr><td>4. Push</td><td>Generate TCs → 🔷 ADO → Select plan → Push</td></tr>
+      </table></div>
+    </div>
+    <div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px">Jira Zephyr Export</h3>
+      <div class="table-wrap"><table>
+        <tr><th>Step</th><th>Action</th></tr>
+        <tr><td>1. Get Token</td><td>id.atlassian.com → Security → API tokens</td></tr>
+        <tr><td>2. Configure</td><td>⚙️ Settings → Jira → Token + email + domain</td></tr>
+        <tr><td>3. Generate</td><td>Generate test cases normally</td></tr>
+        <tr><td>4. Export</td><td>More ▾ → Jira Zephyr → CSV downloads</td></tr>
+        <tr><td>5. Import</td><td>Jira → Zephyr → Test Cases → Import</td></tr>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- CORE FEATURES -->
+<div class="section" id="features">
+  <div class="section-tag">07 — Core Features</div>
+  <h2>Generation & Editing Features</h2>
+  <div class="grid-2">
+    <div class="card"><div class="card-accent"></div><h3>🎯 6 Output Types</h3><p>E2E Scenarios, Smoke Tests, Field Validation, Integration Tests, Negative Tests, and Full Artifact (all combined).</p></div>
+    <div class="card"><div class="card-accent"></div><h3>✏️ Inline Edit Mode</h3><p>Click any cell in the test case table to edit directly. Changes reflect in all exports instantly.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>🔄 Iterative Refinement</h3><p>Hover any test case and click regenerate. Add context to refine just that one TC without regenerating the whole suite.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>🏢 Domain Intelligence</h3><p>Select Insurance, Banking, HR, ERP, Retail or Healthcare for domain-aware TCs with business risk tagging.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>📊 Quality Scores</h3><p>Each test case gets an AI quality score (Good 95%, Fair 75%) with color-coded progress bars.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>💬 Conversation History</h3><p>Each session maintains context. Build on prior test suites without starting over.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>🎯 Smart Detect</h3><p>Auto-detects platform from pasted requirement text. Supports D365, Salesforce, SAP, ServiceNow, and more.</p></div>
+    <div class="card"><div class="card-accent"></div><h3>📋 100+ Templates</h3><p>Pre-built templates for D365, Salesforce, Guidewire, ServiceNow, and more. Click to load instantly.</p></div>
+  </div>
+</div>
+
+<!-- UI FEATURES -->
+<div class="section" id="ui">
+  <div class="section-tag">08 — UI & Shortcuts</div>
+  <h2>UI Features & Keyboard Shortcuts</h2>
+  <div class="shortcuts-grid">
+    <div class="shortcut"><span class="shortcut-action">Generate test cases</span><div><span class="kbd">Ctrl</span><span class="kbd">Enter</span></div></div>
+    <div class="shortcut"><span class="shortcut-action">Open command palette</span><div><span class="kbd">Ctrl</span><span class="kbd">K</span></div></div>
+    <div class="shortcut"><span class="shortcut-action">Toggle dark/light</span><div><span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">T</span></div></div>
+    <div class="shortcut"><span class="shortcut-action">Close modal</span><div><span class="kbd">Esc</span></div></div>
+    <div class="shortcut"><span class="shortcut-action">Open Settings</span><div><span class="kbd">Ctrl</span><span class="kbd">,</span></div></div>
+    <div class="shortcut"><span class="shortcut-action">Copy Markdown</span><div><span class="kbd">Ctrl</span><span class="kbd">C</span></div></div>
+  </div>
+</div>
+
+<!-- TEST COVERAGE -->
+<div class="section" id="testing">
+  <div class="section-tag">09 — Quality Assurance</div>
+  <h2>383 Automated Checks</h2>
+  <p class="section-sub">Every deploy runs 252 pre-deployment checks. 383 total checks across 14 scripts and 10 test groups.</p>
+  <div class="test-grid">
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 1 — Provider Auth</span><span class="test-count">15 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 2 — Generation</span><span class="test-count">5 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 3 — Freemium Gate</span><span class="test-count">8 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 4 — Export Functions</span><span class="test-count">20 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 5 — ADO Push</span><span class="test-count">10 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 6 — Jira Push</span><span class="test-count">8 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 7 — Firebase Auth</span><span class="test-count">10 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 8 — Iterative Refinement</span><span class="test-count">7 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 9 — UI & State</span><span class="test-count">36 scenarios</span></div>
+    <div class="test-row"><span class="test-badge">✅</span><span class="test-name">Group 10 — Error Handling</span><span class="test-count">40 scenarios</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>Start generating test cases today</h2>
+  <p>No installation. No credit card. Just describe what needs to be tested.</p>
+  <a class="cta-btn" href="https://shuddhiqacloud.pages.dev" target="_blank">🚀 Try Shuddhi QA Free</a>
+  <div class="cta-url">shuddhiqacloud.pages.dev</div>
+</div>
+
+</div>
+
+<footer>Built by Ramya VS · Senior QA Architect · Alpha Variance Solutions · Bengaluru 🇮🇳 · Shuddhi QA v12.19</footer>
+</body>
+</html>

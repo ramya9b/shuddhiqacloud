@@ -263,15 +263,22 @@ RULE 4: Minimum 10 step rows per test case.
   if (provider === 'together') {
     const _TA_FORMAT =
 `CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
-Use this 5-column Markdown table for EVERY test case:
+Use ONE SINGLE 5-column Markdown table containing ALL test cases. Do NOT create a separate table per test case. Do NOT use ### or #### or any heading between test cases.
+
 | Title | Step Action | Step Expected Result | Assigned To | State |
 |---|---|---|---|---|
-| TC001 – Your Test Title | | | QA Engineer | Design |
+| TC001 – Your First Test Title | | | QA Engineer | Design |
 | | Navigate to the page. | Page loads. Correct columns visible. | | |
-RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+| | Click Submit. | Confirmation banner appears. | | |
+| TC002 – Your Second Test Title | | | QA Engineer | Design |
+| | Open the form. | Form is displayed. | | |
+
+RULE 1: Title row — Title column filled with TCxxx – name; Step Action and Step Expected Result BLANK.
 RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
 RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 — NEVER TC1 TC2.
 RULE 4: Minimum 10 step rows per test case.
+RULE 5: NO ### or #### markdown headings between test cases. ALL test cases share ONE table with ONE header row at the top.
+RULE 6: The first row after the | --- | --- | separator must be a Title row (TCxxx – name). Step rows for that TC follow immediately after.
 `;
     const msgs = [];
     if (body.system) msgs.push({ role: 'system', content: _TA_FORMAT + (body.system || '') });
@@ -479,11 +486,35 @@ export async function onRequest(context) {
   const upstream = buildUpstreamRequest(provider, key, forwardBody);
 
   try {
-    const response = await fetch(upstream.url, {
+    let response = await fetch(upstream.url, {
       method: 'POST',
       headers: upstream.headers,
       body: upstream.body,
     });
+
+    // ── v9.53: Together AI per-model fallback ────────────────────────
+    // Together's DeepSeek V3 is the default Together model but periodically
+    // 5xx's during model-level outages. If the upstream returned 502/503/504,
+    // transparently retry once with Llama 3.3 70B Turbo (same key, same
+    // endpoint, different model). Users see a successful generation instead
+    // of a service-unavailable error.
+    if (provider === 'together' && [502, 503, 504].includes(response.status)) {
+      console.warn('[Together] DeepSeek V3 returned ' + response.status + ' — falling back to Llama 3.3 70B');
+      try {
+        const fallbackBody = JSON.parse(upstream.body);
+        fallbackBody.model = 'meta-llama/Llama-3.3-70B-Instruct-Turbo';
+        response = await fetch(upstream.url, {
+          method: 'POST',
+          headers: upstream.headers,
+          body: JSON.stringify(fallbackBody),
+        });
+        if (response.ok) {
+          console.info('[Together] Fallback to Llama 3.3 70B succeeded');
+        }
+      } catch (fbErr) {
+        console.error('[Together] Fallback retry failed:', fbErr.message);
+      }
+    }
 
     if (!response.ok) {
       const errText = await response.text().catch(() => '');

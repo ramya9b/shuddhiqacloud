@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Privacy Policy — Shuddhi QA v12.4</title>
+<title>Privacy Policy — Shuddhi QA v12.21</title>
 <meta name="description" content="Privacy Policy for Shuddhi QA — AI-powered test case generator. Learn how we handle your data, API keys, Firebase Auth, and Google OAuth tokens."/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/privacy"/>
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#5B5FEF"/>
+<script>(function(){try{var t=localStorage.getItem('shuddhi-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
@@ -25,13 +26,27 @@
   --border:#E2E5F0; --border2:#D0D5EE; --border3:#B8C0E0;
   --accent:#5B5FEF; --indigo:#5B5FEF; --indigo-l:rgba(91,95,239,0.08); --indigol:#818CF8;
   --violet:#8B5CF6; --pink:#EC4899;
-  --text:#0E0F1A; --text2:#525672; --text3:#666F9C;
+  --text:#0E0F1A; --text2:#525672; --text3:#5E6680;
   --success:#10B981; --error:#EF4444; --warning:#F59E0B;
   --grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);
   --grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);
   --nav-bg:rgba(255,255,255,0.94);
   --orb1:rgba(91,95,239,0.07); --orb2:rgba(139,92,246,0.05);
 }
+[data-theme="dark"]{
+  --bg:#0f1117; --bg2:#1a1d27; --surface:#1e2130; --surface2:#262a3a; --surface3:#2e334a;
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.14); --border3:rgba(255,255,255,.22);
+  --text:#e8eaf0; --text2:#9ba3b8; --text3:#9499B7;
+  --nav-bg:rgba(30,33,48,0.94);
+  --orb1:rgba(91,95,239,0.04); --orb2:rgba(139,92,246,0.03);
+}
+/* Lift indigo accents on dark surfaces without redefining the brand --indigo token (keeps verify_design.py happy) */
+[data-theme="dark"] .section code,
+[data-theme="dark"] .contact-link,
+[data-theme="dark"] .hero-pill,
+[data-theme="dark"] .nav-logo-name .qa,
+[data-theme="dark"] .footer-brand .qa{color:#818CF8 !important}
+[data-theme="dark"] .section code{border-color:rgba(129,140,248,.18)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -101,7 +116,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 .contact-link:hover{color:var(--violet)}
 .oauth-section{background:linear-gradient(135deg,rgba(91,95,239,.04) 0%,rgba(139,92,246,.03) 100%);border-color:rgba(91,95,239,.2)}
 .oauth-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:20px;background:var(--indigo-l);border:1px solid rgba(91,95,239,.25);font-size:11px;color:var(--indigo);font-family:'JetBrains Mono',monospace;margin-bottom:14px}
-.fade-up{opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease}
 
 </style>
 </head>
@@ -110,7 +124,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="orb orb-2" aria-hidden="true"></div>
 <nav>
   <a href="/" class="nav-logo" aria-label="Shuddhi QA Home">
-    <div class="nav-logo-mark">श</div>
+    <img class="nav-logo-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA — शुद्धि" style="object-fit:cover"/>
     <div class="nav-logo-text">
       <div class="nav-logo-name">Shuddhi<span class="qa">QA</span></div>
       <div class="nav-logo-tag">AI Test Intelligence</div>
@@ -124,10 +138,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <section class="hero">
   <div class="wrap">
-    <div class="hero-eyebrow fade-up">🔒 Privacy &amp; Data Policy</div>
-    <h1 class="hero-title fade-up-2">Your data stays<br/><span>yours</span></h1>
-    <p class="hero-sub fade-up-3">Shuddhi QA is built with a privacy-first architecture. Optional sign-in, minimal data collection, no advertising, no data selling.</p>
-    <div class="hero-date fade-up-3">Last updated: May 2026 · v12.4 · Effective immediately</div>
+    <div class="hero-eyebrow">🔒 Privacy &amp; Data Policy</div>
+    <h1 class="hero-title">Your data stays<br/><span>yours</span></h1>
+    <p class="hero-sub">Shuddhi QA is built with a privacy-first architecture. Optional sign-in, minimal data collection, no advertising, no data selling.</p>
+    <div class="hero-date">Last updated: May 2026 · v12.21 · Effective immediately</div>
   </div>
 </section>
 
@@ -135,7 +149,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="wrap">
 
   <!-- 1. Overview -->
-  <div class="section fade-up">
+  <div class="section">
     <div class="section-header"><span class="section-icon">📋</span><h2 class="section-title">Overview</h2></div>
     <p>Shuddhi QA (<strong>shuddhiqacloud.pages.dev</strong>) is an AI-powered QA test case generator built and maintained by Ramya, Senior QA Engineer, Bengaluru, India. This privacy policy explains what data is collected, how it is used, and your rights regarding that data.</p>
     <div class="box-green"><span class="icon">✅</span><span><strong>Short version:</strong> Signing in is optional. If you sign in, Google or Microsoft provides your name and email to identify you. Your preferences are synced to Firebase (Google's cloud) so they follow you across devices. Your API keys, ADO/Jira tokens, and requirement documents are sent only as pass-through requests, over HTTPS, to our Cloudflare Functions proxy — they are never stored on our servers, and are used solely to forward your request to the relevant AI or integration provider.</span></div>
@@ -185,7 +199,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <tr><td>Theme preference</td><td>dark / light</td><td>Your theme follows you to new devices</td></tr>
       </tbody>
     </table>
-    <div class="box-green"><span class="icon">✅</span><span><strong>What is never synced to Firestore:</strong> API keys (Claude, Gemini, Groq), ADO Personal Access Token, Jira API token, free-trial generation counters. These are stored only in your browser's localStorage and are never synced to Firestore. When you generate test cases or push to ADO/Jira, they are sent as a POST body over HTTPS to our Cloudflare Functions proxy (<code>/api/claude</code>, <code>/api/ado</code>, <code>/api/jira</code>), which never stores them server-side and uses them only to forward the request to the respective AI or integration provider.</span></div>
+    <div class="box-green"><span class="icon">✅</span><span><strong>What is never synced to Firestore:</strong> API keys (Claude, Gemini, Groq, OpenAI, Together AI, and your Azure OpenAI endpoint/key/deployment), ADO Personal Access Token, Jira API token, free-trial generation counters. These are stored only in your browser's localStorage and are never synced to Firestore. When you generate test cases or push to ADO/Jira, they are sent as a POST body over HTTPS to our Cloudflare Functions proxy (<code>/api/claude</code>, <code>/api/ado</code>, <code>/api/jira</code>), which never stores them server-side and uses them only to forward the request to the respective AI or integration provider.</span></div>
   </div>
 
   <!-- 4. Data We Collect (anonymous) -->
@@ -196,7 +210,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
       <thead><tr><th>Data</th><th>Where stored</th><th>Purpose</th><th>Sent to server?</th></tr></thead>
       <tbody>
         <tr><td>AI provider preference</td><td>Browser localStorage</td><td>Remember your selected provider</td><td>No</td></tr>
-        <tr><td>Personal API keys (Claude, Gemini, Groq)</td><td>Browser localStorage</td><td>Forwarded to the AI provider to generate test cases</td><td>Yes — POST body to our /api/claude proxy (not stored), then the AI provider</td></tr>
+        <tr><td>Personal API keys (Claude, Gemini, Groq, OpenAI, Together AI, Azure OpenAI)</td><td>Browser localStorage</td><td>Forwarded to the AI provider to generate test cases</td><td>Yes — POST body to our /api/claude proxy (not stored), then the AI provider</td></tr>
         <tr><td>ADO / Jira credentials</td><td>Browser localStorage</td><td>Connect to your Azure DevOps or Jira</td><td>Only to ADO/Jira via proxy</td></tr>
         <tr><td>Usage statistics (token counts, cost estimates)</td><td>Browser localStorage</td><td>Usage &amp; Cost panel display</td><td>No</td></tr>
         <tr><td>Session history (last 20 generations)</td><td>Browser localStorage</td><td>Reload recent test cases</td><td>No</td></tr>
@@ -239,9 +253,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <tr><td>⚡ Groq (Llama)</td><td><a href="https://groq.com/privacy-policy/" target="_blank" rel="noopener" style="color:var(--indigo)">groq.com/privacy-policy</a></td><td>United States</td></tr>
       <tr><td>OpenAI (optional)</td><td>GPT-4o mini</td><td><a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener" style="color:var(--indigo)">openai.com/policies/privacy-policy</a></td><td>United States</td></tr>
       <tr><td>Together AI (optional)</td><td>DeepSeek V3 / Llama</td><td><a href="https://www.together.ai/privacy" target="_blank" rel="noopener" style="color:var(--indigo)">together.ai/privacy</a></td><td>United States</td></tr>
+        <tr><td>☁️ Azure OpenAI (optional · BYO)</td><td><a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener" style="color:var(--indigo)">privacy.microsoft.com</a></td><td>Your own Azure resource region</td></tr>
       </tbody>
     </table>
-    <div class="box-green"><span class="icon">✅</span><span>Your API keys are stored only in your browser's <code>localStorage</code>. With each generation request they are sent as a POST body over HTTPS to our Cloudflare Functions proxy (<code>/api/claude</code>), which uses them solely to forward the request to the respective AI provider — they are never logged or stored on Shuddhi QA's servers. All providers listed are US-hosted. No data is transmitted to Chinese servers.</span></div>
+    <div class="box-green"><span class="icon">✅</span><span>Your API keys are stored only in your browser's <code>localStorage</code>. With each generation request they are sent as a POST body over HTTPS to our Cloudflare Functions proxy (<code>/api/claude</code>), which uses them solely to forward the request to the respective AI provider — they are never logged or stored on Shuddhi QA's servers. All bundled providers are US-hosted; Azure OpenAI (optional · BYO) runs in the region of your own Azure resource, which you control. No data is transmitted to Chinese servers.</span></div>
 
     <!-- Smart Detect section (v11.3) -->
     <div class="subsection" style="margin-top:24px">
@@ -274,6 +289,31 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
       <li><strong>Exchange Rate APIs</strong> — USD→INR rate fetched from <code>exchangerate-api.com</code> for cost display. No personal data is sent.</li>
     </ul>
     <p>No analytics services, advertising networks, or social media trackers are used.</p>
+  </div>
+
+  <!-- 7b. Microsoft Copilot & MCP Integration -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🔌</span><h2 class="section-title">Microsoft Copilot &amp; MCP Integration</h2></div>
+    <p>When you invoke Shuddhi QA from Microsoft 365 Copilot or any other <strong>Model Context Protocol (MCP)</strong> client (Claude Desktop, Cursor, Continue, etc.), the following data flows occur:</p>
+
+    <p><strong>1. Tool invocation requests</strong> — Your MCP client sends a JSON-RPC 2.0 request to our MCP server at <code>https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code>. The request includes the tool name (<code>generateTestCases</code>, <code>fetchJiraIssue</code>, <code>pushToADO</code>, <code>listTemplates</code>, <code>detectPlatform</code>), the arguments you provided, and any caller-supplied credentials.</p>
+
+    <p><strong>2. What we store from MCP calls</strong> — Operational metrics only: request counts, error rates, tool-name frequencies. Retention: 90 days, then aggregated to monthly counts for 12 months. We do <strong>not</strong> store the text of your requirements, the content of Jira tickets you fetch, the test cases generated for you, or any caller-supplied credentials.</p>
+
+    <p><strong>3. What we forward, and to whom</strong> — Depending on the tool you invoke, your data is forwarded to:</p>
+    <ul class="privacy-list">
+      <li><code>generateTestCases</code> → the AI provider you select (Anthropic, Google, Groq, OpenAI, Together AI, or Azure OpenAI). The provider's privacy policy applies.</li>
+      <li><code>fetchJiraIssue</code> → your Jira instance (the URL you provide). We act as a stateless proxy.</li>
+      <li><code>pushToADO</code> → <code>dev.azure.com</code>. We act as a stateless proxy with your supplied PAT.</li>
+      <li><code>listTemplates</code> → no external call. Templates are bundled in the MCP server.</li>
+      <li><code>detectPlatform</code> → our hosted detection endpoint, which forwards to your configured AI provider.</li>
+    </ul>
+
+    <p><strong>4. Where the MCP server runs</strong> — Cloudflare Workers global edge network. Stateless — no database, no persistent storage of customer content. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" style="color:var(--indigo)">Cloudflare's privacy policy</a> applies to network-level telemetry.</p>
+
+    <p><strong>5. Caller-supplied credentials</strong> — Jira API tokens, Azure DevOps PATs, and AI provider keys you pass in tool calls are held in memory for the duration of a single request and explicitly discarded before the request completes. They are never logged, persisted, or shared.</p>
+
+    <p><strong>6. Data residency for AI provider responses</strong> — We do not control the geographic region of AI provider responses. Organizations with data residency requirements should self-host the Shuddhi QA MCP server (source at <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="color:var(--indigo)">github.com/ramya9b/shuddhiqacloud</a>) in their preferred region, or wait for Azure OpenAI provider support (planned v0.2).</p>
   </div>
 
   <!-- 8. Data Retention -->
@@ -342,7 +382,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   </div>
 
 
-  <div class="section fade-up">
+  <div class="section">
     <div class="section-header"><span class="section-icon">🔗</span><h2 class="section-title">LinkedIn Share Unlock</h2></div>
     <p>The free trial gate includes an optional LinkedIn share unlock. Clicking the share button opens LinkedIn's native share dialog in a new tab.</p>
     <ul class="privacy-list">
@@ -356,7 +396,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <footer>
   <div class="footer-brand">
-    <div class="footer-brand-mark">श</div>
+    <img class="footer-brand-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA — शुद्धि" style="object-fit:cover"/>
     Shuddhi<span class="qa">QA</span>
   </div>
   <div class="footer-links">

@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Help & Setup Guide — Shuddhi QA v12.4</title>
+<title>Help & Setup Guide — Shuddhi QA v12.21</title>
 <meta name="description" content="Shuddhi QA help guide — how to get started, configure AI providers, push to ADO and Jira, and use Smart Detect for enterprise platforms."/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://shuddhiqacloud.pages.dev/help"/>
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#5B5FEF"/>
+<script>(function(){try{var t=localStorage.getItem('shuddhi-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
@@ -19,7 +20,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#F7F8FD;--bg2:#F0F2FA;--surface:#FFFFFF;--surface2:#F0F2FA;--surface3:#E8EBF7;--border:#E2E5F0;--border2:#D0D5EE;--border3:#B8C0E0;--accent:#5B5FEF;--indigo:#5B5FEF;--indigo-l:rgba(91,95,239,0.08);--indigol:#818CF8;--violet:#8B5CF6;--pink:#EC4899;--text:#0E0F1A;--text2:#525672;--text3:#666F9C;--success:#10B981;--error:#EF4444;--warning:#F59E0B;--grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);--grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);--nav-bg:rgba(255,255,255,0.94);--orb1:rgba(91,95,239,0.07);--orb2:rgba(139,92,246,0.05)}
+:root{--bg:#F7F8FD;--bg2:#F0F2FA;--surface:#FFFFFF;--surface2:#F0F2FA;--surface3:#E8EBF7;--border:#E2E5F0;--border2:#D0D5EE;--border3:#B8C0E0;--accent:#5B5FEF;--indigo:#5B5FEF;--indigo-l:rgba(91,95,239,0.08);--indigol:#818CF8;--violet:#8B5CF6;--pink:#EC4899;--text:#0E0F1A;--text2:#525672;--text3:#5E6680;--success:#10B981;--error:#EF4444;--warning:#F59E0B;--grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);--grad-cool:linear-gradient(135deg,#5B5FEF,#8B5CF6);--nav-bg:rgba(255,255,255,0.94);--orb1:rgba(91,95,239,0.07);--orb2:rgba(139,92,246,0.05)}
+[data-theme="dark"]{--bg:#0f1117;--bg2:#1a1d27;--surface:#1e2130;--surface2:#262a3a;--surface3:#2e334a;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);--border3:rgba(255,255,255,.22);--text:#e8eaf0;--text2:#9ba3b8;--text3:#9499B7;--nav-bg:rgba(30,33,48,0.94);--orb1:rgba(91,95,239,0.04);--orb2:rgba(139,92,246,0.03)}
+[data-theme="dark"] .badge-rec,[data-theme="dark"] .nav-logo-name .qa,[data-theme="dark"] .footer-brand .qa,[data-theme="dark"] .hero-pill,[data-theme="dark"] code{color:#818CF8 !important}
+[data-theme="dark"] .badge-free{color:#34D399 !important;background:rgba(16,185,129,.15) !important;border-color:rgba(16,185,129,.35) !important}
+[data-theme="dark"] .badge-paid{color:#FBBF24 !important;background:rgba(245,158,11,.15) !important;border-color:rgba(245,158,11,.35) !important}
+[data-theme="dark"] .guide-badge[style*="#1D4ED8"]{color:#93C5FD !important;background:rgba(37,99,235,.18) !important;border-color:rgba(37,99,235,.4) !important}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -91,8 +97,53 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 .platform-card:hover{border-color:var(--indigo);background:var(--indigo-l)}
 .platform-icon{font-size:18px;flex-shrink:0}
 .platform-name{font-size:12px;font-weight:700;color:var(--text)}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--indigo-l);font-size:12px;color:var(--indigo);font-family:'JetBrains Mono',monospace;margin-bottom:20px}
+.hero h1{font-size:clamp(26px,5vw,48px);font-weight:900;line-height:1.1;letter-spacing:-1.2px;margin-bottom:10px;color:var(--text)}
+.hero h1 span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto 24px}
+
+.toc{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:680px;margin:8px auto 0;padding:0 16px}
+.toc-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:1.5px solid var(--border2);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--text2);text-decoration:none;transition:all .15s}
+.toc-btn:hover{color:var(--indigo);border-color:var(--indigo);background:var(--indigo-l)}
+
+.section-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.09em;text-transform:uppercase;margin:32px 0 12px;padding:0 4px}
+
+.guide-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;overflow:hidden}
+.guide-card:hover{border-color:var(--border2);box-shadow:0 4px 24px rgba(91,95,239,.06)}
+.guide-header{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;user-select:none}
+.guide-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.guide-title{flex:1;min-width:0}
+.guide-title h2{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.2px;margin:0}
+.guide-title p{font-size:12.5px;color:var(--text3);margin:2px 0 0;line-height:1.5}
+.guide-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:14px;font-size:10.5px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;flex-shrink:0;white-space:nowrap}
+.badge-free{background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.25)}
+.badge-rec{background:var(--indigo-l);color:var(--indigo);border:1px solid rgba(91,95,239,.25)}
+.badge-paid{background:rgba(245,158,11,.1);color:#D97706;border:1px solid rgba(245,158,11,.25)}
+.guide-toggle{font-size:18px;color:var(--text3);transition:transform .2s;flex-shrink:0;margin-left:4px}
+.guide-card.open .guide-toggle{transform:rotate(180deg)}
+.guide-body{display:none;padding:0 22px 22px;border-top:1px solid var(--border)}
+.guide-card.open .guide-body{display:block;padding-top:18px}
+
+.steps{display:flex;flex-direction:column;gap:14px;margin-top:14px;counter-reset:steps}
+.step{display:flex;align-items:flex-start;gap:14px;counter-increment:steps}
+.step-num{width:28px;height:28px;border-radius:8px;background:var(--indigo-l);color:var(--indigo);font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num::before{content:counter(steps)}
+.step-content{flex:1;min-width:0}
+.step-content h3{font-size:14.5px;font-weight:700;color:var(--text);margin:0 0 4px;letter-spacing:-.1px}
+.step-content p{font-size:13.5px;color:var(--text2);line-height:1.7;margin:0 0 6px}
+.step-content p:last-child{margin-bottom:0}
+.step-link{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;background:var(--indigo-l);font-size:12px;font-weight:600;color:var(--indigo);text-decoration:none;font-family:'JetBrains Mono',monospace;transition:all .15s;margin-top:4px}
+.step-link:hover{background:var(--indigo);color:#fff}
+
+.tip-box{background:rgba(91,95,239,.05);border:1.5px solid rgba(91,95,239,.2);border-radius:10px;padding:13px 15px;font-size:13.5px;color:var(--text2);margin:12px 0;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.tip-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:12.5px;color:var(--text3);margin:10px 0;line-height:1.6}
+.code-block{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:10px 14px;color:var(--text);margin:10px 0;overflow-x:auto;word-break:break-all}
+
 @media(max-width:768px){.help-layout{grid-template-columns:1fr}.help-sidebar{position:static}}
-.fade-up{opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease}
 </style>
 </head>
 <body>
@@ -100,7 +151,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="orb orb-2" aria-hidden="true"></div>
 <nav>
   <a href="/" class="nav-logo" aria-label="Shuddhi QA Home">
-    <div class="nav-logo-mark">श</div>
+    <img class="nav-logo-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA — शुद्धि" style="object-fit:cover"/>
     <div class="nav-logo-text">
       <div class="nav-logo-name">Shuddhi<span class="qa">QA</span></div>
       <div class="nav-logo-tag">AI Test Intelligence</div>
@@ -116,11 +167,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <div class="wrap">
 
 <!-- Hero -->
-<div class="hero fade-up">
-  <div class="hero-pill">📖 Setup Guide · v8.8</div>
+<div class="hero">
+  <div class="hero-pill">📖 Setup Guide · v12.21</div>
   <h1>Get started in <span>5 minutes</span></h1>
   <p>Step-by-step guides to set up your API keys and integrations. Everything is free to start — no credit card required.</p>
   <div class="toc">
+    <a href="#mcp"    class="toc-btn" style="border-color:rgba(232,162,32,.4);background:rgba(232,162,32,.07)">🔌 Copilot / MCP</a>
     <a href="#groq"   class="toc-btn">⚡ Groq API Key</a>
     <a href="#gemini" class="toc-btn">✦ Gemini API Key</a>
     <a href="#claude" class="toc-btn">🤖 Claude API Key</a>
@@ -128,6 +180,72 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <a href="#jira"   class="toc-btn">🟦 Jira API Token</a>
     <a href="#usage"  class="toc-btn">🚀 Using Shuddhi QA</a>
   </div>
+</div>
+
+<!-- ══ MCP / Copilot integration ══ -->
+<div class="section-label" id="mcp">🔌 Microsoft Copilot &amp; MCP Integration</div>
+
+<div class="help-section">
+  <div class="help-section-header">
+    <div class="help-section-icon">🤖</div>
+    <div class="help-section-title">Add Shuddhi QA to Microsoft 365 Copilot (~5 min)</div>
+  </div>
+  <p><strong>Prerequisite:</strong> Active Microsoft 365 Copilot license, and your tenant admin allows custom Copilot Studio agents with MCP server connectors.</p>
+  <ol style="font-size:14px;color:var(--text2);line-height:1.85;padding-left:22px;margin:8px 0">
+    <li>Open <a href="https://copilotstudio.microsoft.com" target="_blank" rel="noopener" style="color:var(--saffron)">copilotstudio.microsoft.com</a> with your work account</li>
+    <li>Click <strong>Create → New agent</strong> → choose <strong>Declarative Agent</strong></li>
+    <li>Name it <code>Shuddhi QA</code> and add the description: <em>"AI test case generator for 14 enterprise platforms"</em></li>
+    <li>In the agent's <strong>Knowledge / Actions</strong> panel, click <strong>Add → MCP server</strong></li>
+    <li>Paste this URL: <code style="font-size:13px">https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code></li>
+    <li>Authentication: <strong>None</strong> (v0.1)</li>
+    <li>Click <strong>Test</strong> — Copilot Studio should discover all 5 tools</li>
+    <li><strong>Publish</strong> and invoke from any Copilot surface: <code>@Shuddhi-QA generate D365 vendor invoice test cases</code></li>
+  </ol>
+</div>
+
+<div class="help-section">
+  <div class="help-section-header">
+    <div class="help-section-icon">🟣</div>
+    <div class="help-section-title">Add to Claude Desktop (~30 sec)</div>
+  </div>
+  <p>Open your Claude Desktop config file at <code>%APPDATA%\Claude\claude_desktop_config.json</code> (Windows) or <code>~/Library/Application Support/Claude/claude_desktop_config.json</code> (macOS) and add this:</p>
+  <pre style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);overflow-x:auto;line-height:1.55"><code>{
+  "mcpServers": {
+    "shuddhi-qa": {
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp"
+      }
+    }
+  }
+}</code></pre>
+  <p>Restart Claude Desktop. Type <em>"Generate D365 vendor invoice test cases with workflow approval"</em> &mdash; you'll see the tool fire and the table render inline.</p>
+</div>
+
+<div class="help-section">
+  <div class="help-section-header">
+    <div class="help-section-icon">⚡</div>
+    <div class="help-section-title">Add to Cursor / Continue / other MCP clients</div>
+  </div>
+  <p>In Cursor: <strong>Settings → Cursor Settings → MCP Servers → Add</strong>. Server type: <strong>Streamable HTTP</strong>. URL: <code style="font-size:13px">https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code>. No auth.</p>
+  <p>In Continue: edit <code>~/.continue/config.json</code>, add an <code>mcpServers</code> entry pointing at the URL above. Same shape as Claude Desktop.</p>
+  <p>For any other MCP-capable client: paste the URL into whatever "Add MCP server" form they expose. Authentication is not required in v0.1.</p>
+</div>
+
+<div class="help-section">
+  <div class="help-section-header">
+    <div class="help-section-icon">🛠️</div>
+    <div class="help-section-title">Five tools exposed</div>
+  </div>
+  <p>Once added, your AI client can invoke any of:</p>
+  <ul style="font-size:14px;color:var(--text2);line-height:1.85;padding-left:22px;margin:8px 0">
+    <li><strong>generateTestCases</strong> &mdash; production-grade test cases for 14 platforms</li>
+    <li><strong>fetchJiraIssue</strong> &mdash; pull a Jira ticket's content into the conversation</li>
+    <li><strong>pushToADO</strong> &mdash; push generated test cases to an Azure DevOps Test Plan</li>
+    <li><strong>listTemplates</strong> &mdash; browse the 110-template library by platform/domain</li>
+    <li><strong>detectPlatform</strong> &mdash; identify platform/domain/module from any requirement text</li>
+  </ul>
+  <p style="margin-top:14px;font-size:13px;color:var(--text3)">Full API reference, source code, and the OpenAPI 3.0 spec: <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="color:var(--saffron)">github.com/ramya9b/shuddhiqacloud</a></p>
 </div>
 
 <!-- ══ AI Provider Keys ══ -->
@@ -425,6 +543,59 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   </div>
 </div>
 
+<!-- ══ Azure OpenAI ══ -->
+<div class="guide-card" id="azure">
+  <div class="guide-header" onclick="toggleCard(this)">
+    <div class="guide-icon" style="background:rgba(0,120,212,.1)">☁️</div>
+    <div class="guide-title">
+      <h2>Azure OpenAI — Enterprise Setup (BYO)</h2>
+      <p>Your own Azure OpenAI resource · data residency · enterprise compliance</p>
+    </div>
+    <span class="guide-badge" style="background:rgba(0,120,212,.1);color:#0078D4">Enterprise · BYO</span>
+    <span class="guide-chevron">▼</span>
+  </div>
+  <div class="guide-body">
+    <div class="tip-box" style="margin-bottom:16px">
+      <span class="tip-icon">🏢</span>
+      <span>Azure OpenAI runs GPT-4o-class models inside <strong>your own Azure subscription</strong>. Requests stay in the Azure region you choose — ideal for enterprises with data-residency or compliance requirements. Unlike the other providers, Azure needs <strong>four values</strong> instead of a single key.</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Create an Azure OpenAI resource</h3>
+          <p>In the Azure portal, create an <strong>Azure OpenAI</strong> resource (requires an Azure subscription with OpenAI access).</p>
+          <a href="https://portal.azure.com" target="_blank" rel="noopener" class="step-link">🔗 portal.azure.com</a>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Copy your Endpoint and API key</h3>
+          <p>Open your resource → <strong>Keys and Endpoint</strong>. Copy the <strong>Endpoint</strong> and <strong>KEY 1</strong>.</p>
+          <div class="code-block">https://your-resource.openai.azure.com</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Deploy a model</h3>
+          <p>In <strong>Azure AI Foundry → Deployments</strong>, deploy a chat model (e.g. <strong>gpt-4o</strong>) and note the <strong>deployment name</strong> you assign it.</p>
+          <div class="code-block">gpt-4o-prod</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-content">
+          <h3>Paste all four values in Shuddhi QA</h3>
+          <p>Open <strong>Settings → AI Provider → Your Personal API Keys → Azure OpenAI</strong> (click to expand). Fill in <strong>Endpoint</strong>, <strong>API Key</strong>, <strong>Deployment</strong>, and <strong>API Version</strong> (defaults to <code>2024-08-01-preview</code>), then click <strong>🔌 Test connection</strong>.</p>
+          <div class="tip-box"><span class="tip-icon">🛡️</span><span>Your endpoint, key, and deployment stay in your browser only (<code>shuddhi-azure-config</code>). Generations run against your own Azure resource, in your chosen region.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ Provider Comparison ══ -->
 <div class="section-label" style="margin-top:48px">📊 Provider Comparison</div>
 <div class="guide-card" id="provider-comparison">
@@ -482,6 +653,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
           <td style="padding:10px;text-align:center">⭐⭐⭐⭐⭐</td>
           <td style="padding:10px;text-align:center">❌ Paid</td>
           <td style="padding:10px">Maximum quality, complex enterprise flows</td>
+        </tr>
+        <tr style="border-top:1px solid var(--border)">
+          <td style="padding:10px"><strong>☁️ Azure OpenAI</strong></td>
+          <td style="padding:10px;text-align:center">Your Azure rates</td>
+          <td style="padding:10px;text-align:center">⭐⭐⭐⭐½</td>
+          <td style="padding:10px;text-align:center">❌ BYO</td>
+          <td style="padding:10px">Enterprise teams on Azure · data residency</td>
         </tr>
       </tbody>
     </table>
@@ -855,7 +1033,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
             <tbody>
               <tr><td>Test Priority</td><td>High (focus on critical paths) · Medium · Low (comprehensive)</td></tr>
               <tr><td>Output Format</td><td>End to End · Smoke · Integration · Full Suite</td></tr>
-              <tr><td>Language</td><td>English, Telugu, Hindi, Tamil, and 5 more</td></tr>
+              <tr><td>Language</td><td>English, German, Spanish, French, Portuguese (BR) — 4 more coming soon</td></tr>
             </tbody>
           </table>
         </div>
@@ -890,7 +1068,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
 
 
   <!-- ── Domain Intelligence ── -->
-  <div class="help-section fade-up" id="domain-intelligence">
+  <div class="help-section" id="domain-intelligence">
     <div class="help-section-header">
       <span class="help-section-icon">🧠</span>
       <h2 class="help-section-title">Domain Intelligence</h2>
@@ -901,7 +1079,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
   </div>
 
   <!-- ── Free Trial Gate ── -->
-  <div class="help-section fade-up" id="free-trial">
+  <div class="help-section" id="free-trial">
     <div class="help-section-header">
       <span class="help-section-icon">🎯</span>
       <h2 class="help-section-title">Free Trial &amp; Sign-In</h2>
@@ -917,7 +1095,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
   </div>
 
   <!-- ── Sign In ── -->
-  <div class="help-section fade-up" id="sign-in">
+  <div class="help-section" id="sign-in">
     <div class="help-section-header">
       <span class="help-section-icon">👤</span>
       <h2 class="help-section-title">Sign In (Google / Microsoft)</h2>
@@ -931,7 +1109,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
   </div>
 
   <!-- ── Template Library ── -->
-  <div class="help-section fade-up" id="templates">
+  <div class="help-section" id="templates">
     <div class="help-section-header">
       <span class="help-section-icon">📚</span>
       <h2 class="help-section-title">Template Library — 100 Templates</h2>
@@ -952,19 +1130,20 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
     <div class="help-tip"><span class="tip-icon">💡</span><span>Browse the full library at <a href="/templates" style="color:var(--indigo);font-weight:600">shuddhiqacloud.pages.dev/templates</a> or click "View all →" on the app home screen.</span></div>
   </div>
 
-  <!-- ── 5 AI Providers ── -->
-  <div class="help-section fade-up" id="ai-providers">
+  <!-- ── 6 AI Providers ── -->
+  <div class="help-section" id="ai-providers">
     <div class="help-section-header">
       <span class="help-section-icon">🤖</span>
-      <h2 class="help-section-title">5 AI Providers</h2>
+      <h2 class="help-section-title">6 AI Providers</h2>
     </div>
-    <p>Choose from 5 AI providers. Groq is fully free with no API key required:</p>
+    <p>Choose from 6 AI providers. Groq is fully free with no API key required:</p>
     <div class="platform-grid">
       <div class="platform-card"><span class="platform-icon">🟠</span><span class="platform-name">Claude (Anthropic)</span></div>
       <div class="platform-card"><span class="platform-icon">🔵</span><span class="platform-name">Gemini (Google)</span></div>
       <div class="platform-card"><span class="platform-icon">🟢</span><span class="platform-name">Groq — FREE ★</span></div>
       <div class="platform-card"><span class="platform-icon">⚫</span><span class="platform-name">OpenAI (GPT-4)</span></div>
       <div class="platform-card"><span class="platform-icon">🟣</span><span class="platform-name">Together AI</span></div>
+      <div class="platform-card"><span class="platform-icon">☁️</span><span class="platform-name">Azure OpenAI · BYO</span></div>
     </div>
     <div class="help-tip"><span class="tip-icon">⭐</span><span><strong>Best quality:</strong> Claude Sonnet. <strong>Free option:</strong> Groq (Llama) — no API key, no cost, no limits.</span></div>
   </div>
@@ -973,7 +1152,7 @@ approves via workflow. Payment is scheduled and GL journal is posted.</div>
 
 <footer>
   <div class="footer-brand">
-    <div class="footer-brand-mark">श</div>
+    <img class="footer-brand-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA — शुद्धि" style="object-fit:cover"/>
     Shuddhi<span class="qa">QA</span>
   </div>
   <div class="footer-links">

@@ -56,7 +56,8 @@
   --teall:    #2DD4C4;
   --text:     #F0EDE6;
   --text2:    #9AA3B2;
-  --text3:    #74849A;
+  /* v12.20: lightened from #74849A so text3 on --surface2 (#1c2230) clears WCAG AA 4.5:1 (was 4.21:1, now 4.71:1) */
+  --text3:    #7E8CA5;
   --grad:     linear-gradient(135deg,#E8A020 0%,#F5B840 50%,#14B8A6 100%);
   --gradS:    linear-gradient(135deg,#E8A020,#C4851A);
   --nav-bg:   rgba(11,13,19,.85);
@@ -80,7 +81,8 @@ html.light {
   --teall:    #0E9888;
   --text:     #1A1208;
   --text2:    #4A3E28;
-  --text3:    #836F54;
+  /* v12.20: darkened from #836F54 so text3 on --code-bg (#EAE4D6) and --surface2 (#F5EFE4) clears WCAG AA 4.5:1 (was 3.80:1 / 4.21:1, now 4.93:1 / 5.46:1) */
+  --text3:    #6E5D47;
   --grad:     linear-gradient(135deg,#9C6010 0%,#B87414 50%,#0D7A6E 100%);
   --gradS:    linear-gradient(135deg,#B87414,#9C6010);
   --nav-bg:   rgba(250,250,247,.94);
@@ -144,11 +146,8 @@ nav{
 @keyframes logoShimmer{from{background-position:100% 0}to{background-position:0 0}}
 .nav-logo-mark{
   width:36px;height:36px;border-radius:10px;
-  background:var(--gradS);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant Garamond',serif;
-  font-size:18px;font-weight:700;color:#fff;
-  box-shadow:0 4px 16px rgba(232,162,32,.3);
+  display:block;object-fit:cover;
+  box-shadow:0 4px 16px rgba(91,95,239,.3);
 }
 .nav-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:.3px}
 .nav-brand span{color:var(--saffron)}
@@ -226,9 +225,22 @@ section{position:relative;z-index:1}
   font-size:22px;
   color:var(--saffronD);
   letter-spacing:6px;
-  margin-bottom:28px;
+  margin-bottom:10px;
   opacity:.7;
   animation:fadeUp .7s .15s ease both;
+}
+.hero-sanskrit-note{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:15px;
+  color:var(--text3);
+  margin-bottom:28px;
+  opacity:.85;
+  animation:fadeUp .7s .2s ease both;
+  max-width:560px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.5;
 }
 
 .hero-tagline{
@@ -279,6 +291,19 @@ section{position:relative;z-index:1}
 .hero-stat-l{font-size:12px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── DEMO VIDEO ─────────────────────────────────────────── */
+.demo{padding:56px 32px 40px;background:var(--bg);position:relative}
+.demo-inner{max-width:1000px;margin:0 auto;text-align:center}
+.demo-eye{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--saffron);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;opacity:.85}
+.demo-eye::before{content:'▶';font-size:10px;color:var(--saffron)}
+.demo-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.6vw,38px);font-weight:600;color:var(--text);margin-bottom:32px;line-height:1.25}
+.demo-title em{color:var(--saffron);font-style:italic}
+.demo-wrap{position:relative;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 24px 80px rgba(232,162,32,.18),0 4px 24px rgba(0,0,0,.45);border:1px solid var(--border2);max-width:920px;margin:0 auto}
+.demo-wrap video{display:block;width:100%;height:auto;background:#000}
+.demo-caption{margin-top:18px;font-size:13px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+.demo-caption strong{color:var(--saffron);font-weight:500}
+@media(max-width:640px){.demo{padding:36px 20px 28px}.demo-wrap{border-radius:12px}.demo-title{margin-bottom:24px}}
 
 /* ── WHAT IS IT ─────────────────────────────────────────── */
 .what{padding:100px 0}
@@ -579,7 +604,7 @@ html.light .feat-card:hover { box-shadow: 0 12px 40px rgba(180,110,20,.1); }
 html.light .hero-devanagari { color: var(--saffronD); opacity: .85; }
 
 /* Light shadow overrides */
-html.light .nav-logo-mark { box-shadow: 0 4px 16px rgba(180,110,20,.25); }
+html.light .nav-logo-mark { box-shadow: 0 4px 16px rgba(91,95,239,.25); }
 html.light .btn-primary    { box-shadow: 0 6px 24px rgba(180,110,20,.25); }
 html.light .btn-primary:hover { box-shadow: 0 10px 32px rgba(180,110,20,.35); }
 html.light .nav-cta        { box-shadow: 0 4px 16px rgba(180,110,20,.2); }
@@ -751,7 +776,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 <!-- ── NAV ──────────────────────────────────────────────── -->
 <nav>
   <a href="/" class="nav-logo" aria-label="Shuddhi QA — Home">
-    <div class="nav-logo-mark">श</div>
+    <img class="nav-logo-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA"/>
     <div>
       <div class="nav-brand"><span>Shuddhi</span> QA<sub>शुद्धि</sub></div>
     </div>
@@ -799,13 +824,14 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Powered by Claude · Gemini · Groq · OpenAI · Together AI · v12.4 · Free to Start
+      Powered by Claude · Gemini · Groq · OpenAI · Together AI · v12.21 · Free to Start
     </div>
 
     <h1 class="hero-title">
       <span class="shuddhi">Shuddhi</span> <span class="qa">QA</span>
     </h1>
     <div class="hero-devanagari">शुद्धि — Purity · Precision · Verification</div>
+    <div class="hero-sanskrit-note">Shuddhi (शुद्धि) — Sanskrit for &ldquo;purity / clarity.&rdquo; Because test cases deserve both.</div>
 
     <p class="hero-tagline">
       Generate <strong>production-ready test cases</strong> for ERP systems, web apps, and mobile platforms in seconds — from a flow description or uploaded requirements document.
@@ -818,7 +844,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div class="hero-stats">
       <div>
-        <div class="hero-stat-n">8</div>
+        <div class="hero-stat-n">14</div>
         <div class="hero-stat-l">Platforms</div>
       </div>
       <div>
@@ -826,7 +852,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div class="hero-stat-l">Export Formats</div>
       </div>
       <div>
-        <div class="hero-stat-n">9</div>
+        <div class="hero-stat-n">5</div>
         <div class="hero-stat-l">Languages</div>
       </div>
       <div>
@@ -843,6 +869,81 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ── DEMO VIDEO 1 — GENERATION ──────────────────────────── -->
+<section class="demo" id="demo" aria-label="Live product demo — generation">
+  <div class="demo-inner">
+    <div class="demo-eye">Watch it work</div>
+    <h2 class="demo-title">From requirement to <em>30+ test cases</em> — in real time</h2>
+    <div class="demo-wrap">
+      <video autoplay loop muted playsinline preload="metadata">
+        <source src="/demo.mp4" type="video/mp4">
+        Your browser doesn't support HTML5 video.
+      </video>
+    </div>
+    <p class="demo-caption">Live recording · D365 F&amp;O · AP Invoice · 30 test cases · No edits · No cuts</p>
+  </div>
+</section>
+
+<!-- ── DEMO VIDEO 2 — ADO PUSH ────────────────────────────── -->
+<section class="demo demo-ado" id="demo-ado" aria-label="Live product demo — Azure DevOps push">
+  <div class="demo-inner">
+    <div class="demo-eye">…and straight into your tools</div>
+    <h2 class="demo-title">One click to <em>Azure DevOps Test Plans</em></h2>
+    <div class="demo-wrap">
+      <video autoplay loop muted playsinline preload="metadata">
+        <source src="/demo-ado.mp4" type="video/mp4">
+        Your browser doesn't support HTML5 video.
+      </video>
+    </div>
+    <p class="demo-caption">56 test cases pushed to ADO · Test Plan + Suite + work items created · AI-review gate before push</p>
+  </div>
+</section>
+
+<!-- ── COPILOT / MCP ANNOUNCEMENT ─────────────────────────── -->
+<section class="mcp-section" id="mcp" aria-label="Microsoft Copilot and MCP integration" style="position:relative;z-index:1;padding:64px 24px;background:linear-gradient(180deg,transparent 0%,rgba(232,162,32,.04) 50%,transparent 100%)">
+  <div style="max-width:980px;margin:0 auto">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.35);background:rgba(232,162,32,.08);font-size:11px;font-weight:700;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">✦ Live now in v12.21</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4.5vw,46px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:14px;line-height:1.15">Now available inside <span style="color:var(--saffron);font-style:italic">Microsoft Copilot</span>, Claude Desktop, Cursor &amp; any MCP client</h2>
+    <p style="font-size:16px;color:var(--text2);line-height:1.7;max-width:780px;margin-bottom:28px">Shuddhi QA is now a <strong>Model Context Protocol (MCP) server</strong>. Add the URL below to any MCP-capable AI client in 30 seconds &mdash; including Microsoft 365 Copilot via Copilot Studio. Generate test cases, pull Jira tickets, push to Azure DevOps &mdash; without leaving your existing chat surface.</p>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 28px;margin-bottom:24px">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;font-family:'JetBrains Mono',monospace">MCP Server URL</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <code id="mcpUrl" style="flex:1;min-width:280px;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--saffron);background:var(--surface2);padding:12px 16px;border-radius:8px;border:1px solid var(--border);word-break:break-all">https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code>
+        <button onclick="(async()=>{try{await navigator.clipboard.writeText('https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp');this.textContent='✓ Copied';setTimeout(()=>this.textContent='Copy URL',2000);}catch(e){this.textContent='Copy failed';}})()" style="background:linear-gradient(135deg,#E8A020,#C4851A);color:#0b0d13;border:none;padding:12px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:.02em;white-space:nowrap">Copy URL</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <div style="font-size:24px;margin-bottom:6px">🤖</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Microsoft Copilot</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.55">Copilot Studio → add MCP server</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <div style="font-size:24px;margin-bottom:6px">🟣</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Claude Desktop</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.55">Paste in claude_desktop_config</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <div style="font-size:24px;margin-bottom:6px">⚡</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Cursor</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.55">Settings → MCP Servers</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
+        <div style="font-size:24px;margin-bottom:6px">🔧</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Continue + others</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.55">Any MCP-capable client</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <a href="/help#mcp" style="background:linear-gradient(135deg,#E8A020,#C4851A);color:#0b0d13;text-decoration:none;padding:12px 22px;border-radius:8px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif">30-second setup guide →</a>
+      <span style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace">5 tools: generateTestCases · fetchJiraIssue · pushToADO · listTemplates · detectPlatform</span>
+    </div>
   </div>
 </section>
 
@@ -877,7 +978,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <div class="what-point-icon">📄</div>
           <div>
             <div class="what-point-title">Upload any document</div>
-            <div class="what-point-desc">PDF, DOCX or TXT — FDDs, BRDs, user stories, Confluence pages. Auto-detects language in the document. Output available in 9 languages.</div>
+            <div class="what-point-desc">PDF, DOCX or TXT — FDDs, BRDs, user stories, Confluence pages. Auto-detects language in the document. Output available in 5 languages.</div>
           </div>
         </div>
         <div class="what-point">
@@ -960,9 +1061,9 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
       <div class="feat-card">
         <div class="feat-icon">🌐</div>
-        <div class="feat-title">9-Language Support</div>
-        <div class="feat-desc">Auto-detects input documents in 22+ languages and generates output in 9 languages — English, Telugu, Hindi, Tamil, Kannada, Bengali, Arabic, German, French.</div>
-        <div class="feat-tags"><span class="feat-tag">Indian Scripts</span><span class="feat-tag">Auto-translate</span></div>
+        <div class="feat-title">5-Language Output</div>
+        <div class="feat-desc">Auto-detects input documents in 22+ languages and generates output in 5 supported languages — English, German, Spanish, French, Portuguese (BR). More languages coming soon.</div>
+        <div class="feat-tags"><span class="feat-tag">European Scripts</span><span class="feat-tag">Auto-translate</span></div>
       </div>
 
       <div class="feat-card">
@@ -988,8 +1089,8 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
       <div class="feat-card">
         <div class="feat-icon">&#x1F916;</div>
-        <div class="feat-title">5 AI Providers — Free &amp; Paid</div>
-        <div class="feat-desc">Choose from Claude (Sonnet + Haiku), Gemini, Groq (free), OpenAI (GPT-4o mini), and Together AI (DeepSeek V3). Mix and match &#8212; use Groq for free exploration, Claude Haiku for cost-effective enterprise, Claude Sonnet for maximum quality.</div>
+        <div class="feat-title">6 AI Providers — Free &amp; Paid</div>
+        <div class="feat-desc">Choose from Claude (Sonnet + Haiku), Gemini, Groq (free), OpenAI (GPT-4o mini), Together AI (DeepSeek V3), and Azure OpenAI (enterprise BYO). Mix and match &#8212; use Groq for free exploration, Claude Haiku for cost-effective enterprise, Claude Sonnet for maximum quality.</div>
         <div class="feat-tags"><span class="feat-tag">Claude Sonnet</span><span class="feat-tag">Claude Haiku</span><span class="feat-tag">Groq Free</span><span class="feat-tag">GPT-4o mini</span><span class="feat-tag">DeepSeek V3</span></div>
       </div>
 
@@ -1014,6 +1115,35 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
         <div class="feat-tags"><span class="feat-tag">D365</span><span class="feat-tag">Guidewire</span><span class="feat-tag">SAP</span><span class="feat-tag">Salesforce</span></div>
       </div>
 
+      <!-- ── ROW 4: Trust + power features ── -->
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F6E1;&#xFE0F;</div>
+        <div class="feat-title">AI-Review Gate</div>
+        <div class="feat-desc">Before pushing to Azure DevOps or downloading the Jira CSV, you must explicitly tick "I&apos;ve reviewed these test cases." The Push button stays disabled until confirmed &mdash; preventing 50 hallucinated TCs from accidentally landing in your sprint. Accountability stays with the human reviewer, not the AI.</div>
+        <div class="feat-tags"><span class="feat-tag">Hallucination Guard</span><span class="feat-tag">ADO Safe</span><span class="feat-tag">Jira Safe</span></div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F3E2;</div>
+        <div class="feat-title">Domain Intelligence &mdash; 6 Verticals</div>
+        <div class="feat-desc">Layer business-domain knowledge on top of any platform. Pick Insurance, Banking, HR, ERP, Retail, or Healthcare &mdash; the AI adds vertical-specific terminology (FNOL, KYC, HL7, PHI) and tags compliance-sensitive scenarios so you don&apos;t miss audit-critical paths. Mix any platform with any domain: Salesforce + Insurance produces underwriting and policy-binding test cases automatically.</div>
+        <div class="feat-tags"><span class="feat-tag">Insurance</span><span class="feat-tag">Banking</span><span class="feat-tag">Healthcare</span><span class="feat-tag">HR</span><span class="feat-tag">ERP</span><span class="feat-tag">Retail</span></div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F4CA;</div>
+        <div class="feat-title">Quality Scoring per Test Case</div>
+        <div class="feat-desc">Every generated test case gets an AI confidence score &mdash; Good (90-100%), Fair (70-89%), or Needs Review (&lt;70%). Colour-coded badges let you prioritise which TCs to review first. Pair with the AI-Review Gate to focus eyes on the Fair/Needs Review ones before pushing to ADO.</div>
+        <div class="feat-tags"><span class="feat-tag">Good 95%</span><span class="feat-tag">Fair 75%</span><span class="feat-tag">Triage Aid</span></div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon">&#x1F4F2;</div>
+        <div class="feat-title">PWA Install &amp; Power Shortcuts</div>
+        <div class="feat-desc">Install Shuddhi QA as a desktop or mobile app &mdash; launches in its own window, works offline for previously generated TCs. Power users get a command palette (<strong>Ctrl+K</strong>) to jump anywhere instantly, plus shortcuts for Generate (Ctrl+Enter), Theme Toggle (Ctrl+Shift+T), and Settings (Ctrl+,).</div>
+        <div class="feat-tags"><span class="feat-tag">PWA</span><span class="feat-tag">Offline</span><span class="feat-tag">Ctrl+K</span><span class="feat-tag">Install</span></div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1022,7 +1152,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 <section class="platforms" id="platforms">
   <div class="wrap">
     <div class="section-eye">Supported Platforms</div>
-    <h2 class="section-title">ERP, Web, and Mobile — all in one</h2>
+    <h2 class="section-title">14 platforms · ERP, CRM, ITSM, Insurance — all in one</h2>
     <p class="section-sub">Smart Detect auto-identifies the platform from your requirement. Platform and domain chips auto-select so you jump straight to generation. Switch platforms and the AI adapts completely — no ERP jargon in web app tests, no REST API language in D365 tests.</p>
 
     <div class="platforms-grid">
@@ -1176,7 +1306,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
       <div class="how-step">
         <div class="how-num">2</div>
         <div class="how-step-title">Describe or Upload</div>
-        <div class="how-step-desc">Type your business flow, paste a user story, or upload a PDF/DOCX FDD. 9 output languages supported with auto-detection of input language.</div>
+        <div class="how-step-desc">Type your business flow, paste a user story, or upload a PDF/DOCX FDD. 5 output languages supported with auto-detection of input language.</div>
       </div>
       <div class="how-step">
         <div class="how-num">3</div>
@@ -1410,7 +1540,51 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
-          Yes. Shuddhi QA is free forever. It uses your own AI provider API key — <strong>Groq is 100% free</strong> (no credit card, no limits for normal use). Gemini has a generous free tier. Claude is paid (~₹9/generation) but optional. The app itself charges nothing.
+          Yes. Shuddhi QA is free forever. New users get <strong>3 free generations</strong> immediately (no signup) using a shared Groq server key. After that, sign in with Google or Microsoft for <strong>10 more free generations</strong>, or add your own API key for <strong>unlimited use</strong>. Groq is 100% free with your own key (no credit card). The app itself never charges.
+        </div></div>
+      </div>
+
+      <!-- Q-MCP-1: Microsoft Copilot integration -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Does Shuddhi QA work inside Microsoft 365 Copilot?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          <strong>Yes — available now via Model Context Protocol (MCP).</strong> Your tenant admin opens Copilot Studio, creates a Declarative Agent, and adds our MCP server URL: <code>https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code>. Once published, anyone with a Microsoft 365 Copilot license can invoke Shuddhi QA from inside Word, Excel, Teams, or Outlook by typing <code>@Shuddhi-QA</code>. Full setup walkthrough at <a href="/help#mcp" target="_blank">Help → Copilot / MCP Integration</a>.
+        </div></div>
+      </div>
+
+      <!-- Q-MCP-2: Other MCP clients -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Which other AI clients support Shuddhi QA via MCP?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          Any MCP-capable AI client: <strong>Claude Desktop</strong>, <strong>Cursor</strong>, <strong>Continue</strong> (VS Code / JetBrains), and a growing list of community clients. Setup is the same paste-the-URL pattern as Microsoft Copilot. The MCP server exposes five tools: <code>generateTestCases</code>, <code>fetchJiraIssue</code>, <code>pushToADO</code>, <code>listTemplates</code>, <code>detectPlatform</code>. See <a href="/help#mcp" target="_blank">setup guide</a>.
+        </div></div>
+      </div>
+
+      <!-- Q-MCP-3: Cost in Copilot -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">What does Shuddhi QA cost when used inside Microsoft Copilot?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          <strong>Shuddhi QA itself is free.</strong> You need a Microsoft 365 Copilot license to invoke any third-party agent from Copilot — that's Microsoft's standard requirement ($30/user/month). The AI generation happens via our free Groq tier by default; if you want higher quality, supply your own Claude / OpenAI / Gemini key per request. We never charge for use of the MCP server.
+        </div></div>
+      </div>
+
+      <!-- Q1.5 NEW: How long does it take? -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">How long does it take to generate test cases?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          Typically <strong>10–30 seconds</strong> for a single-section format (End-to-End, Field Validation, Negative, etc.). Full Suite generation across all 8 sections takes <strong>1–3 minutes</strong> for complex enterprise requirements. Test cases stream in live as they're generated, so you can start reading TC001 before TC002 has finished. Groq is fastest (~10s); Claude produces the highest quality but takes 20–40s.
         </div></div>
       </div>
 
@@ -1454,7 +1628,29 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
-          Typically <strong>40–70 test cases per generation</strong> depending on the complexity of your flow, the platform selected, and the output format chosen. End-to-End format generates 10–20 focused E2E scenarios. Full Suite generates all 8 sections — E2E, Field Validation, Integration, Negative, and more — totalling 50–70 test cases.
+          Depends on the <strong>Output Format</strong> you pick. <strong>All Sections</strong> generates 40+ test cases across E2E, Field Validation, Integration, Negative, Smoke, and Test Data (target 50+). Single-section formats (End-to-End / Field Validation / Integration / Negative / Smoke) generate 8–15 focused test cases of that one type. Test Data Format produces one comprehensive data table. Every test case has minimum 10 numbered steps.
+        </div></div>
+      </div>
+
+      <!-- Q5.5 NEW: Will the AI hallucinate? -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Will the AI hallucinate? Can I trust the test cases?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          AI models can occasionally generate inaccurate steps — this is a known limitation of every LLM, not specific to Shuddhi QA. That's why we built the <strong>AI-Review Gate</strong>: before pushing to Azure DevOps or downloading a Jira CSV, you must explicitly tick "<em>I've reviewed these test cases and they're ready to push.</em>" The Push button stays disabled until you do. This keeps accountability with the human reviewer — not the AI — and prevents 50 fabricated TCs from accidentally landing in your sprint. Every TC also has a quality score (Good 95%, Fair 75%) so you know which ones to read more carefully.
+        </div></div>
+      </div>
+
+      <!-- Q5.6 NEW: Do I need to sign in? -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Do I need to sign in?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          No — sign-in is optional. Anonymous visitors get <strong>3 free generations</strong> immediately. Signing in with Google or Microsoft unlocks <strong>10 more free generations</strong> and syncs your settings across devices. We only access your name and email — no Gmail/Drive/Calendar access, no posting on your behalf. You can delete your account and data anytime from Settings → Account.
         </div></div>
       </div>
 
@@ -1465,7 +1661,29 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
-          Yes. Configure your ADO PAT (Personal Access Token) in Settings → Azure DevOps. After generating, click the ADO button → select your project, test plan, and suite → Push. Test cases are created in ADO with full step XML — Title, Step Action, Expected Result, Assigned To, and State. See <a href="/help#ado" target="_blank">how to create a PAT</a>.
+          Yes. Configure your ADO PAT (Personal Access Token) in Settings → Azure DevOps. After generating, click the ADO button → tick the <strong>AI-Review acknowledgement checkbox</strong> → select your project, test plan, and suite → Push. Test cases are created in ADO with full step XML — Title, Step Action, Expected Result, Assigned To, and State. Note: ADO Test Plans requires the "Basic + Test Plans" license — your "Edit Cloudflare Workers" PAT scope must include Test Plans (R&amp;W). See <a href="/help#ado" target="_blank">how to create a PAT</a>.
+        </div></div>
+      </div>
+
+      <!-- Q6.5 NEW: Can I edit test cases after generation? -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Can I edit test cases after generation?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          Yes. Click <strong>✏️ Edit</strong> in the export toolbar to enter inline edit mode. Every cell in the test case table becomes clickable — change the title, step action, expected result, assigned to, or state. Changes are reflected instantly in <strong>all</strong> export formats (Excel, PDF, ADO push, Jira CSV, etc.). Edits are stored in your browser's localStorage and persist across sessions.
+        </div></div>
+      </div>
+
+      <!-- Q6.6 NEW: Can I regenerate one test case? -->
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q-text">Can I regenerate just one test case without rebuilding the whole suite?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a-wrap"><div class="faq-a">
+          Yes — that's our <strong>Iterative Refinement</strong> feature. Hover any test case row → click the 🔄 regenerate icon that appears on the right. A modal opens showing the original TC title. Add optional context (e.g., "Focus on boundary conditions" or "Add steps for currency conversion") and click Regenerate. Only that one test case is updated — the rest of the suite stays intact. Perfect for tweaking one weak TC without losing your edits to the others.
         </div></div>
       </div>
 
@@ -1476,7 +1694,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
-          Shuddhi QA supports <strong>D365 Finance &amp; Ops, D365 CRM/CE, D365 Business Central, Salesforce Sales Cloud, Salesforce Service Cloud, Salesforce CPQ, General Web App, and Mobile Application</strong>. Each platform has a tailored AI prompt — D365 tests use ERP-specific language and module context, Salesforce tests use CRM-specific field names and flows.
+          14 platforms — <strong>Microsoft D365 F&amp;O, D365 CRM/CE, D365 Business Central, Salesforce (Sales/Service/CPQ), SAP S/4HANA + ECC, ServiceNow ITSM, Guidewire (PolicyCenter, ClaimCenter, BillingCenter), Workday HCM, Oracle ERP, Power BI, generic Web App, and Mobile App</strong>. Plus <strong>6 business-domain layers</strong> (Insurance, Banking, HR, ERP, Retail, Healthcare) that overlay domain-specific terminology and risk patterns. Each platform has a tailored AI prompt with real field names, navigation paths, and module-specific test patterns.
         </div></div>
       </div>
 
@@ -1520,7 +1738,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
-          Test cases can be generated in <strong>9 languages</strong>: English (default), Telugu, Hindi, Tamil, Kannada, Bengali, Arabic, German, and French. Upload your FRD in any language — Shuddhi QA auto-detects the input language and generates output in your selected language. Tier 1 languages (Telugu, Hindi, Tamil) have full translation support.
+          Test cases can be generated in <strong>5 languages</strong>: English (default), German, Spanish, French, and Portuguese (BR) — all with full QA translation. Upload your FRD in any language — Shuddhi QA auto-detects the input language and generates output in your selected language. 4 additional languages (Japanese, Dutch, Italian, Polish) are listed as "Coming Soon".
         </div></div>
       </div>
 
@@ -1545,8 +1763,8 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 <!-- ── v11.3 New Features — dark/saffron theme ─────────────── -->
 <section style="position:relative;z-index:1;padding:72px 48px;max-width:1100px;margin:0 auto">
   <div style="text-align:center;margin-bottom:48px">
-    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.25);background:rgba(232,162,32,.07);font-size:12px;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:14px">✦ New in v12.4</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything new in v12.4</h2>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;border:1px solid rgba(232,162,32,.25);background:rgba(232,162,32,.07);font-size:12px;color:#F5B840;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-bottom:14px">✦ New in v12.14</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,4vw,42px);font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:10px">Everything new in v12.14</h2>
     <p style="font-size:15px;color:var(--text2);max-width:500px;margin:0 auto">Domain Intelligence, Firebase Sign-In, 100 Templates, 5 AI Providers and more.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px">
@@ -1572,8 +1790,8 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
       <div style="font-size:28px;margin-bottom:12px">🤖</div>
-      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">5 AI Providers</h3>
-      <p style="font-size:13px;color:var(--text2);line-height:1.65">Claude · Gemini · Groq (free) · OpenAI · Together AI. Use your own API key or Groq at zero cost. Switch providers any time with one click.</p>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">6 AI Providers</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">Claude · Gemini · Groq (free) · OpenAI · Together AI · Azure OpenAI. Use your own API key or Groq at zero cost. Switch providers any time with one click.</p>
     </div>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">
@@ -1596,9 +1814,11 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
   <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
     <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🐛 Report Issue</a>
 
+    <a href="/help" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">❓ Help &amp; Setup</a>
+    <a href="/guides/documentation.html" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📖 Documentation</a>
     <a href="/privacy" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">🔒 Privacy Policy</a>
     <a href="/terms" target="_blank" rel="noopener" style="font-size:12px;color:var(--text3);text-decoration:none;transition:color .15s" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--text3)'">📋 Terms of Service</a>
-    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v12.4</span>
+    <span style="font-size:12px;color:var(--text3)">Built with Claude Sonnet 4.6 · Deployed on Cloudflare Pages · Made in Bengaluru 🇮🇳 · v12.21</span>
   </div>
 </footer>
 
@@ -1734,10 +1954,9 @@ if (!localStorage.getItem('shuddhi-privacy')) {
 <!-- ── PWA: Service Worker + Install Prompt ──────────────────────────────── -->
 <div id="pwaInstallBanner" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;
   background:linear-gradient(135deg,#1c2230,#151923);border:1px solid rgba(232,162,32,.35);
-  border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:14px;
+  border-radius:14px;padding:14px 20px;align-items:center;gap:14px;
   box-shadow:0 8px 32px rgba(0,0,0,.5);max-width:440px;width:calc(100vw - 48px)">
-  <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#E8A020,#C4851A);
-    display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">श</div>
+  <img src="/icons/icon-72x72.png" alt="Shuddhi QA" style="width:40px;height:40px;border-radius:10px;flex-shrink:0;box-shadow:0 4px 12px rgba(91,95,239,.25);object-fit:cover"/>
   <div style="flex:1;min-width:0">
     <div style="font-size:13px;font-weight:600;color:#F0EDE6;margin-bottom:2px">Install Shuddhi QA</div>
     <div style="font-size:11.5px;color:#9AA3B2">Add to desktop for instant access — works offline too</div>
@@ -1777,6 +1996,7 @@ if ('serviceWorker' in navigator) {
 let _deferredPrompt = null;
 const INSTALL_DISMISSED_KEY = 'shuddhi-pwa-dismissed';
 
+let _pwaAutoDismissTimer = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   _deferredPrompt = e;
@@ -1784,7 +2004,26 @@ window.addEventListener('beforeinstallprompt', e => {
   if (!localStorage.getItem(INSTALL_DISMISSED_KEY)) {
     setTimeout(() => {
       const banner = document.getElementById('pwaInstallBanner');
-      if (banner) banner.style.display = 'flex';
+      if (!banner) return;
+      banner.style.display = 'flex';
+      // Auto-dismiss after 10s. Click/touch on the banner cancels the timer
+      // (real engagement). Hover does NOT pause — when the welcome modal is
+      // also visible, the user moving the cursor toward modal buttons can
+      // pass through the banner area, and pause-on-hover left the banner
+      // stuck open. A plain timer is more predictable.
+      clearTimeout(_pwaAutoDismissTimer);
+      _pwaAutoDismissTimer = setTimeout(() => {
+        banner.style.transition = 'opacity .4s ease';
+        banner.style.opacity = '0';
+        setTimeout(() => {
+          banner.style.display = 'none';
+          banner.style.opacity = '';
+          banner.style.transition = '';
+        }, 400);
+      }, 10000);
+      ['click', 'touchstart'].forEach(evt => {
+        banner.addEventListener(evt, () => clearTimeout(_pwaAutoDismissTimer), { once: true });
+      });
     }, 3000); // show after 3s so it doesn't interrupt landing
   }
 });

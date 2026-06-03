@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shuddhi QA — Complete Step-by-Step User Guide v12.19</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--indigo:#5B5FEF;--violet:#7C3AED;--pink:#EC4899;--dark:#0D0D1A;--dark2:#1A1A2E;--surface:#fff;--surface2:#F8F7FF;--surface3:#EEEEFF;--border:#E5E4FF;--text:#0D0D1A;--text2:#4B4B6B;--text3:#6B6B8F;--green:#10B981;--amber:#F59E0B;--red:#EF4444;--grad:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899);--shadow:0 4px 24px rgba(91,95,239,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:280px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;padding:20px 0}
+.sidebar-logo{padding:16px 20px 20px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.sidebar-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-v{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-top:2px}
+.sidebar-section{margin-bottom:20px;padding:0 12px}
+.sidebar-label{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:6px}
+.sidebar-link{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;font-size:12px;color:var(--text2);text-decoration:none;cursor:pointer;transition:all .15s;line-height:1.3}
+.sidebar-link:hover,.sidebar-link.active{background:var(--surface3);color:var(--indigo);font-weight:500}
+.sidebar-link .step-badge{background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:280px;flex:1;padding:0}
+.topbar{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 40px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text)}
+.topbar-sub{font-size:12px;color:var(--text3);margin-left:auto}
+.content{padding:40px}
+
+/* SECTIONS */
+.chapter{margin-bottom:72px;scroll-margin-top:60px}
+.chapter-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.chapter-num{width:42px;height:42px;background:var(--grad);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;flex-shrink:0}
+.chapter-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px}
+.chapter-sub{font-size:13px;color:var(--text2);margin-top:2px}
+
+/* STEPS */
+.step-block{display:flex;gap:20px;margin-bottom:28px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.step-block:hover{box-shadow:var(--shadow)}
+.step-num-circle{width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;margin-top:2px}
+.step-content{flex:1}
+.step-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px}
+.step-note{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);margin-top:10px;display:flex;gap:8px;align-items:flex-start}
+
+/* UI MOCKUPS */
+.mockup{background:#0D0D1A;border-radius:14px;overflow:hidden;margin:16px 0 20px;border:1px solid rgba(255,255,255,.06);box-shadow:0 16px 64px rgba(0,0,0,.3)}
+.mockup-bar{background:#0A0A18;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+.mockup-url{flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.35);margin:0 12px}
+.mockup-body{padding:16px}
+
+/* APP UI COMPONENTS */
+.app-nav{background:linear-gradient(135deg,#5B5FEF,#7C3AED);border-radius:10px;padding:10px 16px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.app-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#fff}
+.app-ver{background:rgba(255,255,255,.15);border-radius:5px;padding:2px 8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.8)}
+.app-spacer{flex:1}
+.app-pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:10px;color:#fff;cursor:pointer}
+.app-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.app-panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px}
+.app-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.platform-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
+.pchip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 4px;text-align:center;font-size:9px;color:rgba(255,255,255,.6)}
+.pchip.sel{background:rgba(91,95,239,.3);border-color:#5B5FEF;color:#A5A8FF;font-weight:600}
+.app-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:8px 10px;font-size:10px;color:rgba(255,255,255,.6);margin-bottom:10px;min-height:70px;font-style:italic;line-height:1.5}
+.app-counter{font-size:8px;color:rgba(255,255,255,.3);text-align:right;margin:-6px 0 8px}
+.gen-btn{width:100%;background:linear-gradient(135deg,#5B5FEF,#7C3AED);border:none;border-radius:8px;padding:9px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:4px}
+.cost-hint{font-size:9px;color:rgba(255,255,255,.3);text-align:center}
+.tc-row{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.tc-id{background:rgba(91,95,239,.3);border-radius:4px;padding:2px 6px;font-family:'JetBrains Mono',monospace;font-size:8px;color:#A5A8FF;flex-shrink:0}
+.tc-title{font-size:10px;color:rgba(255,255,255,.8);flex:1}
+.tc-score{font-size:8px;padding:1px 6px;border-radius:4px}
+.tc-good{background:rgba(16,185,129,.2);color:#6EE7B7}
+.tc-fair{background:rgba(245,158,11,.2);color:#FCD34D}
+.export-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.exp-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 8px;font-size:9px;color:rgba(255,255,255,.7)}
+
+/* SETTINGS MOCKUP */
+.settings-panel{background:#0D0D1A;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.settings-header{background:rgba(91,95,239,.15);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.settings-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff}
+.settings-tabs{display:flex;gap:4px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.stab{font-size:10px;padding:5px 10px;border-radius:6px;color:rgba(255,255,255,.5);cursor:pointer}
+.stab.active{background:rgba(91,95,239,.3);color:#A5A8FF;font-weight:600}
+.settings-body{padding:14px 16px}
+.settings-field{margin-bottom:12px}
+.sf-label{font-size:9px;color:rgba(255,255,255,.4);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.sf-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:6px 10px;font-size:10px;color:rgba(255,255,255,.6);width:100%;font-family:'JetBrains Mono',monospace}
+.sf-btn{background:rgba(91,95,239,.3);border:1px solid rgba(91,95,239,.5);border-radius:6px;padding:5px 12px;font-size:10px;color:#A5A8FF;cursor:pointer;margin-top:4px}
+
+/* CALLOUTS */
+.callout{border-radius:10px;padding:14px 18px;margin:16px 0;display:flex;gap:12px;align-items:flex-start}
+.callout.tip{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2)}
+.callout.success{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2)}
+.callout.warn{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2)}
+.callout.danger{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2)}
+.callout-icon{font-size:18px;flex-shrink:0}
+.callout-text{font-size:13px;color:var(--text2);line-height:1.6}
+.callout-text strong{color:var(--text)}
+
+/* TABLES */
+.guide-table{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.guide-table th{text-align:left;padding:10px 14px;background:var(--dark2);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700}
+.guide-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+.guide-table tr:hover td{background:var(--surface3)}
+
+/* FLOW DIAGRAM */
+.flow{display:flex;align-items:center;gap:0;margin:20px 0;flex-wrap:wrap}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;text-align:center;min-width:130px}
+.flow-step .fs-icon{font-size:20px;margin-bottom:4px}
+.flow-step .fs-label{font-size:11px;font-weight:600;color:var(--text)}
+.flow-step .fs-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.flow-arrow{font-size:20px;color:var(--indigo);padding:0 8px;flex-shrink:0}
+
+/* HIGHLIGHT BOX */
+.highlight{background:var(--dark2);border-radius:10px;padding:16px 20px;margin:14px 0}
+.highlight-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:8px}
+.highlight-item{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:5px;display:flex;gap:8px}
+.highlight-item::before{content:'→';color:#A5A8FF;flex-shrink:0}
+
+/* MODAL MOCKUP */
+.modal-backdrop{background:rgba(0,0,0,.4);border-radius:10px;padding:20px;margin:14px 0}
+.modal-box{background:#1A1A2E;border:1px solid rgba(91,95,239,.3);border-radius:12px;overflow:hidden;max-width:400px;margin:0 auto}
+.modal-header{background:rgba(91,95,239,.2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.modal-close{color:rgba(255,255,255,.5);font-size:16px;cursor:pointer}
+.modal-body{padding:16px}
+.modal-field{margin-bottom:10px}
+.modal-label{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.modal-input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:7px 10px;font-size:11px;color:rgba(255,255,255,.6);width:100%;font-family:'JetBrains Mono',monospace}
+.modal-footer{padding:12px 16px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid rgba(255,255,255,.06)}
+.modal-btn-primary{background:linear-gradient(135deg,#5B5FEF,#7C3AED);border:none;border-radius:6px;padding:7px 16px;font-size:11px;font-weight:700;color:#fff;cursor:pointer}
+.modal-btn-secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:7px 16px;font-size:11px;color:rgba(255,255,255,.6);cursor:pointer}
+
+/* KEYBOARD */
+.kbd{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--indigo);font-weight:600}
+
+/* PROVIDER CARDS */
+.provider-list{display:flex;flex-direction:column;gap:8px}
+.prov-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.prov-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prov-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.prov-model{font-size:11px;color:var(--text3)}
+.prov-cost{margin-left:auto}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.badge-free{background:rgba(16,185,129,.1);color:#10B981;border:1px solid rgba(16,185,129,.2)}
+.badge-paid{background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)}
+
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.app-layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">🧪 Shuddhi QA</div>
+    <div class="sidebar-v">Step-by-Step Guide · v12.19</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Getting Started</div>
+    <a class="sidebar-link active" href="#ch1"><span class="step-badge">01</span> Overview & First Launch</a>
+    <a class="sidebar-link" href="#ch2"><span class="step-badge">02</span> Configure AI Provider</a>
+    <a class="sidebar-link" href="#ch3"><span class="step-badge">03</span> Select Platform & Module</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Core Workflow</div>
+    <a class="sidebar-link" href="#ch4"><span class="step-badge">04</span> Write Your Requirement</a>
+    <a class="sidebar-link" href="#ch5"><span class="step-badge">05</span> Generate Test Cases</a>
+    <a class="sidebar-link" href="#ch6"><span class="step-badge">06</span> Review & Edit Test Cases</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Exports & Integrations</div>
+    <a class="sidebar-link" href="#ch7"><span class="step-badge">07</span> Export to Excel / PDF</a>
+    <a class="sidebar-link" href="#ch8"><span class="step-badge">08</span> Push to Azure DevOps</a>
+    <a class="sidebar-link" href="#ch9"><span class="step-badge">09</span> Export to Jira Zephyr</a>
+    <a class="sidebar-link" href="#ch10"><span class="step-badge">10</span> Other Export Formats</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Advanced Features</div>
+    <a class="sidebar-link" href="#ch11"><span class="step-badge">11</span> Iterative Refinement</a>
+    <a class="sidebar-link" href="#ch12"><span class="step-badge">12</span> Smart Detect & Templates</a>
+    <a class="sidebar-link" href="#ch13"><span class="step-badge">13</span> Sign In & Sync</a>
+    <a class="sidebar-link" href="#ch14"><span class="step-badge">14</span> Keyboard Shortcuts</a>
+    <a class="sidebar-link" href="#ch15"><span class="step-badge">15</span> Troubleshooting</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+<div class="topbar">
+  <div class="topbar-title">🧪 Shuddhi QA — Step-by-Step User Guide</div>
+  <div class="topbar-sub">v12.19 · shuddhiqacloud.pages.dev</div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 1 — OVERVIEW & FIRST LAUNCH
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div><div class="chapter-title">Overview & First Launch</div><div class="chapter-sub">What Shuddhi QA is and how to open it for the first time</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">What is Shuddhi QA?</div>
+      <div class="step-desc">Shuddhi QA is an AI-powered test case generator. You describe a business requirement in plain English, select your platform (D365, Salesforce, etc.), and the AI generates a complete set of test cases with steps, expected results, and quality scores — in under 30 seconds.</div>
+      <div class="flow">
+        <div class="flow-step"><div class="fs-icon">📝</div><div class="fs-label">Describe</div><div class="fs-sub">Plain English requirement</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">🏢</div><div class="fs-label">Select Platform</div><div class="fs-sub">D365, SF, SAP...</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">⚡</div><div class="fs-label">Generate</div><div class="fs-sub">30 seconds</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><div class="fs-icon">📤</div><div class="fs-label">Export</div><div class="fs-sub">ADO, Jira, Excel...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Open the App</div>
+      <div class="step-desc">Open any browser and navigate to the URL below. No installation, no account, no credit card required to start.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">https://shuddhiqacloud.pages.dev</div></div>
+        <div class="mockup-body">
+          <div class="app-nav">
+            <span class="app-logo">🧪 Shuddhi QA</span>
+            <span class="app-ver">v12.19</span>
+            <span class="app-spacer"></span>
+            <span style="font-size:9px;color:rgba(255,255,255,.5);margin-right:8px">● Groq Sonnet</span>
+            <span class="app-pill">⚙️ Settings</span>
+            <span class="app-pill" style="margin-left:6px">Sign In</span>
+          </div>
+          <div style="text-align:center;padding:20px 0">
+            <div style="font-size:24px;font-weight:800;background:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Syne',sans-serif;margin-bottom:8px">Generate Test Cases</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:16px">AI-Powered Test Intelligence for Enterprise Platforms</div>
+            <div style="display:flex;justify-content:center;gap:20px">
+              <div style="text-align:center"><div style="font-size:18px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">14</div><div style="font-size:9px;color:rgba(255,255,255,.4)">Platforms</div></div>
+              <div style="text-align:center"><div style="font-size:18px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">6</div><div style="font-size:9px;color:rgba(255,255,255,.4)">AI Providers</div></div>
+              <div style="text-align:center"><div style="font-size:18px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">100+</div><div style="font-size:9px;color:rgba(255,255,255,.4)">Templates</div></div>
+              <div style="text-align:center"><div style="font-size:18px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">Free</div><div style="font-size:9px;color:rgba(255,255,255,.4)">To Start</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout success"><div class="callout-icon">✅</div><div class="callout-text"><strong>Free to use.</strong> Anonymous users get 3 free generations. Sign in with Google or Microsoft for 10 free generations. Add your own API key for unlimited usage.</div></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Understand the App Layout</div>
+      <div class="step-desc">The app has two panels side by side — the left panel for your inputs, and the right panel for generated output.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="app-nav"><span class="app-logo">🧪 Shuddhi QA</span><span class="app-ver">v12.19</span><span class="app-spacer"></span><span class="app-pill">⚙️</span><span class="app-pill" style="margin-left:4px">Sign In</span></div>
+          <div class="app-layout">
+            <div class="app-panel">
+              <div style="font-size:9px;font-weight:700;color:#5B5FEF;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">← LEFT PANEL: Your Input</div>
+              <div class="app-label">① Platform</div>
+              <div class="platform-chips"><div class="pchip sel">D365 F&O</div><div class="pchip">Salesforce</div><div class="pchip">Web App</div></div>
+              <div class="app-label">② Module</div>
+              <div class="app-input" style="min-height:30px">AP Invoice</div>
+              <div class="app-label">③ Requirement</div>
+              <div class="app-input">Paste your requirement here...</div>
+              <div class="gen-btn">⚡ Generate Test Cases</div>
+              <div class="cost-hint">⚡ Groq · Free (server-side)</div>
+            </div>
+            <div class="app-panel">
+              <div style="font-size:9px;font-weight:700;color:#5B5FEF;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">→ RIGHT PANEL: Generated Output</div>
+              <div class="export-bar"><span class="exp-btn">✏️ Edit</span><span class="exp-btn">📑 PDF</span><span class="exp-btn">📊 Excel</span><span class="exp-btn">🔷 ADO</span><span class="exp-btn">More ▾</span></div>
+              <div class="tc-row"><span class="tc-id">TC001</span><span class="tc-title">E2E: Successful 3-Way Match</span><span class="tc-score tc-good">Good 95%</span></div>
+              <div class="tc-row"><span class="tc-id">TC002</span><span class="tc-title">E2E: Finance Manager Approval</span><span class="tc-score tc-good">Good 100%</span></div>
+              <div class="tc-row"><span class="tc-id">TC003</span><span class="tc-title">Validation: Quantity Mismatch</span><span class="tc-score tc-fair">Fair 75%</span></div>
+              <div style="font-size:9px;color:rgba(255,255,255,.3);text-align:center;margin-top:8px">+ 9 more test cases</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 2 — CONFIGURE AI PROVIDER
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div><div class="chapter-title">Configure AI Provider</div><div class="chapter-sub">Choose and configure your AI provider for generation</div></div>
+  </div>
+
+  <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>Skip this step to start free.</strong> The app automatically uses a shared Groq server key for your first 3 generations. You only need to add your own key for unlimited usage.</div></div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Choose Your Provider</div>
+      <div class="step-desc">Compare the 6 available providers and choose based on your needs.</div>
+      <div class="provider-list">
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(16,185,129,.1)">⚡</div><div><div class="prov-name">Groq — Llama 3.3</div><div class="prov-model">Fastest · Best for quick iterations · Free with own key</div></div><div class="prov-cost"><span class="badge badge-free">FREE</span></div></div>
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(245,158,11,.1)">✦</div><div><div class="prov-name">Gemini 2.5 Flash</div><div class="prov-model">Google · 1M token context · Recommended · Free tier</div></div><div class="prov-cost"><span class="badge badge-paid">~$0.001/run</span></div></div>
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(124,58,237,.1)">🤖</div><div><div class="prov-name">Claude Sonnet 4</div><div class="prov-model">Anthropic · Best quality · Most detailed steps</div></div><div class="prov-cost"><span class="badge badge-paid">~$0.015/run</span></div></div>
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(14,165,233,.1)">🟢</div><div><div class="prov-name">OpenAI GPT-4o</div><div class="prov-model">Strong reasoning · Complex flows</div></div><div class="prov-cost"><span class="badge badge-paid">~$0.010/run</span></div></div>
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(239,68,68,.1)">🔴</div><div><div class="prov-name">Together AI</div><div class="prov-model">Open source models · Cost effective</div></div><div class="prov-cost"><span class="badge badge-paid">~$0.002/run</span></div></div>
+        <div class="prov-card"><div class="prov-icon" style="background:rgba(14,165,233,.1)">☁️</div><div><div class="prov-name">Azure OpenAI</div><div class="prov-model">Enterprise · BYO Azure resource · Data residency</div></div><div class="prov-cost"><span class="badge badge-paid">Your Azure rates</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Open Settings → AI Provider</div>
+      <div class="step-desc">Click the ⚙️ Settings gear icon in the top navigation bar, then click the <strong>AI Provider</strong> tab.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="settings-panel">
+            <div class="settings-header"><span style="font-size:14px">⚙️</span><span class="settings-title">Settings — API Keys & Connection Configuration</span><span style="margin-left:auto;font-size:14px;color:rgba(255,255,255,.4)">✕</span></div>
+            <div class="settings-tabs">
+              <span class="stab active">🤖 AI Provider</span>
+              <span class="stab">🔷 Azure DevOps</span>
+              <span class="stab">🟦 Jira</span>
+              <span class="stab">📊 Usage & Cost</span>
+              <span class="stab">ℹ️ About</span>
+            </div>
+            <div class="settings-body">
+              <div style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:14px">Select your AI provider and paste your API key. Keys are stored only in your browser.</div>
+              <div class="settings-field">
+                <div class="sf-label">Active Provider</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+                  <span style="background:rgba(91,95,239,.3);border:1px solid #5B5FEF;border-radius:6px;padding:4px 10px;font-size:10px;color:#A5A8FF;font-weight:600">Groq</span>
+                  <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.5)">Gemini</span>
+                  <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.5)">Claude</span>
+                  <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.5)">OpenAI</span>
+                  <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.5)">Together</span>
+                  <span style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;font-size:10px;color:rgba(255,255,255,.5)">Azure OpenAI</span>
+                </div>
+              </div>
+              <div class="settings-field">
+                <div class="sf-label">Groq API Key</div>
+                <input class="sf-input" value="gsk_••••••••••••••••••••" readonly/>
+                <div class="sf-btn">✓ Key Saved</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Get and paste your API key</div>
+      <div class="step-desc">Get your key from the provider's website and paste it in the key field, then click Save.</div>
+      <table class="guide-table">
+        <thead><tr><th>Provider</th><th>Where to get your key</th></tr></thead>
+        <tbody>
+          <tr><td>⚡ Groq (Free)</td><td>console.groq.com → API Keys → Create API Key</td></tr>
+          <tr><td>✦ Gemini</td><td>aistudio.google.com → Get API Key → Create API Key in new project</td></tr>
+          <tr><td>🤖 Claude</td><td>console.anthropic.com → API Keys → Create Key</td></tr>
+          <tr><td>🟢 OpenAI</td><td>platform.openai.com → API Keys → Create new secret key</td></tr>
+          <tr><td>🔴 Together AI</td><td>api.together.ai → Settings → API Keys</td></tr>
+          <tr><td>☁️ Azure OpenAI</td><td>portal.azure.com → your Azure OpenAI resource → Keys and Endpoint (see step 4 for the 4 values needed)</td></tr>
+        </tbody>
+      </table>
+      <div class="callout success"><div class="callout-icon">🔒</div><div class="callout-text"><strong>Your keys stay in your browser.</strong> API keys are stored in browser localStorage only. They are never sent to Shuddhi QA servers — they go directly to the AI provider's API from your browser.</div></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">4</div>
+    <div class="step-content">
+      <div class="step-title">Configure Azure OpenAI (Enterprise · BYO)</div>
+      <div class="step-desc">Unlike the other five providers — which need a single API key — Azure OpenAI uses your own Azure resource, so it requires four values. In <strong>Settings → AI Provider → Your Personal API Keys</strong>, expand the <strong>☁️ Azure OpenAI</strong> row and fill in the fields below, then click <strong>Test connection</strong>.</div>
+      <table class="guide-table">
+        <thead><tr><th>Field</th><th>What to enter</th></tr></thead>
+        <tbody>
+          <tr><td>Endpoint</td><td>https://&lt;your-resource&gt;.openai.azure.com</td></tr>
+          <tr><td>API Key</td><td>portal.azure.com → your Azure OpenAI resource → Keys and Endpoint → KEY 1</td></tr>
+          <tr><td>Deployment name</td><td>The name of your model deployment (e.g. gpt-4o-prod)</td></tr>
+          <tr><td>API Version</td><td>Default 2024-08-01-preview</td></tr>
+        </tbody>
+      </table>
+      <div class="callout tip"><div class="callout-icon">🌍</div><div class="callout-text"><strong>Data residency.</strong> Requests go to your own Azure resource, so your data stays in the region of that resource — ideal for enterprise data-residency requirements. Click <strong>Test connection</strong> to verify the endpoint, key, and deployment before generating.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 3 — SELECT PLATFORM & MODULE
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div><div class="chapter-title">Select Platform & Module</div><div class="chapter-sub">Tell the AI which system and module you're testing</div></div>
+  </div>
+
+  <div class="callout warn"><div class="callout-icon">⚠️</div><div class="callout-text"><strong>Both platform and module are required.</strong> From v12.16, generation is blocked until you select a platform and enter a module name. This ensures the AI generates accurate, domain-specific test cases.</div></div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Select your Platform</div>
+      <div class="step-desc">Click one of the platform chips in the left panel. The selected platform tells the AI which terminology, navigation paths, and field names to use.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="app-panel">
+            <div class="app-label">Select Platform (Required)</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px">
+              <div class="pchip sel">🔷 D365 F&O</div>
+              <div class="pchip">☁️ Salesforce</div>
+              <div class="pchip">🌐 Web App</div>
+              <div class="pchip">📱 Mobile</div>
+              <div class="pchip">🔧 ServiceNow</div>
+              <div class="pchip">🏥 Guidewire</div>
+              <div class="pchip">📊 SAP</div>
+              <div class="pchip">👥 Workday</div>
+            </div>
+            <div style="font-size:9px;color:rgba(16,185,129,.8);margin-top:4px">✅ D365 F&O selected — Finance, Supply Chain, Manufacturing domain</div>
+          </div>
+        </div>
+      </div>
+      <div class="highlight">
+        <div class="highlight-title">Available Platforms</div>
+        <div class="highlight-item">D365 F&O — Finance, Supply Chain, Manufacturing, HR</div>
+        <div class="highlight-item">Salesforce — CRM, Sales Cloud, Service Cloud, Apex, LWC</div>
+        <div class="highlight-item">ServiceNow — ITSM, workflows, service catalog</div>
+        <div class="highlight-item">SAP — S/4HANA, ECC, BTP, Fiori</div>
+        <div class="highlight-item">Guidewire — PolicyCenter, ClaimCenter, BillingCenter</div>
+        <div class="highlight-item">Workday — HCM, Financials, Payroll</div>
+        <div class="highlight-item">Web App, Mobile App, Banking, Insurance, Retail, Healthcare</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Enter the Module Name</div>
+      <div class="step-desc">Type the specific module or feature you are testing. This gives the AI more context to generate precise test cases.</div>
+      <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>Examples of good module names:</strong> "AP Invoice Processing", "Vendor Payment", "Opportunity Management", "ITSM Incident", "Leave Management", "Purchase Order Approval"</div></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Smart Detect — Auto Platform Detection</div>
+      <div class="step-desc">If you paste a requirement first, Shuddhi QA automatically detects the platform from the text content. You'll see a green notification confirming the detected platform.</div>
+      <div class="callout success"><div class="callout-icon">🎯</div><div class="callout-text"><strong>D365 keywords detected:</strong> Action Pane, infolog, legal entity, financial dimension, posting → auto-selects D365 F&O.<br/><strong>Salesforce keywords detected:</strong> SOQL, LWC, Apex trigger, Opportunity, Account → auto-selects Salesforce.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 4 — WRITE YOUR REQUIREMENT
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div><div class="chapter-title">Write Your Requirement</div><div class="chapter-sub">How to write requirements that generate the best test cases</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Paste or type your requirement</div>
+      <div class="step-desc">Click the requirement textarea and paste your user story, BRD excerpt, or process description. You can type up to 6,000 characters — the counter shows your current count.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="app-panel">
+            <div class="app-label">Describe Your Requirement (Required)</div>
+            <div class="app-input" style="min-height:100px">Vendor submits invoice via portal. AP Clerk performs 3-way match (Invoice, PO, Goods Receipt). If amount ≤ ₹50,000, auto-approved. If > ₹50,000, Finance Manager must approve within 2 business days. On approval, payment is scheduled to vendor bank account. On rejection, vendor receives email with reason.</div>
+            <div class="app-counter">312 / 6,000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Writing a good requirement</div>
+      <div class="step-desc">The quality of your test cases directly depends on the clarity of your requirement. Include roles, thresholds, and expected outcomes.</div>
+      <table class="guide-table">
+        <thead><tr><th>✅ Good Requirement</th><th>❌ Poor Requirement</th></tr></thead>
+        <tbody>
+          <tr><td>Includes user roles (AP Clerk, Finance Manager)</td><td>Generic — "test the invoice process"</td></tr>
+          <tr><td>Includes thresholds (≤ ₹50,000 / > ₹50,000)</td><td>No boundary values</td></tr>
+          <tr><td>Includes expected outcomes (payment scheduled, email sent)</td><td>No expected results</td></tr>
+          <tr><td>Includes error scenarios (rejection flow)</td><td>Only happy path described</td></tr>
+          <tr><td>200–500 characters</td><td>Single sentence</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Select Output Type</div>
+      <div class="step-desc">Choose what kind of test cases you want generated.</div>
+      <table class="guide-table">
+        <thead><tr><th>Output Type</th><th>What's generated</th><th>When to use</th></tr></thead>
+        <tbody>
+          <tr><td>E2E Scenarios</td><td>Full end-to-end flows with all steps</td><td>Sprint testing, regression</td></tr>
+          <tr><td>Smoke Tests</td><td>Critical path only — fast to run</td><td>After deployments</td></tr>
+          <tr><td>Field Validation</td><td>All input validations, boundary values</td><td>Form testing</td></tr>
+          <tr><td>Integration</td><td>System integration touch points</td><td>API/middleware testing</td></tr>
+          <tr><td>Negative Tests</td><td>Error paths, invalid inputs, edge cases</td><td>Security, robustness</td></tr>
+          <tr><td>Full Artifact</td><td>All 5 types combined</td><td>Comprehensive coverage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 5 — GENERATE TEST CASES
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div><div class="chapter-title">Generate Test Cases</div><div class="chapter-sub">Trigger generation and understand the output</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Click Generate Test Cases</div>
+      <div class="step-desc">Click the <strong>⚡ Generate Test Cases</strong> button or press <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span>. Test cases stream into the right panel in real-time. Generation takes 10–30 seconds depending on the provider.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="app-layout">
+            <div class="app-panel">
+              <div class="gen-btn" style="background:linear-gradient(135deg,#5B5FEF,#7C3AED);animation:pulse 2s infinite">⚡ Generating... (12s)</div>
+              <div class="cost-hint">⚡ Claude Sonnet · ~$0.015/run</div>
+            </div>
+            <div class="app-panel">
+              <div style="font-size:9px;color:rgba(255,255,255,.4);margin-bottom:8px;font-family:'JetBrains Mono',monospace">D365 F&O · AP Invoice · 12 TCs · ▌ streaming...</div>
+              <div class="tc-row"><span class="tc-id">TC001</span><span class="tc-title">E2E: Successful 3-Way Match & Auto-Approval (≤₹50,000)</span><span class="tc-score tc-good">Good 95%</span></div>
+              <div class="tc-row"><span class="tc-id">TC002</span><span class="tc-title">E2E: Finance Manager Approval (> ₹50,000)</span><span class="tc-score tc-good">Good 100%</span></div>
+              <div class="tc-row"><span class="tc-id">TC003</span><span class="tc-title">E2E: 3-Way Match Failure — Quantity Mismatch</span><span class="tc-score tc-fair">Fair 75%</span></div>
+              <div class="tc-row" style="opacity:.5"><span class="tc-id">TC004</span><span class="tc-title">Validation: Invoice Amount Exceeds Tolerance...</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Understand the Quality Score</div>
+      <div class="step-desc">Each test case gets an AI quality score. Use this to prioritize which test cases to review first.</div>
+      <table class="guide-table">
+        <thead><tr><th>Score</th><th>Color</th><th>Meaning</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>90–100%</td><td style="color:#10B981">🟢 Good</td><td>Complete, accurate, well-structured</td><td>Export as-is</td></tr>
+          <tr><td>70–89%</td><td style="color:#F59E0B">🟡 Fair</td><td>Usable but may need minor edits</td><td>Quick review recommended</td></tr>
+          <tr><td>&lt;70%</td><td style="color:#EF4444">🔴 Needs Review</td><td>Generated with limited context</td><td>Edit or regenerate with more context</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Validation errors before generation</div>
+      <div class="step-desc">From v12.16–v12.17, generation is blocked with a clear error if any required field is missing. Errors appear in the red error banner above the form.</div>
+      <table class="guide-table">
+        <thead><tr><th>Error</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>No AI provider configured</td><td>Go to Settings → AI Provider → add your API key</td></tr>
+          <tr><td>Please select a platform</td><td>Click one of the platform chips (D365, Salesforce, etc.)</td></tr>
+          <tr><td>Please select a module or enter a custom module name</td><td>Type your module name in the Module field</td></tr>
+          <tr><td>Please describe the business flow</td><td>Type or paste your requirement in the textarea</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 6 — REVIEW & EDIT
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div><div class="chapter-title">Review & Edit Test Cases</div><div class="chapter-sub">Inline editing and select-all controls</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Enter Edit Mode</div>
+      <div class="step-desc">Click the <strong>✏️ Edit</strong> button in the export toolbar to enter inline edit mode. Every cell in the test case table becomes clickable.</div>
+      <div class="step-note"><span>💡</span><span>Edit mode is non-destructive — you can exit without saving by clicking Edit again to toggle off.</span></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Edit any cell</div>
+      <div class="step-desc">Click any cell — test case title, step action, expected result — to edit inline. Changes reflect immediately in all export formats.</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Select / Deselect All Test Cases</div>
+      <div class="step-desc">Use the checkbox at the top of the table to select all or deselect all test cases at once. This controls which TCs get exported.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="app-panel">
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(91,95,239,.1);border-radius:6px;margin-bottom:8px;border:1px solid rgba(91,95,239,.2)">
+              <div style="width:14px;height:14px;background:#5B5FEF;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff">✓</div>
+              <span style="font-size:9px;color:#A5A8FF;font-weight:600">Select All (12 TCs selected)</span>
+              <span style="font-size:9px;color:rgba(255,255,255,.3);margin-left:auto">Click to deselect all</span>
+            </div>
+            <div class="tc-row"><div style="width:12px;height:12px;background:#5B5FEF;border-radius:2px;flex-shrink:0"></div><span class="tc-id">TC001</span><span class="tc-title">Successful 3-Way Match</span><span class="tc-score tc-good">Good 95%</span></div>
+            <div class="tc-row"><div style="width:12px;height:12px;background:#5B5FEF;border-radius:2px;flex-shrink:0"></div><span class="tc-id">TC002</span><span class="tc-title">Finance Manager Approval</span><span class="tc-score tc-good">Good 100%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>Toggle behavior (v12.15+):</strong> None selected → click → all selected. All selected → click → none selected. Some selected → shows indeterminate dash → click → all selected.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 7 — EXPORT TO EXCEL / PDF
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div><div class="chapter-title">Export to Excel / PDF</div><div class="chapter-sub">Download test cases for stakeholder review</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Export to Excel</div>
+      <div class="step-desc">Click <strong>📊 Excel</strong> in the export toolbar. A .xlsx file downloads automatically with separate sheets per test case type (E2E, Smoke, Validation, etc.).</div>
+      <div class="step-note"><span>💡</span><span>Only selected test cases (checked checkboxes) are included in the export.</span></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Export to PDF</div>
+      <div class="step-desc">Click <strong>📑 PDF</strong> in the export toolbar. A formatted PDF downloads with all test cases, steps, and expected results — ideal for sign-off packages or sharing with non-technical stakeholders.</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Copy Markdown</div>
+      <div class="step-desc">Click <strong>📋 Markdown</strong> to copy all test cases to clipboard in Markdown format. Paste directly into Confluence, Notion, or any Markdown editor.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 8 — PUSH TO AZURE DEVOPS
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div><div class="chapter-title">Push to Azure DevOps</div><div class="chapter-sub">Create test plans and push test cases directly to ADO</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Create an ADO Personal Access Token (PAT)</div>
+      <div class="step-desc">In Azure DevOps, create a PAT with the correct scope.</div>
+      <div class="highlight">
+        <div class="highlight-title">Steps to create ADO PAT</div>
+        <div class="highlight-item">Go to dev.azure.com → your org</div>
+        <div class="highlight-item">Click your profile icon (top right) → Personal Access Tokens</div>
+        <div class="highlight-item">Click + New Token</div>
+        <div class="highlight-item">Name: ShuddhiQA-PAT (or any name)</div>
+        <div class="highlight-item">Expiration: 90 days recommended</div>
+        <div class="highlight-item">Scopes: tick Test Plans (Read & Write) + Work Items (Read & Write)</div>
+        <div class="highlight-item">Click Create → Copy the token immediately (shown once only)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Configure ADO in Settings</div>
+      <div class="step-desc">Click ⚙️ Settings → Azure DevOps tab → enter your Org URL and PAT → click Test Connection.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="settings-panel">
+            <div class="settings-header"><span>🔷</span><span class="settings-title">Azure DevOps Configuration</span></div>
+            <div class="settings-body">
+              <div class="settings-field"><div class="sf-label">Organization URL</div><input class="sf-input" value="https://dev.azure.com/yourorgname" readonly/></div>
+              <div class="settings-field"><div class="sf-label">Personal Access Token</div><input class="sf-input" value="••••••••••••••••••••••••••••••••••••••••••" readonly/></div>
+              <div style="display:flex;gap:8px">
+                <div class="sf-btn">🔗 Test Connection</div>
+                <div class="sf-btn" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);color:#6EE7B7">✅ Connected</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Push Test Cases to ADO</div>
+      <div class="step-desc">After generating test cases, click the <strong>🔷 ADO</strong> button in the export toolbar. The ADO modal opens — select your Test Plan and click Push.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="mockup-url">shuddhiqacloud.pages.dev/app</div></div>
+        <div class="mockup-body">
+          <div class="modal-backdrop">
+            <div class="modal-box">
+              <div class="modal-header"><span class="modal-title">🔷 Push to Azure DevOps</span><span class="modal-close">✕</span></div>
+              <div class="modal-body">
+                <div class="modal-field"><div class="modal-label">Test Plan</div><input class="modal-input" value="Sprint 23 — AP Invoice Testing" readonly/></div>
+                <div class="modal-field"><div class="modal-label">Test Suite</div><input class="modal-input" value="D365 AP Invoice — 3-Way Match" readonly/></div>
+                <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:6px;padding:8px 10px;font-size:10px;color:#6EE7B7;margin-top:8px">✅ 12 test cases ready to push · Org: SRIVaralakshmiBalaji</div>
+              </div>
+              <div class="modal-footer"><span class="modal-btn-secondary">Cancel</span><span class="modal-btn-primary">🔷 Push to ADO</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout success"><div class="callout-icon">✅</div><div class="callout-text"><strong>What gets created in ADO:</strong> Test Plan, Test Suite per module, Test Cases with full steps, Expected results, Assigned To: QA Engineer, State: Design.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 9 — JIRA ZEPHYR
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="chapter-header">
+    <div class="chapter-num">09</div>
+    <div><div class="chapter-title">Export to Jira Zephyr</div><div class="chapter-sub">Generate CSV for Jira Zephyr Squad or Scale import</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Get your Atlassian API Token</div>
+      <div class="highlight">
+        <div class="highlight-title">Steps to get Atlassian API token</div>
+        <div class="highlight-item">Go to id.atlassian.com</div>
+        <div class="highlight-item">Click Security → API tokens → Create API token</div>
+        <div class="highlight-item">Name: ShuddhiQA (or any label)</div>
+        <div class="highlight-item">Click Create → Copy the token</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Configure Jira in Settings</div>
+      <div class="step-desc">Click ⚙️ Settings → Jira tab → enter your API token, email, and Jira domain (e.g. yourcompany.atlassian.net without https://).</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Export Jira Zephyr CSV</div>
+      <div class="step-desc">After generating test cases, click <strong>More ▾</strong> in the export toolbar → click <strong>🟦 Jira Zephyr</strong>. A CSV file downloads with all 10 Zephyr headers pre-populated.</div>
+      <div class="step-note"><span>📥</span><span>In Jira: Go to Zephyr Squad → Test Cases → Import → Upload the CSV file.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 10 — OTHER EXPORTS
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="chapter-header">
+    <div class="chapter-num">10</div>
+    <div><div class="chapter-title">Other Export Formats</div><div class="chapter-sub">Gherkin, Playwright, TestRail, Postman</div></div>
+  </div>
+
+  <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>More ▾ dropdown:</strong> Click the More ▾ button in the export toolbar to access Gherkin, Playwright, TestRail, and Postman exports. These are hidden by default to keep the toolbar clean.</div></div>
+
+  <table class="guide-table">
+    <thead><tr><th>Format</th><th>Use Case</th><th>How to Access</th></tr></thead>
+    <tbody>
+      <tr><td>🥒 Gherkin</td><td>BDD frameworks (Cucumber, SpecFlow, Behave)</td><td>More ▾ → Gherkin</td></tr>
+      <tr><td>🎭 Playwright</td><td>TypeScript automation skeleton code</td><td>More ▾ → Playwright</td></tr>
+      <tr><td>🧪 TestRail</td><td>CSV import for TestRail test management</td><td>More ▾ → TestRail</td></tr>
+      <tr><td>📮 Postman</td><td>API test collection skeleton</td><td>More ▾ → Postman</td></tr>
+      <tr><td>🔗 Share Link</td><td>Share test cases via URL with colleagues</td><td>Share button in toolbar</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 11 — ITERATIVE REFINEMENT
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="chapter-header">
+    <div class="chapter-num">11</div>
+    <div><div class="chapter-title">Iterative Refinement</div><div class="chapter-sub">Regenerate individual test cases with additional context</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Hover over a test case</div>
+      <div class="step-desc">Move your mouse over any test case row. A 🔄 regenerate button appears on the right side of the row.</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Click the regenerate button</div>
+      <div class="step-desc">The Regeneration modal opens showing the original test case title and an optional context field.</div>
+      <div class="mockup">
+        <div class="mockup-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="mockup-body">
+          <div class="modal-backdrop">
+            <div class="modal-box">
+              <div class="modal-header"><span class="modal-title">🔄 Regenerate TC001</span><span class="modal-close">✕</span></div>
+              <div class="modal-body">
+                <div style="background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:8px 10px;font-size:10px;color:#A5A8FF;margin-bottom:12px">Original: E2E: Successful 3-Way Match & Auto-Approval (≤₹50,000)</div>
+                <div class="modal-field"><div class="modal-label">Additional Context (Optional)</div><textarea class="modal-input" style="min-height:60px;resize:none" placeholder="e.g. Focus on boundary conditions, add negative scenarios for tolerance threshold..."></textarea></div>
+              </div>
+              <div class="modal-footer"><span class="modal-btn-secondary">Cancel</span><span class="modal-btn-primary">🔄 Regenerate</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Add context and regenerate</div>
+      <div class="step-desc">Add specific instructions in the context field (optional) then click Regenerate. Only that one test case is updated — the rest of the suite stays unchanged.</div>
+      <div class="callout tip"><div class="callout-icon">💡</div><div class="callout-text"><strong>Good context examples:</strong> "Focus on boundary conditions", "Add steps for currency conversion", "Include UAT login credentials format", "Add more negative scenarios"</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 12 — SMART DETECT & TEMPLATES
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="chapter-header">
+    <div class="chapter-num">12</div>
+    <div><div class="chapter-title">Smart Detect & Templates</div><div class="chapter-sub">Auto-detection and 100+ pre-built templates</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Using Templates</div>
+      <div class="step-desc">Click <strong>Templates</strong> in the navigation or visit shuddhiqacloud.pages.dev/templates. Browse 100+ pre-built requirement templates for D365, Salesforce, Guidewire, ServiceNow, and more. Click any template to load it into the requirement field instantly.</div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Smart Detect on Paste</div>
+      <div class="step-desc">When you paste a long requirement (100+ characters) into the textarea, Shuddhi QA automatically analyzes the text and suggests the most likely platform — no manual selection needed.</div>
+      <table class="guide-table">
+        <thead><tr><th>Keywords in your text</th><th>Detected Platform</th></tr></thead>
+        <tbody>
+          <tr><td>Action Pane, infolog, legal entity, financial dimension, D365</td><td>🔷 Microsoft D365 F&O</td></tr>
+          <tr><td>SOQL, LWC, Apex trigger, Opportunity, Account, Salesforce</td><td>☁️ Salesforce</td></tr>
+          <tr><td>PolicyCenter, ClaimCenter, Guidewire, underwriting</td><td>🏥 Guidewire</td></tr>
+          <tr><td>incident, ITSM, service catalog, workflow, ServiceNow</td><td>🔧 ServiceNow</td></tr>
+          <tr><td>S/4HANA, Fiori, SAP, transaction code, T-code</td><td>📊 SAP</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 13 — SIGN IN & SYNC
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch13">
+  <div class="chapter-header">
+    <div class="chapter-num">13</div>
+    <div><div class="chapter-title">Sign In & Preference Sync</div><div class="chapter-sub">Google and Microsoft sign-in for cross-device sync</div></div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">1</div>
+    <div class="step-content">
+      <div class="step-title">Why sign in?</div>
+      <div class="step-desc">Signing in is optional but unlocks more features.</div>
+      <table class="guide-table">
+        <thead><tr><th>Feature</th><th>Anonymous</th><th>Signed In</th></tr></thead>
+        <tbody>
+          <tr><td>Free generations</td><td>3 per session</td><td>10 per session</td></tr>
+          <tr><td>Preference sync</td><td>Browser only</td><td>✅ All devices</td></tr>
+          <tr><td>Generation history</td><td>❌</td><td>✅ Last 30 days</td></tr>
+          <tr><td>Sign in method</td><td>N/A</td><td>Google or Microsoft</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">2</div>
+    <div class="step-content">
+      <div class="step-title">Sign In with Google or Microsoft</div>
+      <div class="step-desc">Click <strong>Sign In</strong> in the top navigation → Click "Continue with Google" or "Continue with Microsoft (work account)" → Complete the OAuth flow in the popup.</div>
+      <div class="callout success"><div class="callout-icon">🔒</div><div class="callout-text"><strong>Privacy:</strong> Only your name and email are accessed for identification. No access to Gmail, Drive, Calendar, or any other Google service. Sign-in uses standard OAuth 2.0 with email + profile scopes only.</div></div>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num-circle">3</div>
+    <div class="step-content">
+      <div class="step-title">Delete Your Data</div>
+      <div class="step-desc">Click your name/avatar in the header → <strong>Delete my data & account</strong>. This permanently deletes your Firestore document and Firebase Auth account. Your browser-stored API keys can be cleared separately via Settings → Clear All.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 14 — KEYBOARD SHORTCUTS
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch14">
+  <div class="chapter-header">
+    <div class="chapter-num">14</div>
+    <div><div class="chapter-title">Keyboard Shortcuts</div><div class="chapter-sub">Speed up your workflow with these shortcuts</div></div>
+  </div>
+
+  <table class="guide-table">
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+    <tbody>
+      <tr><td>Generate test cases</td><td><span class="kbd">Ctrl</span> + <span class="kbd">Enter</span></td></tr>
+      <tr><td>Open command palette (search all commands)</td><td><span class="kbd">Ctrl</span> + <span class="kbd">K</span></td></tr>
+      <tr><td>Toggle dark / light theme</td><td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">T</span></td></tr>
+      <tr><td>Close any modal or palette</td><td><span class="kbd">Esc</span></td></tr>
+      <tr><td>Open Settings</td><td><span class="kbd">Ctrl</span> + <span class="kbd">,</span></td></tr>
+      <tr><td>Copy Markdown to clipboard</td><td><span class="kbd">Ctrl</span> + <span class="kbd">C</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip"><div class="callout-icon">⌨️</div><div class="callout-text"><strong>Command Palette (Ctrl+K):</strong> The most powerful shortcut. Type any action — "dark", "export", "templates", "settings" — and it appears instantly. Search across all 19 commands and platform options.</div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CHAPTER 15 — TROUBLESHOOTING
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch15">
+  <div class="chapter-header">
+    <div class="chapter-num">15</div>
+    <div><div class="chapter-title">Troubleshooting</div><div class="chapter-sub">Common issues and how to fix them</div></div>
+  </div>
+
+  <table class="guide-table">
+    <thead><tr><th>Issue</th><th>Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Generate button not working</td><td>No platform or module selected</td><td>Select platform chip → enter module name</td></tr>
+      <tr><td>"No AI provider configured"</td><td>No API key set and server key unavailable</td><td>Settings → AI Provider → add Groq key (free)</td></tr>
+      <tr><td>ADO push fails with 401</td><td>PAT expired or wrong scope</td><td>Create new PAT with Test Plans (R&W) scope</td></tr>
+      <tr><td>"PAT invalid or expired"</td><td>Bogus or expired ADO PAT</td><td>Generate a new PAT in ADO user settings</td></tr>
+      <tr><td>Firebase sign-in fails (network error)</td><td>Browser extension blocking requests</td><td>Try Incognito mode or disable extensions</td></tr>
+      <tr><td>Generated TCs are too generic</td><td>Requirement too brief</td><td>Add roles, thresholds, and expected outcomes to requirement</td></tr>
+      <tr><td>Character limit exceeded</td><td>Requirement over 6,000 chars</td><td>App auto-trims with notification — reduce if needed</td></tr>
+      <tr><td>More ▾ dropdown not opening</td><td>Old browser cache (pre-v12.4)</td><td>Hard refresh Ctrl+Shift+R</td></tr>
+      <tr><td>Cost hint not showing</td><td>Provider not initialized yet</td><td>Wait 2–3 seconds after page load</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip"><div class="callout-icon">🔗</div><div class="callout-text"><strong>Help page:</strong> Visit shuddhiqacloud.pages.dev/help for detailed setup guides for each AI provider, ADO, and Jira configuration steps.</div></div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// Highlight active sidebar link on scroll
+const chapters = document.querySelectorAll('.chapter');
+const links = document.querySelectorAll('.sidebar-link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-60px 0px 0px 0px' });
+chapters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>

@@ -2,3 +2,7 @@
 # REMOVED: /app /app.html 301  ← was causing ERR_TOO_MANY_REDIRECTS loop
 # REMOVED: /templates /templates.html 301  ← same issue
 # Cloudflare Workers html_handling="auto-trailing-slash" handles extensionless URLs natively.
+
+# v12.21 — Master Guide renamed to Documentation. Preserve old URLs.
+/guides/master-guide.html  /guides/documentation.html  301
+/guides/master-guide       /guides/documentation.html  301

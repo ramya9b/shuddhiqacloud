@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shuddhi QA — Documentation v12.20</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--indigo:#5B5FEF;--violet:#7C3AED;--pink:#EC4899;--dark:#0D0D1A;--dark2:#1A1A2E;--surface:#fff;--surface2:#F8F7FF;--surface3:#EEEEFF;--border:#E5E4FF;--text:#0D0D1A;--text2:#4B4B6B;--text3:#6B6B8F;--green:#10B981;--amber:#F59E0B;--red:#EF4444;--grad:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899);--shadow:0 4px 24px rgba(91,95,239,.10);--shadow-lg:0 12px 48px rgba(91,95,239,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--text);display:flex}
+
+/* SIDEBAR */
+.sidebar{width:272px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;padding:0}
+.sidebar-head{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--dark2)}
+.sidebar-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-tag{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.35);margin-top:2px}
+.sidebar-nav{padding:16px 12px}
+.sidebar-section{margin-bottom:22px}
+.nav-group{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:5px}
+.nav-link{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;font-size:12px;color:var(--text2);text-decoration:none;transition:all .15s;cursor:pointer;line-height:1.3}
+.nav-link:hover,.nav-link.active{background:var(--surface3);color:var(--indigo);font-weight:500}
+.nav-num{width:18px;height:18px;background:var(--indigo);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;flex-shrink:0}
+.nav-num.green{background:var(--green)}
+.nav-num.violet{background:var(--violet)}
+.nav-num.amber{background:var(--amber)}
+
+/* MAIN */
+.main{margin-left:272px;flex:1}
+.topbar{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 40px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;height:50px}
+.topbar h1{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.topbar-badge{font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--surface3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;color:var(--indigo)}
+.topbar-url{margin-left:auto;font-size:11px;color:var(--text3)}
+
+/* HERO */
+.hero{background:var(--dark2);padding:60px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--grad)}
+.hero-pill{display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 14px;border-radius:20px;font-size:10px;color:rgba(255,255,255,.6);font-family:'JetBrains Mono',monospace;margin-bottom:18px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1.5px;margin-bottom:10px}
+.hero p{font-size:15px;color:rgba(255,255,255,.55);max-width:500px;margin:0 auto 32px}
+.hero-docs{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.hero-doc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:10px 18px;border-radius:8px;text-align:center;min-width:110px}
+.hero-doc-icon{font-size:20px;margin-bottom:4px}
+.hero-doc-name{font-size:11px;font-weight:600;color:#fff}
+.hero-doc-type{font-size:9px;color:rgba(255,255,255,.4);margin-top:1px}
+
+/* CONTENT */
+.content{padding:40px 48px}
+.chapter{margin-bottom:72px;scroll-margin-top:52px}
+.ch-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.ch-icon{width:44px;height:44px;background:var(--grad);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ch-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.ch-sub{font-size:13px;color:var(--text2);margin-top:3px}
+
+/* STEP BLOCKS */
+.step{display:flex;gap:18px;margin-bottom:24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:box-shadow .2s}
+.step:hover{box-shadow:var(--shadow)}
+.step-circle{width:34px;height:34px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;margin-top:2px}
+.step-body{flex:1}
+.step-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px}
+.step-text{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.step-note{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text2);display:flex;gap:8px}
+
+/* MOCKUPS */
+.mock{background:#0D0D1A;border-radius:12px;overflow:hidden;margin:14px 0 18px;border:1px solid rgba(255,255,255,.06);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.mock-bar{background:#0A0A17;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.05)}
+.dot{width:9px;height:9px;border-radius:50%}
+.dr{background:#FF5F57}.dy{background:#FEBC2E}.dg{background:#28C840}
+.mock-url{flex:1;background:rgba(255,255,255,.05);border-radius:5px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.3);margin:0 10px}
+.mock-body{padding:14px}
+
+/* APP COMPONENTS */
+.app-nav{background:linear-gradient(135deg,#5B5FEF,#7C3AED);border-radius:9px;padding:9px 14px;display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.app-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff}
+.app-ver{background:rgba(255,255,255,.15);border-radius:5px;padding:2px 7px;font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.8)}
+.sp{flex:1}
+.app-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:5px;padding:3px 9px;font-size:9px;color:#fff}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:12px}
+.plabel{font-size:8px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.pchips{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:8px}
+.pc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:4px 3px;text-align:center;font-size:8px;color:rgba(255,255,255,.55)}
+.pc.on{background:rgba(91,95,239,.3);border-color:#5B5FEF;color:#A5A8FF;font-weight:600}
+.ptextarea{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:6px;padding:7px 9px;font-size:9px;color:rgba(255,255,255,.55);margin-bottom:8px;min-height:65px;font-style:italic;line-height:1.5}
+.genbtn{width:100%;background:linear-gradient(135deg,#5B5FEF,#7C3AED);border:none;border-radius:7px;padding:8px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:#fff;margin-bottom:3px}
+.costhint{font-size:8px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:8px}
+.tcrow{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:7px 9px;margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.tcid{background:rgba(91,95,239,.3);border-radius:3px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:7.5px;color:#A5A8FF;flex-shrink:0}
+.tctitle{font-size:9px;color:rgba(255,255,255,.75);flex:1}
+.tcbadge{font-size:7px;padding:1px 5px;border-radius:3px;flex-shrink:0}
+.good{background:rgba(16,185,129,.2);color:#6EE7B7}
+.fair{background:rgba(245,158,11,.2);color:#FCD34D}
+.expbar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.expbtn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 7px;font-size:8px;color:rgba(255,255,255,.65)}
+
+/* SETTINGS */
+.settings{background:#0D0D1A;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.06);margin:14px 0}
+.shead{background:rgba(91,95,239,.15);padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.06)}
+.stitle{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.stabs{display:flex;gap:3px;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
+.stab{font-size:9px;padding:4px 9px;border-radius:5px;color:rgba(255,255,255,.45);cursor:pointer}
+.stab.on{background:rgba(91,95,239,.3);color:#A5A8FF;font-weight:600}
+.sbody{padding:12px 14px}
+.sfield{margin-bottom:10px}
+.slabel{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.sinput{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:5px 9px;font-size:9px;color:rgba(255,255,255,.55);width:100%;font-family:'JetBrains Mono',monospace}
+.sbtn{background:rgba(91,95,239,.25);border:1px solid rgba(91,95,239,.4);border-radius:5px;padding:4px 10px;font-size:9px;color:#A5A8FF;cursor:pointer;margin-top:3px}
+
+/* MODAL */
+.mbackdrop{background:rgba(0,0,0,.5);border-radius:10px;padding:16px;margin:14px 0}
+.mbox{background:#1A1A2E;border:1px solid rgba(91,95,239,.3);border-radius:10px;overflow:hidden;max-width:380px;margin:0 auto}
+.mhead{background:rgba(91,95,239,.18);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.mtitle{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff}
+.mbody{padding:14px}
+.mfield{margin-bottom:9px}
+.mlabel{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.minput{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:6px 9px;font-size:9px;color:rgba(255,255,255,.55);width:100%;font-family:'JetBrains Mono',monospace}
+.mfooter{padding:10px 14px;display:flex;gap:7px;justify-content:flex-end;border-top:1px solid rgba(255,255,255,.06)}
+.mbtn-primary{background:linear-gradient(135deg,#5B5FEF,#7C3AED);border:none;border-radius:5px;padding:6px 14px;font-size:9px;font-weight:700;color:#fff;cursor:pointer}
+.mbtn-sec{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:6px 14px;font-size:9px;color:rgba(255,255,255,.55);cursor:pointer}
+
+/* CALLOUTS */
+.tip,.warn,.ok,.info{border-radius:9px;padding:12px 16px;margin:14px 0;display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.6}
+.tip{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2);color:var(--text2)}
+.ok{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);color:var(--text2)}
+.warn{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);color:var(--text2)}
+.info{background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);color:var(--text2)}
+.tip strong,.warn strong,.ok strong,.info strong{color:var(--text)}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+th{text-align:left;padding:9px 13px;background:var(--dark2);color:#fff;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.3px}
+td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+tr:hover td{background:var(--surface3)}
+
+/* FLOW */
+.flow{display:flex;align-items:center;gap:6px;margin:18px 0;flex-wrap:wrap}
+.fstep{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;min-width:120px}
+.ficon{font-size:20px;margin-bottom:4px}
+.fname{font-size:11px;font-weight:600;color:var(--text)}
+.fsub{font-size:9px;color:var(--text3);margin-top:1px}
+.farrow{font-size:18px;color:var(--indigo)}
+
+/* HIGHLIGHTS */
+.hbox{background:var(--dark2);border-radius:9px;padding:14px 18px;margin:12px 0}
+.htitle{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:7px}
+.hitem{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:4px;display:flex;gap:7px}
+.hitem::before{content:'→';color:#A5A8FF;flex-shrink:0}
+
+/* GRIDS */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;transition:all .2s;position:relative;overflow:hidden}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.card h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:7px}
+.card p{font-size:12px;color:var(--text2);line-height:1.6}
+.card-icon{font-size:22px;margin-bottom:10px}
+
+/* KBD */
+.kbd{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--indigo);font-weight:600}
+
+/* DOC CARDS */
+.doccard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px}
+.doccard-icon{font-size:28px;flex-shrink:0}
+.doccard h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.doccard p{font-size:12px;color:var(--text2);line-height:1.5}
+.doccard-badge{margin-top:6px;display:inline-block;background:var(--surface3);border:1px solid var(--border);padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--indigo)}
+
+/* VERSION TIMELINE */
+.vtimeline{position:relative;padding-left:28px;margin:16px 0}
+.vtimeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.vitem{position:relative;margin-bottom:14px}
+.vitem::before{content:'';position:absolute;left:-22px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--indigo);border:2px solid var(--surface)}
+.vnum{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--indigo);margin-bottom:2px}
+.vdesc{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* MOBILE NAV — shown only below 900px (replaces hidden sidebar) */
+.mobile-nav{display:none;background:var(--surface);border-bottom:1px solid var(--border);margin:0 -24px 20px;padding:0 24px}
+.mobile-nav summary{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:14px 0;cursor:pointer;color:var(--text);list-style:none;display:flex;align-items:center;gap:8px;outline:none}
+.mobile-nav summary::-webkit-details-marker{display:none}
+.mobile-nav summary::after{content:'▾';margin-left:auto;color:var(--indigo);transition:transform .2s;font-size:14px}
+.mobile-nav[open] summary::after{transform:rotate(180deg)}
+.mobile-nav-list{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;padding:0 0 14px}
+.mobile-nav-list a{font-size:11px;color:var(--text2);text-decoration:none;padding:6px 9px;border-radius:6px;background:var(--surface3);border:1px solid transparent}
+.mobile-nav-list a:hover{border-color:var(--indigo);color:var(--indigo)}
+.mobile-nav-group{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:10px 0 3px;grid-column:1/-1}
+@media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.panels{grid-template-columns:1fr}.grid2,.grid3{grid-template-columns:1fr}.mobile-nav{display:block}.content{padding:24px}.hero{padding:40px 24px}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-logo">🧪 Shuddhi QA</div>
+    <div class="sidebar-tag">Documentation · v12.20 · All Topics</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="nav-group">Getting Started</div>
+      <a class="nav-link active" href="#ch1"><span class="nav-num">01</span>Overview & First Launch</a>
+      <a class="nav-link" href="#ch2"><span class="nav-num">02</span>Configure AI Provider</a>
+      <a class="nav-link" href="#ch3"><span class="nav-num">03</span>Platform & Module Setup</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Core Workflow</div>
+      <a class="nav-link" href="#ch4"><span class="nav-num">04</span>Write Your Requirement</a>
+      <a class="nav-link" href="#ch5"><span class="nav-num">05</span>Generate Test Cases</a>
+      <a class="nav-link" href="#ch6"><span class="nav-num">06</span>Review & Edit</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Exports & Integrations</div>
+      <a class="nav-link" href="#ch7"><span class="nav-num green">07</span>Excel, PDF & Markdown</a>
+      <a class="nav-link" href="#ch8"><span class="nav-num green">08</span>Azure DevOps Push</a>
+      <a class="nav-link" href="#ch9"><span class="nav-num green">09</span>Jira Zephyr Export</a>
+      <a class="nav-link" href="#ch10"><span class="nav-num green">10</span>Gherkin, Playwright, TestRail</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Advanced</div>
+      <a class="nav-link" href="#ch11"><span class="nav-num violet">11</span>Iterative Refinement</a>
+      <a class="nav-link" href="#ch12"><span class="nav-num violet">12</span>Templates & Smart Detect</a>
+      <a class="nav-link" href="#ch13"><span class="nav-num violet">13</span>Sign In & Privacy</a>
+      <a class="nav-link" href="#ch14"><span class="nav-num amber">14</span>Shortcuts & Command Palette</a>
+      <a class="nav-link" href="#ch15"><span class="nav-num amber">15</span>Settings Reference</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Power Features</div>
+      <a class="nav-link" href="#ch16"><span class="nav-num">16</span>Welcome Tour</a>
+      <a class="nav-link" href="#ch17"><span class="nav-num">17</span>Domain Intelligence</a>
+      <a class="nav-link" href="#ch18"><span class="nav-num">18</span>Multi-Language Output</a>
+      <a class="nav-link" href="#ch19"><span class="nav-num">19</span>AI-Review Gate</a>
+      <a class="nav-link" href="#ch20"><span class="nav-num">20</span>PWA Install &amp; Offline</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Integrations</div>
+      <a class="nav-link" href="#ch22"><span class="nav-num amber">22</span>Microsoft Copilot &amp; MCP</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Help</div>
+      <a class="nav-link" href="#ch21"><span class="nav-num amber">21</span>Troubleshooting</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="nav-group">Appendix</div>
+      <a class="nav-link" href="#docs"><span class="nav-num">📚</span>Document Index</a>
+      <a class="nav-link" href="#versions"><span class="nav-num">🔢</span>Version History</a>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+<div class="topbar">
+  <h1>🧪 Shuddhi QA — Documentation</h1>
+  <span class="topbar-badge">v12.20</span>
+  <span class="topbar-url">shuddhiqacloud.pages.dev</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill">📖 Complete Documentation · v12.20</div>
+  <h1>Shuddhi QA</h1>
+  <p><em>Shuddhi (शुद्धि)</em> means "purification" in Sanskrit — clean test cases for clean code. AI-powered test case generation for enterprise QA teams.</p>
+  <div class="hero-docs">
+    <div class="hero-doc"><div class="hero-doc-icon">🏠</div><div class="hero-doc-name">Getting Started</div><div class="hero-doc-type">Ch 1–3</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">⚡</div><div class="hero-doc-name">Core Workflow</div><div class="hero-doc-type">Ch 4–6</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">📤</div><div class="hero-doc-name">Exports</div><div class="hero-doc-type">Ch 7–10</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">🔧</div><div class="hero-doc-name">Advanced</div><div class="hero-doc-type">Ch 11–15</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">🚀</div><div class="hero-doc-name">Power Features</div><div class="hero-doc-type">Ch 16–20</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">🆘</div><div class="hero-doc-name">Help</div><div class="hero-doc-type">Ch 21</div></div>
+    <div class="hero-doc"><div class="hero-doc-icon">🔌</div><div class="hero-doc-name">Copilot &amp; MCP</div><div class="hero-doc-type">Ch 22</div></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV — only shown below 900px -->
+<details class="mobile-nav">
+  <summary>📑 Jump to chapter</summary>
+  <div class="mobile-nav-list">
+    <div class="mobile-nav-group">Getting Started</div>
+    <a href="#ch1">1 · Overview</a>
+    <a href="#ch2">2 · AI Provider</a>
+    <a href="#ch3">3 · Platform &amp; Module</a>
+    <div class="mobile-nav-group">Core Workflow</div>
+    <a href="#ch4">4 · Requirement</a>
+    <a href="#ch5">5 · Generate</a>
+    <a href="#ch6">6 · Review &amp; Edit</a>
+    <div class="mobile-nav-group">Exports &amp; Integrations</div>
+    <a href="#ch7">7 · Excel/PDF</a>
+    <a href="#ch8">8 · Azure DevOps</a>
+    <a href="#ch9">9 · Jira Zephyr</a>
+    <a href="#ch10">10 · Gherkin/Playwright</a>
+    <div class="mobile-nav-group">Advanced</div>
+    <a href="#ch11">11 · Refinement</a>
+    <a href="#ch12">12 · Templates</a>
+    <a href="#ch13">13 · Sign In</a>
+    <a href="#ch14">14 · Shortcuts</a>
+    <a href="#ch15">15 · Settings</a>
+    <div class="mobile-nav-group">Power Features</div>
+    <a href="#ch16">16 · Welcome Tour</a>
+    <a href="#ch17">17 · Domain Intel</a>
+    <a href="#ch18">18 · Languages</a>
+    <a href="#ch19">19 · AI-Review Gate</a>
+    <a href="#ch20">20 · PWA Install</a>
+    <div class="mobile-nav-group">Help &amp; Appendix</div>
+    <a href="#ch21">21 · Troubleshooting</a>
+    <a href="#docs">📚 Document Index</a>
+    <a href="#versions">🔢 Version History</a>
+  </div>
+</details>
+
+<div class="content">
+
+<!-- ══ CH1 OVERVIEW ════════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-header"><div class="ch-icon">🏠</div><div><div class="ch-title">Overview & First Launch</div><div class="ch-sub">What Shuddhi QA does and how to open it</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">What does Shuddhi QA do?</div>
+    <div class="step-text">Shuddhi QA converts plain-English business requirements into production-ready test cases with steps, expected results, and quality scores — in under 30 seconds. No manual writing. No templates to fill.</div>
+    <div class="flow">
+      <div class="fstep"><div class="ficon">📝</div><div class="fname">Describe</div><div class="fsub">Plain English req</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="ficon">🏢</div><div class="fname">Select Platform</div><div class="fsub">D365, SF, SAP...</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="ficon">⚡</div><div class="fname">Generate</div><div class="fsub">10–30 seconds</div></div>
+      <div class="farrow">→</div>
+      <div class="fstep"><div class="ficon">📤</div><div class="fname">Export</div><div class="fsub">ADO, Jira, Excel</div></div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Open the App</div>
+    <div class="step-text">Open any browser and go to <strong>https://shuddhiqacloud.pages.dev</strong> — no installation, login, or credit card needed.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div><div class="mock-url">https://shuddhiqacloud.pages.dev</div></div>
+      <div class="mock-body">
+        <div class="app-nav"><span class="app-logo">🧪 Shuddhi QA</span><span class="app-ver">v12.20</span><span class="sp"></span><span style="font-size:8px;color:rgba(255,255,255,.4);margin-right:6px">● Groq · Free</span><span class="app-btn">⚙️ Settings</span><span class="app-btn" style="margin-left:5px">Sign In</span></div>
+        <div style="text-align:center;padding:24px 0">
+          <div style="font-size:22px;font-weight:800;background:linear-gradient(135deg,#5B5FEF,#7C3AED,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Syne',sans-serif;letter-spacing:-1px;margin-bottom:6px">Generate Test Cases</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);margin-bottom:18px">AI-Powered Test Intelligence for Enterprise Platforms</div>
+          <div style="display:flex;justify-content:center;gap:24px">
+            <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">14</div><div style="font-size:8px;color:rgba(255,255,255,.35)">Platforms</div></div>
+            <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">6</div><div style="font-size:8px;color:rgba(255,255,255,.35)">AI Providers</div></div>
+            <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#A5A8FF;font-family:'Syne',sans-serif">100+</div><div style="font-size:8px;color:rgba(255,255,255,.35)">Templates</div></div>
+            <div style="text-align:center"><div style="font-size:20px;font-weight:800;color:#6EE7B7;font-family:'Syne',sans-serif">Free</div><div style="font-size:8px;color:rgba(255,255,255,.35)">To Start</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ok"><span>✅</span><span><strong>Free to use.</strong> 3 generations anonymously · 10 with Google/Microsoft sign-in · Unlimited with your own API key.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Understand the Two-Panel Layout</div>
+    <div class="step-text">The app is split into two panels. Left panel = your inputs (platform, module, requirement). Right panel = AI-generated output (test cases, export buttons).</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div><div class="mock-url">shuddhiqacloud.pages.dev/app</div></div>
+      <div class="mock-body">
+        <div class="app-nav"><span class="app-logo">🧪 Shuddhi QA</span><span class="app-ver">v12.20</span><span class="sp"></span><span class="app-btn">⚙️</span><span class="app-btn" style="margin-left:4px">Sign In</span></div>
+        <div class="panels">
+          <div class="panel">
+            <div style="font-size:8px;font-weight:700;color:#5B5FEF;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px">← INPUT PANEL</div>
+            <div class="plabel">① Platform</div>
+            <div class="pchips"><div class="pc on">D365 F&O</div><div class="pc">Salesforce</div><div class="pc">Web App</div><div class="pc">ServiceNow</div><div class="pc">SAP</div><div class="pc">Workday</div></div>
+            <div class="plabel">② Module</div>
+            <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:6px;padding:5px 9px;font-size:9px;color:rgba(255,255,255,.55);margin-bottom:8px">AP Invoice Processing</div>
+            <div class="plabel">③ Requirement</div>
+            <div class="ptextarea">Vendor submits invoice. AP Clerk performs 3-way match (Invoice, PO, GR). If amount ≤ ₹50K auto-approved...</div>
+            <div style="font-size:7px;color:rgba(255,255,255,.25);text-align:right;margin:-4px 0 6px">312 / 6,000</div>
+            <div class="genbtn">⚡ Generate Test Cases</div>
+            <div class="costhint">⚡ Groq · Free (server-side)</div>
+          </div>
+          <div class="panel">
+            <div style="font-size:8px;font-weight:700;color:#10B981;margin-bottom:7px;text-transform:uppercase;letter-spacing:.5px">→ OUTPUT PANEL</div>
+            <div class="expbar"><span class="expbtn">✏️ Edit</span><span class="expbtn">📑 PDF</span><span class="expbtn">📊 Excel</span><span class="expbtn">🔷 ADO</span><span class="expbtn">More ▾</span></div>
+            <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:7px;font-family:'JetBrains Mono',monospace">D365 F&O · AP Invoice · 12 TCs · Good 97%</div>
+            <div class="tcrow"><span class="tcid">TC001</span><span class="tctitle">E2E: Successful 3-Way Match & Auto-Approval (≤₹50K)</span><span class="tcbadge good">95%</span></div>
+            <div class="tcrow"><span class="tcid">TC002</span><span class="tctitle">E2E: Finance Manager Approval (> ₹50K)</span><span class="tcbadge good">100%</span></div>
+            <div class="tcrow"><span class="tcid">TC003</span><span class="tctitle">E2E: 3-Way Match Failure — Qty Mismatch</span><span class="tcbadge fair">75%</span></div>
+            <div class="tcrow"><span class="tcid">TC004</span><span class="tctitle">Validation: Invoice Amount Exceeds Tolerance</span><span class="tcbadge good">100%</span></div>
+            <div style="font-size:8px;color:rgba(255,255,255,.25);text-align:center;margin-top:5px">+ 8 more test cases</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ══ CH2 AI PROVIDER ═════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-header"><div class="ch-icon">🤖</div><div><div class="ch-title">Configure AI Provider</div><div class="ch-sub">Choose and set up your AI provider</div></div></div>
+
+  <div class="tip"><span>💡</span><span><strong>Skip for now.</strong> The app uses a shared Groq server key for your first 3 free generations. Add your own key only when you want unlimited usage.</span></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Compare the 6 AI Providers</div>
+    <table>
+      <thead><tr><th>Provider</th><th>Model</th><th>Cost / Run</th><th>Best For</th></tr></thead>
+      <tbody>
+        <tr><td>⚡ Groq</td><td>Llama 3.3 70B</td><td style="color:var(--green);font-weight:600">Free</td><td>Fastest responses, high volume</td></tr>
+        <tr><td>✦ Gemini</td><td>2.5 Flash</td><td>~$0.001</td><td>Large requirements, best value</td></tr>
+        <tr><td>🤖 Claude</td><td>Sonnet 4</td><td>~$0.015</td><td>Best quality, detailed steps</td></tr>
+        <tr><td>🟢 OpenAI</td><td>GPT-4o</td><td>~$0.010</td><td>Complex multi-role flows</td></tr>
+        <tr><td>🔴 Together AI</td><td>Open source</td><td>~$0.002</td><td>Cost-effective alternative</td></tr>
+        <tr><td>☁️ Azure OpenAI</td><td>GPT-4o (your deployment)</td><td>Your Azure rates</td><td>Enterprise · BYO — data residency in your region</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Open Settings → AI Provider Tab</div>
+    <div class="step-text">Click the <strong>⚙️ Settings</strong> gear icon (top right) → click the <strong>AI Provider</strong> tab.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div><div class="mock-url">shuddhiqacloud.pages.dev/app — Settings</div></div>
+      <div class="mock-body">
+        <div class="settings">
+          <div class="shead"><span style="font-size:13px">⚙️</span><span class="stitle">Settings — Configuration</span><span style="margin-left:auto;font-size:12px;color:rgba(255,255,255,.35)">✕</span></div>
+          <div class="stabs"><span class="stab on">🤖 AI Provider</span><span class="stab">🔷 Azure DevOps</span><span class="stab">🟦 Jira</span><span class="stab">📊 Usage & Cost</span><span class="stab">ℹ️ About</span></div>
+          <div class="sbody">
+            <div class="sfield"><div class="slabel">Active Provider</div>
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+                <span style="background:rgba(91,95,239,.3);border:1px solid #5B5FEF;border-radius:5px;padding:3px 9px;font-size:9px;color:#A5A8FF;font-weight:600">⚡ Groq</span>
+                <span style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 9px;font-size:9px;color:rgba(255,255,255,.45)">✦ Gemini</span>
+                <span style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 9px;font-size:9px;color:rgba(255,255,255,.45)">🤖 Claude</span>
+                <span style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 9px;font-size:9px;color:rgba(255,255,255,.45)">🟢 OpenAI</span>
+                <span style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 9px;font-size:9px;color:rgba(255,255,255,.45)">🔴 Together</span>
+                <span style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:3px 9px;font-size:9px;color:rgba(255,255,255,.45)">☁️ Azure OpenAI</span>
+              </div>
+            </div>
+            <div class="sfield"><div class="slabel">Groq API Key</div><input class="sinput" value="gsk_••••••••••••••••" readonly/><div class="sbtn" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);color:#6EE7B7">✓ Key Saved</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Get your API Key (Provider-specific)</div>
+    <table>
+      <thead><tr><th>Provider</th><th>Where to get your free key</th></tr></thead>
+      <tbody>
+        <tr><td>⚡ Groq (Free)</td><td>console.groq.com → API Keys → Create API Key</td></tr>
+        <tr><td>✦ Gemini</td><td>aistudio.google.com → Get API Key → Create in new project</td></tr>
+        <tr><td>🤖 Claude</td><td>console.anthropic.com → API Keys → Create Key</td></tr>
+        <tr><td>🟢 OpenAI</td><td>platform.openai.com → API Keys → Create new secret key</td></tr>
+        <tr><td>🔴 Together AI</td><td>api.together.ai → Settings → API Keys</td></tr>
+        <tr><td>☁️ Azure OpenAI</td><td>portal.azure.com → your Azure OpenAI resource → Keys and Endpoint (BYO — bring your own resource)</td></tr>
+      </tbody>
+    </table>
+    <div class="ok"><span>🔒</span><span><strong>Privacy guarantee:</strong> Keys are stored in browser localStorage only. They never touch Shuddhi QA servers — requests go directly from your browser to the AI provider.</span></div>
+    <div class="info"><span>☁️</span><span><strong>Azure OpenAI is different.</strong> Unlike the other 5 providers (one API key each), Azure needs <strong>four</strong> values. Open <strong>Settings → AI Provider → Your Personal API Keys → the expandable "Azure OpenAI" row</strong> and fill in: <strong>Endpoint</strong> (https://&lt;your-resource&gt;.openai.azure.com), <strong>API Key</strong>, <strong>Deployment name</strong> (e.g. gpt-4o-prod), and <strong>API Version</strong> (default 2024-08-01-preview). Then click <strong>Test connection</strong>. Generation runs in the region of <em>your own</em> Azure resource — ideal for enterprise data residency.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">4</div><div class="step-body">
+    <div class="step-title">Quick provider switching (v12.20+)</div>
+    <div class="step-text">If you configure 2 or more provider keys, you don't need to open Settings every time you want to switch between them. A small <strong>⇄</strong> icon appears next to the cost hint below the Generate button. Click the cost hint to open a popover showing all your configured providers with their costs at a glance.</div>
+    <div class="hbox">
+      <div class="htitle">How it behaves</div>
+      <div class="hitem"><strong>0 or 1 provider configured:</strong> cost hint is static (no ⇄ icon) — nothing to switch to</div>
+      <div class="hitem"><strong>2+ providers configured:</strong> ⇄ icon appears; click hint → popover opens</div>
+      <div class="hitem"><strong>Active provider</strong> is marked with a filled radio + "✓ active" tag</div>
+      <div class="hitem"><strong>Costs shown right-aligned</strong> in the popover — easy to scan free vs paid</div>
+      <div class="hitem"><strong>Closes on</strong> selecting a new provider, clicking outside, or pressing Esc</div>
+    </div>
+    <div class="tip"><span>💡</span><span><strong>Why this exists:</strong> Most users pick one provider and stay there. But if you want to A/B test Claude vs Gemini on the same requirement, the popover saves you 3 clicks each switch. Settings remains the single source of truth — the popover is just a shortcut.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH3 PLATFORM & MODULE ═══════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-header"><div class="ch-icon">🏢</div><div><div class="ch-title">Platform & Module Setup</div><div class="ch-sub">Select the right platform for domain-aware test cases</div></div></div>
+
+  <div class="warn"><span>⚠️</span><span><strong>Both are required (v12.16+).</strong> Generation is blocked until you select a platform AND enter a module name. A red glow appears on the missing field.</span></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Select Platform</div>
+    <div class="step-text">Click one of the platform chips. The platform tells the AI which terminology, navigation paths, and field names to use.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="panel">
+          <div class="plabel">Select Platform (Required)</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px">
+            <div class="pc on">🔷 D365 F&O</div><div class="pc">☁️ Salesforce</div><div class="pc">🌐 Web App</div><div class="pc">📱 Mobile</div>
+            <div class="pc">🔧 ServiceNow</div><div class="pc">🏥 Guidewire</div><div class="pc">📊 SAP</div><div class="pc">👥 Workday</div>
+          </div>
+          <div style="font-size:8px;color:rgba(16,185,129,.8)">✅ D365 F&O selected — Finance, Supply Chain, Manufacturing domain</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Enter Module Name</div>
+    <div class="step-text">Type the specific module or feature being tested. This gives the AI more context for accurate test case titles and navigation steps.</div>
+    <div class="tip"><span>💡</span><span><strong>Good module names:</strong> "AP Invoice Processing" · "Vendor Payment" · "Opportunity Management" · "ITSM Incident" · "Leave Management" · "Purchase Order Approval"</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Smart Detect — Auto Platform Detection</div>
+    <div class="step-text">Paste your requirement first and Shuddhi QA automatically identifies the platform from the content. A green notification confirms the detected platform.</div>
+    <table>
+      <thead><tr><th>Keywords in text</th><th>Auto-detected Platform</th></tr></thead>
+      <tbody>
+        <tr><td>Action Pane, infolog, legal entity, financial dimension</td><td>🔷 D365 F&O</td></tr>
+        <tr><td>SOQL, LWC, Apex trigger, Opportunity, Account</td><td>☁️ Salesforce</td></tr>
+        <tr><td>PolicyCenter, ClaimCenter, underwriting</td><td>🏥 Guidewire</td></tr>
+        <tr><td>incident, ITSM, service catalog, ServiceNow</td><td>🔧 ServiceNow</td></tr>
+        <tr><td>S/4HANA, Fiori, T-code, SAP transaction</td><td>📊 SAP</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ══ CH4 REQUIREMENT ═════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-header"><div class="ch-icon">📝</div><div><div class="ch-title">Write Your Requirement</div><div class="ch-sub">Writing requirements that generate the best test cases</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Paste or type your requirement</div>
+    <div class="step-text">Click the requirement textarea and paste your user story, BRD excerpt, or process description. Maximum 6,000 characters. The counter updates as you type.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="panel">
+          <div class="plabel">Describe Your Requirement (Required)</div>
+          <div class="ptextarea" style="min-height:90px;color:rgba(255,255,255,.7);font-style:normal">Vendor submits invoice via portal. AP Clerk performs 3-way match (Invoice, PO, Goods Receipt). If amount ≤ ₹50,000, auto-approved. If > ₹50,000, Finance Manager must approve within 2 business days. On approval, payment is scheduled to vendor bank account. On rejection, vendor receives email with reason code.</div>
+          <div style="font-size:7px;color:rgba(255,255,255,.25);text-align:right;margin:-3px 0 6px">347 / 6,000</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">What makes a good requirement</div>
+    <table>
+      <thead><tr><th>✅ Include</th><th>❌ Avoid</th></tr></thead>
+      <tbody>
+        <tr><td>User roles (AP Clerk, Finance Manager)</td><td>Generic "test the invoice process"</td></tr>
+        <tr><td>Thresholds (≤ ₹50,000 / > ₹50,000)</td><td>No boundary values</td></tr>
+        <tr><td>Expected outcomes (payment scheduled)</td><td>No expected results stated</td></tr>
+        <tr><td>Error paths (rejection → email)</td><td>Only happy path described</td></tr>
+        <tr><td>200–500 characters minimum</td><td>Single sentence</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Choose Output Type</div>
+    <table>
+      <thead><tr><th>Type</th><th>What gets generated</th><th>When to use</th></tr></thead>
+      <tbody>
+        <tr><td>E2E Scenarios</td><td>Full end-to-end flows</td><td>Sprint testing, regression</td></tr>
+        <tr><td>Smoke Tests</td><td>Critical path only</td><td>After deployments</td></tr>
+        <tr><td>Field Validation</td><td>Input validations, boundaries</td><td>Form testing</td></tr>
+        <tr><td>Integration Tests</td><td>System integration points</td><td>API/middleware</td></tr>
+        <tr><td>Negative Tests</td><td>Error paths, invalid inputs</td><td>Security, robustness</td></tr>
+        <tr><td>Full Artifact</td><td>All 5 types combined</td><td>Comprehensive coverage</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ══ CH5 GENERATE ════════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-header"><div class="ch-icon">⚡</div><div><div class="ch-title">Generate Test Cases</div><div class="ch-sub">Trigger generation and interpret the output</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Click Generate or press Ctrl+Enter</div>
+    <div class="step-text">Click <strong>⚡ Generate Test Cases</strong> or press <span class="kbd">Ctrl</span>+<span class="kbd">Enter</span>. Test cases stream into the right panel in real-time. Takes 10–30 seconds depending on provider.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="panels">
+          <div class="panel">
+            <div class="genbtn" style="opacity:.7">⚡ Generating... 14s</div>
+            <div class="costhint">⚡ Claude Sonnet · ~$0.015/run</div>
+          </div>
+          <div class="panel">
+            <div style="font-size:8px;color:rgba(255,255,255,.3);margin-bottom:6px;font-family:'JetBrains Mono',monospace">D365 F&O · AP Invoice · 12 TCs ▌</div>
+            <div class="tcrow"><span class="tcid">TC001</span><span class="tctitle">E2E: Successful 3-Way Match & Auto-Approval</span><span class="tcbadge good">95%</span></div>
+            <div class="tcrow"><span class="tcid">TC002</span><span class="tctitle">E2E: Finance Manager Approval > ₹50K</span><span class="tcbadge good">100%</span></div>
+            <div class="tcrow" style="opacity:.5"><span class="tcid">TC003</span><span class="tctitle">E2E: Quantity Mismatch Failure...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Understand Quality Scores</div>
+    <table>
+      <thead><tr><th>Score</th><th>Badge Color</th><th>Meaning</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>90–100%</td><td style="color:var(--green)">🟢 Good</td><td>Complete, accurate, well-structured</td><td>Export as-is</td></tr>
+        <tr><td>70–89%</td><td style="color:var(--amber)">🟡 Fair</td><td>Usable, minor edits may help</td><td>Quick review</td></tr>
+        <tr><td>&lt;70%</td><td style="color:var(--red)">🔴 Needs Review</td><td>Limited context available</td><td>Edit or regenerate</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Pre-generation Validation Errors</div>
+    <table>
+      <thead><tr><th>Error Message</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr><td>"No AI provider configured"</td><td>Settings → AI Provider → add Groq key (free)</td></tr>
+        <tr><td>"Please select a platform"</td><td>Click a platform chip (D365, Salesforce, etc.)</td></tr>
+        <tr><td>"Please select a module or enter a custom module name"</td><td>Type module name in the module field</td></tr>
+        <tr><td>"Please describe the business flow"</td><td>Type or paste requirement in textarea</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ══ CH6 EDIT ════════════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-header"><div class="ch-icon">✏️</div><div><div class="ch-title">Review & Edit Test Cases</div><div class="ch-sub">Inline editing, select-all, and quality review</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Enter Inline Edit Mode</div>
+    <div class="step-text">Click <strong>✏️ Edit</strong> in the export toolbar. Every cell in the table becomes clickable and editable. Changes reflect immediately in all export formats.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Select / Deselect All (v12.15+)</div>
+    <div class="step-text">Use the header checkbox to select or deselect all test cases. Only selected TCs are included in exports.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="panel">
+          <div style="display:flex;align-items:center;gap:7px;padding:5px 7px;background:rgba(91,95,239,.1);border-radius:5px;margin-bottom:7px;border:1px solid rgba(91,95,239,.2)">
+            <div style="width:12px;height:12px;background:#5B5FEF;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff">✓</div>
+            <span style="font-size:8px;color:#A5A8FF;font-weight:600">All 12 TCs selected</span>
+            <span style="font-size:8px;color:rgba(255,255,255,.3);margin-left:auto">Click to deselect all</span>
+          </div>
+          <div class="tcrow"><div style="width:10px;height:10px;background:#5B5FEF;border-radius:2px;flex-shrink:0"></div><span class="tcid">TC001</span><span class="tctitle">Successful 3-Way Match</span><span class="tcbadge good">95%</span></div>
+          <div class="tcrow"><div style="width:10px;height:10px;background:#5B5FEF;border-radius:2px;flex-shrink:0"></div><span class="tcid">TC002</span><span class="tctitle">Finance Manager Approval</span><span class="tcbadge good">100%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><span>💡</span><span><strong>Toggle logic:</strong> None → click → All selected. All → click → None. Some → indeterminate dash → click → All selected.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH7 EXCEL/PDF ═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-header"><div class="ch-icon">📤</div><div><div class="ch-title">Export to Excel, PDF & Markdown</div><div class="ch-sub">Download test cases for stakeholder review</div></div></div>
+
+  <div class="grid3">
+    <div class="card"><div class="card-icon">📊</div><h3>Excel (.xlsx)</h3><p>Click <strong>📊 Excel</strong>. Downloads .xlsx with separate sheets per TC type. Only selected TCs included.</p></div>
+    <div class="card"><div class="card-icon">📑</div><h3>PDF</h3><p>Click <strong>📑 PDF</strong>. Formatted document with all test cases and steps — ideal for sign-off packages.</p></div>
+    <div class="card"><div class="card-icon">📋</div><h3>Markdown</h3><p>Click <strong>📋 Markdown</strong>. Copies to clipboard — paste into Confluence, Notion, or any Markdown editor.</p></div>
+  </div>
+</div>
+
+<!-- ══ CH8 ADO ══════════════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-header"><div class="ch-icon">🔷</div><div><div class="ch-title">Push to Azure DevOps</div><div class="ch-sub">One-click push to ADO Test Plans</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Create ADO Personal Access Token (PAT)</div>
+    <div class="hbox">
+      <div class="htitle">Steps to create ADO PAT</div>
+      <div class="hitem">Go to dev.azure.com → your organization</div>
+      <div class="hitem">Click your profile icon (top right) → Personal Access Tokens</div>
+      <div class="hitem">Click + New Token</div>
+      <div class="hitem">Name: ShuddhiQA-PAT · Expiration: 90 days</div>
+      <div class="hitem">Scopes: Test Plans (Read &amp; Write) + Work Items (Read &amp; Write)</div>
+      <div class="hitem">Click Create → Copy the token immediately (shown once only)</div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Configure in Settings → Azure DevOps Tab</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="settings">
+          <div class="shead"><span>🔷</span><span class="stitle">Settings — Azure DevOps</span></div>
+          <div class="sbody">
+            <div class="sfield"><div class="slabel">Organization URL</div><input class="sinput" value="https://dev.azure.com/yourorgname" readonly/></div>
+            <div class="sfield"><div class="slabel">Personal Access Token</div><input class="sinput" value="••••••••••••••••••••••••••••••••••••••••" readonly/></div>
+            <div style="display:flex;gap:7px">
+              <div class="sbtn">🔗 Test Connection</div>
+              <div class="sbtn" style="background:rgba(16,185,129,.2);border-color:rgba(16,185,129,.4);color:#6EE7B7">✅ Connected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Push Test Cases to ADO</div>
+    <div class="step-text">Click <strong>🔷 ADO</strong> in the export toolbar → Select Test Plan → <strong>tick the AI-review acknowledgement</strong> → Click Push. The Push button stays disabled (45% opacity) until the checkbox is ticked — see <a href="#ch19" style="color:#5B5FEF;text-decoration:none;font-weight:600">Ch 19</a> for why this gate exists.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="mbackdrop">
+          <div class="mbox">
+            <div class="mhead"><span class="mtitle">🔷 Push to Azure DevOps</span><span style="font-size:12px;color:rgba(255,255,255,.35)">✕</span></div>
+            <div class="mbody">
+              <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);border-radius:8px;padding:10px 12px;margin-bottom:10px">
+                <div style="display:flex;gap:6px;align-items:flex-start;font-size:10px;color:rgba(255,255,255,.75);line-height:1.5">
+                  <span>⚠️</span>
+                  <div><strong style="color:#FCD34D">AI-generated — review before pushing.</strong> Test cases produced by Claude, Gemini, Groq, OpenAI, Together AI or Azure OpenAI.</div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;margin-top:8px;font-size:10px;color:rgba(255,255,255,.7)">
+                  <input type="checkbox" checked style="margin:0"/>
+                  <span>I've reviewed these test cases and they're ready to push.</span>
+                </div>
+              </div>
+              <div class="mfield"><div class="mlabel">Test Plan</div><input class="minput" value="Sprint 23 — AP Invoice Testing" readonly/></div>
+              <div class="mfield"><div class="mlabel">Test Suite</div><input class="minput" value="D365 AP Invoice — 3-Way Match" readonly/></div>
+              <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:5px;padding:7px 9px;font-size:9px;color:#6EE7B7;margin-top:7px">✅ 12 test cases ready · Org: SRIVaralakshmiBalaji</div>
+            </div>
+            <div class="mfooter"><span class="mbtn-sec">Cancel</span><span class="mbtn-primary">🔷 Push to ADO</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ok"><span>✅</span><span><strong>What gets created:</strong> Test Plan · Test Suite per module · Test Cases with full steps · Expected results · State: Design</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH9 JIRA ══════════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-header"><div class="ch-icon">🟦</div><div><div class="ch-title">Export to Jira Zephyr</div><div class="ch-sub">CSV for Zephyr Squad or Scale import</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Get Atlassian API Token</div>
+    <div class="hbox">
+      <div class="htitle">Steps to get API token</div>
+      <div class="hitem">Go to id.atlassian.com → Security → API tokens</div>
+      <div class="hitem">Click Create API token · Name: ShuddhiQA</div>
+      <div class="hitem">Click Create → Copy the token</div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Configure in Settings → Jira Tab</div>
+    <div class="step-text">Settings → Jira tab → Enter token + email + domain (e.g. <code>yourcompany.atlassian.net</code> without https://).</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Export & Import</div>
+    <div class="step-text">After generating: click <strong>More ▾ → 🟦 Jira Zephyr</strong>. CSV downloads with all 10 Zephyr headers pre-populated. In Jira: Zephyr → Test Cases → Import → Upload CSV.</div>
+    <div class="tip"><span>💡</span><span><strong>You'll see a toast on download:</strong> "Jira CSV downloaded — review in Excel before uploading to Jira." This is the AI-review reminder — see <a href="#ch19" style="color:#5B5FEF;text-decoration:none;font-weight:600">Ch 19</a> for the full explanation of why this gate exists.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH10 OTHER EXPORTS ════════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-header"><div class="ch-icon">📦</div><div><div class="ch-title">Other Export Formats</div><div class="ch-sub">Gherkin, Playwright, TestRail — via More ▾ dropdown</div></div></div>
+
+  <table>
+    <thead><tr><th>Format</th><th>Use Case</th><th>Access</th></tr></thead>
+    <tbody>
+      <tr><td>🥒 Gherkin</td><td>BDD — Cucumber, SpecFlow, Behave</td><td>More ▾ → Gherkin</td></tr>
+      <tr><td>🎭 Playwright</td><td>TypeScript automation skeleton</td><td>More ▾ → Playwright</td></tr>
+      <tr><td>🧪 TestRail</td><td>CSV import for TestRail</td><td>More ▾ → TestRail</td></tr>
+      <tr><td>📮 Postman</td><td>API test collection skeleton</td><td>More ▾ → Postman</td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><span>💡</span><span><strong>More ▾ button</strong> in the export toolbar reveals additional formats. Click once to expand, once more to close.</span></div>
+</div>
+
+<!-- ══ CH11 ITERATIVE REFINEMENT ════════════════════════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-header"><div class="ch-icon">🔄</div><div><div class="ch-title">Iterative Refinement</div><div class="ch-sub">Regenerate individual test cases without affecting others</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Hover → click 🔄 on any test case row</div>
+    <div class="step-text">Move your mouse over any test case row. A regenerate icon appears on the right. Click it to open the refinement modal.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Add context and regenerate</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="mbackdrop">
+          <div class="mbox">
+            <div class="mhead"><span class="mtitle">🔄 Regenerate TC001</span><span style="font-size:11px;color:rgba(255,255,255,.35)">✕</span></div>
+            <div class="mbody">
+              <div style="background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:7px 9px;font-size:9px;color:#A5A8FF;margin-bottom:10px">Original: E2E: Successful 3-Way Match & Auto-Approval (≤₹50,000)</div>
+              <div class="mfield"><div class="mlabel">Additional Context (Optional)</div><textarea class="minput" style="min-height:50px;resize:none" placeholder="e.g. Focus on boundary conditions, add negative scenarios..."></textarea></div>
+            </div>
+            <div class="mfooter"><span class="mbtn-sec">Cancel</span><span class="mbtn-primary">🔄 Regenerate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><span>💡</span><span>Only that one TC is updated. The rest of the suite stays intact.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH12 TEMPLATES ════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="ch-header"><div class="ch-icon">📋</div><div><div class="ch-title">Templates & Smart Detect</div><div class="ch-sub">100+ pre-built templates and auto platform detection</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Using Templates</div>
+    <div class="step-text">Visit <strong>shuddhiqacloud.pages.dev/templates</strong> or click Templates in the nav. Browse 100+ pre-built requirement templates. Click any to load it into the requirement field instantly.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Smart Detect on Paste</div>
+    <div class="step-text">When you paste 100+ characters, the AI analyzes your text and suggests the platform. A notification appears confirming detection.</div>
+    <div class="ok"><span>🎯</span><span>Smart Detect runs automatically on every paste/input event. No button to click — it fires in the background.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH13 SIGN IN ══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch13">
+  <div class="ch-header"><div class="ch-icon">👤</div><div><div class="ch-title">Sign In & Privacy</div><div class="ch-sub">Optional sign-in for cross-device sync</div></div></div>
+
+  <table>
+    <thead><tr><th>Feature</th><th>Anonymous</th><th>Signed In</th></tr></thead>
+    <tbody>
+      <tr><td>Free generations</td><td>3 per session</td><td>10 per session</td></tr>
+      <tr><td>Preference sync</td><td>Browser only</td><td>✅ All devices</td></tr>
+      <tr><td>History</td><td>❌</td><td>✅ Last 30 days</td></tr>
+      <tr><td>GDPR delete</td><td>N/A</td><td>✅ Full deletion</td></tr>
+    </tbody>
+  </table>
+  <div class="ok"><span>🔒</span><span><strong>Only email + name accessed.</strong> No Gmail, Drive, Calendar access. Standard OAuth 2.0 with minimal scopes. Keys are never synced to Firebase — browser localStorage only.</span></div>
+</div>
+
+<!-- ══ CH14 SHORTCUTS ════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch14">
+  <div class="ch-header"><div class="ch-icon">⌨️</div><div><div class="ch-title">Shortcuts & Command Palette</div><div class="ch-sub">Speed up your workflow</div></div></div>
+
+  <table>
+    <thead><tr><th>Action</th><th>Shortcut</th></tr></thead>
+    <tbody>
+      <tr><td>Generate test cases</td><td><span class="kbd">Ctrl</span> + <span class="kbd">Enter</span></td></tr>
+      <tr><td>Open command palette</td><td><span class="kbd">Ctrl</span> + <span class="kbd">K</span></td></tr>
+      <tr><td>Toggle dark/light theme</td><td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">T</span></td></tr>
+      <tr><td>Close modal / palette</td><td><span class="kbd">Esc</span></td></tr>
+      <tr><td>Open Settings</td><td><span class="kbd">Ctrl</span> + <span class="kbd">,</span></td></tr>
+      <tr><td>Copy Markdown</td><td><span class="kbd">Ctrl</span> + <span class="kbd">C</span></td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><span>⌨️</span><span><strong>Command Palette (Ctrl+K)</strong> — search across all 19 commands. Type "dark", "export", "templates", "settings" — any command appears instantly.</span></div>
+</div>
+
+<!-- ══ CH15 SETTINGS REFERENCE ══════════════════════════════════════════ -->
+<div class="chapter" id="ch15">
+  <div class="ch-header"><div class="ch-icon">⚙️</div><div><div class="ch-title">Settings Reference</div><div class="ch-sub">All 5 settings tabs explained</div></div></div>
+
+  <table>
+    <thead><tr><th>Tab</th><th>What you configure</th></tr></thead>
+    <tbody>
+      <tr><td>🤖 AI Provider</td><td>Select active provider. Paste API keys for Groq, Gemini, Claude, OpenAI, Together AI. Azure OpenAI (BYO) takes Endpoint + Key + Deployment + API Version.</td></tr>
+      <tr><td>🔷 Azure DevOps</td><td>Org URL + PAT. Test Connection button. Validates PAT format before saving.</td></tr>
+      <tr><td>🟦 Jira</td><td>Atlassian API token + email + Jira domain. Test Connection button.</td></tr>
+      <tr><td>📊 Usage & Cost</td><td>Generation count tracker. Google Cloud Billing sync (OAuth). Token usage estimates.</td></tr>
+      <tr><td>ℹ️ About</td><td>Version number, active provider, platform diagnostics, changelog history.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ CH16 WELCOME TOUR ═════════════════════════════════════════════════ -->
+<div class="chapter" id="ch16">
+  <div class="ch-header"><div class="ch-icon">🎯</div><div><div class="ch-title">Welcome Tour &amp; First-Time Experience</div><div class="ch-sub">The 4-step walkthrough that runs on first visit</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Auto-shows on your first visit</div>
+    <div class="step-text">The Welcome modal auto-launches the first time you load shuddhiqacloud.pages.dev/app — even before signing in. It's tracked via a single browser flag (<code>shuddhi-first-run-done</code>) in localStorage, so it appears exactly once per device.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="mbackdrop">
+          <div class="mbox">
+            <div class="mhead"><span class="mtitle">👋 Welcome to Shuddhi QA</span><span style="font-size:12px;color:rgba(255,255,255,.35)">×</span></div>
+            <div class="mbody">
+              <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:10px">AI-powered test case generation for enterprise QA. Let's walk through the basics in 30 seconds.</div>
+              <div style="display:flex;gap:5px;margin-bottom:12px"><div style="width:20px;height:3px;background:#5B5FEF;border-radius:2px"></div><div style="width:20px;height:3px;background:rgba(255,255,255,.15);border-radius:2px"></div><div style="width:20px;height:3px;background:rgba(255,255,255,.15);border-radius:2px"></div><div style="width:20px;height:3px;background:rgba(255,255,255,.15);border-radius:2px"></div></div>
+              <div style="font-size:9px;color:rgba(255,255,255,.35)">Step 1 of 4</div>
+            </div>
+            <div class="mfooter"><span class="mbtn-sec">Skip tour</span><span class="mbtn-primary">Next →</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">The 4 tour steps</div>
+    <table>
+      <thead><tr><th>Step</th><th>What it teaches</th></tr></thead>
+      <tbody>
+        <tr><td>1. Welcome</td><td>Intro and the "what is Shuddhi QA" pitch</td></tr>
+        <tr><td>2. Select a Platform</td><td>Highlights the platform chips on the left panel</td></tr>
+        <tr><td>3. Describe Requirement</td><td>Points to the textarea + character counter</td></tr>
+        <tr><td>4. Generate &amp; Export</td><td>Shows the Generate button + export toolbar with ADO/Jira</td></tr>
+      </tbody>
+    </table>
+    <div class="tip"><span>💡</span><span>Each step highlights the relevant UI region with a pulse animation. You can <strong>Skip tour</strong> anytime — the flag still flips so the modal doesn't reappear next visit.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">How to re-show the tour</div>
+    <div class="step-text">The tour is one-shot per device, but you can manually replay it:</div>
+    <div class="hbox">
+      <div class="htitle">To re-trigger the welcome modal</div>
+      <div class="hitem">Open DevTools (F12) → Application tab → Local Storage → shuddhiqacloud.pages.dev</div>
+      <div class="hitem">Delete the <code>shuddhi-first-run-done</code> key</div>
+      <div class="hitem">Refresh the page — the tour appears again</div>
+    </div>
+    <div class="info"><span>👨‍💻</span><span><strong>If you're writing E2E tests:</strong> Playwright scripts can set the <code>shuddhi-first-run-done</code> flag via <code>addInitScript</code> before each test, so the welcome modal doesn't block other UI interactions. Skip this if you're not running automated tests.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH17 DOMAIN INTELLIGENCE ══════════════════════════════════════════ -->
+<div class="chapter" id="ch17">
+  <div class="ch-header"><div class="ch-icon">🧠</div><div><div class="ch-title">Domain Intelligence</div><div class="ch-sub">Vertical-aware test generation with business-risk tagging</div></div></div>
+
+  <div class="info"><span>🎯</span><span><strong>Distinct from Platform.</strong> Platform = the tech stack (D365, Salesforce). Domain = the business vertical (Insurance, Banking, Healthcare). You can mix and match — e.g. Salesforce + Insurance domain produces underwriting and policy-binding test cases.</span></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">6 Supported Domains</div>
+    <table>
+      <thead><tr><th>Domain</th><th>Terminology added</th><th>Risk patterns</th></tr></thead>
+      <tbody>
+        <tr><td>🛡️ Insurance</td><td>Policy, claim, premium, underwriting, FNOL (First Notice of Loss)</td><td>Regulatory compliance, fraud, claims leakage</td></tr>
+        <tr><td>🏦 Banking</td><td>KYC (Know Your Customer), AML (Anti-Money Laundering), ledger, settlement, reconciliation</td><td>Compliance breach, double-debit, audit trail</td></tr>
+        <tr><td>👥 HR</td><td>Onboarding, payroll, leave, performance review</td><td>PII (Personally Identifiable Info) exposure, payroll calc errors, GDPR</td></tr>
+        <tr><td>🏭 ERP</td><td>3-way match, MRP (Material Requirements Planning), BOM (Bill of Materials), ledger posting</td><td>Stockout, posting reversal, period-close errors</td></tr>
+        <tr><td>🛒 Retail</td><td>Loyalty, returns, omnichannel, inventory</td><td>Oversell, price mismatch, fulfillment delay</td></tr>
+        <tr><td>🏥 Healthcare</td><td>EMR (Electronic Medical Records), HL7 (data exchange standard), claims, prior auth, HIPAA</td><td>PHI (Protected Health Info) exposure, prior-auth denial, coding errors</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Selecting a domain</div>
+    <div class="step-text">Click the <strong>Domain</strong> selector above the requirement textarea. Default is "Auto-detect" — Shuddhi QA picks the domain from your requirement keywords (e.g. "policy", "KYC", "HL7" → triggers the matching vertical).</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div class="panel">
+          <div class="plabel">Domain (Auto-detect or manual)</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:6px">
+            <div class="pc">🛡️ Insurance</div>
+            <div class="pc on">🏦 Banking</div>
+            <div class="pc">👥 HR</div>
+            <div class="pc">🏭 ERP</div>
+            <div class="pc">🛒 Retail</div>
+            <div class="pc">🏥 Healthcare</div>
+          </div>
+          <div style="font-size:8px;color:rgba(16,185,129,.8)">✓ Banking domain → KYC + AML risk tags will be applied</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">What changes in the output</div>
+    <table>
+      <thead><tr><th>Without domain</th><th>With Insurance domain</th></tr></thead>
+      <tbody>
+        <tr><td>TC: "Verify form submission"</td><td>TC: "Verify FNOL submission triggers claim creation in PolicyCenter"</td></tr>
+        <tr><td>No risk tag</td><td>Tag: <span class="kbd" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#FCA5A5">🔴 Regulatory</span></td></tr>
+        <tr><td>Generic field names</td><td>Specific terms (premium, deductible, claimant)</td></tr>
+        <tr><td>Generic personas</td><td>Underwriter, claims adjuster, broker</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<!-- ══ CH18 MULTI-LANGUAGE OUTPUT ════════════════════════════════════════ -->
+<div class="chapter" id="ch18">
+  <div class="ch-header"><div class="ch-icon">🌐</div><div><div class="ch-title">Multi-Language Output</div><div class="ch-sub">Generate test cases in 5 languages — 4 more coming soon</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">Currently supported (Tier 1 — full QA translation)</div>
+    <table>
+      <thead><tr><th>Language</th><th>Code</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td>🇬🇧 English</td><td>en</td><td>Default — global teams, ADO/Jira standard</td></tr>
+        <tr><td>🇩🇪 Deutsch (German)</td><td>de</td><td>DACH region, automotive/manufacturing</td></tr>
+        <tr><td>🇪🇸 Español (Spanish)</td><td>es</td><td>LATAM, Spain operations</td></tr>
+        <tr><td>🇫🇷 Français (French)</td><td>fr</td><td>France, Quebec, francophone Africa</td></tr>
+        <tr><td>🇧🇷 Português (BR)</td><td>pt-BR</td><td>Brazilian enterprises</td></tr>
+      </tbody>
+    </table>
+    <div class="info"><span>🔜</span><span><strong>Coming Soon (Tier 2):</strong> 🇯🇵 日本語 (Japanese) · 🇳🇱 Nederlands (Dutch) · 🇮🇹 Italiano (Italian) · 🇵🇱 Polski (Polish). These appear in the dropdown but are disabled until full QA testing completes.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">How to select</div>
+    <div class="step-text">Choose your output language from the <strong>Language</strong> dropdown in the left panel, just above the Generate button. Selection persists across sessions and syncs to your account if signed in.</div>
+    <div class="tip"><span>💡</span><span><strong>You can write requirements in English and request output in any other language.</strong> Domain terms (e.g. "underwriting", "3-way match") are translated to their localized equivalent rather than left in English.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">What gets translated</div>
+    <table>
+      <thead><tr><th>Element</th><th>Translated?</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Test case titles</td><td>✅ Yes</td><td>Localized including domain terminology</td></tr>
+        <tr><td>Step actions &amp; expected results</td><td>✅ Yes</td><td>Full localization</td></tr>
+        <tr><td>UI button labels referenced in steps</td><td>✅ Yes</td><td>e.g. "Speichern" instead of "Save" for German</td></tr>
+        <tr><td>Technical identifiers (TC001, field names)</td><td>❌ Kept in English</td><td>For traceability with ADO/Jira</td></tr>
+        <tr><td>Excel/PDF column headers</td><td>✅ Yes</td><td>Headers match selected language</td></tr>
+      </tbody>
+    </table>
+    <div class="warn"><span>⚠️</span><span><strong>ADO/Jira push:</strong> Test case content uses your selected language but the platform's work-item fields (State, Priority, Assigned To) stay in ADO/Jira's UI language.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH19 AI-REVIEW GATE ═══════════════════════════════════════════════ -->
+<div class="chapter" id="ch19">
+  <div class="ch-header"><div class="ch-icon">🛡️</div><div><div class="ch-title">AI-Review Gate</div><div class="ch-sub">Mandatory review before pushing to ADO or Jira</div></div></div>
+
+  <div class="warn"><span>⚠️</span><span><strong>Added because AI can hallucinate.</strong> Before any test case reaches your production work items, you must explicitly confirm you've reviewed them. The Push button stays disabled until you tick the acknowledgement.</span></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">ADO push — review checkbox</div>
+    <div class="step-text">When you click <strong>🔷 ADO</strong>, the push modal shows an amber warning banner above the Test Plan field with the text <em>"AI-generated — review before pushing"</em> and a required acknowledgement checkbox:</div>
+    <div class="ok" style="background:rgba(245,158,11,.05);border-color:rgba(245,158,11,.25)"><span>☑️</span><span><strong>"I've reviewed these test cases and they're ready to push."</strong> Until you tick this, the Push button stays disabled at 45% opacity — no accidental clicks possible.</span></div>
+    <div class="tip"><span>🖼️</span><span>See <a href="#ch8" style="color:#5B5FEF;text-decoration:none;font-weight:600">Ch 8 step 3</a> for the modal mockup with the checkbox in context.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">Jira Zephyr — review reminder on download</div>
+    <div class="step-text">Jira uses CSV import (no API push), so the review gate fires as a toast notification when the CSV is downloaded.</div>
+    <div class="ok"><span>📝</span><span><strong>Toast text:</strong> "Jira CSV downloaded — review in Excel before uploading to Jira"</span></div>
+    <div class="tip"><span>💡</span><span>Workflow: download CSV → open in Excel → cross-check each test case → only then upload to Jira via Zephyr → Test Cases → Import.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Why this matters</div>
+    <table>
+      <thead><tr><th>Without the gate</th><th>With the gate</th></tr></thead>
+      <tbody>
+        <tr><td>50+ hallucinated test cases in your sprint</td><td>You catch them before sprint planning</td></tr>
+        <tr><td>QA team blames "the AI tool" for bad TCs</td><td>Accountability stays with the human reviewer</td></tr>
+        <tr><td>Production incidents from untested edge cases</td><td>Edge cases verified before they go live</td></tr>
+      </tbody>
+    </table>
+    <div class="info"><span>🔒</span><span><strong>Internal audit trail:</strong> The checkbox tick is logged in your Firestore session record (if signed in) — useful for SOC2 / ISO27001 process evidence.</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH20 PWA INSTALL & OFFLINE ════════════════════════════════════════ -->
+<div class="chapter" id="ch20">
+  <div class="ch-header"><div class="ch-icon">📲</div><div><div class="ch-title">PWA Install &amp; Offline Mode</div><div class="ch-sub">Install Shuddhi QA as an app on desktop or mobile</div></div></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">The Install banner</div>
+    <div class="step-text">On the home page (shuddhiqacloud.pages.dev/), an "Install Shuddhi QA" banner appears at the bottom of the screen. Click <strong>Install</strong> to add it to your OS as a standalone app — like installing any native app.</div>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div></div>
+      <div class="mock-body">
+        <div style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.35);border-radius:9px;padding:10px 14px;display:flex;align-items:center;gap:12px">
+          <div style="width:36px;height:36px;background:linear-gradient(135deg,#5B5FEF,#7C3AED);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;font-family:'Syne',sans-serif">aQ</div>
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:700;color:#fff">Install Shuddhi QA</div>
+            <div style="font-size:9px;color:rgba(255,255,255,.55)">Faster launch · offline access · home-screen shortcut</div>
+          </div>
+          <span class="mbtn-sec">Not now</span>
+          <span class="mbtn-primary">Install</span>
+        </div>
+        <div style="font-size:8px;color:rgba(255,255,255,.3);text-align:center;margin-top:6px;font-family:'JetBrains Mono',monospace">auto-dismisses after 10s if untouched</div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">What you get after installing</div>
+    <div class="grid2">
+      <div class="card"><div class="card-icon">⚡</div><h3>Faster launch</h3><p>App opens in its own window, no browser chrome. ~40% faster cold start than a fresh tab.</p></div>
+      <div class="card"><div class="card-icon">📡</div><h3>Offline access</h3><p>App shell + UI loads without network. Generation still needs a connection, but you can review prior TCs offline.</p></div>
+      <div class="card"><div class="card-icon">🏠</div><h3>Home-screen icon</h3><p>aQ icon on indigo background — same on Windows Start, macOS Dock, iOS/Android home screen.</p></div>
+      <div class="card"><div class="card-icon">🔔</div><h3>Push-ready</h3><p>Foundation for future browser push notifications (e.g. "Your generation is ready").</p></div>
+    </div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Stuck on an old version?</div>
+    <div class="step-text">If the app feels stale after a recent update, force a fresh fetch with <strong>Ctrl+Shift+R</strong> (hard refresh). That clears the cached version and pulls the latest from the server. For most users, this is all you ever need to do.</div>
+    <div class="info"><span>👨‍💻</span><span><strong>For developers / SDETs:</strong> The PWA uses a service worker (<code>sw.js</code>) that caches the app shell — app.html, index.html, manifest.json, icons, fonts. Only network-bound calls are <code>/api/claude</code> (generation), <code>/api/ado</code> (push), and Firebase Auth flows. To inspect or force-update: DevTools → Application → Service Workers → "Update on reload".</span></div>
+  </div></div>
+</div>
+
+<!-- ══ CH21 TROUBLESHOOTING ══════════════════════════════════════════════ -->
+<div class="chapter" id="ch21">
+  <div class="ch-header"><div class="ch-icon">🔧</div><div><div class="ch-title">Troubleshooting</div><div class="ch-sub">Common issues and how to fix them</div></div></div>
+
+  <table>
+    <thead><tr><th>Issue</th><th>Cause</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Generate button not working</td><td>No platform or module selected</td><td>Select a platform chip → enter module name</td></tr>
+      <tr><td>"No AI provider configured"</td><td>No API key set and server key unavailable</td><td>Settings → AI Provider → add Groq key (free)</td></tr>
+      <tr><td>ADO push fails with 401</td><td>PAT expired or wrong scope</td><td>Create new PAT with Test Plans (Read &amp; Write) scope</td></tr>
+      <tr><td>"PAT invalid or expired"</td><td>Bogus or expired ADO PAT</td><td>Generate a new PAT in ADO user settings</td></tr>
+      <tr><td>Firebase sign-in fails (network error)</td><td>Browser extension blocking requests</td><td>Try Incognito mode or disable extensions</td></tr>
+      <tr><td>Generated TCs are too generic</td><td>Requirement too brief</td><td>Add roles, thresholds, and expected outcomes to requirement</td></tr>
+      <tr><td>Character limit exceeded</td><td>Requirement over 6,000 chars</td><td>App auto-trims with notification — reduce if needed</td></tr>
+      <tr><td>More ▾ dropdown not opening</td><td>Old browser cache (pre-v12.4)</td><td>Hard refresh Ctrl+Shift+R</td></tr>
+      <tr><td>Cost hint not showing</td><td>Provider not initialized yet</td><td>Wait 2–3 seconds after page load</td></tr>
+      <tr><td>Jira CSV import errors</td><td>Wrong domain format in Settings</td><td>Use yourcompany.atlassian.net (no https://, no trailing slash)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip"><span>📖</span><span><strong>Help page:</strong> Visit <strong>shuddhiqacloud.pages.dev/help</strong> for detailed setup guides for each AI provider, ADO, and Jira configuration steps.</span></div>
+  <div class="ok"><span>💬</span><span><strong>Still stuck?</strong> Email <strong>ramya9.b@gmail.com</strong> with a screenshot and the browser console output (F12 → Console tab).</span></div>
+</div>
+
+<!-- ══ CH22 MICROSOFT COPILOT & MCP INTEGRATION ═══════════════════════════ -->
+<div class="chapter" id="ch22">
+  <div class="ch-header"><div class="ch-icon">🔌</div><div><div class="ch-title">Microsoft Copilot &amp; MCP Integration</div><div class="ch-sub">Use Shuddhi QA from inside Copilot, Claude Desktop, Cursor, and any MCP-capable AI client</div></div></div>
+
+  <div class="info"><span>🆕</span><span><strong>Live now in v12.20.</strong> Shuddhi QA is exposed as a Model Context Protocol (MCP) server. Add it to any MCP-capable AI client in 30 seconds. Five tools are available: <code>generateTestCases</code>, <code>fetchJiraIssue</code>, <code>pushToADO</code>, <code>listTemplates</code>, <code>detectPlatform</code>.</span></div>
+
+  <div class="step"><div class="step-circle">1</div><div class="step-body">
+    <div class="step-title">What is Model Context Protocol (MCP)?</div>
+    <div class="step-text">MCP is an open protocol released by Anthropic in 2024 and adopted by Microsoft, OpenAI, and others. It lets AI assistants discover and use external tools/resources through a standard JSON-RPC 2.0 interface. Shuddhi QA implements an MCP server so any compatible AI client can invoke its test case generation, Jira fetch, and Azure DevOps push capabilities directly from chat — without leaving the AI interface.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">2</div><div class="step-body">
+    <div class="step-title">MCP server endpoint</div>
+    <div class="step-text">The Shuddhi QA MCP server is hosted on Cloudflare Workers at:</div>
+    <table>
+      <thead><tr><th>Field</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Endpoint URL</td><td><code>https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code></td></tr>
+        <tr><td>Protocol</td><td>JSON-RPC 2.0 over HTTP POST (Streamable HTTP transport)</td></tr>
+        <tr><td>MCP version</td><td>2025-06-18</td></tr>
+        <tr><td>Server version</td><td>0.1.0</td></tr>
+        <tr><td>Authentication</td><td>None (v0.1) — anonymous + Cloudflare DDoS protection</td></tr>
+        <tr><td>Health probe</td><td><code>GET /healthz</code> returns <code>{ "ok": true }</code></td></tr>
+        <tr><td>Server info</td><td><code>GET /</code> returns server name, version, protocol, and tool names</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">3</div><div class="step-body">
+    <div class="step-title">Five tools exposed</div>
+    <table>
+      <thead><tr><th>Tool</th><th>Purpose</th><th>Backend</th></tr></thead>
+      <tbody>
+        <tr><td><code>generateTestCases</code></td><td>Generate production-grade QA test cases for 14 enterprise platforms with real navigation paths, T-codes, table names, validation rule names, and platform-specific error messages.</td><td>Proxies to <code>/api/claude</code></td></tr>
+        <tr><td><code>fetchJiraIssue</code></td><td>Pull a Jira ticket's summary, description, acceptance criteria, status, and assignee. Caller supplies base URL, email, and API token.</td><td>Proxies to <code>/api/jira</code></td></tr>
+        <tr><td><code>pushToADO</code></td><td>Push generated test cases to an Azure DevOps Test Plan as Test Case work items. Optionally adds to a specific suite.</td><td>Proxies to <code>/api/ado</code></td></tr>
+        <tr><td><code>listTemplates</code></td><td>Browse a curated subset of the 110-template library, filtered by platform and business domain.</td><td>In-memory (bundled)</td></tr>
+        <tr><td><code>detectPlatform</code></td><td>Identify the enterprise platform, business domain, and module from any requirement text. Returns confidence score and supporting semantic evidence.</td><td>Proxies to <code>/api/detect</code></td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">4</div><div class="step-body">
+    <div class="step-title">Setup — Microsoft 365 Copilot (via Copilot Studio)</div>
+    <div class="step-text">Prerequisite: active Microsoft 365 Copilot license; tenant admin allows custom Copilot Studio agents with MCP connectors.</div>
+    <ol>
+      <li>Open <strong>copilotstudio.microsoft.com</strong> with your work account.</li>
+      <li>Click <strong>Create → New agent</strong> → choose <strong>Declarative Agent</strong>.</li>
+      <li>Name it <code>Shuddhi QA</code>; paste the description from the homepage.</li>
+      <li>In <strong>Knowledge / Actions</strong>, click <strong>Add → MCP server</strong>.</li>
+      <li>Paste the URL: <code>https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code></li>
+      <li>Authentication: <strong>None</strong> (v0.1).</li>
+      <li>Click <strong>Test</strong> — Copilot Studio should discover all 5 tools.</li>
+      <li><strong>Publish</strong>, then invoke from any Copilot surface: <code>@Shuddhi-QA generate D365 vendor invoice test cases</code>.</li>
+    </ol>
+  </div></div>
+
+  <div class="step"><div class="step-circle">5</div><div class="step-body">
+    <div class="step-title">Setup — Claude Desktop</div>
+    <div class="step-text">Edit your Claude Desktop config file. On Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code>. On macOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>. Add:</div>
+    <div class="code-block"><pre>{
+  "mcpServers": {
+    "shuddhi-qa": {
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp"
+      }
+    }
+  }
+}</pre></div>
+    <div class="step-text">Restart Claude Desktop. The Shuddhi QA tool surface appears in the attachments / tool list.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">6</div><div class="step-body">
+    <div class="step-title">Setup — Cursor, Continue, and other MCP clients</div>
+    <div class="step-text">In Cursor: <strong>Settings → Cursor Settings → MCP Servers → Add</strong>. Type: <strong>Streamable HTTP</strong>. URL: <code>https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code>. Auth: <strong>None</strong>.</div>
+    <div class="step-text">In Continue (VS Code / JetBrains): edit <code>~/.continue/config.json</code> and add the same <code>mcpServers</code> block as Claude Desktop.</div>
+    <div class="step-text">For any other MCP-capable client, paste the URL into whatever "Add MCP server" form they expose.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">7</div><div class="step-body">
+    <div class="step-title">Authentication for Jira and Azure DevOps</div>
+    <div class="step-text">When you invoke <code>fetchJiraIssue</code> or <code>pushToADO</code> from your AI client, you supply credentials per-call. They are passed through the MCP server to the target service and discarded after the request completes — never logged, never stored.</div>
+    <table>
+      <thead><tr><th>Tool</th><th>Required credentials</th></tr></thead>
+      <tbody>
+        <tr><td><code>fetchJiraIssue</code></td><td>Jira base URL, account email, API token (from id.atlassian.com)</td></tr>
+        <tr><td><code>pushToADO</code></td><td>Azure DevOps organization, project, test plan ID, PAT with Test Plans (Read &amp; Write) scope</td></tr>
+      </tbody>
+    </table>
+  </div></div>
+
+  <div class="step"><div class="step-circle">8</div><div class="step-body">
+    <div class="step-title">Example Copilot conversation</div>
+    <div class="code-block"><pre>User:    @Shuddhi-QA pull Jira ticket PROJ-1234 and tell me what platform it targets
+
+Copilot: [calls fetchJiraIssue → detectPlatform]
+         "PROJ-1234 is a D365 F&amp;O vendor invoice requirement, 92% confidence.
+          The ticket references workflow approval over $10K and three-way matching."
+
+User:    Generate test cases for it
+
+Copilot: [calls generateTestCases]
+         "Here are 40 D365 vendor invoice test cases:
+          TC001 — Navigate to Accounts Payable > Invoices > Vendor invoices...
+          TC002 — Verify VendInvoiceInfoTable.WorkflowStatusEnum = InReview..."
+
+User:    Push these to ADO Test Plan 567
+
+Copilot: [calls pushToADO]
+         "Pushed 40 test cases to Plan 567 in suite 1024.
+          Work item URLs: dev.azure.com/contoso/RetailPlatform/_workitems/..."</pre></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">9</div><div class="step-body">
+    <div class="step-title">Privacy and data flow</div>
+    <div class="step-text">The MCP server is stateless. No database. No persistent storage of customer content. It operates as a thin protocol adapter between MCP clients and the Shuddhi QA backend.</div>
+    <ul>
+      <li><strong>We store:</strong> Operational metrics (request counts, error rates, tool-name frequencies) for 90 days, then aggregated to monthly counts for 12 months.</li>
+      <li><strong>We never store:</strong> Requirement text, Jira ticket content, generated test cases, or any caller-supplied credentials.</li>
+      <li><strong>We forward:</strong> Requirement text to your selected AI provider (Anthropic, Google, Groq, OpenAI, Together AI, or your own Azure OpenAI resource). Jira credentials to your Jira instance. ADO credentials to dev.azure.com.</li>
+    </ul>
+    <div class="step-text">Full privacy disclosures: <strong>shuddhiqacloud.pages.dev/privacy</strong> → "Microsoft Copilot &amp; MCP Integration" section.</div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">10</div><div class="step-body">
+    <div class="step-title">Microsoft AppSource listing (planned)</div>
+    <div class="step-text">For globally discoverable distribution to every Microsoft 365 Copilot tenant, Shuddhi QA is in active preparation for Microsoft AppSource submission. Once listed, tenant admins will be able to install Shuddhi QA tenant-wide from the Microsoft 365 admin center in a single click — no manual Copilot Studio configuration required.</div>
+    <div class="info"><span>📅</span><span><strong>Current path:</strong> Until AppSource listing goes live, the manual Copilot Studio setup above (step 4) is the canonical install path. Once AppSource certification is complete, the install URL will be added to the homepage and this section will be updated with the AppSource link.</span></div>
+  </div></div>
+
+  <div class="step"><div class="step-circle">11</div><div class="step-body">
+    <div class="step-title">Roadmap — v0.2 and beyond</div>
+    <ul>
+      <li>Authentication / API keys for caller identification and per-tenant quota</li>
+      <li>Full 110-template enumeration via <code>listTemplates</code> (v0.1 surfaces 28 curated)</li>
+      <li>Additional tools: <code>pushToJira</code>, <code>exportPlaywright</code>, <code>scoreTestCases</code>, <code>fetchAdoWorkItem</code></li>
+      <li>Azure OpenAI as a 6th AI provider for enterprises with data residency requirements (✓ shipped in v12.21)</li>
+      <li>Microsoft Entra ID authentication for organizational governance</li>
+    </ul>
+  </div></div>
+
+  <div class="ok"><span>📂</span><span><strong>Open source:</strong> Full MCP server source code at <strong>github.com/ramya9b/shuddhiqacloud</strong>. Self-host to your own Cloudflare Workers account if data residency or compliance requires it.</span></div>
+</div>
+
+<!-- ══ APPENDIX A: DOCUMENT INDEX ══════════════════════════════════════════ -->
+<div class="chapter" id="docs">
+  <div class="ch-header"><div class="ch-icon">📚</div><div><div class="ch-title">Appendix A — Document Index</div><div class="ch-sub">Other guides and reference documents</div></div></div>
+
+  <div class="info"><span>ℹ️</span><span>This is internal reference for the documentation team. End users only need this Documentation plus the in-app help pages.</span></div>
+
+  <div class="doccard">
+    <div class="doccard-icon">🌐</div>
+    <div><h3>Step-by-Step User Guide</h3><p>15-chapter interactive HTML guide with UI mockups covering every feature from first launch to enterprise integrations. Sticky sidebar navigation.</p><span class="doccard-badge">/guides/step-by-step.html</span></div>
+  </div>
+  <div class="doccard">
+    <div class="doccard-icon">🌐</div>
+    <div><h3>Feature Overview HTML</h3><p>Interactive HTML version of the feature guide with sticky nav, hover effects, provider comparison, export cards, test coverage grid.</p><span class="doccard-badge">/guides/features.html</span></div>
+  </div>
+  <div class="doccard">
+    <div class="doccard-icon">📊</div>
+    <div><h3>Feature Overview Presentation (internal)</h3><p>12-slide PPTX deck with indigo/dark premium theme. For stakeholder presentations. Available on request.</p><span class="doccard-badge">ShuddhiQA_Features.pptx</span></div>
+  </div>
+  <div class="doccard">
+    <div class="doccard-icon">📝</div>
+    <div><h3>Word Document User Guide — v7.9 era (archived)</h3><p>35-page .docx historical guide. 13 sections with embedded screenshots. Preserved for reference; superseded by this Documentation.</p><span class="doccard-badge">ShuddhaQA_v79_UserGuide.docx</span></div>
+  </div>
+  <div class="doccard">
+    <div class="doccard-icon">📦</div>
+    <div><h3>Deployment Packages (v10.1 → v11.3) — internal</h3><p>Versioned Cloudflare Pages deployment zips containing complete app source. Internal release artifacts.</p><span class="doccard-badge">ShuddhiQA-v10.x through v11.3.zip</span></div>
+  </div>
+
+  <div class="tip"><span>💡</span><span>The current live version is <strong>v12.20</strong> at shuddhiqacloud.pages.dev. For access to internal/archived documents, contact <strong>ramya9.b@gmail.com</strong>.</span></div>
+</div>
+
+<!-- ══ APPENDIX B: VERSION HISTORY ═════════════════════════════════════════ -->
+<div class="chapter" id="versions">
+  <div class="ch-header"><div class="ch-icon">🔢</div><div><div class="ch-title">Appendix B — Version History</div><div class="ch-sub">Key milestones from v7.x to v12.21</div></div></div>
+
+  <div class="vtimeline">
+    <div class="vitem"><div class="vnum">v12.21</div><div class="vdesc">Azure OpenAI added as a 6th AI provider (Enterprise · BYO). Configured under Settings → AI Provider with four values — Endpoint, API Key, Deployment name, and API Version (default 2024-08-01-preview) — plus a Test connection button. Generation runs in the region of the user's own Azure resource for data residency.</div></div>
+    <div class="vitem"><div class="vnum">v12.20</div><div class="vdesc">Format-aware generation (single-section formats now respect the dropdown). Demo videos on homepage. Honest 5-language marketing (was 9). New feature cards: AI-Review Gate, Domain Intelligence, Quality Scoring, PWA. FAQ expanded to 17 questions. Export format fixes (UTF-8 BOM, metadata-row filter, phantom-step removal across Playwright/Gherkin/TestRail/Jira/Postman/Coverage). Quick-switch cost popover appears when 2+ providers are configured — no need to open Settings every switch. Master Guide renamed to Documentation.</div></div>
+    <div class="vitem"><div class="vnum">v12.19</div><div class="vdesc">Lazy marked.js, Firebase IDB-sniff lazy load, GIS dedupe — ~250KB saving on first load. Performance improvements.</div></div>
+    <div class="vitem"><div class="vnum">v12.18</div><div class="vdesc">#genBtnCostHint — visible cost element below Generate button showing active provider and cost per run.</div></div>
+    <div class="vitem"><div class="vnum">v12.17</div><div class="vdesc">No AI provider configured check added. Unconditional ProviderManager gate replaces silent __statusCheckFailed bypass.</div></div>
+    <div class="vitem"><div class="vnum">v12.16</div><div class="vdesc">Platform and module selection made mandatory. Red glow highlight on validation failure. Cost hint below Generate button.</div></div>
+    <div class="vitem"><div class="vnum">v12.15</div><div class="vdesc">Select-all toggle fixed (None→All, All→None, Some→Indeterminate). 11 browser scenarios verified.</div></div>
+    <div class="vitem"><div class="vnum">v12.14</div><div class="vdesc">help.html hero pill version label updated. 25 missing CSS classes added to help.html — page was unstyled raw HTML.</div></div>
+    <div class="vitem"><div class="vnum">v12.13</div><div class="vdesc">Critical fix: /terms hero and /help hero + 5 sections were invisible due to dead .fade-up opacity:0 CSS. 8 elements restored.</div></div>
+    <div class="vitem"><div class="vnum">v12.12</div><div class="vdesc">privacy.html dead fade-up class cleanup. 2 elements unblocked.</div></div>
+    <div class="vitem"><div class="vnum">v12.11</div><div class="vdesc">privacy.html hero eyebrow fade-up fix. Dead CSS rule removed.</div></div>
+    <div class="vitem"><div class="vnum">v12.10</div><div class="vdesc">Google Sign-In always shows consent screen (prompt:consent). Firebase Web client redirect URI added.</div></div>
+    <div class="vitem"><div class="vnum">v12.9</div><div class="vdesc">GDPR deleteDoc Firestore fix — silent skip resolved. deleteDoc added to Firebase module imports.</div></div>
+    <div class="vitem"><div class="vnum">v12.8</div><div class="vdesc">_USER_KEY_LS bug fixed — OpenAI + Together AI user keys now reach generation pipeline.</div></div>
+    <div class="vitem"><div class="vnum">v12.7</div><div class="vdesc">Firebase SDK compat→modular migration. ORB blocking resolved. Version bumped to 9.23.0.</div></div>
+    <div class="vitem"><div class="vnum">v12.6</div><div class="vdesc">_initAutoSmartDetect called. #flowCharCount span added. wrangler.toml [assets] removed.</div></div>
+    <div class="vitem"><div class="vnum">v12.5</div><div class="vdesc">/api/ado PAT validation hardened. Bogus PATs rejected with clear error.</div></div>
+    <div class="vitem"><div class="vnum">v12.4</div><div class="vdesc">toggleMoreExports/closeMoreExports added. 5 aria-labels added. errText ReferenceError fixed.</div></div>
+    <div class="vitem"><div class="vnum">v11.x</div><div class="vdesc">Freemium gate, Firebase Auth, ADO/Jira proxy rewrites (Vercel→Cloudflare), lazy loading, conversation history.</div></div>
+    <div class="vitem"><div class="vnum">v10.x</div><div class="vdesc">Initial Cloudflare Pages deployment. Core generation pipeline. Provider manager. Export suite.</div></div>
+    <div class="vitem"><div class="vnum">v7.x–v9.x</div><div class="vdesc">Original Vercel → Cloudflare migration. Free trial gate. LinkedIn unlock. ADO/Jira integration. Gold/indigo brand.</div></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+const chapters = document.querySelectorAll(".chapter");
+const links = document.querySelectorAll(".nav-link");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove("active"));
+      const link = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+      if (link) link.classList.add("active");
+    }
+  });
+}, { threshold: 0.3, rootMargin: "-60px 0px 0px 0px" });
+chapters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>

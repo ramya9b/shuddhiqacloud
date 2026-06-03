@@ -5,7 +5,7 @@
  * The handler receives a Cloudflare context object { request, env }.
  * env contains the environment variables set in Cloudflare Pages dashboard.
  *
- * Supported providers: Claude, Gemini, Groq, OpenAI, Together AI (v9.52)
+ * Supported providers: Claude, Gemini, Groq, OpenAI, Together AI, Azure OpenAI (v12.21)
  */
 
 // ── Model mapping per provider ──────────────────────────────────
@@ -68,7 +68,7 @@ function resolveProvider(requestedProvider, env, userKeys) {
   }
 
   // If user supplied any key — try it (any provider)
-  for (const p of ['claude', 'gemini', 'openai', 'together', 'groq']) {
+  for (const p of ['claude', 'gemini', 'openai', 'together', 'groq', 'azure']) {
     if (uk[p]) return { provider: p, key: uk[p], userSupplied: true };
   }
 
@@ -263,15 +263,22 @@ RULE 4: Minimum 10 step rows per test case.
   if (provider === 'together') {
     const _TA_FORMAT =
 `CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
-Use this 5-column Markdown table for EVERY test case:
+Use ONE SINGLE 5-column Markdown table containing ALL test cases. Do NOT create a separate table per test case. Do NOT use ### or #### or any heading between test cases.
+
 | Title | Step Action | Step Expected Result | Assigned To | State |
 |---|---|---|---|---|
-| TC001 – Your Test Title | | | QA Engineer | Design |
+| TC001 – Your First Test Title | | | QA Engineer | Design |
 | | Navigate to the page. | Page loads. Correct columns visible. | | |
-RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+| | Click Submit. | Confirmation banner appears. | | |
+| TC002 – Your Second Test Title | | | QA Engineer | Design |
+| | Open the form. | Form is displayed. | | |
+
+RULE 1: Title row — Title column filled with TCxxx – name; Step Action and Step Expected Result BLANK.
 RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
 RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 — NEVER TC1 TC2.
 RULE 4: Minimum 10 step rows per test case.
+RULE 5: NO ### or #### markdown headings between test cases. ALL test cases share ONE table with ONE header row at the top.
+RULE 6: The first row after the | --- | --- | separator must be a Title row (TCxxx – name). Step rows for that TC follow immediately after.
 `;
     const msgs = [];
     if (body.system) msgs.push({ role: 'system', content: _TA_FORMAT + (body.system || '') });
@@ -293,6 +300,47 @@ RULE 4: Minimum 10 step rows per test case.
         max_tokens:  Math.min(body.max_tokens || 16384, 16384),
         temperature: 0.3,
         stream:      stream,  // support streaming so generating panel works
+      }),
+    };
+  }
+
+  // ── v12.21: Azure OpenAI (BYO — OpenAI-compatible chat completions) ─────────
+  // URL:  {endpoint}/openai/deployments/{deployment}/chat/completions?api-version={ver}
+  // Auth: api-key header (NOT Authorization: Bearer)
+  // Internal azure* fields are NOT forwarded — we build a clean OpenAI-shaped body.
+  if (provider === 'azure') {
+    const _AZ_FORMAT =
+`CRITICAL OUTPUT FORMAT — FOLLOW EXACTLY. NO EXCEPTIONS.
+Use this 5-column Markdown table for EVERY test case:
+| Title | Step Action | Step Expected Result | Assigned To | State |
+|---|---|---|---|---|
+| TC001 – Your Test Title | | | QA Engineer | Design |
+| | Navigate to the page. | Page loads. Correct columns visible. | | |
+RULE 1: Title row — Title column filled; Step Action and Step Expected Result BLANK.
+RULE 2: Step rows — Step Action and Step Expected Result filled; Title, Assigned To, State BLANK.
+RULE 3: TC numbers always 3 digits: TC001 TC002 TC010 — NEVER TC1 TC2.
+RULE 4: Minimum 10 step rows per test case.
+`;
+    const azEndpoint   = String(body.azureEndpoint || '').replace(/\/+$/, '');
+    const azDeployment = body.azureDeployment || '';
+    const azVersion    = body.azureApiVersion || '2024-08-01-preview';
+    const msgs = [];
+    if (body.system) msgs.push({ role: 'system', content: _AZ_FORMAT + (body.system || '') });
+    (body.messages || []).forEach(m => msgs.push({
+      role: m.role,
+      content: typeof m.content === 'string' ? m.content : (m.content?.[0]?.text || '')
+    }));
+    return {
+      url: `${azEndpoint}/openai/deployments/${azDeployment}/chat/completions?api-version=${azVersion}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key':      key,
+      },
+      body: JSON.stringify({
+        messages:    msgs,
+        max_tokens:  Math.min(body.max_tokens || 16384, 16384),
+        temperature: 0.3,
+        stream:      stream,
       }),
     };
   }
@@ -331,8 +379,8 @@ async function normalizeResponse(provider, response) {
     const text = data.choices?.[0]?.message?.content || '';
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS.groq };
   }
-  // OpenAI + Together non-streaming: chat completions format
-  if (provider === 'openai' || provider === 'together') {
+  // OpenAI + Together + Azure non-streaming: chat completions format (identical shape)
+  if (provider === 'openai' || provider === 'together' || provider === 'azure') {
     const text = data.choices?.[0]?.message?.content || '';
     return { content: [{ type: 'text', text: _normaliseProviderOutput(text) }], stop_reason: 'stop', model: MODELS[provider] || provider };
   }
@@ -367,8 +415,8 @@ function normalizeStream(provider, upstreamBody) {
             const parts = json.candidates?.[0]?.content?.parts || [];
             const outputPart = parts.find(p => !p.thought) || parts[0];
             text = outputPart?.text || '';
-          } else if (provider === 'groq' || provider === 'openai' || provider === 'together') {
-            // Handle both delta.content and direct content
+          } else if (provider === 'groq' || provider === 'openai' || provider === 'together' || provider === 'azure') {
+            // Azure SSE is identical to OpenAI — same delta.content shape
             text = json.choices?.[0]?.delta?.content
                 || json.choices?.[0]?.message?.content
                 || '';
@@ -451,8 +499,11 @@ export async function onRequest(context) {
   let body;
   try { body = rawBody ? JSON.parse(rawBody) : {}; }
   catch(e) { body = {}; }
+  // v12.21: azureApiKey is pulled out as the credential; azureEndpoint/Deployment/ApiVersion
+  // stay inside forwardBody so buildUpstreamRequest('azure', ...) can read them.
   const { apiKey: userClaudeKey, geminiApiKey: userGeminiKey, groqApiKey: userGroqKey,
           openaiApiKey: userOpenAIKey, togetherApiKey: userTogetherKey,
+          azureApiKey: userAzureKey,
           provider: requestedProvider, ...forwardBody } = body;
 
   const _userKeys = {
@@ -461,6 +512,8 @@ export async function onRequest(context) {
     ...(userGroqKey     ? { groq:     userGroqKey     } : {}),
     ...(userOpenAIKey   ? { openai:   userOpenAIKey   } : {}),
     ...(userTogetherKey ? { together: userTogetherKey } : {}),
+    // Azure requires both the key AND an endpoint to be a valid, routable credential
+    ...(userAzureKey && forwardBody.azureEndpoint ? { azure: userAzureKey } : {}),
   };
 
   // Resolve provider + key (user keys override server env vars per-provider)
@@ -479,11 +532,35 @@ export async function onRequest(context) {
   const upstream = buildUpstreamRequest(provider, key, forwardBody);
 
   try {
-    const response = await fetch(upstream.url, {
+    let response = await fetch(upstream.url, {
       method: 'POST',
       headers: upstream.headers,
       body: upstream.body,
     });
+
+    // ── v9.53: Together AI per-model fallback ────────────────────────
+    // Together's DeepSeek V3 is the default Together model but periodically
+    // 5xx's during model-level outages. If the upstream returned 502/503/504,
+    // transparently retry once with Llama 3.3 70B Turbo (same key, same
+    // endpoint, different model). Users see a successful generation instead
+    // of a service-unavailable error.
+    if (provider === 'together' && [502, 503, 504].includes(response.status)) {
+      console.warn('[Together] DeepSeek V3 returned ' + response.status + ' — falling back to Llama 3.3 70B');
+      try {
+        const fallbackBody = JSON.parse(upstream.body);
+        fallbackBody.model = 'meta-llama/Llama-3.3-70B-Instruct-Turbo';
+        response = await fetch(upstream.url, {
+          method: 'POST',
+          headers: upstream.headers,
+          body: JSON.stringify(fallbackBody),
+        });
+        if (response.ok) {
+          console.info('[Together] Fallback to Llama 3.3 70B succeeded');
+        }
+      } catch (fbErr) {
+        console.error('[Together] Fallback retry failed:', fbErr.message);
+      }
+    }
 
     if (!response.ok) {
       const errText = await response.text().catch(() => '');
@@ -692,6 +769,21 @@ export async function onRequest(context) {
         return new Response(JSON.stringify({
           error: 'Together AI error ' + response.status + ': ' + detail.substring(0,150),
           switchProvider: true, provider: 'together',
+        }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      // ── v12.21: Azure OpenAI error handler ───────────────────────
+      // Wrapped as HTTP 429 (so the generation fallback chain switches providers),
+      // but carries upstreamStatus so the Settings "Test connection" can map 401/404.
+      if (provider === 'azure') {
+        console.error('[Azure] Status:', response.status, '| Error:', detail.substring(0,150));
+        let azMsg;
+        if (response.status === 401)      azMsg = 'Azure OpenAI api-key invalid (401). Check Keys & Endpoint in the Azure portal.';
+        else if (response.status === 404) azMsg = 'Azure deployment not found (404). Check the deployment name and endpoint.';
+        else if (response.status === 429) azMsg = 'Azure OpenAI rate limit hit — switching to next provider.';
+        else                              azMsg = 'Azure OpenAI error ' + response.status + ': ' + detail.substring(0,150);
+        return new Response(JSON.stringify({
+          error: azMsg, switchProvider: true, provider: 'azure', upstreamStatus: response.status,
         }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
 
