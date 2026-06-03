@@ -19785,6 +19785,7 @@ function adoGoToStep(n) {
 }
 
 function openADOModal() {
+  window._adoPushOnlyIds = null; // full push by default; bulkPushToADO scopes it after opening
   adoPushCancelled = false;
   adoGoToStep(1);
   initADOModal(); // detect env PAT, reset dropdowns
@@ -19805,6 +19806,7 @@ function openADOModal() {
 
 function closeADOModal() {
   adoPushCancelled = true;
+  window._adoPushOnlyIds = null;
   document.getElementById('adoModal').classList.remove('open');
   document.getElementById('adoOverlay').classList.remove('open');
 
@@ -20230,8 +20232,18 @@ async function pushToADOFull() {
   if (!planSel)                          { showToast('Select a Test Plan (or Create New)', '⚠️'); showAdoBanner('Select a Test Plan (or Create New)', 'warning'); return; }
   if (planSel === '__new__' && !newPlan) { showToast('Enter a name for the new Test Plan', '⚠️'); showAdoBanner('Enter a name for the new Test Plan', 'warning'); return; }
 
-  const testCases = parseTestCasesFromMarkdown();
-  if (!testCases.length) { showToast('No test cases found in output', '⚠️'); showAdoBanner('No test cases found in output', 'error'); return; }
+  let testCases = parseTestCasesFromMarkdown();
+  // v12.21.16: bulkPushToADO scopes the push to ONLY the selected test cases (matched by TC id).
+  if (window._adoPushOnlyIds && window._adoPushOnlyIds.size) {
+    const _pickId = function(t){ var mm = String(t||'').match(/^(TC[-\s]?\d+(?:\.\d+)?)/i); return mm ? mm[1].replace(/\s/g,'') : null; };
+    testCases = testCases.filter(function(tc){ var id = _pickId(tc.title); return id && window._adoPushOnlyIds.has(id); });
+  }
+  if (!testCases.length) {
+    var _noMsg = (window._adoPushOnlyIds && window._adoPushOnlyIds.size)
+      ? 'Could not match the selected test cases — use the full Push to ADO instead.'
+      : 'No test cases found in output';
+    showToast(_noMsg, '⚠️'); showAdoBanner(_noMsg, 'error'); return;
+  }
 
   adoGoToStep(3);
   adoPushCancelled = false;
@@ -30644,7 +30656,10 @@ function bulkPushToADO() {
   var open = (typeof openADOModal === 'function') ? openADOModal : (window.openADOModal || null);
   if (open) {
     open();
-    if (typeof showToast==='function') showToast(sel.length + ' selected — review plan & suite in the dialog, then Push', '🔷');
+    // openADOModal() resets the scope to null — set it AFTER opening so this push
+    // targets ONLY the selected TCs (pushToADOFull filters by these ids).
+    try { window._adoPushOnlyIds = new Set(Array.from(tgSelectedIds)); } catch (e) {}
+    if (typeof showToast==='function') showToast('Pushing ' + sel.length + ' selected test case' + (sel.length!==1?'s':'') + ' — review plan & suite, then Push', '🔷');
   } else if (typeof showToast==='function') {
     showToast('ADO integration unavailable', '⚠️');
   }
