@@ -10210,7 +10210,7 @@ header::after { display: none !important; }
             <span id="_costHintSwap" style="opacity:.55;font-size:12px;display:none">⇄</span>
           </button>
           <div id="_costHintNote" style="font-size:9.5px;color:var(--text3);opacity:.7;margin-top:2px;font-style:italic;display:none;letter-spacing:.2px">~ approximate · actual cost varies with input size and output format</div>
-          <div id="_costPopover" style="display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:10px;min-width:240px;max-width:90vw;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:1000;text-align:left"></div>
+          <div id="_costPopover" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:10px;min-width:240px;max-width:90vw;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:99999;text-align:left"></div>
         </div>
         <div class="gen-btn-hint">⌨️ Ctrl+Enter to generate</div>
         <div id="_genTimeEstimate">
@@ -11477,6 +11477,24 @@ function _toggleCostPopover(event) {
   } else {
     _buildCostPopover();
     pop.style.display = 'block';
+    // v12.21 — fixed-position the popover under the button (matches the app's other
+    // floating menus) so it overlays cleanly instead of colliding with the panel below.
+    try {
+      var r    = btn.getBoundingClientRect();
+      var popW = pop.offsetWidth  || 240;
+      var popH = pop.offsetHeight || 280;
+      var left = r.left + r.width / 2 - popW / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - popW - 8));
+      var top  = r.bottom + 8;
+      if (top + popH > window.innerHeight - 8) top = Math.max(8, r.top - popH - 8); // flip up if no room
+      pop.style.left = left + 'px';
+      pop.style.top  = top + 'px';
+    } catch (e) { /* positioning best-effort */ }
+    // de-emphasise the "test cases like these" hint so its chips don't peek around the card
+    var oph = document.getElementById('_outputPreviewHint');
+    if (oph) oph.style.opacity = '0';
+    // close on any scroll so a fixed-position popover never floats detached
+    document.addEventListener('scroll', _closeCostPopover, { capture: true, once: true, passive: true });
     btn.classList.add('_pop-open');
     btn.style.background = 'var(--surface2)';
     btn.style.borderColor = 'var(--saffron)';
@@ -11486,6 +11504,9 @@ function _closeCostPopover() {
   var pop = document.getElementById('_costPopover');
   var btn = document.getElementById('genBtnCostHint');
   if (pop) pop.style.display = 'none';
+  // restore the preview hint (let CSS/.hidden govern again — don't force-show)
+  var oph = document.getElementById('_outputPreviewHint');
+  if (oph) oph.style.opacity = '';
   if (btn) {
     btn.classList.remove('_pop-open');
     btn.style.background = 'transparent';
