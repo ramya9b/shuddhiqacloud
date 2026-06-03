@@ -11434,12 +11434,15 @@ function _updateGenBtnCostTooltip(provider) {
     textEl.textContent = '⚡ ' + displayName + ' · ' + displayCost;
     hintBtn.style.color = color;
 
-    // Count configured providers — show swap icon only if user has 2+ (v12.21: incl. Azure)
+    // v12.21 — show the swap whenever there's a real choice: configured personal
+    // providers (incl. Azure) PLUS the always-available free server Groq (unless the
+    // user already has a personal Groq key). 2+ options → show the switcher.
     var configuredCount = 0;
     ['claude','gemini','groq','openai','together','azure'].forEach(function(prov) {
       if (_isProviderConfigured(prov)) configuredCount++;
     });
-    if (configuredCount > 1) {
+    var switchOptions = configuredCount + (_isProviderConfigured('groq') ? 0 : 1);
+    if (switchOptions > 1) {
       if (swapIcon) swapIcon.style.display = 'inline';
       hintBtn.style.cursor = 'pointer';
       hintBtn.setAttribute('data-clickable', '1');
@@ -11505,7 +11508,11 @@ function _buildCostPopover() {
   var configured = providers.filter(function(item) {
     return _isProviderConfigured(item.p);
   });
-  if (configured.length === 0) configured = [{p:'groq', name:'Server Groq (free)'}];
+  // v12.21 — the free server Groq is always available as a switch target
+  // (unless the user already has a personal Groq key, which is shown above).
+  if (!_isProviderConfigured('groq')) {
+    configured.push({p:'groq', name:'Groq · free (server)'});
+  }
   var html = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);padding:4px 10px 10px;border-bottom:1px solid var(--border);margin-bottom:6px">Switch active provider</div>';
   configured.forEach(function(item) {
     var cost = _genBtnCostLabel(item.p);
