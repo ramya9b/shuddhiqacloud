@@ -9395,6 +9395,15 @@ header::after { display: none !important; }
 
       <!-- ── Google Cloud Billing Live Sync (v4.1) ────────────── -->
       <div id="gcpBillingSection" style="margin-top:4px">
+        <!-- v12.21.15: billing account selector — Google (live sync) | Azure (cost portal) -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Billing account</span>
+          <select id="billingProviderSelect" onchange="if(window._billingProviderChange)window._billingProviderChange(this.value)" style="font-size:12px;padding:5px 10px;border-radius:8px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer">
+            <option value="google">✦ Google Cloud (Gemini) — live sync</option>
+            <option value="azure">☁️ Azure OpenAI — cost portal</option>
+          </select>
+        </div>
+        <div id="billingGoogleView">
         <!-- Connect prompt (shown when not connected) -->
         <div id="gcpConnectPrompt" style="
           border:1.5px dashed var(--border2);border-radius:12px;
@@ -9458,6 +9467,16 @@ header::after { display: none !important; }
 
           <!-- Billing data rows -->
           <div id="gcpBillingData" style="font-size:13px"></div>
+        </div>
+        </div><!-- /billingGoogleView -->
+        <div id="billingAzureView" style="display:none">
+          <div style="border:1.5px dashed var(--border2);border-radius:12px;padding:16px 18px;text-align:center;background:var(--surface2)">
+            <div style="font-size:18px;margin-bottom:6px">☁️</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Azure OpenAI — Cost Management</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5">Azure billing lives in your own Azure subscription (bring-your-own). Open Cost Management in the Azure portal for live spend — or see the in-app estimate in the provider table above.</div>
+            <a href="https://portal.azure.com/#view/Microsoft_Azure_CostManagement/Menu/~/overview" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;background:#0078D4;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,.08)">☁️ Open Azure Cost Management ↗</a>
+            <div style="margin-top:10px;font-size:11px;color:var(--text3)">In-app estimate for Azure appears in the Usage &amp; Cost table above (tokens × estimated rate).</div>
+          </div>
         </div>
       </div>
     </div>
@@ -28695,6 +28714,14 @@ window._runTCRegen = async function() {
   }
 
   // ── Public API ─────────────────────────────────────────────────
+  // v12.21.15: switch the billing card between Google (live sync) and Azure (cost portal).
+  window._billingProviderChange = function(v) {
+    var g = document.getElementById('billingGoogleView');
+    var a = document.getElementById('billingAzureView');
+    if (g) g.style.display = (v === 'azure') ? 'none' : '';
+    if (a) a.style.display = (v === 'azure') ? '' : 'none';
+  };
+
   window._gcpConnect = function() {
     if (!_clientId) {
       setStatus('GOOGLE_CLIENT_ID not configured. Add it in Vercel/Cloudflare env vars.', true);
