@@ -20939,6 +20939,7 @@ window.testClaudeConnection = typeof testClaudeConnection !== 'undefined' ? test
 
 let tgAllTCs     = [];
 let tgFilter     = '';
+let tgSearchQuery= '';
 let tgPage       = 1;
 const TG_PAGE    = 50;
 let tgSelectedIds= new Set();
@@ -21409,7 +21410,7 @@ function renderTGTable() {
   try {
     const wrap = document.getElementById('tgSectionsWrap');
     if (!wrap) return;
-    const q = (document.getElementById('tgSearch')?.value||'').toLowerCase();
+    const q = ((typeof tgSearchQuery !== 'undefined' ? tgSearchQuery : '') || document.getElementById('tgSearch')?.value || '').toLowerCase();
     const filtered = tgAllTCs.filter(tc => {
       const matchFilter = !tgFilter || tgFilter==='all' || tc.type===tgFilter;
       const matchSearch = !q || tc.id.toLowerCase().includes(q) || tc.title.toLowerCase().includes(q) || (tc.expected||'').toLowerCase().includes(q);
@@ -30505,6 +30506,131 @@ function bulkDeleteSelected() {
 }
 
 // ── FEATURE 2: Drag to Reorder ───────────────────────────────────────
+// ── v12.21.10: implement 8 previously-undefined handler functions ────────────
+// (TC search, expand/collapse all, clear selection, bulk copy/export/push, load sprint)
+// These were referenced by inline onclick/oninput but never defined -> ReferenceError.
+
+function searchTestCases(value) {
+  tgSearchQuery = (value == null ? '' : String(value));
+  var tg = document.getElementById('tgSearch');
+  if (tg && tg.value !== tgSearchQuery) tg.value = tgSearchQuery;
+  tgPage = 1;
+  if (typeof renderTGTable === 'function') renderTGTable();
+}
+
+function expandAllSections() {
+  document.querySelectorAll('.tg-row-expanded').forEach(function(r){ r.style.display = ''; });
+  document.querySelectorAll('tr[data-tc-id]').forEach(function(tr){ tr.classList.add('tg-row-open'); });
+  document.querySelectorAll('.tg-steps-chip').forEach(function(c){ c.classList.add('open'); });
+}
+
+function collapseAllSections() {
+  document.querySelectorAll('.tg-row-expanded').forEach(function(r){ r.style.display = 'none'; });
+  document.querySelectorAll('tr[data-tc-id]').forEach(function(tr){ tr.classList.remove('tg-row-open'); });
+  document.querySelectorAll('.tg-steps-chip').forEach(function(c){ c.classList.remove('open'); });
+}
+
+function clearBulkSelection() {
+  if (typeof tgSelectedIds !== 'undefined') tgSelectedIds.clear();
+  if (typeof renderTGTable === 'function') renderTGTable();
+  if (typeof updateBulkBar === 'function') updateBulkBar();
+}
+
+function _bulkSelectedTCs() {
+  if (typeof tgAllTCs === 'undefined' || typeof tgSelectedIds === 'undefined') return [];
+  return tgAllTCs.filter(function(tc){ return tgSelectedIds.has(tc.id); });
+}
+
+function bulkCopySelected() {
+  var sel = _bulkSelectedTCs();
+  if (!sel.length) { if (typeof showToast==='function') showToast('Select test cases first', '⚠️'); return; }
+  var header = ['ID','Title','Steps','Expected Result','Priority'].join('\t');
+  var rows = sel.map(function(tc){
+    var steps = String(tc.stepsRaw||'').replace(/\s*\n\s*/g, ' | ').trim();
+    return [tc.id, tc.title, steps, (tc.expected||''), (tc.priority||'')].join('\t');
+  });
+  var tsv = header + '\n' + rows.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsv)
+      .then(function(){ if (typeof showToast==='function') showToast('Copied ' + sel.length + ' test case' + (sel.length!==1?'s':'') + ' — paste into Excel/Sheets', '📋'); })
+      .catch(function(){ if (typeof showToast==='function') showToast('Copy failed — clipboard blocked by browser', '⚠️'); });
+  }
+}
+
+function bulkExportSelected() {
+  var sel = _bulkSelectedTCs();
+  if (!sel.length) { if (typeof showToast==='function') showToast('Select test cases first', '⚠️'); return; }
+  var esc = function(v){ v = (v==null?'':String(v)).replace(/\r?\n/g, ' '); return '"' + v.replace(/"/g, '""') + '"'; };
+  var lines = ['ID,Title,Steps,Expected Result,Priority,Type'];
+  sel.forEach(function(tc){
+    var steps = String(tc.stepsRaw||'').replace(/\s*\n\s*/g, ' | ').trim();
+    lines.push([esc(tc.id), esc(tc.title), esc(steps), esc(tc.expected), esc(tc.priority), esc(tc.type)].join(','));
+  });
+  var csv = '﻿' + lines.join('\r\n'); // BOM so Excel reads UTF-8
+  try {
+    var blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'shuddhiqa-selected-' + sel.length + '-testcases.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 100);
+    if (typeof showToast==='function') showToast('Exported ' + sel.length + ' test case' + (sel.length!==1?'s':'') + ' to CSV', '📊');
+  } catch(e) { if (typeof showToast==='function') showToast('Export failed: ' + e.message, '⚠️'); }
+}
+
+function bulkPushToADO() {
+  var sel = _bulkSelectedTCs();
+  if (!sel.length) { if (typeof showToast==='function') showToast('Select test cases first, then Push to ADO', '⚠️'); return; }
+  // Open the existing ADO push flow (choose plan/suite/area/iteration + review, then push).
+  var open = (typeof openADOModal === 'function') ? openADOModal : (window.openADOModal || null);
+  if (open) {
+    open();
+    if (typeof showToast==='function') showToast(sel.length + ' selected — review plan & suite in the dialog, then Push', '🔷');
+  } else if (typeof showToast==='function') {
+    showToast('ADO integration unavailable', '⚠️');
+  }
+}
+
+async function loadCurrentSprint() {
+  var org      = ((document.getElementById('adoOrg')||{}).value || '').trim();
+  var project  = ((document.getElementById('adoProject')||{}).value || '').trim();
+  var statusEl = document.getElementById('sprintLoadStatus');
+  var iterEl   = document.getElementById('adoIteration');
+  var btn      = document.getElementById('loadSprintBtn');
+  var setStatus = function(msg){ if (statusEl){ statusEl.style.display=''; statusEl.textContent = msg; } };
+  if (!org || !project) { setStatus('Enter organisation and project first.'); return; }
+  if (typeof adoRequest !== 'function') { setStatus('ADO connection unavailable.'); return; }
+  if (btn) btn.disabled = true;
+  setStatus('Loading current sprint…');
+  try {
+    var url = 'https://dev.azure.com/' + encodeURIComponent(org) + '/' + encodeURIComponent(project)
+            + '/_apis/work/teamsettings/iterations?$timeframe=current&api-version=7.1-preview.1';
+    var data = await adoRequest('GET', url, null);
+    var iter = data && data.value && data.value[0];
+    if (iter && (iter.path || iter.name)) {
+      var path = iter.path || iter.name;
+      if (iterEl) iterEl.value = path;
+      setStatus('✓ Current sprint: ' + (iter.name || path));
+    } else {
+      setStatus('No current sprint for the default team — enter the iteration path manually.');
+    }
+  } catch (e) {
+    setStatus('Could not load sprint: ' + (e && e.message ? e.message : 'check org / project / PAT'));
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+// Expose globally (inline onclick/oninput handlers run in global scope)
+window.searchTestCases     = searchTestCases;
+window.expandAllSections   = expandAllSections;
+window.collapseAllSections = collapseAllSections;
+window.clearBulkSelection  = clearBulkSelection;
+window.bulkCopySelected    = bulkCopySelected;
+window.bulkExportSelected  = bulkExportSelected;
+window.bulkPushToADO       = bulkPushToADO;
+window.loadCurrentSprint   = loadCurrentSprint;
+
 var _dragTcId = null;
 
 function _tcDragStart(e, tcId) {
