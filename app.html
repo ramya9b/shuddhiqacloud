@@ -11370,9 +11370,21 @@ window._updateProviderUI = _updateProviderUI;
 // Per-run cost shown in the Generate button tooltip. "Server-side" means the
 // user has no personal API key — server's env key is used and the user is not
 // billed. Personal key → user's own provider account is billed at these rates.
+// v12.21 — Azure stores a JSON config (shuddhi-azure-config), not a single key.
+// Treat it as "configured" only when endpoint + apiKey + deployment are all present.
+function _isProviderConfigured(p) {
+  try {
+    if (p === 'azure') {
+      var az = JSON.parse(localStorage.getItem('shuddhi-azure-config') || '{}');
+      return !!(az && az.endpoint && az.apiKey && az.deployment);
+    }
+    return !!localStorage.getItem('shuddhi-user-' + p + '-key');
+  } catch (e) { return false; }
+}
+window._isProviderConfigured = _isProviderConfigured;
+
 function _genBtnCostLabel(provider) {
-  var hasPersonal = false;
-  try { hasPersonal = !!localStorage.getItem('shuddhi-user-' + provider + '-key'); } catch(e){}
+  var hasPersonal = _isProviderConfigured(provider);
   if (!hasPersonal) return 'Free (server-side)';
   switch (provider) {
     case 'groq':     return 'Free';
@@ -11380,6 +11392,7 @@ function _genBtnCostLabel(provider) {
     case 'claude':   return '~$0.015/run';
     case 'openai':   return '~$0.010/run';
     case 'together': return '~$0.002/run';
+    case 'azure':    return 'BYO rate';
     default:         return 'Free';
   }
 }
@@ -11403,8 +11416,7 @@ function _updateGenBtnCostTooltip(provider) {
   var textEl    = document.getElementById('_costHintText');
   var swapIcon  = document.getElementById('_costHintSwap');
   if (hintBtn && textEl) {
-    var hasPersonal = false;
-    try { hasPersonal = !!localStorage.getItem('shuddhi-user-' + p + '-key'); } catch(e){}
+    var hasPersonal = _isProviderConfigured(p);
     var displayName, displayCost, color;
     if (!hasPersonal) {
       displayName = 'Server key';
@@ -11422,10 +11434,10 @@ function _updateGenBtnCostTooltip(provider) {
     textEl.textContent = '⚡ ' + displayName + ' · ' + displayCost;
     hintBtn.style.color = color;
 
-    // Count personal keys — show swap icon only if user has 2+ configured providers
+    // Count configured providers — show swap icon only if user has 2+ (v12.21: incl. Azure)
     var configuredCount = 0;
-    ['claude','gemini','groq','openai','together'].forEach(function(prov) {
-      try { if (localStorage.getItem('shuddhi-user-' + prov + '-key')) configuredCount++; } catch(e){}
+    ['claude','gemini','groq','openai','together','azure'].forEach(function(prov) {
+      if (_isProviderConfigured(prov)) configuredCount++;
     });
     if (configuredCount > 1) {
       if (swapIcon) swapIcon.style.display = 'inline';
@@ -11487,10 +11499,11 @@ function _buildCostPopover() {
     {p:'gemini',   name:'Gemini 2.5 Flash'},
     {p:'groq',     name:'Groq Llama 3.3'},
     {p:'openai',   name:'GPT-4o'},
-    {p:'together', name:'Together AI'}
+    {p:'together', name:'Together AI'},
+    {p:'azure',    name:'Azure OpenAI'}
   ];
   var configured = providers.filter(function(item) {
-    try { return !!localStorage.getItem('shuddhi-user-' + item.p + '-key'); } catch(e){ return false; }
+    return _isProviderConfigured(item.p);
   });
   if (configured.length === 0) configured = [{p:'groq', name:'Server Groq (free)'}];
   var html = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);padding:4px 10px 10px;border-bottom:1px solid var(--border);margin-bottom:6px">Switch active provider</div>';
