@@ -19493,8 +19493,8 @@ async function _testAzureConnection() {
         azureApiKey:     apiKey,
         azureDeployment: deployment,
         azureApiVersion: apiVersion,
-        messages:        [{ role: 'user', content: 'ping' }],
-        max_tokens:      1,
+        messages:        [{ role: 'user', content: 'Reply with the single word: ok' }],
+        max_tokens:      2000,
         stream:          false,
       }),
     });
