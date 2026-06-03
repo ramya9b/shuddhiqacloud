@@ -25568,11 +25568,20 @@ async function _runRefinement() {
     }
 
     if (refined.length > 100) {
-      rawMarkdown = refined;
-      if (outEl && typeof marked !== 'undefined') {
-        outEl.innerHTML = _safeMarkedParse(refined);
+      // Normalise like generation does, then rebuild the INTERACTIVE test-case table
+      // (checkboxes, bulk-select, expand, row actions) via renderTestGenView — not a
+      // plain markdown dump — so the refined set behaves exactly like a fresh generation.
+      rawMarkdown = (typeof _normaliseOutput === 'function')
+        ? _normaliseOutput(refined, (typeof ProviderManager !== 'undefined' ? ProviderManager.getActive() : ''))
+        : refined;
+      if (typeof tgSelectedIds !== 'undefined') tgSelectedIds.clear();
+      if (typeof renderTestGenView === 'function') {
+        renderTestGenView();
+      } else if (outEl && typeof marked !== 'undefined') {
+        outEl.innerHTML = _safeMarkedParse(rawMarkdown);
+        if (typeof postProcessTables === 'function') postProcessTables();
       }
-      if (typeof postProcessTables === 'function') postProcessTables();
+      if (typeof updateBulkBar === 'function') updateBulkBar();
       if (statusEl) statusEl.textContent = '✅ Refined!';
       setTimeout(function() { if (statusEl) statusEl.textContent = ''; }, 3000);
       if (inp) inp.value = '';
