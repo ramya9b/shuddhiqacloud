@@ -19446,9 +19446,23 @@ function toggleAzureRow() {
 function recheckAzureDot() {
   var f = _azFields();
   var complete = !!(f.endpoint.trim() && f.apiKey.trim() && f.deployment.trim());
+  // v12.21 — persist as soon as the 4 fields are filled (like the other providers save
+  // on edit) so Azure appears in the quick-switch and survives reload. Test connection
+  // still validates and turns the dot green; editing any field drops back to amber.
+  if (complete) {
+    saveAzureConfig({ endpoint: f.endpoint.trim(), apiKey: f.apiKey.trim(), deployment: f.deployment.trim(), apiVersion: (f.apiVersion.trim() || _AZ_DEFAULT_VER) });
+    if (typeof ProviderManager !== 'undefined' && ProviderManager._state) ProviderManager._state.keys.azure = true;
+  } else {
+    try { localStorage.removeItem(_USER_AZURE_LS); } catch (e) {}
+    if (typeof ProviderManager !== 'undefined' && ProviderManager._state) ProviderManager._state.keys.azure = false;
+  }
+  var azBadge = document.getElementById('pka-badge-azure');
+  if (azBadge) azBadge.classList.toggle('visible', complete);
   _setAzDot(complete ? 'amber' : 'grey');
   var res = document.getElementById('az-test-result');
   if (res) { res.style.display = 'none'; res.textContent = ''; }
+  // refresh the under-Generate cost hint / quick-switch so Azure appears/disappears live
+  if (typeof _updateGenBtnCostTooltip === 'function') { try { _updateGenBtnCostTooltip(); } catch (e) {} }
 }
 // Routes the Azure test through the /api/claude proxy (avoids browser→Azure CORS).
 // Proxy surfaces the real upstream HTTP status via `upstreamStatus` so we map 401/404.
@@ -19487,12 +19501,13 @@ async function _testAzureConnection() {
     var data = await r.json().catch(function() { return { error: 'Invalid JSON response' }; });
 
     if (r.ok && !data.error) {
-      // 200 — persist config ONLY on success
+      // 200 — validated: persist, mark green, and refresh the under-Generate switcher
       saveAzureConfig({ endpoint: endpoint, apiKey: apiKey, deployment: deployment, apiVersion: apiVersion });
       if (typeof ProviderManager !== 'undefined' && ProviderManager._state) ProviderManager._state.keys.azure = true;
       var badge = document.getElementById('pka-badge-azure'); if (badge) badge.classList.add('visible');
       _setAzDot('green');
       _showKeyTestResult(resultId, 'success', '✓ Connected · ' + deployment);
+      if (typeof _updateGenBtnCostTooltip === 'function') { try { _updateGenBtnCostTooltip(); } catch (e) {} }
     } else {
       var status = data.upstreamStatus || r.status;
       var msg;
