@@ -435,22 +435,26 @@ function normalizeStream(provider, upstreamBody) {
             controller.enqueue(encoder.encode(event));
           }
 
-          // Check for finish
+          // v12.21.13: emit token usage whenever present — NOT only on the finish chunk.
+          // Gemini includes usageMetadata on its final chunk; OpenAI-compatible providers
+          // (groq/openai/together/azure) send usage in a SEPARATE trailing chunk (choices:[])
+          // when stream_options.include_usage is set on the request.
+          let _usage = null;
+          if (provider === 'gemini') {
+            if (json.usageMetadata) _usage = { input: json.usageMetadata.promptTokenCount||0, output: json.usageMetadata.candidatesTokenCount||0, provider: 'gemini' };
+          } else if (json.usage && (json.usage.prompt_tokens != null || json.usage.completion_tokens != null)) {
+            _usage = { input: json.usage.prompt_tokens||0, output: json.usage.completion_tokens||0, provider: provider };
+          }
+          if (_usage) {
+            controller.enqueue(encoder.encode(`event: usage\ndata: ${JSON.stringify(_usage)}\n\n`));
+          }
+
+          // Check for finish → close the Anthropic-style stream
           const isFinished = provider === 'gemini'
             ? json.candidates?.[0]?.finishReason
             : json.choices?.[0]?.finish_reason;
 
           if (isFinished) {
-            // v4.0: Extract exact token counts and emit usage event
-            let _usage = null;
-            if (provider === 'gemini' && json.usageMetadata) {
-              _usage = { input: json.usageMetadata.promptTokenCount||0, output: json.usageMetadata.candidatesTokenCount||0, provider: 'gemini' };
-            } else if (provider === 'groq' && json.usage) {
-              _usage = { input: json.usage.prompt_tokens||0, output: json.usage.completion_tokens||0, provider: 'groq' };
-            }
-            if (_usage) {
-              controller.enqueue(encoder.encode(`event: usage\ndata: ${JSON.stringify(_usage)}\n\n`));
-            }
             controller.enqueue(encoder.encode(
               `event: message_stop\ndata: ${JSON.stringify({ type: 'message_stop' })}\n\n`
             ));
@@ -532,6 +536,16 @@ export async function onRequest(context) {
 
   const { provider, key } = resolved;
   const upstream = buildUpstreamRequest(provider, key, forwardBody);
+
+  // v12.21.13: ask OpenAI-compatible providers to include token usage in the stream
+  // (groq/openai/together/azure) so the client can record accurate tokens + cost.
+  if (forwardBody.stream === true && ['groq','openai','together','azure'].includes(provider)) {
+    try {
+      const _b = JSON.parse(upstream.body);
+      _b.stream_options = { include_usage: true };
+      upstream.body = JSON.stringify(_b);
+    } catch (e) { /* leave body unchanged on parse failure */ }
+  }
 
   try {
     let response = await fetch(upstream.url, {
