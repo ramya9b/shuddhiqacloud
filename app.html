@@ -22822,7 +22822,13 @@ function checkAndTrimFlow(flow) {
 <script>
 
 (function _initUsageCostTracker() {
-  var PRICING = { claude:{input:3.00,output:15.00}, gemini:{input:0.075,output:0.30}, groq:{input:0,output:0} };
+  // v12.21.12: all 6 providers (openai/together/azure added). Azure is BYO so its rate
+  // is an estimate (gpt-4o-mini class); together ≈ DeepSeek V3 on Together.
+  var PRICING = { claude:{input:3.00,output:15.00}, gemini:{input:0.075,output:0.30}, groq:{input:0,output:0}, openai:{input:0.15,output:0.60}, together:{input:0.20,output:0.80}, azure:{input:0.15,output:0.60} };
+  var PROVS   = ['claude','gemini','groq','openai','together','azure'];
+  var PROV_ICON = { claude:'🤖', gemini:'✦', groq:'⚡', openai:'🟢', together:'🤝', azure:'☁️' };
+  var PROV_NAME = { claude:'Claude', gemini:'Gemini', groq:'Groq', openai:'OpenAI', together:'Together', azure:'Azure OpenAI' };
+  var FREE_PROVS = { groq:true };
   var BUDGET = 250, WARN = 0.80, PFX = 'shuddhi-v37-';
   var _rate = 84.0;          // fallback rate (updated periodically)
   var _rateFresh = false;    // true once a live rate is confirmed
@@ -22912,12 +22918,12 @@ function checkAndTrimFlow(flow) {
     return ((i*pr.input + o*pr.output)/1e6)*_rate;
   }
   function totalCost(u) {
-    return ['claude','gemini','groq'].reduce(function(s,p){ return s+cost(p,u[p].input,u[p].output); }, 0);
+    return PROVS.reduce(function(s,p){ return s+cost(p,u[p].input,u[p].output); }, 0);
   }
 
   function getMonthUsage(m) {
     m = m||curMonth();
-    return ['claude','gemini','groq'].reduce(function(o,p){
+    return PROVS.reduce(function(o,p){
       o[p] = {
         req:    parseInt(localStorage.getItem(PFX+m+'-'+p+'-req')||'0',10),
         input:  parseInt(localStorage.getItem(PFX+m+'-'+p+'-in') ||'0',10),
@@ -22934,12 +22940,16 @@ function checkAndTrimFlow(flow) {
     var now = new Date(), result = [];
     for (var d=1; d<=days; d++) {
       var key = m+'-'+(d+'').padStart(2,'0');
-      var g = cost('gemini', parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-out')||'0',10));
-      var cl = cost('claude', parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-out')||'0',10));
-      var tot = g+cl;
+      var tot = PROVS.reduce(function(s,p){
+        var i = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-in') ||'0',10);
+        var o = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||'0',10);
+        return s + cost(p, i, o);
+      }, 0);
       var dayDate = new Date(y, parseInt(mo,10)-1, d);
       if (tot > 0 || (m === curMonth() && d <= now.getDate())) {
-        result.push({ label:(d+'').padStart(2,'0')+' '+MONTH_NAMES[parseInt(mo,10)-1], gemini:g, claude:cl, cost:tot });
+        var _g  = cost('gemini', parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-gemini-out')||'0',10));
+        var _cl = cost('claude', parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-in')||'0',10), parseInt(localStorage.getItem(PFX+'day-'+key+'-claude-out')||'0',10));
+        result.push({ label:(d+'').padStart(2,'0')+' '+MONTH_NAMES[parseInt(mo,10)-1], gemini:_g, claude:_cl, cost:tot });
       }
     }
     return result.reverse().slice(0,10);
@@ -23032,7 +23042,7 @@ function checkAndTrimFlow(flow) {
     if (type === 'month') {
       var u = getMonthUsage(m);
       csv = 'Month,Provider,Requests,Input Tokens,Output Tokens,Cost (INR)\n';
-      ['claude','gemini','groq'].forEach(function(p) {
+      PROVS.forEach(function(p) {
         csv += fmtMonth(m)+','+p.charAt(0).toUpperCase()+p.slice(1)+','+u[p].req+','+u[p].input+','+u[p].output+','+cost(p,u[p].input,u[p].output).toFixed(4)+'\n';
       });
       filename = 'shuddhi-usage-'+m+'.csv';
@@ -23043,7 +23053,7 @@ function checkAndTrimFlow(flow) {
       for (var d=1; d<=days; d++) {
         var key = m+'-'+(d+'').padStart(2,'0');
         var label = (d+'').padStart(2,'0')+'-'+MONTH_NAMES[parseInt(mo,10)-1]+'-'+y;
-        ['claude','gemini','groq'].forEach(function(p) {
+        PROVS.forEach(function(p) {
           var i = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-in')||'0',10);
           var o = parseInt(localStorage.getItem(PFX+'day-'+key+'-'+p+'-out')||'0',10);
           if (i||o) csv += label+','+p.charAt(0).toUpperCase()+p.slice(1)+','+i+','+o+','+cost(p,i,o).toFixed(4)+'\n';
@@ -23088,13 +23098,14 @@ function checkAndTrimFlow(flow) {
       groq:   'https://console.groq.com/usage',
     };
 
-    var provRows = ['claude','gemini','groq'].map(function(p) {
+    var provRows = PROVS.map(function(p) {
       var d=u[p], c=cost(p,d.input,d.output);
-      var ic = p==='claude'?'🤖':p==='gemini'?'✦':'⚡';
+      var ic = PROV_ICON[p] || '•';
+      var nm = PROV_NAME[p] || (p.charAt(0).toUpperCase()+p.slice(1));
       var cs = p==='groq'?'\u20b90.00 (Free)':'\u20b9'+c.toFixed(4);
       var tk = (d.input||d.output)?(((d.input+d.output)/1000).toFixed(1)+'k'):'—';
       return '<tr style="border-top:1px solid var(--border)">'
-        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</td>'
+        +'<td style="padding:7px 10px;font-weight:600;color:var(--text)">'+ic+' '+nm+'</td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+d.req+'</td>'
         +'<td style="padding:7px 10px;text-align:right;color:var(--text2)">'+tk+'</td>'
         +'<td style="padding:7px 10px;font-weight:700;text-align:right;color:'+(p==='groq'?'#10b981':'var(--text)')+'">'+cs+'</td>'
@@ -23116,7 +23127,7 @@ function checkAndTrimFlow(flow) {
 
     var RECOMMENDED_DAILY = 8;
     var todayKey = curMonth() + '-' + (new Date().getDate()+'').padStart(2,'0');
-    var todayReqs = ['claude','gemini','groq'].reduce(function(s,p){
+    var todayReqs = PROVS.reduce(function(s,p){
       return s + (parseInt(localStorage.getItem(PFX+'day-'+todayKey+'-'+p+'-req')||'0',10)||0);
     }, 0);
 
