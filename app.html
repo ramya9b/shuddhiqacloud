@@ -25477,7 +25477,7 @@ async function _runRefinement() {
     return;
   }
 
-  if (!window.rawMarkdown || window.rawMarkdown.length < 100) {
+  if (!rawMarkdown || rawMarkdown.length < 100) {
     if (typeof showToast === 'function') showToast('No test cases to refine — generate first', '⚠️');
     return;
   }
@@ -25495,7 +25495,7 @@ async function _runRefinement() {
   var uk       = typeof getUserKeys === 'function' ? getUserKeys() : {};
 
   var refineSystemPrompt = 'You are a senior enterprise QA engineer. You will be given a set of existing test cases and an instruction to refine them. Apply the instruction to improve the test cases. Keep the same markdown table format. Return ONLY the updated test cases, no explanation.';
-  var refineUserPrompt   = 'EXISTING TEST CASES:\n\n' + window.rawMarkdown.substring(0, 8000)
+  var refineUserPrompt   = 'EXISTING TEST CASES:\n\n' + rawMarkdown.substring(0, 8000)
     + '\n\nINSTRUCTION: ' + instruction
     + '\n\nContext: Platform=' + platform + ', Module=' + module;
 
@@ -25567,7 +25567,7 @@ async function _runRefinement() {
     }
 
     if (refined.length > 100) {
-      window.rawMarkdown = refined;
+      rawMarkdown = refined;
       if (outEl && typeof marked !== 'undefined') {
         outEl.innerHTML = _safeMarkedParse(refined);
       }
