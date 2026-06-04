@@ -878,7 +878,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <div class="demo-eye">Watch it work</div>
     <h2 class="demo-title">From requirement to <em>30+ test cases</em> — in real time</h2>
     <div class="demo-wrap">
-      <video autoplay loop muted playsinline preload="metadata">
+      <video autoplay loop muted playsinline preload="auto">
         <source src="/demo.mp4" type="video/mp4">
         Your browser doesn't support HTML5 video.
       </video>
@@ -893,7 +893,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <div class="demo-eye">…and straight into your tools</div>
     <h2 class="demo-title">One click to <em>Azure DevOps Test Plans</em></h2>
     <div class="demo-wrap">
-      <video autoplay loop muted playsinline preload="metadata">
+      <video autoplay loop muted playsinline preload="auto">
         <source src="/demo-ado.mp4" type="video/mp4">
         Your browser doesn't support HTML5 video.
       </video>
@@ -901,6 +901,24 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <p class="demo-caption">56 test cases pushed to ADO · Test Plan + Suite + work items created · AI-review gate before push</p>
   </div>
 </section>
+
+<script>
+/* v12.21.18 — ensure the demo videos actually play: preload=auto fully buffers them
+   (Cloudflare Pages serves these mp4s without byte-range, so preload=metadata + autoplay
+   left them black), plus an explicit play() nudge for strict autoplay policies. */
+(function(){
+  function nudge(){
+    document.querySelectorAll('.demo-wrap video').forEach(function(v){
+      try { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function(){}); } catch(e){}
+    });
+  }
+  if (document.readyState !== 'loading') nudge(); else document.addEventListener('DOMContentLoaded', nudge);
+  window.addEventListener('load', function(){ setTimeout(nudge, 500); });
+  ['click','touchstart','scroll','keydown'].forEach(function(ev){
+    window.addEventListener(ev, function _once(){ nudge(); window.removeEventListener(ev, _once); }, { passive:true });
+  });
+})();
+</script>
 
 <!-- ── COPILOT / MCP ANNOUNCEMENT ─────────────────────────── -->
 <section class="mcp-section" id="mcp" aria-label="Microsoft Copilot and MCP integration" style="position:relative;z-index:1;padding:64px 24px;background:linear-gradient(180deg,transparent 0%,rgba(232,162,32,.04) 50%,transparent 100%)">
