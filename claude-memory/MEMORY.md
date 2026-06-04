@@ -1,0 +1,3 @@
+- [Project focus](feedback_project_focus.md) — when working on one project, don't surface pending items from other projects unless asked
+- [ShuddhiQA Copilot/MCP roadmap](project_shuddhiqa_copilot_mcp_roadmap.md) — 3-phase MS Copilot integration plan (MCP build → AppSource → enterprise)
+- [ShuddhiQA launch status](project_shuddhiqa_launch_status.md) — 2026-06-04 snapshot: Azure 6th provider shipped, docs verified, pending: rotate keys + browser click-through
