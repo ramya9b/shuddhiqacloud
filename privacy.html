@@ -313,7 +313,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
     <p><strong>5. Caller-supplied credentials</strong> — Jira API tokens, Azure DevOps PATs, and AI provider keys you pass in tool calls are held in memory for the duration of a single request and explicitly discarded before the request completes. They are never logged, persisted, or shared.</p>
 
-    <p><strong>6. Data residency for AI provider responses</strong> — We do not control the geographic region of AI provider responses. Organizations with data residency requirements should self-host the Shuddhi QA MCP server (source at <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="color:var(--indigo)">github.com/ramya9b/shuddhiqacloud</a>) in their preferred region, or wait for Azure OpenAI provider support (planned v0.2).</p>
+    <p><strong>6. Data residency for AI provider responses</strong> — We do not control the geographic region of most AI provider responses. Organizations with data residency requirements can use the <strong>Azure OpenAI provider (live now)</strong> — bring your own Azure endpoint and the request is processed in <strong>your</strong> chosen Azure region — or self-host the Shuddhi QA MCP server (source at <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener" style="color:var(--indigo)">github.com/ramya9b/shuddhiqacloud</a>) in their preferred region.</p>
   </div>
 
   <!-- 8. Data Retention -->
