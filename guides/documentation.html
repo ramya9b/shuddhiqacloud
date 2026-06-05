@@ -48,6 +48,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:4px;z-index:1
   .mock,.mock-body,.card,.panel,.sbody,.mbody,.grid2,.grid3,table,tr,thead,img{break-inside:avoid;page-break-inside:avoid}
   .step{break-inside:avoid;page-break-inside:avoid}
   h1,h2,h3,.step-title{break-after:avoid;page-break-after:avoid}
+  /* PDF text font -> Calibri (code/mockups stay monospaced) */
+  *{font-family:Calibri,'Segoe UI',Arial,sans-serif !important}
+  code,pre,.sidebar-tag,.topbar-badge,.hero-pill,.mock-url,.app-ver,.tcid,.sinput,.minput,.kbd,.doccard-badge,[style*="JetBrains"]{font-family:'JetBrains Mono',Consolas,monospace !important}
 }
 .hero-pill{display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 14px;border-radius:20px;font-size:10px;color:rgba(255,255,255,.6);font-family:'JetBrains Mono',monospace;margin-bottom:18px}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1.5px;margin-bottom:10px}
