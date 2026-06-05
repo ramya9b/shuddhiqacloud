@@ -41,6 +41,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--surface2);color:var(--tex
 .doc-chakra{position:absolute;top:50%;left:50%;width:min(440px,82%);height:min(440px,82%);transform:translate(-50%,-50%);color:#A9B0EE;opacity:.10;z-index:1;pointer-events:none;animation:docChakraSpin 80s linear infinite}
 @keyframes docChakraSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 body::before{content:'';position:fixed;top:0;left:0;right:0;height:4px;z-index:1001;background:linear-gradient(90deg,#FF9933 0%,#FFB870 20%,#FFFFFF 50%,#7CC47C 80%,#138808 100%);box-shadow:0 1px 10px rgba(0,0,0,.18);pointer-events:none}
+@media print{body::before{display:none!important}.doc-chakra{animation:none!important}}
 .hero-pill{display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:4px 14px;border-radius:20px;font-size:10px;color:rgba(255,255,255,.6);font-family:'JetBrains Mono',monospace;margin-bottom:18px}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1.5px;margin-bottom:10px}
 .hero p{font-size:15px;color:rgba(255,255,255,.55);max-width:500px;margin:0 auto 32px}
