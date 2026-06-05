@@ -1,0 +1,235 @@
+/* ShuddhiQA — premium HTML deck framework (LIGHT theme + gradient accent slides)
+   Brand: indigo #5B5FEF -> violet #8B5CF6 -> pink #EC4899, Plus Jakarta Sans */
+:root{
+  --indigo:#5B5FEF; --indigol:#818CF8; --violet:#8B5CF6; --pink:#EC4899;
+  --ink:#0E0F1A; --bg:#F7F8FD; --surface:#FFFFFF;
+  --muted:#5B6478; --slate:#3A4150;
+  --line:rgba(14,15,26,.08); --line2:rgba(14,15,26,.14);
+  --grad:linear-gradient(135deg,#5B5FEF 0%,#8B5CF6 50%,#EC4899 100%);
+  --grad-soft:linear-gradient(135deg,rgba(91,95,239,.10),rgba(236,72,153,.07));
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Plus Jakarta Sans',-apple-system,system-ui,sans-serif;
+  background:var(--bg); color:var(--ink); overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+code,.mono{font-family:'JetBrains Mono',monospace}
+
+/* ---- backdrop: soft light mesh + faint grid ---- */
+.bgfx{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bgfx::before{content:"";position:absolute;inset:-20%;
+  background:
+   radial-gradient(38% 32% at 12% 8%,rgba(91,95,239,.12),transparent 60%),
+   radial-gradient(34% 30% at 88% 14%,rgba(236,72,153,.10),transparent 60%),
+   radial-gradient(42% 40% at 78% 92%,rgba(139,92,246,.10),transparent 60%);
+  filter:blur(10px);}
+.bgfx::after{content:"";position:absolute;inset:0;opacity:.6;
+  background-image:
+   linear-gradient(rgba(14,15,26,.035) 1px,transparent 1px),
+   linear-gradient(90deg,rgba(14,15,26,.035) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(circle at 50% 45%,#000 50%,transparent 100%);
+          mask-image:radial-gradient(circle at 50% 45%,#000 50%,transparent 100%);}
+
+/* ---- deck + slides ---- */
+.deck{position:relative;z-index:1;height:100vh;width:100vw}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;
+  justify-content:center;
+  padding:5.2vh 7vw;opacity:0;transform:translateY(14px) scale(.995);
+  transition:opacity .5s ease,transform .5s ease}
+.slide.active{display:flex;opacity:1;transform:none}
+.slide.center{align-items:center;text-align:center}
+
+/* ---- typography ---- */
+.kicker{font-size:clamp(12px,1.05vw,15px);font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:14px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-size:clamp(40px,6.4vw,92px);font-weight:800;line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(28px,3.9vw,52px);font-weight:800;line-height:1.06;letter-spacing:-.015em}
+.lead{font-size:clamp(17px,1.7vw,25px);color:var(--slate);font-weight:400;line-height:1.5;max-width:60ch}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent}
+.rule{height:5px;width:84px;border-radius:99px;background:var(--grad);margin:18px 0 26px}
+.muted{color:var(--muted)}
+.title-row h2{margin-bottom:6px}
+
+/* ---- hero ---- */
+.hero .brand{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.logo{width:54px;height:54px;border-radius:15px;background:var(--grad);
+  display:grid;place-items:center;font-weight:800;font-size:26px;color:#fff;
+  box-shadow:0 12px 40px rgba(91,95,239,.35)}
+.brand .name{font-size:20px;font-weight:800;letter-spacing:.01em}
+.hero h1{margin-bottom:22px}
+.hero .lead{margin-bottom:34px}
+.cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 24px;border-radius:13px;
+  font-weight:700;font-size:16px;text-decoration:none;border:1px solid var(--line2);color:var(--ink)}
+.btn.primary{background:var(--grad);color:#fff;border:none;box-shadow:0 12px 34px rgba(124,58,180,.30)}
+.btn.ghost{color:var(--slate);background:rgba(14,15,26,.03)}
+
+/* ---- cards ---- */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{position:relative;background:var(--surface);
+  border:1px solid var(--line);border-radius:20px;padding:24px 24px;
+  box-shadow:0 10px 30px rgba(14,15,26,.05);
+  transition:transform .3s,border-color .3s,box-shadow .3s;overflow:hidden}
+.card:hover{transform:translateY(-4px);border-color:rgba(91,95,239,.35);
+  box-shadow:0 22px 50px rgba(14,15,26,.12)}
+.card .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
+  background:var(--grad-soft);border:1px solid rgba(91,95,239,.18);margin-bottom:15px}
+.card .ic svg{width:24px;height:24px;stroke:var(--indigo)}
+.card h3{font-size:19px;font-weight:700;margin-bottom:7px;color:var(--ink)}
+.card p{font-size:14.5px;color:var(--muted);line-height:1.5}
+.card .tag{position:absolute;top:0;left:0;height:4px;width:100%;background:var(--grad);opacity:0;transition:opacity .3s}
+.card:hover .tag{opacity:1}
+
+/* numbered step card */
+.step .num{font-family:'JetBrains Mono';font-size:13px;font-weight:600;color:var(--indigo);
+  border:1px solid rgba(91,95,239,.30);background:rgba(91,95,239,.06);
+  border-radius:8px;padding:3px 9px;display:inline-block;margin-bottom:13px}
+
+/* ---- stats ---- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;width:100%}
+.stat{text-align:center;padding:28px 14px;border-radius:20px;
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:0 10px 30px rgba(14,15,26,.05)}
+.stat .n{font-size:clamp(40px,5vw,68px);font-weight:800;line-height:1;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent}
+.stat .l{margin-top:10px;font-size:15px;color:var(--slate);font-weight:500}
+
+/* ---- bullet list ---- */
+.list{list-style:none;display:flex;flex-direction:column;gap:16px;max-width:64ch}
+.list li{position:relative;padding-left:38px;font-size:clamp(16px,1.55vw,21px);
+  color:var(--slate);line-height:1.45}
+.list li::before{content:"";position:absolute;left:0;top:.35em;width:20px;height:20px;border-radius:6px;
+  background:var(--grad);box-shadow:0 4px 12px rgba(91,95,239,.35)}
+.list li.k{color:var(--ink);font-weight:700}
+.list li b{color:var(--ink);font-weight:700}
+
+/* pills row */
+.pills{display:flex;flex-wrap:wrap;gap:11px}
+.pill{padding:9px 16px;border-radius:99px;font-size:14.5px;font-weight:600;
+  background:var(--surface);border:1px solid var(--line2);color:var(--ink);
+  box-shadow:0 4px 14px rgba(14,15,26,.04)}
+.pill.grad{background:var(--grad);border:none;color:#fff;box-shadow:0 8px 20px rgba(124,58,180,.28)}
+
+/* flow chips (howto overview) */
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;width:100%}
+.flow .chip{flex:1;min-width:120px;background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;padding:18px 12px;text-align:center;
+  box-shadow:0 8px 22px rgba(14,15,26,.05)}
+.flow .chip .cn{font-family:'JetBrains Mono';font-weight:700;font-size:15px;color:var(--indigo)}
+.flow .chip .ct{margin-top:7px;font-size:13.5px;color:var(--ink);font-weight:600}
+.flow .arr{align-self:center;color:var(--indigol);font-size:20px}
+
+/* tip bar */
+.tip{margin-top:26px;display:flex;gap:12px;align-items:flex-start;
+  background:var(--grad-soft);border:1px solid rgba(91,95,239,.20);border-radius:14px;
+  padding:14px 18px;max-width:78ch}
+.tip .lab{font-weight:800;letter-spacing:.08em;font-size:12px;color:var(--indigo);
+  text-transform:uppercase;white-space:nowrap;padding-top:2px}
+.tip .txt{font-size:15px;color:var(--slate);line-height:1.45}
+.tip .txt b{color:var(--ink)}
+
+/* two-column split */
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;width:100%}
+
+/* code chip */
+.kbd{font-family:'JetBrains Mono';font-size:14px;background:rgba(91,95,239,.08);
+  border:1px solid rgba(91,95,239,.25);border-radius:8px;padding:3px 9px;color:var(--indigo)}
+
+/* =========================================================
+   GRADIENT ACCENT SLIDES — hero + section/CTA full-bleed
+   ========================================================= */
+/* Pre-rendered gradient image (headless Chrome fails to rasterize CSS gradients
+   on the large .slide layer; a raster image paints reliably in browser + PDF).
+   Solid indigo fallback if the image is ever unavailable. */
+.slide.hero, .slide.section{background:#5B5FEF url(hero-bg.png) center/cover no-repeat}
+.slide.hero::after, .slide.section::after{content:"";position:absolute;inset:0;
+  background-image:
+   linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+   linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:54px 54px;pointer-events:none;opacity:.5}
+.slide.hero > *, .slide.section > *{position:relative;z-index:1}
+.slide.hero h1, .slide.hero h2, .slide.section h1, .slide.section h2{color:#fff}
+.slide.hero .lead, .slide.section .lead{color:#EDE9FE}
+.slide.hero .kicker, .slide.section .kicker{
+  background:none;-webkit-background-clip:initial;background-clip:initial;
+  color:#F0E9FF;-webkit-text-fill-color:#F0E9FF}
+.slide.hero .grad, .slide.section .grad{
+  background:none;color:#FBD3EC;-webkit-text-fill-color:#FBD3EC}
+.slide.hero .rule, .slide.section .rule{background:rgba(255,255,255,.92)}
+.slide.hero .muted, .slide.section .muted{color:rgba(255,255,255,.78)}
+.slide.hero .logo, .slide.section .logo{background:#fff;color:var(--indigo);box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.slide.hero .brand .name, .slide.section .brand .name{color:#fff}
+.slide.hero .btn.primary, .slide.section .btn.primary{background:#fff;color:var(--indigo);box-shadow:0 12px 34px rgba(0,0,0,.20)}
+.slide.hero .btn.ghost, .slide.section .btn.ghost{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
+.slide.hero .kbd, .slide.section .kbd{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.32);color:#fff}
+/* cards used on the index landing (hero) -> glass on gradient */
+.slide.hero .card{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);box-shadow:none;backdrop-filter:blur(8px)}
+.slide.hero .card h3{color:#fff}
+.slide.hero .card p{color:rgba(255,255,255,.82)}
+.slide.hero .card .ic{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28)}
+.slide.hero .card .ic svg{stroke:#fff}
+
+/* ---- HUD (styled for LIGHT slides by default) ---- */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:10;
+  background:var(--grad);transition:width .4s ease;box-shadow:0 0 14px rgba(139,92,246,.5)}
+.hud{position:fixed;bottom:22px;left:0;right:0;z-index:10;display:flex;
+  align-items:center;justify-content:center;gap:18px;pointer-events:none}
+.dots{display:flex;gap:8px;pointer-events:auto}
+.dot{width:8px;height:8px;border-radius:99px;background:rgba(14,15,26,.20);
+  cursor:pointer;transition:all .3s;border:none}
+.dot.on{width:26px;background:var(--grad)}
+.nav{position:fixed;bottom:18px;right:26px;z-index:11;display:flex;gap:10px}
+.nav button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line2);
+  background:var(--surface);color:var(--ink);cursor:pointer;font-size:18px;
+  display:grid;place-items:center;transition:background .2s,transform .15s;
+  box-shadow:0 6px 18px rgba(14,15,26,.08)}
+.nav button:hover{background:#fff;border-color:rgba(91,95,239,.4)}
+.nav button:active{transform:scale(.92)}
+.counter{position:fixed;bottom:26px;left:26px;z-index:11;font-family:'JetBrains Mono';
+  font-size:13px;color:var(--muted)}
+.brandmark{position:fixed;top:20px;right:26px;z-index:11;display:flex;gap:9px;align-items:center;
+  font-size:13.5px;font-weight:700;color:var(--slate);opacity:.9}
+.brandmark .d{width:22px;height:22px;border-radius:7px;background:var(--grad);
+  display:grid;place-items:center;font-size:12px;font-weight:800;color:#fff}
+.hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:9;
+  font-size:12px;color:var(--muted);opacity:0;transition:opacity .4s}
+body.fresh .hint{opacity:.85}
+
+/* when the active slide is a gradient slide, flip HUD to light-on-dark */
+body.dark-slide .dot{background:rgba(255,255,255,.35)}
+body.dark-slide .dot.on{background:#fff}
+body.dark-slide .nav button{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.3);box-shadow:none}
+body.dark-slide .nav button:hover{background:rgba(255,255,255,.28)}
+body.dark-slide .counter{color:rgba(255,255,255,.8)}
+body.dark-slide .brandmark{color:#fff}
+body.dark-slide .brandmark .d{background:#fff;color:var(--indigo)}
+body.dark-slide .hint{color:rgba(255,255,255,.8)}
+
+/* ---- responsive ---- */
+@media(max-width:820px){
+  .g3,.g4,.stats{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr;gap:22px}
+  .slide{padding:6vh 7vw}
+}
+
+/* ---- print => clean PDF, one slide per page ---- */
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;background:var(--bg)}
+  .bgfx{position:absolute}
+  .hud,.nav,.counter,.hint,.progress{display:none!important}
+  .deck{height:auto}
+  .slide{position:relative;display:flex!important;opacity:1!important;transform:none!important;
+    width:1280px;height:720px;page-break-after:always;break-after:page;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .card:hover{transform:none;box-shadow:0 10px 30px rgba(14,15,26,.05)}
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ShuddhiQA — How to Use (Demo Guide)</title>
+<meta name="description" content="Step-by-step guide to ShuddhiQA — from a plain requirement to test cases pushed into Azure DevOps."/>
+<link rel="icon" href="/favicon.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="deck.css"/>
+</head>
+<body>
+<div class="bgfx"></div>
+<div class="progress"></div>
+<div class="brandmark"><span class="d">S</span> ShuddhiQA</div>
+
+<div class="deck">
+
+  <!-- 1 HERO -->
+  <section class="slide hero">
+    <div class="brand"><span class="logo">S</span><span class="name">ShuddhiQA</span></div>
+    <div class="kicker">Step-by-Step Guide</div>
+    <h1>How to use<br><span class="grad">ShuddhiQA.</span></h1>
+    <p class="lead">From a plain-English requirement to test cases pushed straight into Azure DevOps — the complete workflow, one step at a time.</p>
+    <div class="cta-row"><span class="btn ghost">11 steps · ~5 min read</span></div>
+  </section>
+
+  <!-- 2 OVERVIEW -->
+  <section class="slide">
+    <div class="kicker">Overview</div>
+    <h2>The whole workflow in one view</h2>
+    <div class="rule"></div>
+    <div class="flow">
+      <div class="chip"><div class="cn">1</div><div class="ct">Sign in</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">2</div><div class="ct">Configure provider</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">3</div><div class="ct">Paste requirement</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">4</div><div class="ct">Pick platform</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">5</div><div class="ct">Generate</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">6</div><div class="ct">Refine</div></div>
+      <span class="arr">→</span>
+      <div class="chip"><div class="cn">7</div><div class="ct">Export / Push</div></div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide step">
+    <span class="num">STEP 1</span>
+    <h2>Sign in — or just start</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Open <span class="kbd">shuddhiqacloud.pages.dev</span> — any modern browser, installable as a PWA</li>
+      <li>Use it <b>anonymously</b> for a few free generations, or sign in with Google / Microsoft</li>
+      <li>Signing in raises your free quota and saves your preferences</li>
+      <li>Everything you generate stays in your browser</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Install it: browser menu → <b>Install ShuddhiQA</b> for a one-click desktop app.</span></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide step">
+    <span class="num">STEP 2</span>
+    <h2>Configure your AI provider (BYO key)</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Open <b>Settings → AI Provider → Your Personal API Keys</b></li>
+      <li>Paste a key for any of the 6 providers — Claude, Gemini, OpenAI, Together, Groq, Azure</li>
+      <li>Click <b>Test</b> to verify the connection — a green dot means ready</li>
+      <li>Keys are stored only in your browser and forwarded via the proxy — never logged or stored</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">No key yet? Start on the shared free key, then switch to your own anytime.</span></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide step">
+    <span class="num">STEP 2b</span>
+    <h2>Azure OpenAI — enterprise setup</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Create an Azure OpenAI resource in <b>your chosen region</b></li>
+      <li>Deploy a model (e.g. <span class="kbd">gpt-5-mini</span> or <span class="kbd">gpt-4o</span>)</li>
+      <li>In ShuddhiQA enter: <b>Endpoint, API key, Deployment, API version</b></li>
+      <li>Default API version <span class="kbd">2024-12-01-preview</span> — requests run in your region</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Reasoning models like gpt-5-mini use <span class="kbd">max_completion_tokens</span> automatically — handled for you.</span></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide step">
+    <span class="num">STEP 3</span>
+    <h2>Paste your requirement</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Type or paste a requirement, user story, or acceptance criteria</li>
+      <li>Or pull a <b>Jira ticket</b> in directly as the source</li>
+      <li>More detail = sharper tests, but it'll ask if something's unclear</li>
+      <li>No formatting needed — it understands natural language</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Vague input? The <b>clarification gate</b> asks smart questions instead of guessing.</span></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide step">
+    <span class="num">STEP 4</span>
+    <h2>Pick your platform (or auto-detect)</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Choose from 14 platforms — Web, Mobile, D365, Salesforce, SAP, ServiceNow & more</li>
+      <li>Each uses module-aware terminology, roles, and integration points</li>
+      <li>Or use <b>Smart Detect</b> — it infers the platform and intent for you</li>
+      <li>Enterprise platforms get deeper, domain-specific scenarios</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Not sure which platform? Hit <b>Smart Detect</b> and let it choose.</span></div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide step">
+    <span class="num">STEP 5</span>
+    <h2>Generate test cases</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Click <b>Generate</b> — output streams in real time</li>
+      <li>You get a table: <span class="kbd">TC ID · Title · Preconditions · Steps · Expected Result</span></li>
+      <li>Each row has a checkbox for selection</li>
+      <li>Token usage and cost are captured automatically</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Switch providers anytime from the quick-switch dropdown — see the cost hint live.</span></div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide step">
+    <span class="num">STEP 6</span>
+    <h2>Review the interactive table</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Search / filter test cases by keyword</li>
+      <li>Expand or collapse sections to focus</li>
+      <li>Select all, or check just the rows you want</li>
+      <li>Every step numbered; every expected result specific and assertable</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Spot a gap? That's what <b>Refine</b> is for — next step.</span></div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide step">
+    <span class="num">STEP 7</span>
+    <h2>Refine in plain English</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Type feedback: <i>"add negative cases for invalid email"</i> or <i>"cover the admin role"</i></li>
+      <li>It regenerates and <b>rebuilds the interactive table</b> — checkboxes intact</li>
+      <li>Prior context is preserved, so refinements build on what's there</li>
+      <li>Repeat until coverage is exactly what you need</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Refine is conversational — keep nudging until it's review-ready.</span></div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide step">
+    <span class="num">STEP 8</span>
+    <h2>Bulk actions on your selection</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Check the rows you care about (or <b>Select All</b>)</li>
+      <li>Bulk copy to clipboard</li>
+      <li>Bulk export to your chosen format</li>
+      <li>Bulk push to Azure DevOps — only the selected rows go</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Selection-scoped everything — you never push more than you picked.</span></div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide step">
+    <span class="num">STEP 9</span>
+    <h2>Export anywhere</h2>
+    <div class="rule"></div>
+    <div class="pills" style="margin-bottom:8px">
+      <span class="pill grad">Excel .xlsx</span><span class="pill grad">PDF</span><span class="pill grad">Markdown</span>
+      <span class="pill">Jira/Zephyr CSV</span><span class="pill">TestRail CSV</span>
+      <span class="pill">Gherkin .feature</span><span class="pill">Playwright spec</span>
+    </div>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Exports respect your selection — export all, or just the checked rows.</span></div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide step">
+    <span class="num">STEP 10</span>
+    <h2>Push to Azure DevOps / Jira</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Connect with your <b>ADO PAT</b> or <b>Jira API token</b> (stored in your browser)</li>
+      <li>Push selected test cases as Test Cases / work items</li>
+      <li>Load the current sprint to target the right iteration</li>
+      <li>Credentials are used for one request and never stored</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">Pull from Jira, generate, then push back to ADO — a full round trip.</span></div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide step">
+    <span class="num">STEP 11</span>
+    <h2>Track usage & cost</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li>Open the <b>Usage & Cost</b> panel</li>
+      <li>Token counts and cost estimates for all 6 providers</li>
+      <li>Month and day rollups, with a per-provider breakdown</li>
+      <li>Export usage to CSV; deep-link to each provider's billing console</li>
+    </ul>
+    <div class="tip"><span class="lab">Tip</span><span class="txt">BYO-key means you pay your provider directly — no markup, full visibility.</span></div>
+  </section>
+
+  <!-- 15 PRO TIPS -->
+  <section class="slide">
+    <div class="kicker">Pro Tips</div>
+    <h2>Get the most out of ShuddhiQA</h2>
+    <div class="rule"></div>
+    <ul class="list">
+      <li class="k">Give one clear requirement per generation — sharper, less noisy output</li>
+      <li>Match the provider to the job: depth (Claude) vs speed (Groq) vs cost (Together)</li>
+      <li>Answer the clarification questions — it measurably improves coverage</li>
+      <li>Use Refine instead of regenerating — it keeps context</li>
+      <li class="k">For data residency, use Azure OpenAI in your own region</li>
+    </ul>
+  </section>
+
+  <!-- 16 CTA -->
+  <section class="slide center section">
+    <div class="kicker">You're Ready</div>
+    <h2>Generate · Refine · Export · <span class="grad">Push.</span></h2>
+    <div class="rule" style="margin:24px auto 30px"></div>
+    <a class="btn primary" href="https://shuddhiqacloud.pages.dev" target="_blank" style="font-size:19px;padding:16px 30px">shuddhiqacloud.pages.dev →</a>
+    <p class="lead" style="margin-top:22px">Need help? <span class="kbd">shuddhiqacloud.pages.dev/help</span></p>
+  </section>
+
+</div>
+
+<div class="hud"><div class="dots"></div></div>
+<div class="nav"><button data-prev aria-label="Previous">‹</button><button data-next aria-label="Next">›</button></div>
+<div class="counter">01 / 16</div>
+<div class="hint">← → to navigate · F for fullscreen · click sides</div>
+
+<script src="deck.js"></script>
+</body>
+</html>
