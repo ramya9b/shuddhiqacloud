@@ -62,9 +62,11 @@
   --gradS:    linear-gradient(135deg,#E8A020,#C4851A);
   --nav-bg:   rgba(11,13,19,.85);
   --code-bg:  #080a10;
-  --orb1:     rgba(232,162,32,.07);
-  --orb2:     rgba(20,184,166,.06);
+  --orb1:     rgba(255,153,51,.16);
+  --orb2:     rgba(19,136,8,.15);
   --shadow:   0 12px 40px rgba(0,0,0,.4);
+  /* Indian-tricolour background wash (saffron top -> neutral -> green bottom) */
+  --tricolor: linear-gradient(180deg, rgba(255,153,51,.14) 0%, transparent 30%, transparent 70%, rgba(19,136,8,.13) 100%);
 }
 /* ── Variables — Light ─────────────────────────────────── */
 html.light {
@@ -87,9 +89,11 @@ html.light {
   --gradS:    linear-gradient(135deg,#B87414,#9C6010);
   --nav-bg:   rgba(250,250,247,.94);
   --code-bg:  #EAE4D6;
-  --orb1:     rgba(232,162,32,.05);
-  --orb2:     rgba(20,184,166,.04);
+  --orb1:     rgba(255,153,51,.10);
+  --orb2:     rgba(19,136,8,.09);
   --shadow:   0 8px 32px rgba(0,0,0,.10);
+  /* Indian-tricolour background wash (saffron top -> neutral -> green bottom) */
+  --tricolor: linear-gradient(180deg, rgba(255,153,51,.10) 0%, transparent 26%, transparent 74%, rgba(19,136,8,.09) 100%);
 }
 /* ── Theme transition ──────────────────────────────────── */
 body, nav, .feat-card, .plat-card, .what-visual, .security-inner, .quote-card, .cta-inner, .code-block, .sec-row, .how-num {
@@ -100,7 +104,8 @@ body, nav, .feat-card, .plat-card, .what-visual, .security-inner, .quote-card, .
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:var(--bg);
+  background:var(--tricolor), var(--bg);
+  background-attachment:fixed;
   color:var(--text);
   font-family:'DM Sans',sans-serif;
   font-size:15px;
