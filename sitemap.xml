@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://shuddhiqacloud.pages.dev/</loc>
+    <loc>https://shuddhiqacloud.vercel.app/</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://shuddhiqacloud.pages.dev/templates</loc>
+    <loc>https://shuddhiqacloud.vercel.app/templates</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://shuddhiqacloud.pages.dev/help</loc>
+    <loc>https://shuddhiqacloud.vercel.app/help</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://shuddhiqacloud.pages.dev/privacy</loc>
+    <loc>https://shuddhiqacloud.vercel.app/privacy</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://shuddhiqacloud.pages.dev/terms</loc>
+    <loc>https://shuddhiqacloud.vercel.app/terms</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
