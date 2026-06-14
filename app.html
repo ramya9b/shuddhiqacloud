@@ -130,6 +130,13 @@
     };
   }
 
+  // Reveal the header Sign In button (display:none by default). Needed on the
+  // anonymous path where Firebase stays lazy and _updateUI() never runs.
+  function _revealSignInBtn() {
+    var b = document.getElementById('fbSignInBtn');
+    if (b) b.style.display = 'flex';
+  }
+
   // Sniff IndexedDB for an existing Firebase session. If found → eager load.
   // If absent → defer until first sign-in click. Older browsers without
   // indexedDB.databases() fall back to eager load (safest default).
@@ -150,6 +157,12 @@
         var hasFb = (dbs || []).some(function(d) { return d.name === 'firebaseLocalStorageDb'; });
         if (hasFb) {
           window._loadFirebaseModules();
+        } else {
+          // Anonymous user: Firebase stays deferred until the Sign In click.
+          // _updateUI() (which normally shows the button) only runs after the
+          // SDK loads, so reveal the button here — otherwise a first-time
+          // visitor never sees Sign In and can't authenticate at all.
+          _revealSignInBtn();
         }
       }).catch(function() {
         window._loadFirebaseModules();
