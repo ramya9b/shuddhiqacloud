@@ -15442,7 +15442,7 @@ async function _callProviderWithFallback(requestBody, signal) {
             toastMsg = provName + ' daily quota exhausted. Switching to ' + nextName + '…';
           } else {
             toastMsg = provName + ' daily quota exhausted (resets midnight UTC). '
-              + 'Add a free GEMINI_API_KEY at aistudio.google.com in Cloudflare Pages → Settings → Environment Variables to continue now.';
+              + 'Add your own free Gemini key (aistudio.google.com) in Settings → AI Provider to continue now.';
           }
         } else if (isKeyIssue && provider === 'gemini') {
 
@@ -15453,7 +15453,7 @@ async function _callProviderWithFallback(requestBody, signal) {
             toastMsg = provName + ' unavailable. Switching to ' + nextName + '…';
           } else {
             toastMsg = provName + ' model is currently unavailable and no fallback provider is configured. '
-              + 'Add a GROQ_API_KEY (free at console.groq.com) in Cloudflare Pages → Settings → Environment Variables, then redeploy.';
+              + 'Add your own free Groq key (console.groq.com) in Settings → AI Provider to continue.';
           }
         } else if (isQuota) {
           toastMsg = provName + ' free-tier limit reached.';
@@ -15466,7 +15466,7 @@ async function _callProviderWithFallback(requestBody, signal) {
         } else {
           toastMsg = 'Rate limit on ' + provName + ' (~' + waitS + 's cooldown).';
           if (nextName) toastMsg += ' Switching to ' + nextName + '…';
-          else toastMsg += ' No more providers available.';
+          else toastMsg += ' High demand on the free tier — retry in ~' + (waitS || 35) + 's, or add your own free Groq key (console.groq.com, no card) in Settings → AI Provider for unlimited use.';
         }
 
         console.log('[Fallback] Switching provider. Reason:', toastMsg);
@@ -18904,11 +18904,11 @@ const _ACTIONABLE_ERRORS = [
   },
   {
     match: /gemini.*all available models|all.*models.*failed/i,
-    action: '→ Most likely cause: GEMINI_API_KEY not set in Cloudflare Pages → Settings → Environment Variables\n→ Or: Generative Language API not enabled — console.cloud.google.com → APIs\n→ Quick fix: add your own key in Settings → Use Your Own Key → Gemini',
+    action: '→ Quick fix: add your own free key in Settings → Use Your Own Key → Gemini (aistudio.google.com)\n→ Or: Generative Language API not enabled — console.cloud.google.com → APIs',
   },
   {
     match: /claude.*invalid|invalid.*claude|claude.*expired|CLAUDE_API_KEY.*invalid/i,
-    action: '→ Check your key at console.anthropic.com → API Keys\n→ If revoked, create a new key and update CLAUDE_API_KEY in Cloudflare Pages → Settings → Environment Variables',
+    action: '→ Check your key at console.anthropic.com → API Keys\n→ Or just add your own key in Settings → Use Your Own Key → Claude',
   },
   {
     match: /no ai provider|no provider configured/i,
@@ -20957,7 +20957,7 @@ async function testClaudeConnection() {
 
         displayMsg = errText
           ? 'Provider error: ' + errText.substring(0, 120)
-          : 'Internal proxy error (500). Check Cloudflare Pages function logs.';
+          : 'Internal proxy error (500). Check Vercel function logs.';
       } else if (res.status === 429 || isSwitch) {
         displayMsg = errText || 'Rate limit or quota exceeded. Try again later.';
       } else if (res.status === 401) {
