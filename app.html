@@ -8494,7 +8494,7 @@ header::after { display: none !important; }
       <!-- ── Firebase Auth: Sign In (shown when not signed in) ── -->
       <button id="fbSignInBtn"
         onclick="_showFirebaseSignIn()"
-        data-tip="Sign in with Google or Microsoft — get 10 free generations"
+        data-tip="Sign in with Google — get 10 free generations"
         aria-label="Sign in"
         style="display:none;align-items:center;gap:6px;padding:0 14px;height:38px;
                border-radius:10px;border:1.5px solid rgba(91,95,239,.25);
@@ -27719,9 +27719,9 @@ window._runTCRegen = async function() {
       Continue with Google
     </button>
 
-    <!-- Microsoft -->
+    <!-- Microsoft (hidden for launch — Azure provider config pending; re-enable by setting display:flex) -->
     <button id="fbMsBtn" onclick="_signInWithMicrosoft()"
-      style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+      style="width:100%;display:none;align-items:center;justify-content:center;gap:10px;
              padding:12px;border-radius:10px;border:1.5px solid var(--border2);
              background:var(--surface);color:var(--text);font-size:14px;font-weight:600;
              cursor:pointer;margin-bottom:16px;transition:all .18s;
