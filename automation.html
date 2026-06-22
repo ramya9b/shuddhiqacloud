@@ -583,6 +583,161 @@ html.light .nav-cta{color:#fff}
   .btn-generate:hover{transform:none}
   .btn-download:hover{transform:none}
 }
+
+/* ── Mode toggle ─────────────────────────────────────────────── */
+.mode-toggle-wrap{
+  display:flex;align-items:center;gap:0;
+  background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:12px;padding:4px;margin-bottom:28px;
+  width:100%;
+}
+.mode-btn{
+  flex:1;padding:11px 16px;border:none;border-radius:9px;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:13.5px;font-weight:500;
+  transition:all .22s cubic-bezier(.34,1.56,.64,1);
+  background:transparent;color:var(--text2);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.mode-btn.active{
+  background:var(--surface2);color:var(--text);font-weight:700;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.mode-btn:hover:not(.active){color:var(--text)}
+.mode-btn-badge{
+  font-size:9px;font-family:'JetBrains Mono',monospace;
+  padding:2px 6px;border-radius:5px;letter-spacing:.04em;
+  font-weight:700;
+}
+.mode-btn:first-child .mode-btn-badge{
+  background:rgba(232,162,32,.15);color:var(--saffronl);
+}
+.mode-btn:last-child .mode-btn-badge{
+  background:linear-gradient(135deg,var(--teal),var(--teall));color:#fff;
+}
+html.light .mode-btn.active{box-shadow:0 2px 8px rgba(0,0,0,.10)}
+
+/* ── Deep analysis output ─────────────────────────────────────── */
+.deep-panel{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.deep-panel.visible{display:block}
+
+/* Tab bar */
+.deep-tabs{
+  display:flex;gap:0;overflow-x:auto;
+  background:var(--surface2);
+  border-bottom:1px solid var(--border);
+  scrollbar-width:none;
+}
+.deep-tabs::-webkit-scrollbar{display:none}
+.deep-tab{
+  padding:12px 18px;border:none;background:transparent;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  font-weight:600;letter-spacing:.3px;color:var(--text3);
+  cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all .15s;flex-shrink:0;
+}
+.deep-tab:hover{color:var(--text)}
+.deep-tab.active{color:var(--teall);border-bottom-color:var(--teal)}
+
+/* Tab content panes */
+.deep-pane{
+  display:none;padding:28px;
+  max-height:600px;overflow-y:auto;
+}
+.deep-pane.active{display:block}
+
+/* Section headings inside panes */
+.deep-section{margin-bottom:24px}
+.deep-section-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-weight:700;color:var(--text);
+  margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.deep-section-icon{font-size:15px}
+.deep-content{
+  font-size:13.5px;color:var(--text2);line-height:1.75;
+  white-space:pre-wrap;font-family:'DM Sans',sans-serif;
+}
+.deep-content code{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:var(--bg2);padding:1px 6px;border-radius:4px;
+  color:var(--teall);
+}
+
+/* Code blocks inside deep panes */
+.deep-code{
+  background:var(--code-bg);
+  border-radius:10px;padding:18px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  line-height:1.7;color:var(--text2);
+  overflow-x:auto;white-space:pre;
+  margin-top:8px;
+}
+
+/* Risk/matrix tables */
+.deep-table{
+  width:100%;border-collapse:collapse;
+  font-size:12.5px;margin-top:8px;
+}
+.deep-table th{
+  background:var(--surface2);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--text3);padding:10px 12px;
+  text-align:left;border-bottom:1px solid var(--border);
+}
+.deep-table td{
+  padding:10px 12px;border-bottom:1px solid var(--border);
+  color:var(--text2);vertical-align:top;
+}
+.deep-table tr:last-child td{border-bottom:none}
+.deep-table tr:hover td{background:rgba(20,184,166,.04)}
+.badge-auto{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-family:'JetBrains Mono',monospace;
+  padding:2px 7px;border-radius:5px;font-weight:600;
+}
+.badge-yes{background:rgba(20,184,166,.1);color:var(--teall);border:1px solid rgba(20,184,166,.2)}
+.badge-no{background:rgba(148,163,184,.08);color:var(--text3);border:1px solid var(--border)}
+.badge-high{background:rgba(239,68,68,.1);color:#FCA5A5;border:1px solid rgba(239,68,68,.2)}
+.badge-med{background:rgba(232,162,32,.1);color:var(--saffronl);border:1px solid rgba(232,162,32,.2)}
+.badge-low{background:rgba(20,184,166,.08);color:var(--teall);border:1px solid rgba(20,184,166,.15)}
+
+/* Deep output actions */
+.deep-output-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;background:var(--surface2);
+  border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;
+}
+.deep-progress{
+  display:none;flex-direction:column;gap:12px;
+  margin-top:20px;padding:20px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+}
+.deep-progress.visible{display:flex}
+
+/* Loading skeleton */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skeleton{
+  background:linear-gradient(90deg,var(--surface2) 25%,var(--bg2) 50%,var(--surface2) 75%);
+  background-size:800px 100%;animation:shimmer 1.5s infinite;
+  border-radius:6px;height:14px;margin-bottom:8px;
+}
+
+@media(max-width:600px){
+  .deep-tab{padding:10px 12px;font-size:10px}
+  .deep-pane{padding:18px 16px}
+}
+html.light .deep-code{color:var(--text2)}
+html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
 </style>
 </head>
 <body>
@@ -692,6 +847,18 @@ html.light .nav-cta{color:#fff}
       <strong>ready-to-run Playwright or Selenium scripts</strong> for web apps,
       D365, Salesforce, Amazon, Flipkart and more.
     </p>
+  </div>
+
+  <!-- Mode Toggle -->
+  <div class="mode-toggle-wrap" role="group" aria-label="Generation mode">
+    <button class="mode-btn active" id="modeQuick" onclick="switchMode('quick')" aria-pressed="true">
+      🤖 Quick Script
+      <span class="mode-btn-badge">Playwright / Selenium</span>
+    </button>
+    <button class="mode-btn" id="modeDeep" onclick="switchMode('deep')" aria-pressed="false">
+      🧠 Deep Analysis
+      <span class="mode-btn-badge">NEW · BA + UX + Architect</span>
+    </button>
   </div>
 
   <!-- Step 1 — URL & Platform -->
@@ -836,7 +1003,7 @@ html.light .nav-cta{color:#fff}
       </div>
     </div>
 
-    <!-- Generate button -->
+    <!-- Generate button — routes to quick or deep mode -->
     <button class="btn-generate" id="generateBtn" onclick="generateScript()">
       <span id="generateBtnIcon">🤖</span>
       <span id="generateBtnText">Generate Automation Script</span>
@@ -864,6 +1031,16 @@ html.light .nav-cta{color:#fff}
 
     <!-- Error display -->
     <div class="gen-error" id="genError"></div>
+
+    <!-- Deep analysis progress -->
+    <div class="deep-progress" id="deepProgress">
+      <div class="progress-step" id="dstep1"><div class="progress-dot"></div>Analysing from BA perspective…</div>
+      <div class="progress-step" id="dstep2"><div class="progress-dot"></div>Analysing from End User perspective…</div>
+      <div class="progress-step" id="dstep3"><div class="progress-dot"></div>Analysing from Automation Architect perspective…</div>
+      <div class="progress-step" id="dstep4"><div class="progress-dot"></div>Generating test scenarios &amp; cases…</div>
+      <div class="progress-step" id="dstep5"><div class="progress-dot"></div>Generating Playwright code &amp; coverage matrix…</div>
+    </div>
+
   </div>
 
   <!-- Output panel -->
@@ -885,6 +1062,131 @@ html.light .nav-cta{color:#fff}
       <div class="summary-stat"><strong id="sumPlatform">—</strong></div>
     </div>
   </div>
+
+  <!-- Deep Analysis Output Panel -->
+  <div class="deep-panel" id="deepPanel">
+    <div class="deep-output-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text)">🧠 Deep Analysis Report</span>
+        <span class="output-lang-badge" id="deepPlatformBadge">—</span>
+      </div>
+      <div class="output-actions">
+        <button class="btn-action btn-copy" onclick="copyDeepReport()">📋 Copy All</button>
+        <button class="btn-action btn-download" onclick="downloadDeepReport()">⬇ Download .md</button>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="deep-tabs" role="tablist">
+      <button class="deep-tab active" role="tab" aria-selected="true"  data-pane="pane-ba"       onclick="switchDeepTab(this)">📊 BA Analysis</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-ux"       onclick="switchDeepTab(this)">👤 End User</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-arch"     onclick="switchDeepTab(this)">🏗 Architect</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-scenarios" onclick="switchDeepTab(this)">📋 Scenarios</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-cases"    onclick="switchDeepTab(this)">🧪 Test Cases</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-matrix"   onclick="switchDeepTab(this)">📈 Coverage</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-code"     onclick="switchDeepTab(this)">⚡ Code</button>
+      <button class="deep-tab"        role="tab" aria-selected="false" data-pane="pane-risk"     onclick="switchDeepTab(this)">⚠ Risks</button>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="deep-pane active" id="pane-ba">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🎯</span>Business Objectives &amp; Functional Requirements</div>
+        <div class="deep-content" id="ba-objectives">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">⚠</span>Missing &amp; Ambiguous Requirements</div>
+        <div class="deep-content" id="ba-gaps">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">✅</span>Acceptance Criteria</div>
+        <div class="deep-content" id="ba-acceptance">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🔗</span>Dependencies &amp; Integration Points</div>
+        <div class="deep-content" id="ba-deps">—</div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-ux">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🚀</span>Happy Path Analysis</div>
+        <div class="deep-content" id="ux-happy">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">😤</span>User Frustrations &amp; Pain Points</div>
+        <div class="deep-content" id="ux-pain">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">♿</span>Accessibility &amp; Usability</div>
+        <div class="deep-content" id="ux-a11y">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">📱</span>Real-World Usage Scenarios</div>
+        <div class="deep-content" id="ux-realworld">—</div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-arch">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🤖</span>Automation Feasibility &amp; ROI</div>
+        <div class="deep-content" id="arch-roi">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🔌</span>API Automation Opportunities</div>
+        <div class="deep-content" id="arch-api">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🗄</span>Database Validation</div>
+        <div class="deep-content" id="arch-db">—</div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🔒</span>Security &amp; Performance Recommendations</div>
+        <div class="deep-content" id="arch-sec">—</div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-scenarios">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">✅</span>All Test Scenarios</div>
+        <div class="deep-content" id="scenarios-list">—</div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-cases">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🧪</span>Detailed Test Cases</div>
+        <div id="cases-table-wrap"><div class="deep-content" id="cases-content">—</div></div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-matrix">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">📈</span>Automation Coverage Matrix</div>
+        <div id="matrix-table-wrap"><div class="deep-content" id="matrix-content">—</div></div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-code">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">⚡</span>Playwright TypeScript — Production Code</div>
+        <div class="deep-code" id="deep-code-output">// Code will appear here after analysis…</div>
+      </div>
+    </div>
+
+    <div class="deep-pane" id="pane-risk">
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">⚠</span>Risks &amp; Mitigations</div>
+        <div id="risk-table-wrap"><div class="deep-content" id="risk-content">—</div></div>
+      </div>
+      <div class="deep-section">
+        <div class="deep-section-title"><span class="deep-section-icon">🏁</span>Final Coverage Summary</div>
+        <div class="deep-content" id="coverage-summary">—</div>
+      </div>
+    </div>
+
+  </div><!-- /deep-panel -->
+
 
   <!-- Divider -->
   <div class="divider"></div>
@@ -1595,6 +1897,406 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Trigger provider hint init */
   document.getElementById('aiProvider').dispatchEvent(new Event('change'));
 });
+
+/* ══════════════════════════════════════════════════════════
+   DEEP ANALYSIS MODE
+   ══════════════════════════════════════════════════════════ */
+
+let currentMode = 'quick';
+let deepReportRaw = '';
+
+/* ── Mode switch ── */
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeQuick').classList.toggle('active', mode === 'quick');
+  document.getElementById('modeDeep').classList.toggle('active', mode === 'deep');
+  document.getElementById('modeQuick').setAttribute('aria-pressed', mode === 'quick');
+  document.getElementById('modeDeep').setAttribute('aria-pressed', mode === 'deep');
+
+  // Update generate button
+  const btnText = document.getElementById('generateBtnText');
+  const btnIcon = document.getElementById('generateBtnIcon');
+  if (mode === 'quick') {
+    if (btnText) btnText.textContent = 'Generate Automation Script';
+    if (btnIcon) btnIcon.textContent = '🤖';
+  } else {
+    if (btnText) btnText.textContent = 'Run Deep Analysis';
+    if (btnIcon) btnIcon.textContent = '🧠';
+  }
+
+  // Hide both output panels when switching mode
+  document.getElementById('outputPanel')?.classList.remove('visible');
+  document.getElementById('deepPanel')?.classList.remove('visible');
+  clearError();
+}
+
+/* ── Deep tab switching ── */
+function switchDeepTab(btn) {
+  // Deactivate all tabs + panes
+  document.querySelectorAll('.deep-tab').forEach(t => {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+  });
+  document.querySelectorAll('.deep-pane').forEach(p => p.classList.remove('active'));
+  // Activate selected
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  const paneId = btn.dataset.pane;
+  const pane = document.getElementById(paneId);
+  if (pane) pane.classList.add('active');
+}
+
+/* ── Override generateScript to route by mode ── */
+const _origGenerateScript = generateScript;
+generateScript = async function() {
+  if (currentMode === 'deep') {
+    await generateDeepAnalysis();
+  } else {
+    await _origGenerateScript();
+  }
+};
+
+/* ── Deep analysis prompt ── */
+function buildDeepPrompt(url, platform, flow, context) {
+  const pack = DOMAIN_PACKS[platform] || DOMAIN_PACKS.generic;
+
+  return `You are a world-class Quality Engineering Architect with 20+ years of experience in Enterprise Software Testing, Business Analysis, Product Ownership, User Experience Validation, and Test Automation.
+
+TARGET APPLICATION
+URL: ${url}
+Platform: ${pack.label}
+Flow / Feature: ${flow || 'General application smoke test and critical path validation'}
+${context ? 'Additional context: ' + context : ''}
+
+DOMAIN KNOWLEDGE: ${pack.label}
+${pack.selectors}
+Wait strategy: ${pack.waitStrategy}
+
+Analyse this from THREE perspectives simultaneously and return a structured JSON response ONLY (no prose before or after):
+
+{
+  "ba": {
+    "objectives": "Business objectives and functional requirements (numbered list)",
+    "gaps": "Missing, ambiguous, or risky requirements found",
+    "acceptance": "Clear acceptance criteria (Given/When/Then format where possible)",
+    "deps": "Dependencies, integration points, impacted modules"
+  },
+  "ux": {
+    "happy": "Happy path from end user perspective — step by step as a real user would experience it",
+    "pain": "User frustrations, confusing UX, error handling gaps, performance expectations",
+    "a11y": "Accessibility checks (WCAG), keyboard nav, screen reader, colour contrast concerns",
+    "realworld": "Real-world usage scenarios including edge cases a real user would hit"
+  },
+  "arch": {
+    "roi": "Automation feasibility score (1-10), ROI justification, regression impact",
+    "api": "API automation opportunities — list specific endpoints/operations to automate",
+    "db": "Database validation queries (SQL) to verify data integrity after key operations",
+    "sec": "Security test recommendations (auth, injection, session, data exposure) and performance test recommendations"
+  },
+  "scenarios": "All test scenarios as a numbered list — positive, negative, boundary, integration, security, performance, accessibility (min 15 scenarios)",
+  "testcases": "Top 8 detailed test cases in this exact format for each:
+TC-001 | Title | Preconditions | Steps (numbered) | Expected Result | Priority (P1/P2/P3) | Automate (Yes/No)",
+  "matrix": "Coverage matrix rows in this format:
+Requirement | Scenario | Test Case ID | Automated (Yes/No) | Framework",
+  "code": "Complete production-ready Playwright TypeScript script using Page Object Model — includes imports, constants, Page class with selectors, test.describe block with happy path + negative + verification tests. Use selectors from domain knowledge above.",
+  "risks": "Risk table rows in this format:
+Risk | Impact (High/Med/Low) | Probability | Mitigation",
+  "summary": "Final coverage summary — total scenarios, automated count, manual count, coverage percentage, quality gates status"
+}
+
+Return ONLY valid JSON. No markdown fences. No explanatory text.`;
+}
+
+/* ── Deep analysis generator ── */
+async function generateDeepAnalysis() {
+  if (isGenerating) return;
+  clearError();
+
+  const url     = document.getElementById('targetUrl')?.value?.trim();
+  const flow    = document.getElementById('flowDesc')?.value?.trim();
+  const context = document.getElementById('extraContext')?.value?.trim();
+  const provider = document.getElementById('aiProvider')?.value;
+  const apiKey   = document.getElementById('apiKey')?.value?.trim();
+
+  // Validation
+  if (!url) { showError('Please enter a target URL.'); return; }
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    showError('URL must start with https://'); return;
+  }
+  if (url.includes('localhost') || url.includes('127.0.0.1')) {
+    showError('Localhost URLs are not accessible from the browser.'); return;
+  }
+  if (!apiKey) { showError('Please enter your API key.'); return; }
+  if (apiKey.length < 20) { showError('API key looks too short — please check.'); return; }
+
+  isGenerating = true;
+
+  const btn     = document.getElementById('generateBtn');
+  const btnText = document.getElementById('generateBtnText');
+  const btnIcon = document.getElementById('generateBtnIcon');
+  if (btn)     btn.disabled = true;
+  if (btnText) btnText.textContent = 'Analysing…';
+  if (btnIcon) btnIcon.textContent = '⏳';
+
+  const deepProg = document.getElementById('deepProgress');
+  const deepPanel = document.getElementById('deepPanel');
+  if (deepProg)  deepProg.classList.add('visible');
+  if (deepPanel) deepPanel.classList.remove('visible');
+
+  // Reset deep progress steps
+  ['dstep1','dstep2','dstep3','dstep4','dstep5'].forEach(s => setStep(s, ''));
+
+  // Skeleton loaders
+  const skeletonFields = ['ba-objectives','ba-gaps','ba-acceptance','ba-deps',
+    'ux-happy','ux-pain','ux-a11y','ux-realworld',
+    'arch-roi','arch-api','arch-db','arch-sec',
+    'scenarios-list','cases-content','matrix-content','risk-content','coverage-summary'];
+  skeletonFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<div class="skeleton" style="width:80%"></div><div class="skeleton" style="width:60%"></div><div class="skeleton" style="width:72%"></div>';
+  });
+  const codeEl = document.getElementById('deep-code-output');
+  if (codeEl) codeEl.textContent = '// Generating…';
+
+  try {
+    // Visual progress while API runs
+    const progressAnim = (async () => {
+      setStep('dstep1','active'); await delay(800);
+      setStep('dstep1','done');   setStep('dstep2','active'); await delay(900);
+      setStep('dstep2','done');   setStep('dstep3','active'); await delay(800);
+      setStep('dstep3','done');   setStep('dstep4','active'); await delay(1000);
+      setStep('dstep4','done');   setStep('dstep5','active');
+    })();
+
+    const prompt = buildDeepPrompt(url, selectedPlatform, flow, context);
+
+    let raw = '';
+    if (provider === 'claude')       raw = await callClaude(prompt, apiKey);
+    else if (provider === 'gemini')  raw = await callGemini(prompt, apiKey);
+    else if (provider === 'groq')    raw = await callGroq(prompt, apiKey);
+    else if (provider === 'openai')  raw = await callOpenAI(prompt, apiKey);
+    else if (provider === 'azureopenai') {
+      const endpoint   = document.getElementById('azureEndpoint')?.value?.trim();
+      const deployment = document.getElementById('azureDeployment')?.value?.trim() || 'gpt-4o';
+      if (!endpoint) throw new Error('Please enter your Azure OpenAI endpoint URL.');
+      raw = await callAzureOpenAI(prompt, apiKey, endpoint, deployment);
+    } else {
+      raw = await callClaude(prompt, apiKey);
+    }
+
+    await progressAnim;
+    ['dstep1','dstep2','dstep3','dstep4','dstep5'].forEach(s => setStep(s,'done'));
+
+    // Clean JSON fences
+    raw = raw.replace(/^```json\s*/m,'').replace(/\s*```$/m,'').trim();
+
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch(e) {
+      // Try to extract JSON from response
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (match) {
+        try { data = JSON.parse(match[0]); }
+        catch(e2) { throw new Error('AI returned invalid JSON. Try Claude for best structured output.'); }
+      } else {
+        throw new Error('AI returned invalid JSON. Try Claude for best structured output.');
+      }
+    }
+
+    deepReportRaw = raw;
+    renderDeepPanel(data, url, platform);
+
+  } catch(err) {
+    ['dstep1','dstep2','dstep3','dstep4','dstep5'].forEach(s => setStep(s,''));
+    const msg = err.message || '';
+    let friendly = msg;
+    if (msg.includes('401') || msg.includes('invalid') || msg.toLowerCase().includes('unauthorized')) {
+      friendly = 'API key invalid or expired. ' + msg;
+    } else if (msg.includes('429')) {
+      friendly = 'Rate limit hit — wait a moment or switch provider.';
+    } else if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+      friendly = 'Network error — check your connection. Try Claude or Groq.';
+    }
+    showError(friendly);
+  } finally {
+    isGenerating = false;
+    if (btn)     btn.disabled = false;
+    if (btnText) btnText.textContent = 'Run Deep Analysis';
+    if (btnIcon) btnIcon.textContent = '🧠';
+    if (deepProg) deepProg.classList.remove('visible');
+  }
+}
+
+/* ── Render deep panel ── */
+function renderDeepPanel(data, url) {
+  const ba   = data.ba   || {};
+  const ux   = data.ux   || {};
+  const arch = data.arch || {};
+
+  const setText = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val || '—';
+  };
+
+  // BA tab
+  setText('ba-objectives', ba.objectives);
+  setText('ba-gaps',       ba.gaps);
+  setText('ba-acceptance', ba.acceptance);
+  setText('ba-deps',       ba.deps);
+
+  // UX tab
+  setText('ux-happy',      ux.happy);
+  setText('ux-pain',       ux.pain);
+  setText('ux-a11y',       ux.a11y);
+  setText('ux-realworld',  ux.realworld);
+
+  // Architect tab
+  setText('arch-roi', arch.roi);
+  setText('arch-api', arch.api);
+  setText('arch-db',  arch.db);
+  setText('arch-sec', arch.sec);
+
+  // Scenarios tab
+  setText('scenarios-list', data.scenarios);
+
+  // Test cases tab — render as table if possible
+  renderTextOrTable('cases-content', data.testcases);
+
+  // Coverage matrix tab
+  renderTextOrTable('matrix-content', data.matrix);
+
+  // Code tab
+  const codeEl = document.getElementById('deep-code-output');
+  if (codeEl) codeEl.textContent = data.code || '// No code generated';
+
+  // Risk tab
+  renderTextOrTable('risk-content', data.risks);
+  setText('coverage-summary', data.summary);
+
+  // Platform badge
+  const badge = document.getElementById('deepPlatformBadge');
+  const pack  = DOMAIN_PACKS[selectedPlatform] || DOMAIN_PACKS.generic;
+  if (badge) badge.textContent = pack.label;
+
+  // Show panel, reset to BA tab
+  const deepPanel = document.getElementById('deepPanel');
+  if (deepPanel) {
+    deepPanel.classList.add('visible');
+    // Activate first tab
+    const firstTab = document.querySelector('.deep-tab');
+    if (firstTab) switchDeepTab(firstTab);
+    deepPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  showToast('Deep analysis complete — 8 sections generated', '🧠');
+}
+
+/* ── Render pipe-delimited table rows as HTML table ── */
+function renderTextOrTable(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!text) { el.textContent = '—'; return; }
+
+  // Check if it looks like a pipe table
+  const lines = text.trim().split('
+').filter(l => l.trim());
+  const hasPipes = lines.filter(l => l.includes('|')).length >= 3;
+
+  if (hasPipes) {
+    const rows = lines.filter(l => l.includes('|') && !l.match(/^[\|\-\s]+$/));
+    if (rows.length < 2) { el.textContent = text; return; }
+
+    const headers = rows[0].split('|').map(h => h.trim()).filter(Boolean);
+    const dataRows = rows.slice(1);
+
+    let html = '<table class="deep-table"><thead><tr>';
+    headers.forEach(h => { html += `<th>${h}</th>`; });
+    html += '</tr></thead><tbody>';
+
+    dataRows.forEach(row => {
+      const cells = row.split('|').map(c => c.trim()).filter(Boolean);
+      html += '<tr>';
+      cells.forEach((cell, i) => {
+        let display = cell;
+        // Badge for Yes/No/High/Med/Low
+        if (cell === 'Yes') display = '<span class="badge-auto badge-yes">✓ Yes</span>';
+        else if (cell === 'No') display = '<span class="badge-auto badge-no">— No</span>';
+        else if (cell === 'High') display = '<span class="badge-auto badge-high">High</span>';
+        else if (cell === 'Med' || cell === 'Medium') display = '<span class="badge-auto badge-med">Med</span>';
+        else if (cell === 'Low') display = '<span class="badge-auto badge-low">Low</span>';
+        html += `<td>${display}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  } else {
+    el.textContent = text;
+  }
+}
+
+/* ── Copy full deep report ── */
+function copyDeepReport() {
+  if (!deepReportRaw) return;
+  navigator.clipboard.writeText(deepReportRaw)
+    .then(() => showToast('Full report copied!', '📋'))
+    .catch(() => showToast('Copy failed — try the Download button', '⚠'));
+}
+
+/* ── Download deep report as markdown ── */
+function downloadDeepReport() {
+  if (!deepReportRaw) return;
+
+  // Build readable markdown from JSON
+  let md = '# Shuddhi QA — Deep Analysis Report\n\n';
+  try {
+    const d = JSON.parse(deepReportRaw);
+    const sections = [
+      ['## 📊 Business Analysis', [
+        ['Business Objectives', d.ba?.objectives],
+        ['Missing/Ambiguous Requirements', d.ba?.gaps],
+        ['Acceptance Criteria', d.ba?.acceptance],
+        ['Dependencies', d.ba?.deps],
+      ]],
+      ['## 👤 End User Analysis', [
+        ['Happy Path', d.ux?.happy],
+        ['User Pain Points', d.ux?.pain],
+        ['Accessibility', d.ux?.a11y],
+        ['Real-World Scenarios', d.ux?.realworld],
+      ]],
+      ['## 🏗 Architect Analysis', [
+        ['Automation Feasibility & ROI', d.arch?.roi],
+        ['API Automation Opportunities', d.arch?.api],
+        ['Database Validation', d.arch?.db],
+        ['Security & Performance', d.arch?.sec],
+      ]],
+      ['## 📋 Test Scenarios', [['All Scenarios', d.scenarios]]],
+      ['## 🧪 Test Cases', [['Detailed Test Cases', d.testcases]]],
+      ['## 📈 Coverage Matrix', [['Matrix', d.matrix]]],
+      ['## ⚡ Playwright Code', [['TypeScript Script', '```typescript\n' + (d.code||'') + '\n```']]],
+      ['## ⚠ Risks & Mitigations', [['Risks', d.risks]]],
+      ['## 🏁 Final Summary', [['Coverage Summary', d.summary]]],
+    ];
+    sections.forEach(([heading, items]) => {
+      md += heading + '\n\n';
+      items.forEach(([label, val]) => {
+        if (val) md += `### ${label}\n\n${val}\n\n`;
+      });
+    });
+  } catch {
+    md += deepReportRaw;
+  }
+
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'deep-analysis-report.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Report downloaded!', '⬇');
+}
+
 </script>
 </body>
 </html>
