@@ -10,11 +10,26 @@
  *            testingFocus, automationFeasibility, riskLevel }
  */
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin':  '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+// detect.js uses origin-aware CORS (built per-request) — not a static wildcard
+// The wildcard here is intentional for detect: it's used only server-side by the
+// ShuddhiQA proxy; the actual origin check happens in the calling handler.
+// Updated to restrict to known origins (v9.101 — security hardening)
+function buildDetectCors(origin) {
+  const allowed = origin && (
+    origin.includes('localhost') ||
+    origin.includes('shuddhiqacloud.vercel.app') ||
+    origin.includes('shuddhiqacloud.pages.dev') ||
+    origin.includes('workers.dev')
+  );
+  return {
+    'Access-Control-Allow-Origin':  allowed ? origin : 'https://shuddhiqacloud.vercel.app',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
+  };
+}
+// Legacy alias — keep existing code working
+const CORS_HEADERS = buildDetectCors('');
 
 // Elite enterprise intelligence prompt — extracts platform + domain via
 // multi-phase semantic analysis, domain ontology mapping, and hidden clue detection
@@ -151,9 +166,11 @@ RESPOND ONLY WITH THIS EXACT JSON (no markdown, no explanation, no preamble):
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+  const origin = request.headers.get('origin') || '';
+  const CORS = buildDetectCors(origin);
 
   if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS_HEADERS });
+    return new Response(null, { status: 204, headers: CORS });
   }
 
   let body;
@@ -162,20 +179,20 @@ export async function onRequestPost(context) {
     body = raw ? JSON.parse(raw) : {};
   } catch(e) {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }),
-      { status: 400, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+      { status: 400, headers: { ...CORS, 'Content-Type': 'application/json' } });
   }
 
   const text = (body.text || '').trim();
   if (!text || text.length < 20) {
     return new Response(JSON.stringify({ error: 'Text too short (min 20 chars)' }),
-      { status: 400, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+      { status: 400, headers: { ...CORS, 'Content-Type': 'application/json' } });
   }
 
   const analysisText = text.substring(0, 3000);
   const groqKey = env.GROQ_API_KEY || '';
   if (!groqKey) {
     return new Response(JSON.stringify({ error: 'Detection service not configured' }),
-      { status: 500, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+      { status: 500, headers: { ...CORS, 'Content-Type': 'application/json' } });
   }
 
   try {
@@ -200,7 +217,7 @@ export async function onRequestPost(context) {
     if (!groqResp.ok) {
       const errText = await groqResp.text().catch(() => '');
       return new Response(JSON.stringify({ error: 'Detection failed: ' + groqResp.status, detail: errText.substring(0,200) }),
-        { status: 502, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+        { status: 502, headers: { ...CORS, 'Content-Type': 'application/json' } });
     }
 
     const groqData = await groqResp.json();
@@ -218,19 +235,19 @@ export async function onRequestPost(context) {
       }
     } catch(parseErr) {
       return new Response(JSON.stringify({ error: 'Parse failed', raw: raw.substring(0, 300) }),
-        { status: 502, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+        { status: 502, headers: { ...CORS, 'Content-Type': 'application/json' } });
     }
 
     if (!result.platformKey || !result.platform) {
       return new Response(JSON.stringify({ error: 'Incomplete result', raw: raw.substring(0, 200) }),
-        { status: 502, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+        { status: 502, headers: { ...CORS, 'Content-Type': 'application/json' } });
     }
 
     return new Response(JSON.stringify(result),
-      { status: 200, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+      { status: 200, headers: { ...CORS, 'Content-Type': 'application/json' } });
 
   } catch(e) {
     return new Response(JSON.stringify({ error: 'Detection error: ' + e.message }),
-      { status: 500, headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' } });
+      { status: 500, headers: { ...CORS, 'Content-Type': 'application/json' } });
   }
 }
