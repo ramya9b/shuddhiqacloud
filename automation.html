@@ -213,6 +213,9 @@ nav{
   padding:36px;
   margin-bottom:28px;
 }
+@media(max-width:600px){
+  .gen-card{padding:20px 18px;border-radius:14px}
+}
 .gen-card-title{
   font-family:'Cormorant Garamond',serif;
   font-size:20px;font-weight:700;
@@ -274,6 +277,9 @@ html.light .form-input:focus, html.light .form-select:focus, html.light .form-te
 .format-group{
   display:flex;gap:10px;flex-wrap:wrap;
 }
+@media(max-width:600px){
+  .format-btn{width:100%;justify-content:flex-start}
+}
 .format-btn{
   padding:9px 18px;border-radius:8px;
   border:1.5px solid var(--border2);
@@ -300,6 +306,9 @@ html.light .format-btn.active{background:rgba(13,122,110,.07);border-color:var(-
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
   gap:10px;
+}
+@media(max-width:480px){
+  .platform-grid{grid-template-columns:repeat(2,1fr)}
 }
 .plat-btn{
   padding:10px 12px;
@@ -388,6 +397,11 @@ html.light .btn-generate{color:#fff}
   background:var(--surface2);
   border-bottom:1px solid var(--border);
   flex-wrap:wrap;gap:12px;
+}
+@media(max-width:600px){
+  .output-header{padding:12px 16px}
+  .output-actions{width:100%;justify-content:flex-end}
+  .code-out{font-size:11px;padding:16px}
 }
 .output-header-left{
   display:flex;align-items:center;gap:10px;
@@ -783,7 +797,25 @@ html.light .nav-cta{color:#fff}
         <option value="gemini">Gemini (Google)</option>
         <option value="groq">Groq (Llama) — Free</option>
         <option value="openai">OpenAI (GPT-4o)</option>
+        <option value="azureopenai">Azure OpenAI</option>
       </select>
+    </div>
+
+    <!-- Azure OpenAI endpoint — shown only for Azure provider -->
+    <div class="form-group" id="azureEndpointGroup" style="display:none">
+      <label class="form-label" for="azureEndpoint">Azure OpenAI Endpoint</label>
+      <input type="url" id="azureEndpoint" class="form-input"
+        placeholder="https://your-resource.openai.azure.com"
+        autocomplete="off"/>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace">
+        Azure Portal → your OpenAI resource → Keys and Endpoint
+      </div>
+    </div>
+    <div class="form-group" id="azureDeploymentGroup" style="display:none">
+      <label class="form-label" for="azureDeployment">Deployment Name</label>
+      <input type="text" id="azureDeployment" class="form-input"
+        placeholder="gpt-4o"
+        autocomplete="off"/>
     </div>
 
     <!-- API Key input — shown/hidden based on provider -->
@@ -996,20 +1028,25 @@ function updatePlaceholders() {
 
 /* ── Provider → API key hint ── */
 document.getElementById('aiProvider').addEventListener('change', function() {
+  const isAzure = this.value === 'azureopenai';
+  document.getElementById('azureEndpointGroup').style.display = isAzure ? 'block' : 'none';
+  document.getElementById('azureDeploymentGroup').style.display = isAzure ? 'block' : 'none';
   const hints = {
-    claude:     'Anthropic key — sk-ant-…',
-    gemini:     'Google AI Studio key — AIza…',
-    groq:       'Groq key (free tier available) — gsk_…',
-    openai:     'OpenAI key — sk-…',
+    claude:      'Anthropic key — sk-ant-…',
+    gemini:      'Google AI Studio key — AIza…',
+    groq:        'Groq key (free tier available) — gsk_…',
+    openai:      'OpenAI key — sk-…',
+    azureopenai: 'Azure OpenAI key — from Azure Portal → your resource → Keys',
   };
   const input = document.getElementById('apiKey');
   const hint  = document.getElementById('apiKeyHint');
   if (hint) hint.textContent = '(' + (hints[this.value] || '') + ')';
   const placeholders = {
-    claude:  'sk-ant-api03-…',
-    gemini:  'AIzaSy…',
-    groq:    'gsk_…',
-    openai:  'sk-…',
+    claude:      'sk-ant-api03-…',
+    gemini:      'AIzaSy…',
+    groq:        'gsk_…',
+    openai:      'sk-…',
+    azureopenai: 'Paste your Azure OpenAI key here…',
   };
   if (input) input.placeholder = placeholders[this.value] || 'Enter API key';
 });
@@ -1058,70 +1095,214 @@ function showToast(msg, icon='✓') {
 }
 
 /* ── Build the Claude prompt ── */
+/* ── Domain knowledge packs ─────────────────────────────────── */
+const DOMAIN_PACKS = {
+  generic: {
+    label: 'Generic Web Application',
+    selectors: 'Priority: data-testid > aria-label > role > id > CSS class. Avoid XPath.',
+    patterns: `Forms: getByRole('textbox',{name:...}), getByLabel(), getByPlaceholder()
+Buttons: getByRole('button',{name:...})
+Navigation: getByRole('link',{name:...})
+Dialogs: getByRole('dialog')
+Tables: getByRole('table'), getByRole('row')
+Alerts: getByRole('alert')`,
+    waitStrategy: 'Use waitForLoadState("networkidle") for SPAs. Use waitForURL() for navigation. Use expect(locator).toBeVisible() for element waits.',
+    testData: 'Define BASE_URL, TEST_USER, TEST_PASSWORD as constants at file top.',
+    antiPatterns: 'Never use page.waitForTimeout(). Never use Thread.sleep(). Avoid nth-child on dynamic lists.',
+  },
+  amazon: {
+    label: 'Amazon E-Commerce',
+    selectors: `Search box: #twotabsearchtextbox, [data-testid="desktop-search-input"]
+Search button: #nav-search-submit-button
+Product cards: [data-component-type="s-search-result"][data-asin]
+Add to cart: #add-to-cart-button
+Cart icon/count: #nav-cart, #nav-cart-count
+Price: .a-price-whole
+Email: #ap_email | Password: #ap_password
+Continue: #continue
+Checkout: [name="proceedToRetailCheckout"]`,
+    patterns: `1. Search: fill search box -> click search -> wait for results grid
+2. Cart: search -> click product -> #add-to-cart-button -> verify cart count increments
+3. Login: detect redirect to /ap/signin -> fill email/password -> verify return`,
+    waitStrategy: 'waitForLoadState("domcontentloaded") then waitForSelector for product grid. Handle cookie consent dialogs first.',
+    testData: 'AMAZON_BASE_URL, AMAZON_EMAIL, AMAZON_PASSWORD, SEARCH_TERM as constants.',
+    antiPatterns: 'Avoid .a-list-item nth-child for products — use [data-asin]. Add comment: captcha may appear on login.',
+  },
+  flipkart: {
+    label: 'Flipkart E-Commerce',
+    selectors: `Search box: input[title="Search for products, brands and more"]
+Product cards: [data-id], ._1AtVbE
+Price: ._30jeq3._1_WHN1
+Add to cart: ._2KpZ6l._2U9uOA._3LWZlK
+Login modal close: ._2KpZ6l._1lRcqv
+Cart: ._3334nS (cart count)`,
+    patterns: `1. Always dismiss login popup first (._2KpZ6l._1lRcqv close button)
+2. Search: fill -> Enter -> wait for product grid ._1YokD2
+3. Apply filters in sidebar ._1sSDL0 after grid loads`,
+    waitStrategy: 'Flipkart lazy-loads. Scroll after search to load products. waitForSelector with timeout 10000.',
+    testData: 'FLIPKART_BASE_URL, SEARCH_TERM, FLIPKART_PHONE as constants. Note: OTP login cannot be automated.',
+    antiPatterns: 'Class names are obfuscated — may change on deploys. Add selector-freshness comment in script.',
+  },
+  d365: {
+    label: 'Microsoft Dynamics 365 Finance & Operations',
+    selectors: `Nav bar: .navigationBar, [data-dyn-controlname="NavBar"]
+Workspace tiles: .tile-container .tile
+Form controls: [data-dyn-controlname="FieldName"] input
+Grid rows: [data-dyn-row-index]
+Action pane: [data-dyn-controlname="SystemDefinedMenuButton"]
+Save: [data-dyn-controlname="SystemDefinedSaveButton"]
+New: [data-dyn-controlname="SystemDefinedNewButton"]
+Lookup: [data-dyn-controlname] .lookup-button
+Loading spinner: .loadingCircle, [data-dyn-role="LoadingCircle"]
+Message bar: .messageBar, [data-dyn-role="MessageBar"]
+Fast tabs: .quickTab-header`,
+    patterns: `1. Navigate: hamburger -> expand module -> click item -> wait for form
+2. Create: New button -> fill [data-dyn-controlname] fields -> Save -> verify record ID
+3. Grid filter: filter icon -> value -> Apply -> check row count
+4. Approval: Submit -> verify "In review" status -> Approve -> verify "Approved"`,
+    waitStrategy: 'D365 is slow. waitForLoadState("networkidle") after nav. ALWAYS wait for .loadingCircle to be hidden before any click. Timeout: 30000ms.',
+    testData: 'D365_BASE_URL, D365_USERNAME (user@org.onmicrosoft.com), D365_PASSWORD, COMPANY_ID (e.g. USMF) as constants.',
+    antiPatterns: 'Never click while loading spinner visible. Use frameLocator() for iframe sections. Note MFA requirement in setup comments.',
+  },
+  salesforce: {
+    label: 'Salesforce Lightning',
+    selectors: `App launcher: .slds-icon-waffle, [title="App Launcher"]
+Global search: input.global-find-and-select
+Nav items: [data-label="NavItemName"]
+New button: [title="New"], .slds-button[name="New"]
+Form fields: [data-field-id="FieldApiName"], lightning-input-field
+Input: input[name="FieldApiName"]
+Save: [title="Save"], .slds-button[name="SaveEdit"]
+Toast: .slds-notify_toast, [data-key="success"]
+Spinner: .slds-spinner_container, lightning-spinner
+Lookup: lightning-lookup, .slds-combobox__input`,
+    patterns: `1. Create: App Launcher -> find app -> object tab -> New -> fill -> Save -> verify toast
+2. Search: global search -> type -> select result -> verify record page
+3. Edit inline: click field -> inline edit -> change -> save -> verify
+4. Related list: scroll to related -> New -> fill popup -> Save`,
+    waitStrategy: 'Wait for .slds-spinner_container hidden before any interaction. waitForLoadState("networkidle") after nav. Timeout 20000ms for saves.',
+    testData: 'SF_URL (https://org.lightning.force.com), SF_USERNAME, SF_PASSWORD, SF_SECURITY_TOKEN as constants.',
+    antiPatterns: 'Never use nth-of-type on .slds-button — use [title]. Handle MFA in beforeEach. Await spinner hidden before assertions.',
+  },
+  sap: {
+    label: 'SAP Fiori / Web UI',
+    selectors: `Shell: #shell-header, .sapUiShellHead
+Input: [id*="__input"], .sapMInputBaseInner input
+Buttons: [id*="__button"], .sapMBtn bdi
+Combobox: .sapMSlt select
+Date: .sapUiCalPicker
+Search: .sapMSF input
+Error: .sapMMessageToast`,
+    patterns: `1. Launchpad: click tile -> wait for app load
+2. Form: find input by ID suffix -> fill -> tab -> next field
+3. Table: find row by cell value -> select -> toolbar action`,
+    waitStrategy: 'waitForLoadState("networkidle"). SAP UI5 fires custom events — use waitForFunction for UI5 ready state.',
+    testData: 'SAP_BASE_URL, SAP_CLIENT, SAP_USERNAME, SAP_PASSWORD as constants.',
+    antiPatterns: 'Use partial ID [id*="suffix"] not exact IDs — SAP generates long dynamic IDs.',
+  },
+  servicenow: {
+    label: 'ServiceNow',
+    selectors: `Main nav: #gsft_nav
+Search: #sysparm_search
+Fields: [data-fieldname="field_name"] (inside gsft_main frame)
+Save: [id="sysverb_update"]
+New: [id="sysverb_new"]
+State: select[id="incident_state"]
+List rows: tbody .list_row`,
+    patterns: `1. Always use frameLocator("#gsft_main") for form interactions
+2. Incident: All -> Incident -> New -> fill -> Submit
+3. Reference field: type -> wait for autocomplete -> select`,
+    waitStrategy: 'ServiceNow uses iframes. frameLocator("#gsft_main").locator(...) for all form elements.',
+    testData: 'SN_URL, SN_USERNAME, SN_PASSWORD as constants. Note: some orgs require SSO.',
+    antiPatterns: 'Direct page.locator() WILL MISS form fields — always use frameLocator("#gsft_main").',
+  },
+  workday: {
+    label: 'Workday',
+    selectors: `Search: [data-automation-id="globalSearchInput"]
+Menu items: [data-automation-id*="MenuItem"]
+Inputs: [data-automation-id="textInput"], input[data-automation-id]
+Buttons: [data-automation-id*="button"], button[data-automation-id]
+Dropdowns: [data-automation-id*="selectWidget"]
+Date: [data-automation-id="dateSectionDay"]
+OK/Done: [data-automation-id="wd-popup-done-button"]
+Worklets: [data-automation-id*="Worklet"]`,
+    patterns: `1. Navigation: search task in global search -> click result -> interact
+2. Business process: initiate -> complete each screen -> submit
+3. Report: navigate -> set params -> Run -> verify`,
+    waitStrategy: 'Workday is very slow. timeout: 45000 on most interactions. waitForLoadState("networkidle") after each screen.',
+    testData: 'WD_URL, WD_USERNAME, WD_PASSWORD, WD_TENANT as constants.',
+    antiPatterns: 'NEVER use class selectors — GWT-generated. ALWAYS use data-automation-id.',
+  },
+};
+
+/* ── Format details ── */
+const FORMAT_DETAILS = {
+  'playwright-ts': { lang: 'TypeScript', framework: 'Playwright', ext: '.spec.ts',
+    imports: "import { test, expect, Page } from '@playwright/test';" },
+  'playwright-js': { lang: 'JavaScript', framework: 'Playwright', ext: '.spec.js',
+    imports: "const { test, expect } = require('@playwright/test');" },
+  'selenium-java': { lang: 'Java', framework: 'Selenium 4 + TestNG', ext: '.java',
+    imports: "import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.annotations.*;
+import org.testng.Assert;
+import java.time.Duration;" },
+  'selenium-python': { lang: 'Python', framework: 'Selenium 4 + pytest', ext: '_test.py',
+    imports: "import pytest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC" },
+};
+
 function buildPrompt(url, platform, flow, format, context) {
-  const platformContext = {
-    generic:    'a generic web application',
-    amazon:     'Amazon e-commerce (amazon.in / amazon.com) — use stable data-testid and aria selectors where available',
-    flipkart:   'Flipkart e-commerce — use stable class names and aria selectors',
-    d365:       'Microsoft Dynamics 365 Finance & Operations — use MSDyn365 data-testid attributes, form control IDs, and grid selectors typical of D365 F&O',
-    salesforce: 'Salesforce Lightning — use SLDS class selectors, lightning-* component data attributes, and aria-label selectors',
-    sap:        'SAP Web UI — use SAP-specific ID patterns and aria attributes',
-    servicenow: 'ServiceNow — use g_form controls, data-fieldname attributes, and standard ServiceNow selectors',
-    workday:    'Workday — use data-automation-id attributes which are the stable Workday selector pattern',
-  };
+  const pack = DOMAIN_PACKS[platform] || DOMAIN_PACKS.generic;
+  const fd   = FORMAT_DETAILS[format]  || FORMAT_DETAILS['playwright-ts'];
 
-  const formatDetails = {
-    'playwright-ts': { lang: 'TypeScript', framework: 'Playwright', ext: '.spec.ts',
-      imports: `import { test, expect } from '@playwright/test';`,
-      testFn: 'test', describeFn: 'test.describe', beforeFn: 'test.beforeEach' },
-    'playwright-js': { lang: 'JavaScript', framework: 'Playwright', ext: '.spec.js',
-      imports: `const { test, expect } = require('@playwright/test');`,
-      testFn: 'test', describeFn: 'test.describe', beforeFn: 'test.beforeEach' },
-    'selenium-java': { lang: 'Java', framework: 'Selenium + TestNG', ext: '.java',
-      imports: `import org.openqa.selenium.*;\nimport org.openqa.selenium.chrome.ChromeDriver;\nimport org.testng.annotations.*;`,
-      testFn: '@Test', describeFn: '@Test', beforeFn: '@BeforeMethod' },
-    'selenium-python': { lang: 'Python', framework: 'Selenium + pytest', ext: '_test.py',
-      imports: `import pytest\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC`,
-      testFn: 'def test_', describeFn: 'class Test', beforeFn: 'def setup_method' },
-  };
-
-  const fd = formatDetails[format] || formatDetails['playwright-ts'];
-
-  return `You are a Senior QA Automation Engineer generating a production-quality ${fd.framework} (${fd.lang}) test script.
+  return `You are a world-class Senior QA Automation Engineer.
+Generate a production-quality, ready-to-run ${fd.framework} (${fd.lang}) test script.
 
 TARGET APPLICATION
 URL: ${url}
-Platform: ${platformContext[platform] || platformContext.generic}
-Test flow: ${flow || 'General smoke test — login, navigate main features, verify page loads'}
-${context ? `Additional context: ${context}` : ''}
+Platform: ${pack.label}
+Test flow: ${flow || 'General smoke test — navigate to homepage, verify key elements load, check navigation'}
+${context ? 'Additional context: ' + context : ''}
 
-OUTPUT REQUIREMENTS
-- Language: ${fd.lang}
-- Framework: ${fd.framework}
-- File extension: ${fd.ext}
-- Structure: Page Object Model (POM) — separate Page class from test class
-- Selectors: Use data-testid > aria-label > role > ID > CSS class (in that priority order)
-- Assertions: Use specific, meaningful assertions — not just "element exists"
-- Error handling: Add explicit waits, no hardcoded sleep/timeout
-- Self-contained: Each test must be able to run independently
-- Comments: Add step comments explaining what each section verifies
+DOMAIN KNOWLEDGE: ${pack.label.toUpperCase()}
+Known stable selectors:
+${pack.selectors}
 
-SCRIPT STRUCTURE
-1. Imports block (${fd.imports.split('\n')[0]}...)
-2. Page Object class with all selectors as private properties and action methods
-3. Test suite with at minimum:
-   - Happy path test (main flow)
-   - At least one negative/edge case
-   - At least one assertion-heavy verification step
-4. After the script, add a brief comment block: "// COVERAGE SUMMARY" listing which business rules are verified
+Interaction patterns:
+${pack.patterns}
 
-IMPORTANT RULES
-- Never use page.waitForTimeout() or Thread.sleep() — use proper waits
-- All selectors must look realistic for ${platformContext[platform] || 'a web application'}
-- Credentials/test data must use variables or constants at the top, not hardcoded inline
-- Include a beforeEach/setup that handles login if the flow requires it
+Wait strategy: ${pack.waitStrategy}
+Test data: ${pack.testData}
+Anti-patterns to avoid: ${pack.antiPatterns}
 
-Generate ONLY the complete, runnable script. No explanation before or after the code block.`;
+OUTPUT SPECIFICATION
+Language: ${fd.lang} | Framework: ${fd.framework} | File: ${fd.ext}
+Start imports with: ${fd.imports.split('\n')[0]}
+
+REQUIRED STRUCTURE:
+1. Constants block — BASE_URL, credentials, test data at top
+2. Page Object class — selectors as readonly properties, action methods only (no assertions in POM)
+3. Test suite with:
+   a. Happy path — complete the described flow end to end
+   b. Negative test — invalid input, auth failure, or boundary condition
+   c. Verification test — detailed assertions on result state
+4. // COVERAGE SUMMARY comment listing which business rules are tested
+
+HARD RULES:
+- NEVER use page.waitForTimeout() or Thread.sleep() — explicit waits only
+- NEVER hardcode credentials — use constants block
+- NEVER use brittle nth-child on dynamic lists
+- Each test independently runnable — no shared mutable state
+- Add // Step N: comments before each logical action group
+- Use selectors from the domain knowledge section above
+
+Generate ONLY the complete runnable script — no prose explanation before or after.`;
 }
 
 /* ── Main generate function ── */
@@ -1137,11 +1318,18 @@ async function generateScript() {
   const apiKey   = document.getElementById('apiKey')?.value?.trim();
 
   /* Validation */
-  if (!url) { showError('Please enter a target URL.'); return; }
+  if (!url) { showError('Please enter a target URL — e.g. https://www.amazon.in'); return; }
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    showError('URL must start with http:// or https://'); return;
+    showError('URL must start with https:// — e.g. https://www.amazon.in'); return;
   }
-  if (!apiKey) { showError('Please enter your API key for the selected provider.'); return; }
+  if (url.includes('localhost') || url.includes('127.0.0.1')) {
+    showError('Localhost URLs are not accessible from the browser. Deploy your app or use a public URL.'); return;
+  }
+  if (!apiKey) {
+    const providerNames = {claude:'Anthropic (claude.ai/settings)',gemini:'Google AI Studio (aistudio.google.com)',groq:'Groq (console.groq.com)',openai:'OpenAI (platform.openai.com)'};
+    showError(`Please enter your ${providerNames[provider] || 'AI provider'} API key.`); return;
+  }
+  if (apiKey.length < 20) { showError('API key looks too short — please check and re-enter.'); return; }
 
   isGenerating = true;
 
@@ -1182,6 +1370,11 @@ async function generateScript() {
       script = await callGroq(prompt, apiKey);
     } else if (provider === 'openai') {
       script = await callOpenAI(prompt, apiKey);
+    } else if (provider === 'azureopenai') {
+      const endpoint   = document.getElementById('azureEndpoint')?.value?.trim();
+      const deployment = document.getElementById('azureDeployment')?.value?.trim() || 'gpt-4o';
+      if (!endpoint) { throw new Error('Please enter your Azure OpenAI endpoint URL.'); }
+      script = await callAzureOpenAI(prompt, apiKey, endpoint, deployment);
     } else {
       script = await callClaude(prompt, apiKey);
     }
@@ -1200,7 +1393,18 @@ async function generateScript() {
 
   } catch (err) {
     ['step1','step2','step3','step4'].forEach(s => setStep(s, ''));
-    showError(err.message || 'Generation failed. Please check your API key and try again.');
+    const msg = err.message || '';
+    let friendly = msg;
+    if (msg.includes('401') || msg.includes('invalid') || msg.toLowerCase().includes('unauthorized')) {
+      friendly = `API key invalid or expired. Please check your key and try again. (${msg})`;
+    } else if (msg.includes('429')) {
+      friendly = 'Rate limit hit — wait a moment and try again, or switch to a different provider.';
+    } else if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+      friendly = 'Network error — check your internet connection. Some providers also block browser-direct calls; try Claude or Groq.';
+    } else if (!msg) {
+      friendly = 'Generation failed. Please check your API key and internet connection.';
+    }
+    showError(friendly);
   } finally {
     isGenerating = false;
     if (btn)     btn.disabled = false;
@@ -1285,6 +1489,25 @@ async function callOpenAI(prompt, apiKey) {
   if (!resp.ok) {
     const err = await resp.json().catch(() => ({}));
     throw new Error(err?.error?.message || `OpenAI API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+/* ── Azure OpenAI API ── */
+async function callAzureOpenAI(prompt, apiKey, endpoint, deployment) {
+  const url = `${endpoint.replace(/\/$/,'')}/openai/deployments/${deployment}/chat/completions?api-version=2025-01-01-preview`;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'api-key': apiKey },
+    body: JSON.stringify({
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 4096,
+    }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Azure OpenAI error ${resp.status}`);
   }
   const data = await resp.json();
   return data.choices?.[0]?.message?.content || '';
