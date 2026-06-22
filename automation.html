@@ -999,7 +999,7 @@ html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
         autocomplete="off"
       />
       <div style="font-size:11px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace">
-        🔒 Key is used only in your browser session — never stored or logged
+        🔒 Key is used only in your browser session — never stored or logged · Page crawl via Jina Reader (free)
       </div>
     </div>
 
@@ -1017,7 +1017,7 @@ html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
       </div>
       <div class="progress-step" id="step2">
         <div class="progress-dot"></div>
-        Analysing platform &amp; building domain context…
+        Crawling URL &amp; building domain context…
       </div>
       <div class="progress-step" id="step3">
         <div class="progress-dot"></div>
@@ -1034,7 +1034,7 @@ html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
 
     <!-- Deep analysis progress -->
     <div class="deep-progress" id="deepProgress">
-      <div class="progress-step" id="dstep1"><div class="progress-dot"></div>Analysing from BA perspective…</div>
+      <div class="progress-step" id="dstep1"><div class="progress-dot"></div>Crawling URL &amp; analysing from BA perspective…</div>
       <div class="progress-step" id="dstep2"><div class="progress-dot"></div>Analysing from End User perspective…</div>
       <div class="progress-step" id="dstep3"><div class="progress-dot"></div>Analysing from Automation Architect perspective…</div>
       <div class="progress-step" id="dstep4"><div class="progress-dot"></div>Generating test scenarios &amp; cases…</div>
@@ -1559,7 +1559,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC" },
 };
 
-function buildPrompt(url, platform, flow, format, context) {
+function buildPrompt(url, platform, flow, format, context, crawledDOM) {
   const pack = DOMAIN_PACKS[platform] || DOMAIN_PACKS.generic;
   const fd   = FORMAT_DETAILS[format]  || FORMAT_DETAILS['playwright-ts'];
 
@@ -1660,7 +1660,25 @@ async function generateScript() {
       setStep('step3', 'done'); setStep('step4', 'active');
     })();
 
-    const prompt = buildPrompt(url, selectedPlatform, flow, selectedFormat, context);
+    /* ── URL Crawl (Jina Reader — free, no key needed) ── */
+    let crawledDOM = '';
+    try {
+      setStep('step2', 'active');
+      const jinaResp = await fetch(`https://r.jina.ai/${encodeURIComponent(url)}`, {
+        headers: { 'Accept': 'text/plain', 'X-Return-Format': 'markdown', 'X-Timeout': '10' },
+        signal: AbortSignal.timeout(12000)
+      });
+      if (jinaResp.ok) {
+        const jinaText = await jinaResp.text();
+        // Extract useful content — first 3000 chars (selectors, labels, headings)
+        crawledDOM = jinaText.slice(0, 3000);
+      }
+    } catch(crawlErr) {
+      // Crawl failed silently — proceed with domain packs only
+      crawledDOM = '';
+    }
+
+    const prompt = buildPrompt(url, selectedPlatform, flow, selectedFormat, context, crawledDOM);
     let script   = '';
 
     /* Route to correct API */
@@ -1957,7 +1975,7 @@ generateScript = async function() {
 };
 
 /* ── Deep analysis prompt ── */
-function buildDeepPrompt(url, platform, flow, context) {
+function buildDeepPrompt(url, platform, flow, context, crawledDOM) {
   const pack = DOMAIN_PACKS[platform] || DOMAIN_PACKS.generic;
 
   return `You are a world-class Quality Engineering Architect with 20+ years of experience in Enterprise Software Testing, Business Analysis, Product Ownership, User Experience Validation, and Test Automation.
@@ -1971,6 +1989,12 @@ ${context ? 'Additional context: ' + context : ''}
 DOMAIN KNOWLEDGE: ${pack.label}
 ${pack.selectors}
 Wait strategy: ${pack.waitStrategy}
+${crawledDOM ? `
+LIVE PAGE CONTENT (crawled from ${url}):
+Use actual page labels, headings, and element text below for precise selectors:
+---
+${crawledDOM.slice(0, 2000)}
+---` : ''}
 
 Analyse this from THREE perspectives simultaneously and return a structured JSON response ONLY (no prose before or after):
 
@@ -2005,6 +2029,65 @@ Risk | Impact (High/Med/Low) | Probability | Mitigation",
 }
 
 Return ONLY valid JSON. No markdown fences. No explanatory text.`;
+}
+
+/* ── Robust JSON parser — handles Groq/Gemini partial/malformed responses ── */
+function robustParseJSON(raw) {
+  // Strategy 1: Direct parse
+  try { return JSON.parse(raw); } catch {}
+
+  // Strategy 2: Extract largest {...} block
+  const braceMatch = raw.match(/\{[\s\S]*\}/);
+  if (braceMatch) {
+    try { return JSON.parse(braceMatch[0]); } catch {}
+  }
+
+  // Strategy 3: Fix common Groq/Gemini issues
+  // - Trailing commas before } or ]
+  // - Unescaped newlines inside string values
+  // - Single quotes instead of double quotes
+  let cleaned = raw;
+  if (braceMatch) cleaned = braceMatch[0];
+
+  cleaned = cleaned
+    .replace(/,\s*([}\]])/g, '$1')            // remove trailing commas
+    .replace(/\n/g, '\\n')                    // escape raw newlines in strings
+    .replace(/\r/g, '')                         // remove carriage returns
+    .replace(/([{,]\s*)(\w+)(\s*:)/g, '$1"$2"$3'); // unquoted keys → quoted
+
+  try { return JSON.parse(cleaned); } catch {}
+
+  // Strategy 4: Build data object from partial content
+  // If JSON is incomplete, extract what we can
+  const partial = {};
+  const fieldPatterns = [
+    ['ba',        /"ba"\s*:\s*\{([^}]+)\}/s],
+    ['ux',        /"ux"\s*:\s*\{([^}]+)\}/s],
+    ['arch',      /"arch"\s*:\s*\{([^}]+)\}/s],
+    ['scenarios', /"scenarios"\s*:\s*"([^"]+)"/s],
+    ['testcases', /"testcases"\s*:\s*"([^"]+)"/s],
+    ['matrix',    /"matrix"\s*:\s*"([^"]+)"/s],
+    ['code',      /"code"\s*:\s*"((?:[^"\\]|\\.)*)"/s],
+    ['risks',     /"risks"\s*:\s*"([^"]+)"/s],
+    ['summary',   /"summary"\s*:\s*"([^"]+)"/s],
+  ];
+
+  let gotAny = false;
+  for (const [key, pattern] of fieldPatterns) {
+    const m = raw.match(pattern);
+    if (m) { partial[key] = key === 'ba' || key === 'ux' || key === 'arch' ? {} : m[1]; gotAny = true; }
+  }
+  if (gotAny) return partial;
+
+  // Strategy 5: Return structured fallback so UI still renders
+  return {
+    ba:        { objectives: raw.slice(0, 1500), gaps: '— Parse error: see raw below', acceptance: '—', deps: '—' },
+    ux:        { happy: '—', pain: '—', a11y: '—', realworld: '—' },
+    arch:      { roi: '—', api: '—', db: '—', sec: '—' },
+    scenarios: '— Raw AI response could not be parsed as JSON. Raw output:\n\n' + raw.slice(0, 3000),
+    testcases: '—', matrix: '—', code: '// Could not extract code', risks: '—',
+    summary:   'Parse failed — switch to Claude provider for reliable JSON output.',
+  };
 }
 
 /* ── Deep analysis generator ── */
@@ -2068,7 +2151,23 @@ async function generateDeepAnalysis() {
       setStep('dstep4','done');   setStep('dstep5','active');
     })();
 
-    const prompt = buildDeepPrompt(url, selectedPlatform, flow, context);
+    /* ── URL Crawl (Jina Reader) ── */
+    let crawledDOM = '';
+    try {
+      setStep('dstep1', 'active');
+      const jinaResp = await fetch(`https://r.jina.ai/${encodeURIComponent(url)}`, {
+        headers: { 'Accept': 'text/plain', 'X-Return-Format': 'markdown', 'X-Timeout': '10' },
+        signal: AbortSignal.timeout(12000)
+      });
+      if (jinaResp.ok) {
+        const jinaText = await jinaResp.text();
+        crawledDOM = jinaText.slice(0, 3000);
+      }
+    } catch(crawlErr) {
+      crawledDOM = '';
+    }
+
+    const prompt = buildDeepPrompt(url, selectedPlatform, flow, context, crawledDOM);
 
     let raw = '';
     if (provider === 'claude')       raw = await callClaude(prompt, apiKey);
@@ -2087,21 +2186,17 @@ async function generateDeepAnalysis() {
     await progressAnim;
     ['dstep1','dstep2','dstep3','dstep4','dstep5'].forEach(s => setStep(s,'done'));
 
-    // Clean JSON fences
-    raw = raw.replace(/^```json\s*/m,'').replace(/\s*```$/m,'').trim();
+    // ── Robust JSON extraction (handles Groq/Gemini quirks) ──
+    raw = raw
+      .replace(/^```json\s*/m, '')   // strip ```json fence
+      .replace(/^```\s*/m, '')       // strip ``` fence
+      .replace(/\s*```$/m, '')       // strip closing fence
+      .trim();
 
     let data;
-    try {
-      data = JSON.parse(raw);
-    } catch(e) {
-      // Try to extract JSON from response
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (match) {
-        try { data = JSON.parse(match[0]); }
-        catch(e2) { throw new Error('AI returned invalid JSON. Try Claude for best structured output.'); }
-      } else {
-        throw new Error('AI returned invalid JSON. Try Claude for best structured output.');
-      }
+    data = robustParseJSON(raw);
+    if (!data) {
+      throw new Error('AI returned unrecognisable output. Try Claude for best structured output, or check your API key.');
     }
 
     deepReportRaw = raw;
