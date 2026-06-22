@@ -36,6 +36,7 @@ export async function onRequest(context) {
     headers: {
       'Content-Type':                'application/json',
       'Cache-Control':               'no-store',
+      'Vary':                        'Origin',
       'Access-Control-Allow-Origin':  allowed ? (origin || 'https://shuddhiqacloud.vercel.app') : 'https://shuddhiqacloud.vercel.app',
     },
   });
