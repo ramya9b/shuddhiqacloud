@@ -8,12 +8,15 @@ service cloud.firestore {
                          && request.auth.uid == userId;
     }
 
-    // Shareable TC links — public read, any user can create (v9.52)
+    // Shareable TC links — public read, authenticated create only (v9.53 — security hardening)
     match /shares/{shareId} {
-      allow read: if true;                              // public read-only
-      allow create: if request.resource.data.markdown is string
-                    && request.resource.data.markdown.size() < 500000; // 500KB max
-      allow update, delete: if request.auth != null;   // only authenticated can modify
+      allow read: if true;                              // public read-only (by design)
+      allow create: if request.auth != null             // must be signed in
+                    && request.resource.data.markdown is string
+                    && request.resource.data.markdown.size() < 500000  // 500KB max
+                    && request.resource.data.keys().hasOnly(['markdown', 'createdAt', 'platform', 'version']);
+      allow update, delete: if request.auth != null
+                            && request.auth.uid == resource.data.get('uid', null);
     }
 
     // Block all other paths
