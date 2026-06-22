@@ -7,9 +7,12 @@ export async function onRequest(context) {
   const { request: req, env } = context;
 
   const origin  = req.headers.get('origin') || '';
-  const allowed = origin.includes('localhost') || origin.includes('vercel.app')
-                || origin.includes('pages.dev') || origin.includes('workers.dev')
-                || origin === '';
+  const ALLOWED_ORIGINS = [
+    'http://localhost', 'http://127.0.0.1',
+    'https://shuddhiqacloud.vercel.app',
+    'https://shuddhiqacloud.pages.dev',
+  ];
+  const allowed = ALLOWED_ORIGINS.some(o => origin.startsWith(o)) || origin.includes('localhost');
 
   const preferred  = (env.AI_PROVIDER || '').toLowerCase();
   const hasGemini  = !!env.GEMINI_API_KEY;
@@ -33,7 +36,7 @@ export async function onRequest(context) {
     headers: {
       'Content-Type':                'application/json',
       'Cache-Control':               'no-store',
-      'Access-Control-Allow-Origin': allowed ? origin || '*' : '',
+      'Access-Control-Allow-Origin':  allowed ? (origin || 'https://shuddhiqacloud.vercel.app') : 'https://shuddhiqacloud.vercel.app',
     },
   });
 }
