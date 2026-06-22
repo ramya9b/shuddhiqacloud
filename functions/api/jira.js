@@ -18,13 +18,18 @@ export async function onRequest(context) {
   const { request: req, env } = context;
 
   const origin  = req.headers.get('origin') || '';
-  const allowed = origin.includes('localhost') || origin.includes('pages.dev') ||
-                  origin.includes('workers.dev') || origin === '';
+  const ALLOWED_ORIGINS = [
+    'http://localhost', 'http://127.0.0.1',
+    'https://shuddhiqacloud.vercel.app',
+    'https://shuddhiqacloud.pages.dev',
+  ];
+  const allowed = ALLOWED_ORIGINS.some(o => origin.startsWith(o)) || origin.includes('localhost');
 
   const corsHeaders = {
-    'Access-Control-Allow-Origin':  allowed ? (origin || '*') : '',
+    'Access-Control-Allow-Origin':  allowed ? (origin || 'https://shuddhiqacloud.vercel.app') : 'https://shuddhiqacloud.vercel.app',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
+    'Vary': 'Origin',
   };
 
   if (req.method === 'OPTIONS') return new Response(null, { status: 200, headers: corsHeaders });
