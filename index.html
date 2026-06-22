@@ -807,6 +807,7 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
     <a href="#security">Security</a>
     <a href="#faq">FAQ</a>
     <a href="https://github.com/ramya9b/shuddhiqacloud" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="/automation" style="display:inline-flex;align-items:center;gap:5px;font-size:13.5px;color:var(--teall);text-decoration:none;font-weight:600;transition:color .15s">🤖 Script Gen <span style="font-size:9px;background:linear-gradient(135deg,var(--teal),var(--teall));color:#fff;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em">NEW</span></a>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button id="themeToggle" onclick="toggleTheme()"
@@ -857,9 +858,47 @@ html.light a.nav-cta { color: #fff !important; -webkit-text-fill-color: #fff !im
       Generate <strong>production-ready test cases</strong> for ERP systems, web apps, and mobile platforms in seconds — from a flow description or uploaded requirements document.
     </p>
 
-    <div class="hero-actions">
-      <a href="/app" class="btn-primary">Start Generating Free →</a>
-      <a href="#how" class="btn-secondary">See How it Works</a>
+    <!-- Hero product cards — added v12.22 -->
+    <style>
+    .hero-product-card{display:flex;flex-direction:column;align-items:flex-start;width:252px;padding:24px 24px 20px;border-radius:18px;background:var(--surface);border:1px solid var(--border2);text-decoration:none;transition:transform .22s cubic-bezier(.34,1.56,.64,1),border-color .2s ease,box-shadow .2s ease;position:relative;overflow:hidden}
+    .hero-product-card:hover{transform:translateY(-4px)}
+    .hero-product-card:first-child:hover{border-color:var(--saffron);box-shadow:0 12px 40px rgba(232,162,32,.18)}
+    .hero-product-card:last-child:hover{border-color:var(--teal);box-shadow:0 12px 40px rgba(20,184,166,.18)}
+    .hero-product-card:focus-visible{outline:2px solid var(--saffron);outline-offset:3px}
+    .hero-product-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--teal),var(--teall));color:#fff;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;padding:3px 8px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase;line-height:1.4}
+    .hero-product-icon{font-size:26px;margin-bottom:12px;line-height:1}
+    .hero-product-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.2}
+    .hero-product-desc{font-size:12.5px;color:var(--text2);line-height:1.65;margin-bottom:18px;flex:1}
+    .hero-product-cta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:5px;transition:gap .15s ease}
+    .hero-product-card:hover .hero-product-cta{gap:9px}
+    .hero-product-cta--saffron{color:var(--saffronl)}
+    .hero-product-cta--teal{color:var(--teall)}
+    html.light .hero-product-card:first-child:hover{box-shadow:0 12px 40px rgba(180,110,20,.15)}
+    html.light .hero-product-card:last-child:hover{box-shadow:0 12px 40px rgba(13,122,110,.15)}
+    @media(max-width:580px){.hero-product-card{width:100%;max-width:340px}}
+    @media(prefers-reduced-motion:reduce){.hero-product-card{transition:border-color .2s ease,box-shadow .2s ease}.hero-product-card:hover{transform:none}}
+    </style>
+    <div class="hero-actions" style="flex-direction:column;gap:20px;align-items:center">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+        <a href="/app" class="hero-product-card" aria-label="Generate Test Cases">
+          <div class="hero-product-icon">📋</div>
+          <div class="hero-product-title">Generate Test Cases</div>
+          <div class="hero-product-desc">BDD, manual, API, Playwright — from any flow description or FDD. 14 platforms, 9 export formats.</div>
+          <div class="hero-product-cta hero-product-cta--saffron">Start free <span aria-hidden="true">→</span></div>
+        </a>
+        <a href="/automation" class="hero-product-card" aria-label="Generate Automation Scripts">
+          <div class="hero-product-badge">NEW</div>
+          <div class="hero-product-icon">🤖</div>
+          <div class="hero-product-title">Generate Automation Scripts</div>
+          <div class="hero-product-desc">Ready-to-run Playwright &amp; Selenium — from any URL. Web, D365, Salesforce, Amazon, Flipkart &amp; more.</div>
+          <div class="hero-product-cta hero-product-cta--teal">Try now <span aria-hidden="true">→</span></div>
+        </a>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center">
+        <a href="#how" style="font-size:13px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:.3px;transition:color .15s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'">See how it works ↓</a>
+        <span style="color:var(--border2);font-size:11px">·</span>
+        <span style="font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace">Free · No sign-up · 6 AI providers</span>
+      </div>
     </div>
 
     <div class="hero-stats">
@@ -1977,6 +2016,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeMobileDraw
       <a href="#how"       class="mobile-drawer-link" onclick="closeMobileDrawer()">⚡ How it Works</a>
       <a href="#security"  class="mobile-drawer-link" onclick="closeMobileDrawer()">🔒 Security</a>
           <a href="#faq" class="mobile-drawer-link" onclick="closeMobileDrawer()">❓ FAQ</a>
+      <a href="/automation" class="mobile-drawer-link" onclick="closeMobileDrawer()" style="color:var(--teall);border-color:rgba(20,184,166,.2)">🤖 Script Generator <span style="margin-left:auto;font-size:9px;background:linear-gradient(135deg,var(--teal),var(--teall));color:#fff;padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace">NEW</span></a>
     </div>
     <a href="/app" class="mobile-drawer-cta" onclick="closeMobileDrawer()">Get Started →</a>
   </div>
