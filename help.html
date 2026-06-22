@@ -197,7 +197,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <li>Name it <code>Shuddhi QA</code> and add the description: <em>"AI test case generator for 14 enterprise platforms"</em></li>
     <li>In the agent's <strong>Knowledge / Actions</strong> panel, click <strong>Add → MCP server</strong></li>
     <li>Paste this URL: <code style="font-size:13px">https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp</code></li>
-    <li>Authentication: <strong>None</strong> (v0.1)</li>
+    <li>Authentication: <strong>API Key</strong> (v0.2 — recommended)<br/>
+              Add header: <code>Authorization: Bearer YOUR_MCP_TOKEN</code><br/>
+              <span style="color:var(--text3);font-size:12px">
+                Note: v0.1 (no auth) is still supported for local/private use.
+                For production/enterprise use, contact the admin to enable API key auth.
+              </span></li>
     <li>Click <strong>Test</strong> — Copilot Studio should discover all 5 tools</li>
     <li><strong>Publish</strong> and invoke from any Copilot surface: <code>@Shuddhi-QA generate D365 vendor invoice test cases</code></li>
   </ol>
@@ -216,6 +221,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         "type": "streamable-http",
         "url": "https://shuddhiqa-mcp.ramya9-b.workers.dev/mcp"
       }
+      // Optional: add API key for authenticated access
+      // "headers": { "Authorization": "Bearer YOUR_MCP_TOKEN" }
     }
   }
 }</code></pre>
