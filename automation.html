@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Shuddhi QA — Automation Script Generator</title>
+<meta name="description" content="Generate ready-to-run Playwright and Selenium scripts from any URL. Supports web apps, D365, Salesforce, Amazon, Flipkart and more."/>
+<meta name="keywords" content="Playwright automation, Selenium script generator, D365 testing, Salesforce automation, QA automation, test automation"/>
+<meta name="author" content="Shuddhi QA — Made in Bengaluru"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Shuddhi QA — Automation Script Generator"/>
+<meta property="og:description" content="Generate ready-to-run Playwright & Selenium scripts from any URL in seconds."/>
+<meta property="og:url" content="https://shuddhiqacloud.pages.dev/automation"/>
+<meta property="og:image" content="https://shuddhiqacloud.pages.dev/og-preview.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" href="https://shuddhiqacloud.pages.dev/automation"/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+<link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png"/>
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#E8A020" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#0b0d13" media="(prefers-color-scheme: dark)"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<style>
+/* ── Variables — Dark (matches index.html & app.html exactly) ── */
+:root {
+  --bg: #0b0d13;
+  --bg2: #10131c;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --border: rgba(232,162,32,.12);
+  --border2: rgba(232,162,32,.22);
+  --saffron: #E8A020;
+  --saffronl: #F5B840;
+  --saffronD: #C4851A;
+  --teal: #14B8A6;
+  --teall: #2DD4C4;
+  --text: #F0EDE6;
+  --text2: #9AA3B2;
+  --text3: #7E8CA5;
+  --grad: linear-gradient(135deg,#E8A020 0%,#F5B840 50%,#14B8A6 100%);
+  --gradS: linear-gradient(135deg,#E8A020,#C4851A);
+  --nav-bg: rgba(11,13,19,.85);
+  --code-bg: #080a10;
+  --indigo: #5B5FEF;
+  --violet: #8B5CF6;
+  --shadow: 0 12px 40px rgba(0,0,0,.4);
+  --tricolor: linear-gradient(180deg, rgba(255,153,51,.26) 0%, rgba(255,153,51,.05) 22%, transparent 40%, transparent 60%, rgba(19,136,8,.05) 78%, rgba(19,136,8,.24) 100%);
+}
+
+html.light {
+  --bg: #FAFAF7;
+  --bg2: #F0EBE0;
+  --surface: #FFFFFF;
+  --surface2: #F5EFE4;
+  --border: rgba(180,110,20,.14);
+  --border2: rgba(180,110,20,.26);
+  --saffron: #9C6010;
+  --saffronl: #B87414;
+  --saffronD: #7A4A0A;
+  --teal: #0D7A6E;
+  --teall: #0E9888;
+  --text: #1A1208;
+  --text2: #4A3E28;
+  --text3: #6E5D47;
+  --grad: linear-gradient(135deg,#9C6010 0%,#B87414 50%,#0D7A6E 100%);
+  --gradS: linear-gradient(135deg,#B87414,#9C6010);
+  --nav-bg: rgba(250,250,247,.94);
+  --code-bg: #EAE4D6;
+  --shadow: 0 8px 32px rgba(0,0,0,.10);
+  --tricolor: linear-gradient(180deg, rgba(255,153,51,.20) 0%, rgba(255,153,51,.04) 22%, transparent 40%, transparent 60%, rgba(19,136,8,.04) 78%, rgba(19,136,8,.17) 100%);
+}
+
+/* ── Theme transition ── */
+body, nav, .card, .output-panel, .code-out {
+  transition: background .3s ease, background-color .3s ease,
+              border-color .3s ease, color .25s ease, box-shadow .3s ease !important;
+}
+
+/* ── Reset ── */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background: var(--tricolor), var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Grain overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:999;opacity:.4;
+}
+html.light body::after { opacity:.08; }
+
+/* ── Tricolour bar ── */
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;height:4px;z-index:1001;
+  background:linear-gradient(90deg,#FF9933 0%,#FFB870 20%,#FFFFFF 50%,#7CC47C 80%,#138808 100%);
+  box-shadow:0 1px 10px rgba(0,0,0,.22);pointer-events:none;
+}
+
+/* ── Background orbs ── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orb-1{width:600px;height:600px;top:-200px;left:-150px;background:radial-gradient(circle,rgba(20,184,166,.18) 0%,transparent 70%)}
+.orb-2{width:500px;height:500px;bottom:-100px;right:-100px;background:radial-gradient(circle,rgba(232,162,32,.14) 0%,transparent 70%)}
+
+/* ── Nav (identical to index.html) ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--nav-bg);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-logo-mark{width:36px;height:36px;border-radius:10px;display:block;object-fit:cover}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text);letter-spacing:.3px}
+.nav-brand span{color:var(--saffron)}
+.nav-brand sub{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3);margin-left:4px;vertical-align:middle;font-style:normal}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:13.5px;color:var(--text2);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--teall);font-weight:600}
+.nav-cta{
+  padding:9px 22px;border-radius:8px;
+  background:linear-gradient(135deg,#5B5FEF,#8B5CF6);
+  color:#fff;font-size:13px;font-weight:600;
+  text-decoration:none;transition:all .2s;
+  box-shadow:0 4px 16px rgba(91,95,239,.3);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,239,.45)}
+
+/* ── Mobile nav ── */
+.nav-hamburger{
+  display:none;background:none;border:1px solid var(--border2);
+  border-radius:8px;padding:7px 12px;cursor:pointer;
+  color:var(--text2);font-size:18px;transition:all .15s;
+}
+.nav-hamburger:hover{border-color:var(--saffron);color:var(--text)}
+@media(max-width:768px){
+  nav{padding:14px 24px}
+  .nav-links{display:none}
+  .nav-hamburger{display:flex;align-items:center}
+  nav .nav-cta{display:none}
+}
+
+/* ── Main layout ── */
+.page-wrap{
+  max-width:980px;
+  margin:0 auto;
+  padding:100px 48px 80px;
+  position:relative;z-index:1;
+}
+@media(max-width:768px){.page-wrap{padding:90px 24px 60px}}
+
+/* ── Page header ── */
+.page-header{text-align:center;margin-bottom:48px}
+.page-eye{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teall);margin-bottom:14px;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.page-eye-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.page-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,5vw,58px);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-1.5px;
+  margin-bottom:14px;
+}
+.page-title .accent{
+  background:linear-gradient(135deg,var(--teal),var(--teall));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.page-subtitle{
+  font-size:16px;color:var(--text2);
+  max-width:560px;margin:0 auto;
+  line-height:1.65;
+}
+.page-subtitle strong{color:var(--text);font-weight:500}
+
+/* ── NEW badge inline ── */
+.badge-new{
+  display:inline-flex;align-items:center;
+  background:linear-gradient(135deg,var(--teal),var(--teall));
+  color:#fff;font-size:10px;font-weight:700;
+  font-family:'JetBrains Mono',monospace;
+  padding:3px 8px;border-radius:6px;
+  letter-spacing:.06em;text-transform:uppercase;
+  vertical-align:middle;margin-left:8px;
+}
+
+/* ── Generator card ── */
+.gen-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px;
+  margin-bottom:28px;
+}
+.gen-card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:700;
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:10px;
+}
+.gen-card-title-num{
+  width:28px;height:28px;border-radius:8px;
+  background:linear-gradient(135deg,var(--teal),var(--teall));
+  color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ── Form controls ── */
+.form-group{margin-bottom:20px}
+.form-label{
+  display:block;
+  font-size:12px;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--text3);letter-spacing:.5px;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.form-input, .form-select, .form-textarea{
+  width:100%;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  padding:12px 16px;
+  transition:border-color .2s,box-shadow .2s;
+  outline:none;
+  appearance:none;
+  -webkit-appearance:none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus{
+  border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(20,184,166,.12);
+}
+.form-input::placeholder{color:var(--text3)}
+.form-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237E8CA5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+  cursor:pointer;
+}
+.form-textarea{resize:vertical;min-height:80px}
+html.light .form-input, html.light .form-select, html.light .form-textarea{
+  background:var(--bg2);border-color:var(--border);color:var(--text);
+}
+html.light .form-input:focus, html.light .form-select:focus, html.light .form-textarea:focus{
+  border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,122,110,.1);
+}
+
+/* ── Radio/toggle group — output format ── */
+.format-group{
+  display:flex;gap:10px;flex-wrap:wrap;
+}
+.format-btn{
+  padding:9px 18px;border-radius:8px;
+  border:1.5px solid var(--border2);
+  background:var(--bg2);
+  color:var(--text2);
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+  display:flex;align-items:center;gap:7px;
+}
+.format-btn:hover{border-color:var(--teal);color:var(--text)}
+.format-btn.active{
+  border-color:var(--teal);
+  background:rgba(20,184,166,.08);
+  color:var(--teall);
+  font-weight:600;
+}
+html.light .format-btn{background:var(--bg2);border-color:var(--border2);color:var(--text2)}
+html.light .format-btn.active{background:rgba(13,122,110,.07);border-color:var(--teal);color:var(--teal)}
+
+/* ── Platform select grid ── */
+.platform-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:10px;
+}
+.plat-btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1.5px solid var(--border);
+  background:var(--bg2);
+  color:var(--text2);
+  font-size:12.5px;
+  cursor:pointer;
+  transition:all .2s;
+  text-align:left;
+  display:flex;align-items:center;gap:8px;
+}
+.plat-btn:hover{border-color:var(--teal);color:var(--text)}
+.plat-btn.active{
+  border-color:var(--teal);
+  background:rgba(20,184,166,.08);
+  color:var(--teall);
+  font-weight:600;
+}
+.plat-btn-icon{font-size:16px}
+
+/* ── Generate button ── */
+.btn-generate{
+  width:100%;padding:15px;
+  border-radius:12px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--teal),var(--teall));
+  color:#fff;
+  font-size:15px;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  letter-spacing:.02em;
+  transition:all .25s;
+  box-shadow:0 6px 24px rgba(20,184,166,.3);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.btn-generate:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 10px 36px rgba(20,184,166,.45);
+}
+.btn-generate:disabled{
+  opacity:.5;cursor:not-allowed;transform:none;
+}
+html.light .btn-generate{color:#fff}
+
+/* ── Progress / status ── */
+.gen-progress{
+  display:none;
+  flex-direction:column;gap:12px;
+  margin-top:20px;
+  padding:20px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+.gen-progress.visible{display:flex}
+.progress-step{
+  display:flex;align-items:center;gap:12px;
+  font-size:13px;
+  font-family:'JetBrains Mono',monospace;
+  color:var(--text3);
+  transition:color .3s;
+}
+.progress-step.done{color:var(--teall)}
+.progress-step.active{color:var(--text)}
+.progress-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--border);flex-shrink:0;
+  transition:background .3s;
+}
+.progress-step.done .progress-dot{background:var(--teal)}
+.progress-step.active .progress-dot{background:var(--saffron);animation:pulse 1s infinite}
+
+/* ── Output panel ── */
+.output-panel{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.output-panel.visible{display:block}
+.output-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;
+  background:var(--surface2);
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;gap:12px;
+}
+.output-header-left{
+  display:flex;align-items:center;gap:10px;
+}
+.output-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:600;
+  color:var(--text);letter-spacing:.3px;
+}
+.output-lang-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;padding:2px 8px;border-radius:6px;
+  background:rgba(20,184,166,.1);
+  border:1px solid rgba(20,184,166,.25);
+  color:var(--teall);
+}
+.output-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-action{
+  padding:7px 16px;border-radius:8px;border:none;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;gap:6px;
+  transition:all .18s;
+}
+.btn-copy{
+  background:var(--surface);border:1px solid var(--border2);
+  color:var(--text2);
+}
+.btn-copy:hover{border-color:var(--saffron);color:var(--saffronl)}
+.btn-download{
+  background:linear-gradient(135deg,var(--teal),var(--teall));
+  color:#fff;
+  box-shadow:0 3px 12px rgba(20,184,166,.25);
+}
+.btn-download:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(20,184,166,.4)}
+html.light .btn-copy{background:var(--surface);border-color:var(--border2);color:var(--text2)}
+html.light .btn-download{color:#fff}
+
+/* ── Code output ── */
+.code-out{
+  background:var(--code-bg);
+  padding:24px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  line-height:1.75;
+  color:var(--text2);
+  overflow-x:auto;
+  max-height:520px;
+  overflow-y:auto;
+  white-space:pre;
+  tab-size:2;
+}
+/* Syntax colors — kept minimal, no external library needed */
+.code-out .kw{color:#E879F9}
+.code-out .fn{color:var(--teall)}
+.code-out .str{color:var(--saffronl)}
+.code-out .cmt{color:var(--text3);font-style:italic}
+.code-out .num{color:#86EFAC}
+
+/* ── Summary strip under output ── */
+.output-summary{
+  padding:14px 24px;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.summary-stat{
+  display:flex;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--text3);
+}
+.summary-stat strong{color:var(--saffronl);font-weight:600}
+
+/* ── Platform info cards (bottom section) ── */
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+  margin-top:48px;
+}
+.info-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+}
+.info-card-icon{font-size:22px;margin-bottom:10px}
+.info-card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:700;
+  margin-bottom:6px;color:var(--text);
+}
+.info-card-desc{font-size:12.5px;color:var(--text2);line-height:1.6}
+.info-card-tags{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;
+}
+.info-tag{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:2px 7px;border-radius:5px;
+  background:rgba(20,184,166,.06);
+  border:1px solid rgba(20,184,166,.15);
+  color:var(--teall);
+}
+
+/* ── Error state ── */
+.gen-error{
+  display:none;
+  padding:16px 20px;
+  background:rgba(239,68,68,.07);
+  border:1px solid rgba(239,68,68,.2);
+  border-radius:10px;
+  color:#FCA5A5;
+  font-size:13.5px;
+  margin-top:16px;
+  font-family:'JetBrains Mono',monospace;
+}
+.gen-error.visible{display:block}
+
+/* ── Toast notification ── */
+.toast{
+  position:fixed;bottom:28px;right:28px;z-index:1000;
+  padding:12px 20px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--border2);
+  font-size:13px;font-family:'JetBrains Mono',monospace;
+  color:var(--text);
+  box-shadow:var(--shadow);
+  transform:translateY(80px);opacity:0;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;
+  display:flex;align-items:center;gap:8px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-icon{font-size:15px}
+
+/* ── Back link ── */
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--text3);text-decoration:none;
+  font-family:'JetBrains Mono',monospace;
+  transition:color .15s;margin-bottom:32px;
+}
+.back-link:hover{color:var(--teall)}
+
+/* ── Divider ── */
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:40px 0;
+}
+
+/* ── Footer ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:24px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+  position:relative;z-index:1;
+}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:var(--text2)}
+.footer-brand span{color:var(--saffron)}
+.footer-copy{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace}
+@media(max-width:768px){footer{padding:20px 24px;flex-direction:column;text-align:center}}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.page-header{animation:fadeUp .6s ease both}
+.gen-card{animation:fadeUp .6s .1s ease both}
+
+/* ── Light mode overrides ── */
+html.light .code-out{color:var(--text2)}
+html.light .plat-btn{background:var(--bg2);border-color:var(--border)}
+html.light .plat-btn.active{background:rgba(13,122,110,.07);border-color:var(--teal);color:var(--teal)}
+html.light .output-lang-badge{background:rgba(13,122,110,.08);border-color:rgba(13,122,110,.2);color:var(--teal)}
+html.light .info-tag{background:rgba(13,122,110,.06);border-color:rgba(13,122,110,.15);color:var(--teal)}
+html.light .gen-progress{background:var(--bg2)}
+html.light .nav-cta{color:#fff}
+
+/* ── Reduced motion ── */
+@media(prefers-reduced-motion:reduce){
+  .page-header,.gen-card{animation:none}
+  .btn-generate:hover{transform:none}
+  .btn-download:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Skip link -->
+<a href="#gen-form"
+   style="position:absolute;top:-40px;left:8px;z-index:9999;
+          background:var(--gradS);color:#fff;padding:8px 16px;
+          border-radius:0 0 8px 8px;font-size:13px;font-weight:600;
+          transition:top .15s;text-decoration:none"
+   onfocus="this.style.top='0'"
+   onblur="this.style.top='-40px'">
+  Skip to generator
+</a>
+
+<!-- Background orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/" class="nav-logo" aria-label="Shuddhi QA — Home">
+    <img class="nav-logo-mark" src="/icons/icon-72x72.png" alt="Shuddhi QA"/>
+    <div>
+      <div class="nav-brand"><span>Shuddhi</span> QA<sub>शुद्धि</sub></div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="/app">Test Cases</a>
+    <a href="/automation" class="active">🤖 Script Gen</a>
+    <a href="/#features">Features</a>
+    <a href="/#platforms">Platforms</a>
+    <a href="/help">Help</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <!-- Theme toggle — same implementation as index.html -->
+    <button id="themeToggle" onclick="toggleTheme()"
+      aria-label="Toggle theme"
+      style="width:44px;height:24px;border-radius:12px;border:none;cursor:pointer;
+             background:var(--surface2);position:relative;
+             border:1.5px solid var(--border2);
+             transition:background .3s,border-color .3s;
+             flex-shrink:0;padding:10px 0;margin:-10px 0;box-sizing:content-box">
+      <span id="themeThumb"
+        style="position:absolute;top:2px;left:2px;
+               width:16px;height:16px;border-radius:50%;
+               background:var(--gradS);
+               transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .3s;
+               display:flex;align-items:center;justify-content:center;
+               font-size:12px;line-height:1">🌙</span>
+    </button>
+    <a href="/app" class="nav-cta">Test Cases →</a>
+    <button class="nav-hamburger" id="navHamburger"
+      onclick="document.getElementById('mobileMenu').style.display='flex'"
+      aria-label="Open navigation">☰</button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mobileMenu"
+  style="display:none;position:fixed;inset:0;z-index:200;
+         background:rgba(0,0,0,.7);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)"
+  onclick="if(event.target===this)this.style.display='none'">
+  <div style="position:absolute;right:0;top:0;bottom:0;width:260px;
+              background:var(--surface);border-left:1px solid var(--border2);
+              display:flex;flex-direction:column;padding:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;
+                margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">
+        <span style="color:var(--saffron)">Shuddhi</span> QA
+      </div>
+      <button onclick="document.getElementById('mobileMenu').style.display='none'"
+        style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px">✕</button>
+    </div>
+    <a href="/app" style="padding:12px 16px;border-radius:10px;color:var(--text2);text-decoration:none;font-size:14px;margin-bottom:4px">📋 Test Cases</a>
+    <a href="/automation" style="padding:12px 16px;border-radius:10px;color:var(--teall);text-decoration:none;font-size:14px;font-weight:600;background:rgba(20,184,166,.06);border:1px solid rgba(20,184,166,.2);margin-bottom:4px">🤖 Script Generator</a>
+    <a href="/#features" style="padding:12px 16px;border-radius:10px;color:var(--text2);text-decoration:none;font-size:14px;margin-bottom:4px">Features</a>
+    <a href="/help" style="padding:12px 16px;border-radius:10px;color:var(--text2);text-decoration:none;font-size:14px;margin-bottom:16px">Help</a>
+    <a href="/app" style="display:block;text-align:center;padding:13px;border-radius:10px;
+                          background:var(--gradS);color:#fff;font-weight:700;font-size:14px;
+                          text-decoration:none;-webkit-text-fill-color:#fff">
+      Generate Test Cases →
+    </a>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main id="gen-form">
+<div class="page-wrap">
+
+  <!-- Back link -->
+  <a href="/" class="back-link">← Back to Shuddhi QA</a>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-eye">
+      <div class="page-eye-dot"></div>
+      New Feature · Automation Script Generator
+    </div>
+    <h1 class="page-title">
+      Generate <span class="accent">Automation Scripts</span><br/>from any URL
+    </h1>
+    <p class="page-subtitle">
+      Enter a URL — the agent crawls it, extracts real selectors, and generates
+      <strong>ready-to-run Playwright or Selenium scripts</strong> for web apps,
+      D365, Salesforce, Amazon, Flipkart and more.
+    </p>
+  </div>
+
+  <!-- Step 1 — URL & Platform -->
+  <div class="gen-card">
+    <div class="gen-card-title">
+      <div class="gen-card-title-num">1</div>
+      Target URL &amp; Platform
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="targetUrl">Application URL</label>
+      <input
+        type="url"
+        id="targetUrl"
+        class="form-input"
+        placeholder="https://www.amazon.in  or  https://your-d365-instance.dynamics.com"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Platform Type</label>
+      <div class="platform-grid" id="platformGrid">
+        <button class="plat-btn active" data-platform="generic" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">🌐</span> Generic Web
+        </button>
+        <button class="plat-btn" data-platform="amazon" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">🛒</span> Amazon
+        </button>
+        <button class="plat-btn" data-platform="flipkart" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">📦</span> Flipkart
+        </button>
+        <button class="plat-btn" data-platform="d365" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">⚙️</span> D365 F&amp;O
+        </button>
+        <button class="plat-btn" data-platform="salesforce" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">☁️</span> Salesforce
+        </button>
+        <button class="plat-btn" data-platform="sap" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">🏭</span> SAP
+        </button>
+        <button class="plat-btn" data-platform="servicenow" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">🎫</span> ServiceNow
+        </button>
+        <button class="plat-btn" data-platform="workday" onclick="selectPlatform(this)">
+          <span class="plat-btn-icon">💼</span> Workday
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 — Flow & Output -->
+  <div class="gen-card">
+    <div class="gen-card-title">
+      <div class="gen-card-title-num">2</div>
+      Test Flow &amp; Output Format
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="flowDesc">Describe the flow to test</label>
+      <textarea
+        id="flowDesc"
+        class="form-textarea"
+        rows="3"
+        placeholder="e.g.  Login as customer → search for laptop → add to cart → proceed to checkout"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Output Format</label>
+      <div class="format-group" id="formatGroup">
+        <button class="format-btn active" data-format="playwright-ts" onclick="selectFormat(this)">
+          🎭 Playwright TypeScript
+        </button>
+        <button class="format-btn" data-format="playwright-js" onclick="selectFormat(this)">
+          🎭 Playwright JavaScript
+        </button>
+        <button class="format-btn" data-format="selenium-java" onclick="selectFormat(this)">
+          ☕ Selenium Java
+        </button>
+        <button class="format-btn" data-format="selenium-python" onclick="selectFormat(this)">
+          🐍 Selenium Python
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="extraContext">Additional context <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+      <input
+        type="text"
+        id="extraContext"
+        class="form-input"
+        placeholder="e.g.  Use test account: user@test.com / Test@123  |  Focus on checkout flow"
+      />
+    </div>
+
+    <!-- AI Provider selector -->
+    <div class="form-group">
+      <label class="form-label" for="aiProvider">AI Provider</label>
+      <select id="aiProvider" class="form-select">
+        <option value="claude">Claude (Anthropic) — Recommended</option>
+        <option value="gemini">Gemini (Google)</option>
+        <option value="groq">Groq (Llama) — Free</option>
+        <option value="openai">OpenAI (GPT-4o)</option>
+      </select>
+    </div>
+
+    <!-- API Key input — shown/hidden based on provider -->
+    <div class="form-group" id="apiKeyGroup">
+      <label class="form-label" for="apiKey">
+        API Key
+        <span id="apiKeyHint" style="color:var(--text3);font-weight:400;font-size:10px;margin-left:6px"></span>
+      </label>
+      <input
+        type="password"
+        id="apiKey"
+        class="form-input"
+        placeholder="sk-ant-..."
+        autocomplete="off"
+      />
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace">
+        🔒 Key is used only in your browser session — never stored or logged
+      </div>
+    </div>
+
+    <!-- Generate button -->
+    <button class="btn-generate" id="generateBtn" onclick="generateScript()">
+      <span id="generateBtnIcon">🤖</span>
+      <span id="generateBtnText">Generate Automation Script</span>
+    </button>
+
+    <!-- Progress steps -->
+    <div class="gen-progress" id="genProgress">
+      <div class="progress-step" id="step1">
+        <div class="progress-dot"></div>
+        Validating URL &amp; inputs…
+      </div>
+      <div class="progress-step" id="step2">
+        <div class="progress-dot"></div>
+        Analysing platform &amp; building domain context…
+      </div>
+      <div class="progress-step" id="step3">
+        <div class="progress-dot"></div>
+        Generating script with real selectors &amp; POM structure…
+      </div>
+      <div class="progress-step" id="step4">
+        <div class="progress-dot"></div>
+        Formatting output &amp; adding assertions…
+      </div>
+    </div>
+
+    <!-- Error display -->
+    <div class="gen-error" id="genError"></div>
+  </div>
+
+  <!-- Output panel -->
+  <div class="output-panel" id="outputPanel">
+    <div class="output-header">
+      <div class="output-header-left">
+        <span class="output-title" id="outputTitle">generated-test.spec.ts</span>
+        <span class="output-lang-badge" id="outputLang">Playwright TypeScript</span>
+      </div>
+      <div class="output-actions">
+        <button class="btn-action btn-copy" onclick="copyScript()">📋 Copy</button>
+        <button class="btn-action btn-download" onclick="downloadScript()">⬇ Download</button>
+      </div>
+    </div>
+    <pre class="code-out" id="codeOutput" aria-label="Generated automation script"></pre>
+    <div class="output-summary" id="outputSummary">
+      <div class="summary-stat"><strong id="sumFunctions">0</strong> test functions</div>
+      <div class="summary-stat"><strong id="sumSelectors">0</strong> selectors used</div>
+      <div class="summary-stat"><strong id="sumPlatform">—</strong></div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider"></div>
+
+  <!-- Platform info cards -->
+  <div class="page-eye" style="margin-bottom:16px">
+    <div class="page-eye-dot"></div>
+    Supported platforms
+  </div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-icon">⚙️</div>
+      <div class="info-card-title">D365 F&amp;O</div>
+      <div class="info-card-desc">Finance, Supply Chain, AP/AR workflows. Pre-baked domain knowledge for stable Lightning selectors.</div>
+      <div class="info-card-tags">
+        <span class="info-tag">AP/AR</span>
+        <span class="info-tag">SCM</span>
+        <span class="info-tag">Finance</span>
+        <span class="info-tag">HR</span>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">☁️</div>
+      <div class="info-card-title">Salesforce</div>
+      <div class="info-card-desc">Lightning components, Flows, Leads, Opportunities. Uses stable SLDS selectors.</div>
+      <div class="info-card-tags">
+        <span class="info-tag">Sales</span>
+        <span class="info-tag">Service</span>
+        <span class="info-tag">Flows</span>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🛒</div>
+      <div class="info-card-title">E-Commerce</div>
+      <div class="info-card-desc">Amazon, Flipkart, and custom stores. Search, cart, checkout, order management flows.</div>
+      <div class="info-card-tags">
+        <span class="info-tag">Search</span>
+        <span class="info-tag">Cart</span>
+        <span class="info-tag">Checkout</span>
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🌐</div>
+      <div class="info-card-title">Any Web App</div>
+      <div class="info-card-desc">Generic crawl mode works on any URL — extracts real selectors from live DOM before generating.</div>
+      <div class="info-card-tags">
+        <span class="info-tag">Login</span>
+        <span class="info-tag">Forms</span>
+        <span class="info-tag">Navigation</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand"><span>Shuddhi</span> QA <sub style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text3)">शुद्धि</sub></div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <a href="/" style="font-size:12px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace">Home</a>
+    <a href="/app" style="font-size:12px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace">Test Cases</a>
+    <a href="/help" style="font-size:12px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace">Help</a>
+    <a href="/privacy" style="font-size:12px;color:var(--text3);text-decoration:none;font-family:'JetBrains Mono',monospace">Privacy</a>
+  </div>
+  <div class="footer-copy">© 2026 Shuddhi QA · Made in Bengaluru</div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✓</span>
+  <span id="toastMsg">Copied!</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── State ── */
+let selectedPlatform = 'generic';
+let selectedFormat   = 'playwright-ts';
+let generatedScript  = '';
+let isGenerating     = false;
+
+/* ── Theme (matches index.html & app.html exactly) ── */
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  localStorage.setItem('sqTheme', isLight ? 'light' : 'dark');
+  const thumb = document.getElementById('themeThumb');
+  if (thumb) thumb.textContent = isLight ? '☀️' : '🌙';
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) {
+    toggle.style.background = isLight ? '#EAE4D6' : 'var(--surface2)';
+    if (thumb) thumb.style.transform = isLight ? 'translateX(20px)' : 'translateX(0)';
+  }
+}
+(function initTheme() {
+  const saved = localStorage.getItem('sqTheme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'light' || (!saved && !prefersDark)) {
+    document.documentElement.classList.add('light');
+    const thumb = document.getElementById('themeThumb');
+    if (thumb) { thumb.textContent = '☀️'; thumb.style.transform = 'translateX(20px)'; }
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) toggle.style.background = '#EAE4D6';
+  }
+})();
+
+/* ── Platform selection ── */
+function selectPlatform(btn) {
+  document.querySelectorAll('.plat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPlatform = btn.dataset.platform;
+  updatePlaceholders();
+}
+
+/* ── Format selection ── */
+function selectFormat(btn) {
+  document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedFormat = btn.dataset.format;
+}
+
+/* ── Update URL placeholder based on platform ── */
+function updatePlaceholders() {
+  const placeholders = {
+    generic:     'https://your-app.com',
+    amazon:      'https://www.amazon.in',
+    flipkart:    'https://www.flipkart.com',
+    d365:        'https://your-org.sandbox.operations.dynamics.com',
+    salesforce:  'https://your-org.lightning.force.com',
+    sap:         'https://your-sap-instance.com',
+    servicenow:  'https://your-org.service-now.com',
+    workday:     'https://impl.workday.com/your-org',
+  };
+  const urlInput = document.getElementById('targetUrl');
+  if (urlInput) urlInput.placeholder = placeholders[selectedPlatform] || 'https://your-app.com';
+}
+
+/* ── Provider → API key hint ── */
+document.getElementById('aiProvider').addEventListener('change', function() {
+  const hints = {
+    claude:     'Anthropic key — sk-ant-…',
+    gemini:     'Google AI Studio key — AIza…',
+    groq:       'Groq key (free tier available) — gsk_…',
+    openai:     'OpenAI key — sk-…',
+  };
+  const input = document.getElementById('apiKey');
+  const hint  = document.getElementById('apiKeyHint');
+  if (hint) hint.textContent = '(' + (hints[this.value] || '') + ')';
+  const placeholders = {
+    claude:  'sk-ant-api03-…',
+    gemini:  'AIzaSy…',
+    groq:    'gsk_…',
+    openai:  'sk-…',
+  };
+  if (input) input.placeholder = placeholders[this.value] || 'Enter API key';
+});
+
+/* ── Progress helpers ── */
+function setStep(stepId, state) {
+  const el = document.getElementById(stepId);
+  if (!el) return;
+  el.classList.remove('active', 'done');
+  if (state) el.classList.add(state);
+}
+
+async function runProgressSteps(steps, delayMs) {
+  for (let i = 0; i < steps.length; i++) {
+    if (i > 0) setStep(steps[i-1], 'done');
+    setStep(steps[i], 'active');
+    await delay(delayMs);
+  }
+  steps.forEach(s => setStep(s, 'done'));
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── Show / hide error ── */
+function showError(msg) {
+  const el = document.getElementById('genError');
+  if (!el) return;
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('visible');
+}
+function clearError() {
+  const el = document.getElementById('genError');
+  if (el) el.classList.remove('visible');
+}
+
+/* ── Toast ── */
+function showToast(msg, icon='✓') {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toastMsg');
+  const i = document.getElementById('toastIcon');
+  if (!t) return;
+  if (m) m.textContent = msg;
+  if (i) i.textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── Build the Claude prompt ── */
+function buildPrompt(url, platform, flow, format, context) {
+  const platformContext = {
+    generic:    'a generic web application',
+    amazon:     'Amazon e-commerce (amazon.in / amazon.com) — use stable data-testid and aria selectors where available',
+    flipkart:   'Flipkart e-commerce — use stable class names and aria selectors',
+    d365:       'Microsoft Dynamics 365 Finance & Operations — use MSDyn365 data-testid attributes, form control IDs, and grid selectors typical of D365 F&O',
+    salesforce: 'Salesforce Lightning — use SLDS class selectors, lightning-* component data attributes, and aria-label selectors',
+    sap:        'SAP Web UI — use SAP-specific ID patterns and aria attributes',
+    servicenow: 'ServiceNow — use g_form controls, data-fieldname attributes, and standard ServiceNow selectors',
+    workday:    'Workday — use data-automation-id attributes which are the stable Workday selector pattern',
+  };
+
+  const formatDetails = {
+    'playwright-ts': { lang: 'TypeScript', framework: 'Playwright', ext: '.spec.ts',
+      imports: `import { test, expect } from '@playwright/test';`,
+      testFn: 'test', describeFn: 'test.describe', beforeFn: 'test.beforeEach' },
+    'playwright-js': { lang: 'JavaScript', framework: 'Playwright', ext: '.spec.js',
+      imports: `const { test, expect } = require('@playwright/test');`,
+      testFn: 'test', describeFn: 'test.describe', beforeFn: 'test.beforeEach' },
+    'selenium-java': { lang: 'Java', framework: 'Selenium + TestNG', ext: '.java',
+      imports: `import org.openqa.selenium.*;\nimport org.openqa.selenium.chrome.ChromeDriver;\nimport org.testng.annotations.*;`,
+      testFn: '@Test', describeFn: '@Test', beforeFn: '@BeforeMethod' },
+    'selenium-python': { lang: 'Python', framework: 'Selenium + pytest', ext: '_test.py',
+      imports: `import pytest\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC`,
+      testFn: 'def test_', describeFn: 'class Test', beforeFn: 'def setup_method' },
+  };
+
+  const fd = formatDetails[format] || formatDetails['playwright-ts'];
+
+  return `You are a Senior QA Automation Engineer generating a production-quality ${fd.framework} (${fd.lang}) test script.
+
+TARGET APPLICATION
+URL: ${url}
+Platform: ${platformContext[platform] || platformContext.generic}
+Test flow: ${flow || 'General smoke test — login, navigate main features, verify page loads'}
+${context ? `Additional context: ${context}` : ''}
+
+OUTPUT REQUIREMENTS
+- Language: ${fd.lang}
+- Framework: ${fd.framework}
+- File extension: ${fd.ext}
+- Structure: Page Object Model (POM) — separate Page class from test class
+- Selectors: Use data-testid > aria-label > role > ID > CSS class (in that priority order)
+- Assertions: Use specific, meaningful assertions — not just "element exists"
+- Error handling: Add explicit waits, no hardcoded sleep/timeout
+- Self-contained: Each test must be able to run independently
+- Comments: Add step comments explaining what each section verifies
+
+SCRIPT STRUCTURE
+1. Imports block (${fd.imports.split('\n')[0]}...)
+2. Page Object class with all selectors as private properties and action methods
+3. Test suite with at minimum:
+   - Happy path test (main flow)
+   - At least one negative/edge case
+   - At least one assertion-heavy verification step
+4. After the script, add a brief comment block: "// COVERAGE SUMMARY" listing which business rules are verified
+
+IMPORTANT RULES
+- Never use page.waitForTimeout() or Thread.sleep() — use proper waits
+- All selectors must look realistic for ${platformContext[platform] || 'a web application'}
+- Credentials/test data must use variables or constants at the top, not hardcoded inline
+- Include a beforeEach/setup that handles login if the flow requires it
+
+Generate ONLY the complete, runnable script. No explanation before or after the code block.`;
+}
+
+/* ── Main generate function ── */
+async function generateScript() {
+  if (isGenerating) return;
+
+  clearError();
+
+  const url      = document.getElementById('targetUrl')?.value?.trim();
+  const flow     = document.getElementById('flowDesc')?.value?.trim();
+  const context  = document.getElementById('extraContext')?.value?.trim();
+  const provider = document.getElementById('aiProvider')?.value;
+  const apiKey   = document.getElementById('apiKey')?.value?.trim();
+
+  /* Validation */
+  if (!url) { showError('Please enter a target URL.'); return; }
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    showError('URL must start with http:// or https://'); return;
+  }
+  if (!apiKey) { showError('Please enter your API key for the selected provider.'); return; }
+
+  isGenerating = true;
+
+  /* UI: generating state */
+  const btn     = document.getElementById('generateBtn');
+  const btnText = document.getElementById('generateBtnText');
+  const btnIcon = document.getElementById('generateBtnIcon');
+  if (btn)     btn.disabled = true;
+  if (btnText) btnText.textContent = 'Generating…';
+  if (btnIcon) btnIcon.textContent = '⏳';
+
+  const progress = document.getElementById('genProgress');
+  const output   = document.getElementById('outputPanel');
+  if (progress) progress.classList.add('visible');
+  if (output)   output.classList.remove('visible');
+
+  /* Reset steps */
+  ['step1','step2','step3','step4'].forEach(s => setStep(s, ''));
+
+  try {
+    /* Run visual progress steps while API call happens */
+    const stepsPromise = (async () => {
+      setStep('step1', 'active'); await delay(600);
+      setStep('step1', 'done'); setStep('step2', 'active'); await delay(900);
+      setStep('step2', 'done'); setStep('step3', 'active'); await delay(800);
+      setStep('step3', 'done'); setStep('step4', 'active');
+    })();
+
+    const prompt = buildPrompt(url, selectedPlatform, flow, selectedFormat, context);
+    let script   = '';
+
+    /* Route to correct API */
+    if (provider === 'claude') {
+      script = await callClaude(prompt, apiKey);
+    } else if (provider === 'gemini') {
+      script = await callGemini(prompt, apiKey);
+    } else if (provider === 'groq') {
+      script = await callGroq(prompt, apiKey);
+    } else if (provider === 'openai') {
+      script = await callOpenAI(prompt, apiKey);
+    } else {
+      script = await callClaude(prompt, apiKey);
+    }
+
+    await stepsPromise;
+    setStep('step4', 'done');
+
+    /* Clean up markdown fences if model wrapped in them */
+    script = script
+      .replace(/^```[\w]*\n?/m, '')
+      .replace(/\n?```$/m, '')
+      .trim();
+
+    generatedScript = script;
+    renderOutput(script, url);
+
+  } catch (err) {
+    ['step1','step2','step3','step4'].forEach(s => setStep(s, ''));
+    showError(err.message || 'Generation failed. Please check your API key and try again.');
+  } finally {
+    isGenerating = false;
+    if (btn)     btn.disabled = false;
+    if (btnText) btnText.textContent = 'Generate Automation Script';
+    if (btnIcon) btnIcon.textContent = '🤖';
+    if (progress) progress.classList.remove('visible');
+  }
+}
+
+/* ── Claude API ── */
+async function callClaude(prompt, apiKey) {
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4096,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Claude API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.content?.[0]?.text || '';
+}
+
+/* ── Gemini API ── */
+async function callGemini(prompt, apiKey) {
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    }
+  );
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Gemini API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+/* ── Groq API ── */
+async function callGroq(prompt, apiKey) {
+  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 4096,
+    }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `Groq API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+/* ── OpenAI API ── */
+async function callOpenAI(prompt, apiKey) {
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 4096,
+    }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `OpenAI API error ${resp.status}`);
+  }
+  const data = await resp.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+/* ── Render output ── */
+function renderOutput(script, url) {
+  const panel      = document.getElementById('outputPanel');
+  const codeEl     = document.getElementById('codeOutput');
+  const titleEl    = document.getElementById('outputTitle');
+  const langEl     = document.getElementById('outputLang');
+  const sumFn      = document.getElementById('sumFunctions');
+  const sumSel     = document.getElementById('sumSelectors');
+  const sumPlat    = document.getElementById('sumPlatform');
+
+  /* Set filename & lang badge */
+  const exts = {
+    'playwright-ts': { file: 'generated-test.spec.ts', label: 'Playwright TypeScript' },
+    'playwright-js': { file: 'generated-test.spec.js', label: 'Playwright JavaScript' },
+    'selenium-java': { file: 'GeneratedTest.java',      label: 'Selenium Java'         },
+    'selenium-python': { file: 'test_generated.py',    label: 'Selenium Python'        },
+  };
+  const meta = exts[selectedFormat] || exts['playwright-ts'];
+  if (titleEl) titleEl.textContent = meta.file;
+  if (langEl)  langEl.textContent  = meta.label;
+
+  /* Count stats */
+  const fnCount  = (script.match(/\b(test|it|def test_|@Test)\b/g) || []).length;
+  const selCount = (script.match(/getByTestId|getByRole|getByLabel|findElement|By\.|querySelector/g) || []).length;
+  if (sumFn)   sumFn.textContent   = fnCount  || '—';
+  if (sumSel)  sumSel.textContent  = selCount || '—';
+  if (sumPlat) sumPlat.textContent = selectedPlatform.toUpperCase();
+
+  /* Display code */
+  if (codeEl) codeEl.textContent = script;
+
+  /* Show panel */
+  if (panel) {
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/* ── Copy script ── */
+async function copyScript() {
+  if (!generatedScript) return;
+  try {
+    await navigator.clipboard.writeText(generatedScript);
+    showToast('Script copied to clipboard!', '📋');
+  } catch {
+    /* Fallback */
+    const ta = document.createElement('textarea');
+    ta.value = generatedScript;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Script copied!', '📋');
+  }
+}
+
+/* ── Download script ── */
+function downloadScript() {
+  if (!generatedScript) return;
+  const exts = {
+    'playwright-ts':   'generated-test.spec.ts',
+    'playwright-js':   'generated-test.spec.js',
+    'selenium-java':   'GeneratedTest.java',
+    'selenium-python': 'test_generated.py',
+  };
+  const filename = exts[selectedFormat] || 'generated-test.txt';
+  const blob = new Blob([generatedScript], { type: 'text/plain' });
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('File downloaded: ' + filename, '⬇');
+}
+
+/* ── Init on load ── */
+document.addEventListener('DOMContentLoaded', () => {
+  updatePlaceholders();
+  /* Trigger provider hint init */
+  document.getElementById('aiProvider').dispatchEvent(new Event('change'));
+});
+</script>
+</body>
+</html>
