@@ -738,6 +738,190 @@ html.light .mode-btn.active{box-shadow:0 2px 8px rgba(0,0,0,.10)}
 }
 html.light .deep-code{color:var(--text2)}
 html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
+/* ── Fix Loop Panel ─────────────────────────────────────── */
+.fix-panel{
+  display:none;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.fix-panel.visible{display:block}
+.fix-panel-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;background:var(--surface2);
+  border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;
+}
+.fix-panel-title{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  font-weight:600;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.fix-cycle-badge{
+  font-size:10px;padding:2px 8px;border-radius:6px;
+  background:rgba(232,162,32,.12);border:1px solid rgba(232,162,32,.2);
+  color:var(--saffronl);font-family:'JetBrains Mono',monospace;
+  font-weight:700;letter-spacing:.04em;
+}
+.fix-tabs{
+  display:flex;gap:0;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+}
+.fix-tab{
+  padding:10px 20px;border:none;background:transparent;
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  font-weight:600;letter-spacing:.3px;color:var(--text3);
+  cursor:pointer;border-bottom:2px solid transparent;
+  transition:all .15s;
+}
+.fix-tab:hover{color:var(--text)}
+.fix-tab.active{color:var(--saffronl);border-bottom-color:var(--saffron)}
+.fix-pane{display:none;padding:24px}
+.fix-pane.active{display:block}
+
+/* Error input */
+.error-input-wrap{position:relative;margin-bottom:16px}
+.error-textarea{
+  width:100%;min-height:120px;resize:vertical;
+  background:var(--code-bg);border:1px solid var(--border2);
+  border-radius:10px;padding:14px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text2);line-height:1.65;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.error-textarea:focus{
+  border-color:var(--saffron);
+  box-shadow:0 0 0 3px rgba(232,162,32,.1);
+}
+.error-textarea::placeholder{color:var(--text3)}
+
+/* Fix result */
+.fix-result{
+  background:var(--code-bg);border-radius:10px;padding:20px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  line-height:1.7;color:var(--text2);
+  overflow-x:auto;white-space:pre;max-height:440px;overflow-y:auto;
+}
+.fix-explanation{
+  padding:16px;background:rgba(232,162,32,.06);
+  border:1px solid rgba(232,162,32,.15);border-radius:10px;
+  font-size:13px;color:var(--text2);line-height:1.7;
+  margin-bottom:16px;
+}
+.fix-explanation strong{color:var(--saffronl)}
+
+/* Fix progress */
+.fix-progress{
+  display:none;flex-direction:column;gap:10px;
+  padding:16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;
+  margin-bottom:16px;
+}
+.fix-progress.visible{display:flex}
+
+/* Cycle history */
+.cycle-history{display:flex;flex-direction:column;gap:12px}
+.cycle-item{
+  padding:14px 16px;border-radius:10px;
+  border:1px solid var(--border);background:var(--bg2);
+}
+.cycle-item-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;
+}
+.cycle-item-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  font-weight:600;color:var(--text3);
+}
+.cycle-item-status{
+  font-size:10px;font-family:'JetBrains Mono',monospace;
+  padding:2px 8px;border-radius:5px;font-weight:600;
+}
+.status-fixed{background:rgba(20,184,166,.1);color:var(--teall);border:1px solid rgba(20,184,166,.2)}
+.status-failed{background:rgba(239,68,68,.08);color:#FCA5A5;border:1px solid rgba(239,68,68,.2)}
+.status-pending{background:rgba(232,162,32,.1);color:var(--saffronl);border:1px solid rgba(232,162,32,.2)}
+.cycle-item-summary{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+/* GitHub connect */
+.github-connect-wrap{
+  display:flex;flex-direction:column;gap:16px;
+}
+.github-step{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:16px;border-radius:12px;
+  background:var(--bg2);border:1px solid var(--border);
+}
+.github-step-num{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--saffron),var(--saffronl));
+  color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.github-step-content{flex:1}
+.github-step-title{
+  font-size:13.5px;font-weight:600;color:var(--text);
+  margin-bottom:5px;
+}
+.github-step-desc{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+/* CI Status */
+.ci-status-wrap{
+  padding:16px;border-radius:12px;
+  border:1px solid var(--border);background:var(--bg2);
+}
+.ci-status-row{
+  display:flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  color:var(--text2);margin-bottom:8px;
+}
+.ci-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:var(--border);transition:background .3s;
+}
+.ci-dot.running{background:var(--saffron);animation:pulse 1s infinite}
+.ci-dot.passed{background:var(--teal)}
+.ci-dot.failed{background:#EF4444}
+
+/* Btn variants */
+.btn-fix{
+  width:100%;padding:13px;border-radius:10px;border:none;
+  cursor:pointer;background:linear-gradient(135deg,var(--saffron),var(--saffronl));
+  color:#fff;font-size:14px;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  transition:all .22s;box-shadow:0 4px 18px rgba(232,162,32,.28);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-fix:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,162,32,.4)}
+.btn-fix:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-gh{
+  width:100%;padding:13px;border-radius:10px;border:none;
+  cursor:pointer;background:#24292e;color:#fff;
+  font-size:14px;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  transition:all .22s;box-shadow:0 4px 18px rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-gh:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+html.light .btn-fix{color:#fff}
+
+/* Max cycles warning */
+.max-cycles-warn{
+  padding:14px 18px;border-radius:10px;
+  background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);
+  font-size:13px;color:#FCA5A5;margin-top:12px;
+  font-family:'JetBrains Mono',monospace;display:none;
+}
+.max-cycles-warn.visible{display:block}
+
+@media(max-width:600px){
+  .fix-pane{padding:16px 14px}
+  .fix-tab{padding:9px 12px;font-size:10px}
+  .github-step{flex-direction:column;gap:8px}
+}
+
 </style>
 </head>
 <body>
@@ -1187,6 +1371,148 @@ html.light .deep-table tr:hover td{background:rgba(13,122,110,.04)}
 
   </div><!-- /deep-panel -->
 
+  <!-- ── Fix Loop Panel (Option A + C) ── -->
+  <div class="fix-panel" id="fixPanel">
+    <div class="fix-panel-header">
+      <div class="fix-panel-title">
+        🔧 Script Fix Agent
+        <span class="fix-cycle-badge" id="fixCycleBadge">Cycle 0 / 3</span>
+      </div>
+      <div class="output-actions">
+        <button class="btn-action btn-copy" onclick="copyFixedScript()">📋 Copy Fixed</button>
+        <button class="btn-action btn-download" onclick="downloadFixedScript()">⬇ Download</button>
+      </div>
+    </div>
+
+    <!-- Fix tabs -->
+    <div class="fix-tabs">
+      <button class="fix-tab active" data-fpane="fpane-local" onclick="switchFixTab(this)">🖥 Option A — Paste Error</button>
+      <button class="fix-tab" data-fpane="fpane-github" onclick="switchFixTab(this)">🐙 Option C — GitHub CI</button>
+      <button class="fix-tab" data-fpane="fpane-history" onclick="switchFixTab(this)">📜 Fix History</button>
+    </div>
+
+    <!-- Option A — Paste error pane -->
+    <div class="fix-pane active" id="fpane-local">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">
+        Run the downloaded script locally, then paste any error output below.
+        The agent will analyse the failure, fix selectors/waits, and explain what changed.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label" for="errorPasteInput">Paste error output here</label>
+        <textarea
+          id="errorPasteInput"
+          class="error-textarea"
+          placeholder="Paste your Playwright / Selenium error here e.g:&#10;&#10;Error: locator.click: Timeout 30000ms exceeded&#10;  waiting for getByTestId('add-to-cart')&#10;  =========================== logs ===========================&#10;  waiting for selector [data-testid='add-to-cart']"
+        ></textarea>
+      </div>
+
+      <div class="fix-progress" id="fixProgress">
+        <div class="progress-step" id="fstep1"><div class="progress-dot"></div>Analysing error type and root cause…</div>
+        <div class="progress-step" id="fstep2"><div class="progress-dot"></div>Identifying broken selectors and timing issues…</div>
+        <div class="progress-step" id="fstep3"><div class="progress-dot"></div>Applying targeted fix using domain knowledge…</div>
+        <div class="progress-step" id="fstep4"><div class="progress-dot"></div>Generating fix explanation and updated script…</div>
+      </div>
+
+      <div class="gen-error" id="fixError" style="margin-bottom:12px"></div>
+
+      <button class="btn-fix" id="fixBtn" onclick="runFixCycle()">
+        <span id="fixBtnIcon">🔧</span>
+        <span id="fixBtnText">Fix Script</span>
+      </button>
+
+      <div class="max-cycles-warn" id="maxCyclesWarn">
+        ⚠ Maximum 3 fix cycles reached. If the script still fails, try regenerating with a more specific flow description, or switch to Claude provider for best results.
+      </div>
+
+      <!-- Fix result -->
+      <div id="fixResultWrap" style="display:none;margin-top:20px">
+        <div class="fix-explanation" id="fixExplanation"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);font-weight:600">FIXED SCRIPT</span>
+          <div style="display:flex;gap:8px">
+            <button class="btn-action btn-copy" onclick="copyFixedScript()" style="font-size:11px;padding:5px 12px">📋 Copy</button>
+            <button class="btn-action btn-download" onclick="downloadFixedScript()" style="font-size:11px;padding:5px 12px">⬇ Download</button>
+          </div>
+        </div>
+        <pre class="fix-result" id="fixedCodeOutput"></pre>
+      </div>
+    </div>
+
+    <!-- Option C — GitHub CI pane -->
+    <div class="fix-pane" id="fpane-github">
+      <div class="github-connect-wrap">
+
+        <div class="github-step">
+          <div class="github-step-num">1</div>
+          <div class="github-step-content">
+            <div class="github-step-title">Connect your GitHub repository</div>
+            <div class="github-step-desc">Enter your repo details and a Personal Access Token with <code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--bg2);padding:1px 5px;border-radius:4px">repo + actions</code> scope.</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <input type="text" id="ghRepo" class="form-input" placeholder="owner/repo-name  e.g.  ramya9b/my-playwright-tests"/>
+              <input type="text" id="ghBranch" class="form-input" placeholder="Branch  e.g.  main" value="main"/>
+              <input type="password" id="ghToken" class="form-input" placeholder="GitHub PAT — ghp_…" autocomplete="off"/>
+              <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace">
+                🔒 Token used only in your browser session — never stored
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="github-step">
+          <div class="github-step-num">2</div>
+          <div class="github-step-content">
+            <div class="github-step-title">Push script &amp; trigger GitHub Actions</div>
+            <div class="github-step-desc">ShuddhiQA will push the generated script to your repo and trigger a Playwright Actions workflow. If one doesn't exist, we'll create it automatically.</div>
+            <button class="btn-gh" id="ghRunBtn" onclick="runGitHubCI()" style="margin-top:12px">
+              <span>🐙</span>
+              <span id="ghRunBtnText">Push &amp; Run in GitHub Actions</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="github-step" id="ghStep3" style="display:none">
+          <div class="github-step-num">3</div>
+          <div class="github-step-content">
+            <div class="github-step-title">Live CI status</div>
+            <div class="ci-status-wrap" id="ciStatusWrap">
+              <div class="ci-status-row"><div class="ci-dot" id="ciDot1"></div><span id="ciStatus1">Waiting for workflow to start…</span></div>
+              <div class="ci-status-row"><div class="ci-dot" id="ciDot2"></div><span id="ciStatus2">—</span></div>
+              <div class="ci-status-row"><div class="ci-dot" id="ciDot3"></div><span id="ciStatus3">—</span></div>
+            </div>
+            <div style="margin-top:12px">
+              <a id="ghActionsLink" href="#" target="_blank" rel="noopener"
+                style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--teall);text-decoration:none">
+                View in GitHub Actions →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="ghFixResultWrap" style="display:none">
+          <div class="fix-explanation" id="ghFixExplanation"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);font-weight:600">CI-FIXED SCRIPT</span>
+            <button class="btn-action btn-download" onclick="downloadFixedScript()" style="font-size:11px;padding:5px 12px">⬇ Download</button>
+          </div>
+          <pre class="fix-result" id="ghFixedCodeOutput"></pre>
+        </div>
+
+        <div class="gen-error" id="ghError"></div>
+      </div>
+    </div>
+
+    <!-- Fix History pane -->
+    <div class="fix-pane" id="fpane-history">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">All fix cycles for the current script.</p>
+      <div class="cycle-history" id="cycleHistoryList">
+        <div style="font-size:13px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-align:center;padding:24px">
+          No fix cycles yet — run the script and paste any errors.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /fix-panel -->
 
   <!-- Divider -->
   <div class="divider"></div>
@@ -1544,19 +1870,9 @@ const FORMAT_DETAILS = {
   'playwright-js': { lang: 'JavaScript', framework: 'Playwright', ext: '.spec.js',
     imports: "const { test, expect } = require('@playwright/test');" },
   'selenium-java': { lang: 'Java', framework: 'Selenium 4 + TestNG', ext: '.java',
-    imports: "import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.annotations.*;
-import org.testng.Assert;
-import java.time.Duration;" },
+    imports: "import org.openqa.selenium.*;\nimport org.openqa.selenium.chrome.ChromeDriver;\nimport org.openqa.selenium.support.ui.WebDriverWait;\nimport org.openqa.selenium.support.ui.ExpectedConditions;\nimport org.testng.annotations.*;\nimport org.testng.Assert;\nimport java.time.Duration;" },
   'selenium-python': { lang: 'Python', framework: 'Selenium 4 + pytest', ext: '_test.py',
-    imports: "import pytest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC" },
+    imports: "import pytest\nfrom selenium import webdriver\nfrom selenium.webdriver.common.by import By\nfrom selenium.webdriver.support.ui import WebDriverWait\nfrom selenium.webdriver.support import expected_conditions as EC" },
 };
 
 function buildPrompt(url, platform, flow, format, context, crawledDOM) {
@@ -2081,12 +2397,12 @@ function robustParseJSON(raw) {
 
   // Strategy 5: Return structured fallback so UI still renders
   return {
-    ba:        { objectives: raw.slice(0, 1500), gaps: '— Parse error: see raw below', acceptance: '—', deps: '—' },
-    ux:        { happy: '—', pain: '—', a11y: '—', realworld: '—' },
-    arch:      { roi: '—', api: '—', db: '—', sec: '—' },
-    scenarios: '— Raw AI response could not be parsed as JSON. Raw output:\n\n' + raw.slice(0, 3000),
-    testcases: '—', matrix: '—', code: '// Could not extract code', risks: '—',
-    summary:   'Parse failed — switch to Claude provider for reliable JSON output.',
+    ba:        { objectives: raw.slice(0, 1500), gaps: "Parse error: see raw below", acceptance: "N/A", deps: "N/A" },
+    ux:        { happy: "N/A", pain: "N/A", a11y: "N/A", realworld: "N/A" },
+    arch:      { roi: "N/A", api: "N/A", db: "N/A", sec: "N/A" },
+    scenarios: "Raw AI response could not be parsed. Raw output:\n\n" + raw.slice(0, 3000),
+    testcases: "N/A", matrix: "N/A", code: "// Could not extract code", risks: "N/A",
+    summary:   "Parse failed - switch to Claude provider for reliable JSON output.",
   };
 }
 
@@ -2201,6 +2517,14 @@ async function generateDeepAnalysis() {
 
     deepReportRaw = raw;
     renderDeepPanel(data, url, platform);
+    // Wire fix panel to code output from deep analysis
+    if (data.code) {
+      generatedScript = data.code;
+      fixedScript = '';
+      fixCycleCount = 0;
+      resetFixPanel();
+      showFixPanel();
+    }
 
   } catch(err) {
     ['dstep1','dstep2','dstep3','dstep4','dstep5'].forEach(s => setStep(s,''));
@@ -2294,8 +2618,7 @@ function renderTextOrTable(id, text) {
   if (!text) { el.textContent = '—'; return; }
 
   // Check if it looks like a pipe table
-  const lines = text.trim().split('
-').filter(l => l.trim());
+  const lines = text.trim().split('\n').filter(l => l.trim());
   const hasPipes = lines.filter(l => l.includes('|')).length >= 3;
 
   if (hasPipes) {
@@ -2390,6 +2713,713 @@ function downloadDeepReport() {
   a.click();
   URL.revokeObjectURL(a.href);
   showToast('Report downloaded!', '⬇');
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   FIX LOOP ENGINE — Option A (paste-back) + Option C (GitHub CI)
+   ══════════════════════════════════════════════════════════ */
+
+let fixCycleCount  = 0;
+const MAX_CYCLES   = 3;
+let fixedScript    = '';
+let isFixing       = false;
+let ciPollInterval = null;
+
+/* ── Show fix panel after script is generated ── */
+function showFixPanel() {
+  const panel = document.getElementById('fixPanel');
+  if (!panel) return;
+  panel.classList.add('visible');
+  updateCycleBadge();
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function updateCycleBadge() {
+  const badge = document.getElementById('fixCycleBadge');
+  if (badge) badge.textContent = 'Cycle ' + fixCycleCount + ' / ' + MAX_CYCLES;
+}
+
+/* ── Fix tab switch ── */
+function switchFixTab(btn) {
+  document.querySelectorAll('.fix-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.fix-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const pane = document.getElementById(btn.dataset.fpane);
+  if (pane) pane.classList.add('active');
+}
+
+/* ── Build fix prompt ── */
+function buildFixPrompt(originalScript, errorOutput, cycleNum) {
+  const pack = DOMAIN_PACKS[selectedPlatform] || DOMAIN_PACKS.generic;
+  const fd   = FORMAT_DETAILS[selectedFormat]  || FORMAT_DETAILS['playwright-ts'];
+
+  return `You are a world-class QA Automation Engineer debugging a failing ${fd.framework} (${fd.lang}) test script.
+
+ORIGINAL SCRIPT (Cycle ${cycleNum} fix attempt):
+\`\`\`
+${originalScript.slice(0, 3000)}
+\`\`\`
+
+ERROR OUTPUT FROM TEST RUN:
+\`\`\`
+${errorOutput.slice(0, 2000)}
+\`\`\`
+
+PLATFORM DOMAIN KNOWLEDGE:
+Platform: ${pack.label}
+Stable selectors: ${pack.selectors}
+Wait strategy: ${pack.waitStrategy}
+Anti-patterns to avoid: ${pack.antiPatterns}
+
+DIAGNOSIS RULES:
+1. If error contains "Timeout" or "waiting for selector" — the selector is wrong or element takes too long to appear. Fix selector using domain knowledge above. Add explicit waitForSelector.
+2. If error contains "strict mode violation" or "multiple elements" — selector is too broad. Add more specific attribute or nth filter.
+3. If error contains "Element is not visible" or "not attached to DOM" — add waitForLoadState or wait for spinner to disappear first.
+4. If error contains "net::ERR" or "Navigation" — add retry logic or increase navigation timeout.
+5. If error contains "expected" and "received" — assertion value is wrong. Fix the assertion to match actual page text/value.
+6. If error contains "Cannot read properties" or "undefined" — a variable or selector returned null. Add null check or fix the selector.
+
+Return a JSON object with exactly these two fields:
+{
+  "explanation": "2-3 sentence explanation of root cause and what was changed. Be specific: name the broken selector, what it was changed to, and why.",
+  "fixedScript": "The complete fixed ${fd.lang} script — full file, not a diff. Production-ready."
+}
+
+Return ONLY valid JSON. No markdown fences. No prose outside the JSON.`;
+}
+
+/* ── Option A: Run fix cycle ── */
+async function runFixCycle() {
+  if (isFixing) return;
+
+  const errorText = document.getElementById('errorPasteInput')?.value?.trim();
+  if (!errorText) {
+    showFixError('Please paste your error output first.', 'fixError');
+    return;
+  }
+
+  const currentScript = fixedScript || generatedScript;
+  if (!currentScript) {
+    showFixError('No script to fix — generate a script first.', 'fixError');
+    return;
+  }
+
+  if (fixCycleCount >= MAX_CYCLES) {
+    document.getElementById('maxCyclesWarn')?.classList.add('visible');
+    return;
+  }
+
+  const apiKey  = document.getElementById('apiKey')?.value?.trim();
+  const provider = document.getElementById('aiProvider')?.value;
+  if (!apiKey) { showFixError('Please enter your API key above.', 'fixError'); return; }
+
+  isFixing = true;
+  fixCycleCount++;
+  updateCycleBadge();
+
+  const btn     = document.getElementById('fixBtn');
+  const btnText = document.getElementById('fixBtnText');
+  const btnIcon = document.getElementById('fixBtnIcon');
+  if (btn)     btn.disabled = true;
+  if (btnText) btnText.textContent = 'Fixing…';
+  if (btnIcon) btnIcon.textContent = '⏳';
+
+  const prog = document.getElementById('fixProgress');
+  if (prog) prog.classList.add('visible');
+  clearFixError('fixError');
+
+  // Hide previous result
+  const resultWrap = document.getElementById('fixResultWrap');
+  if (resultWrap) resultWrap.style.display = 'none';
+
+  // Reset progress steps
+  ['fstep1','fstep2','fstep3','fstep4'].forEach(s => setStep(s, ''));
+
+  // Add to history immediately as pending
+  const historyId = 'cycle-' + fixCycleCount;
+  addCycleToHistory(fixCycleCount, 'pending', errorText, '');
+
+  try {
+    const prompt = buildFixPrompt(currentScript, errorText, fixCycleCount);
+
+    // Visual progress
+    const progressAnim = (async () => {
+      setStep('fstep1','active'); await delay(600);
+      setStep('fstep1','done'); setStep('fstep2','active'); await delay(700);
+      setStep('fstep2','done'); setStep('fstep3','active'); await delay(800);
+      setStep('fstep3','done'); setStep('fstep4','active');
+    })();
+
+    // Call AI
+    let raw = '';
+    if (provider === 'claude')           raw = await callClaude(prompt, apiKey);
+    else if (provider === 'gemini')      raw = await callGemini(prompt, apiKey);
+    else if (provider === 'groq')        raw = await callGroq(prompt, apiKey);
+    else if (provider === 'openai')      raw = await callOpenAI(prompt, apiKey);
+    else if (provider === 'azureopenai') {
+      const endpoint   = document.getElementById('azureEndpoint')?.value?.trim();
+      const deployment = document.getElementById('azureDeployment')?.value?.trim() || 'gpt-4o';
+      if (!endpoint) throw new Error('Azure OpenAI endpoint required.');
+      raw = await callAzureOpenAI(prompt, apiKey, endpoint, deployment);
+    } else {
+      raw = await callClaude(prompt, apiKey);
+    }
+
+    await progressAnim;
+    ['fstep1','fstep2','fstep3','fstep4'].forEach(s => setStep(s, 'done'));
+
+    // Parse response
+    const data = robustParseJSON(
+      raw.replace(/^```json\s*/m,'').replace(/\s*```$/m,'').trim()
+    );
+
+    if (!data || (!data.fixedScript && !data.explanation)) {
+      throw new Error('AI returned unrecognisable fix. Try Claude provider for best results.');
+    }
+
+    const explanation  = data.explanation  || 'Fix applied — see updated script below.';
+    const fixed        = data.fixedScript  || raw;
+
+    fixedScript = fixed;
+
+    // Render result
+    const explEl = document.getElementById('fixExplanation');
+    if (explEl) explEl.innerHTML = '<strong>🔍 What was fixed:</strong> ' + explanation;
+
+    const codeEl = document.getElementById('fixedCodeOutput');
+    if (codeEl) codeEl.textContent = fixed;
+
+    if (resultWrap) resultWrap.style.display = 'block';
+
+    // Update history
+    updateCycleHistory(historyId, 'fixed', explanation);
+
+    // Clear error input for next cycle
+    const errInput = document.getElementById('errorPasteInput');
+    if (errInput) errInput.value = '';
+
+    // Show max cycles warning if reached
+    if (fixCycleCount >= MAX_CYCLES) {
+      document.getElementById('maxCyclesWarn')?.classList.add('visible');
+    }
+
+    showToast('Cycle ' + fixCycleCount + ' fix applied — check the updated script', '🔧');
+
+  } catch(err) {
+    ['fstep1','fstep2','fstep3','fstep4'].forEach(s => setStep(s, ''));
+    fixCycleCount--; // rollback cycle count on failure
+    updateCycleBadge();
+    updateCycleHistory(historyId, 'failed', err.message || 'Fix failed');
+    const msg = err.message || '';
+    let friendly = msg;
+    if (msg.includes('401') || msg.includes('unauthorized')) friendly = 'API key invalid. ' + msg;
+    else if (msg.includes('429')) friendly = 'Rate limit hit — wait a moment and retry.';
+    showFixError(friendly, 'fixError');
+  } finally {
+    isFixing = false;
+    if (btn)     btn.disabled = false;
+    if (btnText) btnText.textContent = 'Fix Script';
+    if (btnIcon) btnIcon.textContent = '🔧';
+    if (prog)    prog.classList.remove('visible');
+  }
+}
+
+/* ── Fix history helpers ── */
+function addCycleToHistory(num, status, errorSnippet, explanation) {
+  const list = document.getElementById('cycleHistoryList');
+  if (!list) return;
+
+  // Remove empty state message
+  if (list.querySelector('div[style*="text-align:center"]')) list.innerHTML = '';
+
+  const item = document.createElement('div');
+  item.className = 'cycle-item';
+  item.id = 'cycle-' + num;
+  item.innerHTML = `
+    <div class="cycle-item-header">
+      <span class="cycle-item-title">Cycle ${num} of ${MAX_CYCLES}</span>
+      <span class="cycle-item-status status-${status}">${status === 'pending' ? '⏳ Running' : status === 'fixed' ? '✅ Fixed' : '❌ Failed'}</span>
+    </div>
+    <div class="cycle-item-summary">
+      <strong>Error:</strong> ${errorSnippet.slice(0, 120)}${errorSnippet.length > 120 ? '…' : ''}<br/>
+      ${explanation ? '<strong>Fix:</strong> ' + explanation.slice(0, 200) : ''}
+    </div>`;
+  list.prepend(item);
+}
+
+function updateCycleHistory(historyId, status, explanation) {
+  const item = document.getElementById(historyId);
+  if (!item) return;
+  const badge = item.querySelector('.cycle-item-status');
+  if (badge) {
+    badge.className = 'cycle-item-status status-' + status;
+    badge.textContent = status === 'fixed' ? '✅ Fixed' : '❌ Failed';
+  }
+  const summary = item.querySelector('.cycle-item-summary');
+  if (summary && explanation) {
+    const strongFix = summary.querySelector('strong:last-child');
+    if (strongFix) {
+      strongFix.nextSibling && (strongFix.nextSibling.textContent = explanation.slice(0, 200));
+    } else {
+      summary.innerHTML += '<br/><strong>Fix:</strong> ' + explanation.slice(0, 200);
+    }
+  }
+}
+
+/* ── Error display helpers ── */
+function showFixError(msg, id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('visible');
+}
+function clearFixError(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('visible');
+}
+
+/* ── Copy/download fixed script ── */
+function copyFixedScript() {
+  const script = fixedScript || generatedScript;
+  if (!script) return;
+  navigator.clipboard.writeText(script)
+    .then(() => showToast('Fixed script copied!', '📋'))
+    .catch(() => showToast('Copy failed — use Download instead', '⚠'));
+}
+
+function downloadFixedScript() {
+  const script = fixedScript || generatedScript;
+  if (!script) return;
+  const exts = {
+    'playwright-ts':   'fixed-test.spec.ts',
+    'playwright-js':   'fixed-test.spec.js',
+    'selenium-java':   'FixedTest.java',
+    'selenium-python': 'test_fixed.py',
+  };
+  const filename = exts[selectedFormat] || 'fixed-test.txt';
+  const blob = new Blob([script], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Fixed script downloaded!', '⬇');
+}
+
+/* ══════════════════════════════════════════════════════════
+   OPTION C — GITHUB ACTIONS CI INTEGRATION
+   ══════════════════════════════════════════════════════════ */
+
+const WORKFLOW_FILENAME = 'shuddhiqa-playwright.yml';
+let ghRunId = null;
+
+/* ── Build GitHub Actions workflow YAML ── */
+function buildWorkflowYAML(scriptFilename) {
+  return `name: ShuddhiQA Playwright Test
+
+on:
+  push:
+    paths:
+      - 'shuddhiqa-tests/${scriptFilename}'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install @playwright/test
+          npx playwright install chromium --with-deps
+
+      - name: Run ShuddhiQA generated tests
+        run: npx playwright test shuddhiqa-tests/${scriptFilename} --reporter=json
+        continue-on-error: true
+        env:
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+`;
+}
+
+/* ── GitHub API helpers ── */
+async function ghGet(path, token) {
+  const resp = await fetch('https://api.github.com' + path, {
+    headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.message || 'GitHub API error ' + resp.status);
+  }
+  return resp.json();
+}
+
+async function ghPut(path, token, body) {
+  const resp = await fetch('https://api.github.com' + path, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'token ' + token,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.message || 'GitHub PUT error ' + resp.status);
+  return data;
+}
+
+async function ghPost(path, token, body) {
+  const resp = await fetch('https://api.github.com' + path, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'token ' + token,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.message || 'GitHub POST error ' + resp.status);
+  return data;
+}
+
+/* ── Set CI status indicator ── */
+function setCIStatus(stepNum, status, text) {
+  const dot = document.getElementById('ciDot' + stepNum);
+  const msg = document.getElementById('ciStatus' + stepNum);
+  if (dot) { dot.className = 'ci-dot ' + status; }
+  if (msg) msg.textContent = text;
+}
+
+/* ── Run GitHub CI ── */
+async function runGitHubCI() {
+  const repo    = document.getElementById('ghRepo')?.value?.trim();
+  const branch  = document.getElementById('ghBranch')?.value?.trim() || 'main';
+  const token   = document.getElementById('ghToken')?.value?.trim();
+  const apiKey  = document.getElementById('apiKey')?.value?.trim();
+  const provider = document.getElementById('aiProvider')?.value;
+
+  if (!repo || !token) {
+    showFixError('Please enter your GitHub repo (owner/repo) and Personal Access Token.', 'ghError');
+    return;
+  }
+  if (!repo.includes('/')) {
+    showFixError('Repo format must be owner/repo-name e.g. ramya9b/my-tests', 'ghError');
+    return;
+  }
+
+  const script = fixedScript || generatedScript;
+  if (!script) {
+    showFixError('No script to push — generate a script first.', 'ghError');
+    return;
+  }
+
+  const btn = document.getElementById('ghRunBtn');
+  const btnText = document.getElementById('ghRunBtnText');
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.textContent = 'Pushing…';
+  clearFixError('ghError');
+
+  // Show step 3 CI status
+  const step3 = document.getElementById('ghStep3');
+  if (step3) step3.style.display = 'flex';
+  setCIStatus(1, 'running', 'Connecting to GitHub…');
+  setCIStatus(2, '', '—');
+  setCIStatus(3, '', '—');
+
+  try {
+    // Step 1: Verify repo access
+    const repoData = await ghGet('/repos/' + repo, token);
+    setCIStatus(1, 'passed', 'Connected: ' + repoData.full_name);
+
+    // Step 2: Push workflow file if not exists
+    setCIStatus(2, 'running', 'Setting up Playwright workflow…');
+    const exts = { 'playwright-ts': 'spec.ts', 'playwright-js': 'spec.js', 'selenium-java': 'java', 'selenium-python': 'py' };
+    const scriptExt  = exts[selectedFormat] || 'spec.ts';
+    const scriptFile = 'shuddhiqa-generated.' + scriptExt;
+    const workflowPath = '/.github/workflows/' + WORKFLOW_FILENAME;
+
+    // Check if workflow exists
+    let workflowSha = null;
+    try {
+      const existing = await ghGet('/repos/' + repo + '/contents' + workflowPath, token);
+      workflowSha = existing.sha;
+    } catch { /* doesn't exist yet — will create */ }
+
+    const workflowBody = {
+      message: 'ci: add/update ShuddhiQA Playwright workflow',
+      content: btoa(unescape(encodeURIComponent(buildWorkflowYAML(scriptFile)))),
+      branch: branch
+    };
+    if (workflowSha) workflowBody.sha = workflowSha;
+    await ghPut('/repos/' + repo + '/contents' + workflowPath, token, workflowBody);
+
+    // Push test script to shuddhiqa-tests/
+    const scriptPath = '/repos/' + repo + '/contents/shuddhiqa-tests/' + scriptFile;
+    let scriptSha = null;
+    try {
+      const existing = await ghGet(scriptPath.replace('/repos/' + repo + '/contents', '') , token);
+      scriptSha = existing.sha;
+    } catch {}
+
+    const scriptBody = {
+      message: 'test: push ShuddhiQA generated script (cycle ' + fixCycleCount + ')',
+      content: btoa(unescape(encodeURIComponent(script))),
+      branch: branch
+    };
+    if (scriptSha) scriptBody.sha = scriptSha;
+    await ghPut(scriptPath, token, scriptBody);
+
+    setCIStatus(2, 'passed', 'Workflow + script pushed to ' + repo);
+
+    // Step 3: Trigger workflow dispatch + poll
+    setCIStatus(3, 'running', 'Triggering GitHub Actions run…');
+    try {
+      await ghPost('/repos/' + repo + '/actions/workflows/' + WORKFLOW_FILENAME + '/dispatches', token, { ref: branch });
+    } catch { /* Push already triggers on path match — dispatch is bonus */ }
+
+    // Set Actions link
+    const link = document.getElementById('ghActionsLink');
+    if (link) {
+      link.href = 'https://github.com/' + repo + '/actions';
+      link.textContent = 'View in GitHub Actions → github.com/' + repo + '/actions';
+    }
+
+    // Poll for run result
+    setCIStatus(3, 'running', 'Waiting for CI run to start…');
+    await pollGitHubRun(repo, token, branch, scriptFile, apiKey, provider);
+
+  } catch(err) {
+    if (btn)     btn.disabled = false;
+    if (btnText) btnText.textContent = 'Push & Run in GitHub Actions';
+    const msg = err.message || '';
+    let friendly = msg;
+    if (msg.includes('404'))       friendly = 'Repo not found or token lacks access. Check repo name and PAT scope (needs repo + actions).';
+    else if (msg.includes('401'))  friendly = 'GitHub token invalid or expired.';
+    else if (msg.includes('403'))  friendly = 'Token lacks permissions. Enable repo + actions scope.';
+    showFixError(friendly, 'ghError');
+    setCIStatus(1, 'failed', 'Connection failed: ' + friendly.slice(0,60));
+  }
+}
+
+/* ── Poll GitHub Actions for run result ── */
+async function pollGitHubRun(repo, token, branch, scriptFile, apiKey, provider) {
+  const btn     = document.getElementById('ghRunBtn');
+  const btnText = document.getElementById('ghRunBtnText');
+  let attempts  = 0;
+  const maxAttempts = 40; // 40 × 15s = 10 min max
+
+  if (ciPollInterval) clearInterval(ciPollInterval);
+
+  ciPollInterval = setInterval(async () => {
+    attempts++;
+    try {
+      // Get latest workflow runs
+      const runs = await ghGet('/repos/' + repo + '/actions/workflows/' + WORKFLOW_FILENAME + '/runs?per_page=5&branch=' + branch, token);
+      const latestRun = runs.workflow_runs?.[0];
+
+      if (!latestRun) {
+        if (attempts > 6) setCIStatus(3, 'running', 'Waiting for run to appear…');
+        return;
+      }
+
+      ghRunId = latestRun.id;
+      const status     = latestRun.status;      // queued | in_progress | completed
+      const conclusion = latestRun.conclusion;   // success | failure | null
+
+      if (status === 'queued') {
+        setCIStatus(3, 'running', 'Run queued — waiting for runner…');
+      } else if (status === 'in_progress') {
+        setCIStatus(3, 'running', 'Tests running in GitHub Actions…');
+        if (btnText) btnText.textContent = 'Tests running…';
+      } else if (status === 'completed') {
+        clearInterval(ciPollInterval);
+        if (btn)     btn.disabled = false;
+        if (btnText) btnText.textContent = 'Push & Run in GitHub Actions';
+
+        if (conclusion === 'success') {
+          setCIStatus(3, 'passed', '✅ All tests passed!');
+          showToast('CI passed — all tests green! ✅', '✅');
+          // Show success state
+          const resultWrap = document.getElementById('ghFixResultWrap');
+          const explEl = document.getElementById('ghFixExplanation');
+          if (explEl) explEl.innerHTML = '<strong>✅ All tests passed</strong> in GitHub Actions. No fixes needed — script is working correctly against the live application.';
+          if (resultWrap) resultWrap.style.display = 'block';
+          const codeEl = document.getElementById('ghFixedCodeOutput');
+          if (codeEl) codeEl.textContent = fixedScript || generatedScript;
+        } else {
+          // Tests failed — fetch logs and auto-fix
+          setCIStatus(3, 'failed', '❌ Tests failed — fetching logs…');
+          await fetchLogsAndFix(repo, token, latestRun.id, apiKey, provider);
+        }
+      }
+
+      if (attempts >= maxAttempts) {
+        clearInterval(ciPollInterval);
+        if (btn)     btn.disabled = false;
+        if (btnText) btnText.textContent = 'Push & Run in GitHub Actions';
+        setCIStatus(3, 'failed', 'Timeout — check GitHub Actions directly');
+      }
+    } catch(pollErr) {
+      // Silent poll failure — keep trying
+    }
+  }, 15000); // poll every 15 seconds
+}
+
+/* ── Fetch CI logs and auto-fix ── */
+async function fetchLogsAndFix(repo, token, runId, apiKey, provider) {
+  const btn = document.getElementById('ghRunBtn');
+  const btnText = document.getElementById('ghRunBtnText');
+
+  try {
+    setCIStatus(3, 'running', 'Fetching failure logs…');
+
+    // Get jobs for this run
+    const jobs = await ghGet('/repos/' + repo + '/actions/runs/' + runId + '/jobs', token);
+    const failedJob = jobs.jobs?.find(j => j.conclusion === 'failure') || jobs.jobs?.[0];
+
+    let errorLog = '';
+    if (failedJob) {
+      // Get job logs
+      try {
+        const logResp = await fetch('https://api.github.com/repos/' + repo + '/actions/jobs/' + failedJob.id + '/logs', {
+          headers: { 'Authorization': 'token ' + token }
+        });
+        if (logResp.ok) {
+          const fullLog = await logResp.text();
+          // Extract relevant error lines (last 100 lines or lines containing Error/fail)
+          const logLines = fullLog.split('\n');
+          const errorLines = logLines.filter(l =>
+            l.includes('Error') || l.includes('error') || l.includes('FAIL') ||
+            l.includes('expect') || l.includes('timeout') || l.includes('Timeout')
+          );
+          errorLog = errorLines.slice(0, 50).join('\n') || logLines.slice(-60).join('\n');
+        }
+      } catch {}
+    }
+
+    if (!errorLog) {
+      errorLog = 'CI run ' + runId + ' failed — could not fetch logs. Check GitHub Actions directly.';
+    }
+
+    setCIStatus(3, 'running', 'CI failed — running auto-fix (cycle ' + (fixCycleCount + 1) + ')…');
+
+    if (fixCycleCount >= MAX_CYCLES) {
+      setCIStatus(3, 'failed', 'Max fix cycles reached — manual intervention needed');
+      document.getElementById('maxCyclesWarn')?.classList.add('visible');
+      return;
+    }
+
+    // Auto-fix using same engine as Option A
+    const currentScript = fixedScript || generatedScript;
+    const prompt = buildFixPrompt(currentScript, errorLog, fixCycleCount + 1);
+
+    let raw = '';
+    if (provider === 'claude')           raw = await callClaude(prompt, apiKey);
+    else if (provider === 'gemini')      raw = await callGemini(prompt, apiKey);
+    else if (provider === 'groq')        raw = await callGroq(prompt, apiKey);
+    else if (provider === 'openai')      raw = await callOpenAI(prompt, apiKey);
+    else                                 raw = await callClaude(prompt, apiKey);
+
+    const data = robustParseJSON(
+      raw.replace(/^```json\s*/m,'').replace(/\s*```$/m,'').trim()
+    );
+
+    if (data?.fixedScript) {
+      fixCycleCount++;
+      updateCycleBadge();
+      fixedScript = data.fixedScript;
+
+      const explanation = data.explanation || 'Auto-fix applied from CI logs.';
+      addCycleToHistory(fixCycleCount, 'fixed', errorLog, explanation);
+
+      // Show result in GitHub pane
+      const explEl = document.getElementById('ghFixExplanation');
+      if (explEl) explEl.innerHTML = '<strong>🔧 Auto-fix from CI logs:</strong> ' + explanation;
+      const codeEl = document.getElementById('ghFixedCodeOutput');
+      if (codeEl) codeEl.textContent = data.fixedScript;
+      const wrap = document.getElementById('ghFixResultWrap');
+      if (wrap) wrap.style.display = 'block';
+
+      setCIStatus(3, 'passed', 'Fixed! Re-pushing to GitHub for re-run…');
+      showToast('CI auto-fix applied — check GitHub pane', '🔧');
+
+      // Re-push fixed script
+      if (apiKey) {
+        const repo   = document.getElementById('ghRepo')?.value?.trim();
+        const branch = document.getElementById('ghBranch')?.value?.trim() || 'main';
+        const token  = document.getElementById('ghToken')?.value?.trim();
+        if (repo && token) {
+          if (btnText) btnText.textContent = 'Re-pushing fix…';
+          if (btn) btn.disabled = true;
+          // Small delay then re-run
+          await delay(2000);
+          await runGitHubCI();
+        }
+      }
+    } else {
+      setCIStatus(3, 'failed', 'Auto-fix failed — paste logs manually in Option A tab');
+      // Pre-populate Option A error textarea with the CI logs
+      const errInput = document.getElementById('errorPasteInput');
+      if (errInput) errInput.value = errorLog;
+      // Switch to Option A tab
+      const localTab = document.querySelector('[data-fpane="fpane-local"]');
+      if (localTab) switchFixTab(localTab);
+      showToast('Switch to "Paste Error" tab — logs pre-filled', '⚠');
+    }
+  } catch(err) {
+    setCIStatus(3, 'failed', 'Log fetch failed: ' + (err.message || 'unknown error').slice(0,50));
+    if (btn)     btn.disabled = false;
+    if (btnText) btnText.textContent = 'Push & Run in GitHub Actions';
+  }
+}
+
+/* ── Reset fix panel when new script generated ── */
+function resetFixPanel() {
+  fixCycleCount = 0;
+  fixedScript   = '';
+  isFixing      = false;
+  if (ciPollInterval) { clearInterval(ciPollInterval); ciPollInterval = null; }
+  updateCycleBadge();
+
+  // Reset UI
+  const errInput = document.getElementById('errorPasteInput');
+  if (errInput) errInput.value = '';
+  document.getElementById('fixResultWrap') && (document.getElementById('fixResultWrap').style.display = 'none');
+  document.getElementById('ghFixResultWrap') && (document.getElementById('ghFixResultWrap').style.display = 'none');
+  document.getElementById('ghStep3') && (document.getElementById('ghStep3').style.display = 'none');
+  document.getElementById('maxCyclesWarn')?.classList.remove('visible');
+  document.getElementById('cycleHistoryList') && (
+    document.getElementById('cycleHistoryList').innerHTML =
+    '<div style="font-size:13px;color:var(--text3);font-family:\'JetBrains Mono\',monospace;text-align:center;padding:24px">No fix cycles yet — run the script and paste any errors.</div>'
+  );
+  clearFixError('fixError');
+  clearFixError('ghError');
+  ['fstep1','fstep2','fstep3','fstep4'].forEach(s => setStep(s, ''));
+
+  // Switch to Option A tab
+  const localTab = document.querySelector('.fix-tab[data-fpane="fpane-local"]');
+  if (localTab) switchFixTab(localTab);
 }
 
 </script>
